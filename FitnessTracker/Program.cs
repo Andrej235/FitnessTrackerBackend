@@ -12,6 +12,8 @@ namespace ProjectGym
 {
     public class Program
     {
+        public static IServiceProvider serviceProvider = null!;
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -167,6 +169,7 @@ namespace ProjectGym
             builder.Services.AddControllers();
 
             var app = builder.Build();
+            serviceProvider = app.Services;
 
             //app.UseHttpsRedirection();
             app.UseAuthorization();

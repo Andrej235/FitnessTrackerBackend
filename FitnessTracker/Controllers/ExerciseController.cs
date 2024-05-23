@@ -32,7 +32,7 @@ namespace ProjectGym.Controllers
         public async Task<IActionResult> Get([FromQuery] int? offset, [FromQuery] int? limit, [FromQuery] string? include, [FromQuery] string? q)
         {
             var exercises = await ReadService.Get(q, offset, limit, include);
-            await Task.Delay(2000);
+            //await Task.Delay(2000);
 
             return Ok(exercises.Select(Mapper.Map).ToList());
         }
