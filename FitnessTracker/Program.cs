@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ProjectGym.Data;
 using ProjectGym.DTOs;
@@ -103,6 +102,7 @@ namespace ProjectGym
             #region User
             builder.Services.AddTransient<ICreateService<User>, UserCreateService>();
             builder.Services.AddTransient<IReadService<User>, UserReadService>();
+            builder.Services.AddTransient<IUpdateService<User>, UpdateService<User>>();
             builder.Services.AddTransient<IDeleteService<User>, DeleteService<User>>();
             builder.Services.AddTransient<IEntityMapper<User, UserDTO>, UserMapper>();
             #endregion

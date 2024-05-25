@@ -20,12 +20,14 @@ namespace ProjectGym.Controllers
     public partial class UserController(IReadService<User> readService,
                           IEntityMapper<User, UserDTO> mapper,
                           ICreateService<User> createService,
-                          IDeleteService<User> deleteService) : ControllerBase, ICreateController<User, RegisterDTO>, IDeleteController<User>
+                          IDeleteService<User> deleteService,
+                          IUpdateService<User> updateService) : ControllerBase, ICreateController<User, RegisterDTO>
     {
         public IReadService<User> ReadService { get; } = readService;
         public IEntityMapper<User, UserDTO> Mapper { get; } = mapper;
         public ICreateService<User> CreateService { get; } = createService;
         public IDeleteService<User> DeleteService { get; } = deleteService;
+        public IUpdateService<User> UpdateService { get; } = updateService;
 
         [HttpPost("register")]
         public async Task<IActionResult> Create([FromBody] RegisterDTO userDTO)
@@ -99,6 +101,36 @@ namespace ProjectGym.Controllers
         }
 
         [Authorize]
+        [HttpPut("resetpassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO dto)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity)
+                return Unauthorized();
+
+            var userIdClaim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim is null)
+                return Unauthorized();
+
+            try
+            {
+                var user = await ReadService.Get(userIdClaim, "none");
+                if (!user.PasswordHash.SequenceEqual(dto.OldPassword.HashPassword(user.Salt)))
+                    return BadRequest("Incorrect old password");
+
+                user.PasswordHash = dto.NewPassword.HashPassword(user.Salt);
+                await UpdateService.Update(user);
+
+                //TODO: Invalidate all JWTs / tokens for this user and return a new one
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return BadRequest(ex.GetErrorMessage(false));
+            }
+        }
+
+        [Authorize]
         [HttpDelete]
         public async Task<IActionResult> Delete()
         {
@@ -134,12 +166,13 @@ namespace ProjectGym.Controllers
             public string Password { get; set; } = null!;
         }
 
+        public class ResetPasswordDTO
+        {
+            public string OldPassword { get; set; } = null!;
+            public string NewPassword { get; set; } = null!;
+        }
+
         [GeneratedRegex(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")]
         private static partial Regex ValidEmailRegex();
-
-        public Task<IActionResult> Delete(string primaryKey)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
