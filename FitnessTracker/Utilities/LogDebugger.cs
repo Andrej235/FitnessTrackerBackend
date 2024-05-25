@@ -4,7 +4,7 @@ namespace ProjectGym.Utilities
 {
     public static class LogDebugger
     {
-        public static void LogError(Exception ex, bool includeStackTrace = true)
+        public static void LogError(this Exception ex, bool includeStackTrace = true)
         {
             if (includeStackTrace)
             {
@@ -22,7 +22,7 @@ namespace ProjectGym.Utilities
             }
         }
 
-        public static string GetErrorMessage(Exception ex, bool includeStackTrace = true)
+        public static string GetErrorMessage(this Exception ex, bool includeStackTrace = true)
         {
             return includeStackTrace
                 ? ex.InnerException is null

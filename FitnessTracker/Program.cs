@@ -138,12 +138,6 @@ namespace ProjectGym
             builder.Services.AddTransient<IEntityMapper<Workout, WorkoutDTO>, WorkoutMapper>();
             #endregion
 
-            #region Client
-            builder.Services.AddTransient<IReadService<Client>, ClientReadService>();
-            builder.Services.AddTransient<ICreateService<Client>, ClientCreateService>();
-            builder.Services.AddTransient<IUpdateService<Client>, ClientUpdateService>();
-            #endregion
-
             #region Muscle group
             builder.Services.AddTransient<ICreateService<MuscleGroup>, MuscleGroupCreateService>();
             builder.Services.AddTransient<IReadService<MuscleGroup>, MuscleGroupReadService>();

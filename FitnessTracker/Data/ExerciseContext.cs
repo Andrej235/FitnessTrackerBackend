@@ -19,7 +19,6 @@ namespace ProjectGym.Data
         public DbSet<EquipmentUsage> EquipmentUsages { get; set; }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Client> Clients { get; set; }
         public DbSet<ExerciseBookmark> ExerciseBookmarks { get; set; }
         public DbSet<Set> Sets { get; set; }
         public DbSet<PersonalExerciseWeight> Weights { get; set; }
@@ -30,7 +29,7 @@ namespace ProjectGym.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ProjectGymDB;Integrated Security=True;");
+            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=FitnessTracker;Integrated Security=True;");
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -121,14 +120,6 @@ namespace ProjectGym.Data
                 .WithOne(a => a.Exercise)
                 .HasForeignKey(a => a.ExerciseId)
                 .OnDelete(DeleteBehavior.Cascade);
-            #endregion
-
-            #region User - Client
-            modelBuilder.Entity<Client>()
-                .HasOne(c => c.User)
-                .WithMany()
-                .HasForeignKey(c => c.UserGUID)
-                .OnDelete(DeleteBehavior.NoAction);
             #endregion
 
             #region Weight
