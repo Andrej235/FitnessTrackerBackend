@@ -9,13 +9,14 @@ using ProjectGym.Services.Update;
 using ProjectGym.Utilities;
 using System.Diagnostics;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using static ProjectGym.Controllers.UserController;
 
 namespace ProjectGym.Controllers
 {
     [Route("api/user")]
     [ApiController]
-    public class UserController(IReadService<User> readService,
+    public partial class UserController(IReadService<User> readService,
                           IEntityMapper<User, UserDTO> mapper,
                           ICreateService<User> createService) : ControllerBase, ICreateController<User, RegisterDTO>
     {
@@ -26,6 +27,12 @@ namespace ProjectGym.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Create([FromBody] RegisterDTO userDTO)
         {
+            if (!ValidEmailRegex().IsMatch(userDTO.Email))
+                return BadRequest("Invalid email address");
+
+            if (userDTO.Password.Length < 8)
+                return BadRequest("Password must be at least 8 characters long");
+
             byte[] salt = HashingService.GenerateSalt();
             User user = new()
             {
@@ -92,5 +99,8 @@ namespace ProjectGym.Controllers
             public string Email { get; set; } = null!;
             public string Password { get; set; } = null!;
         }
+
+        [GeneratedRegex(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")]
+        private static partial Regex ValidEmailRegex();
     }
 }
