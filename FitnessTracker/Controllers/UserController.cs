@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProjectGym.DTOs;
 using ProjectGym.Models;
 using ProjectGym.Services.Create;
@@ -7,6 +8,7 @@ using ProjectGym.Services.Read;
 using ProjectGym.Services.Update;
 using ProjectGym.Utilities;
 using System.Diagnostics;
+using System.Security.Claims;
 using static ProjectGym.Controllers.UserController;
 
 namespace ProjectGym.Controllers
@@ -63,17 +65,36 @@ namespace ProjectGym.Controllers
                 if (!user.PasswordHash.SequenceEqual(hash))
                     return BadRequest("Incorrect password");
 
-                return Ok(new LoggedInDTO()
-                {
-                    ClientGuid = await VerifyClient(userDTO.ClientGuid, user),
-                    User = Mapper.Map(user)
-                });
+                //var @return = new LoggedInDTO()
+                //{
+                //    ClientGuid = await VerifyClient(userDTO.ClientGuid, user),
+                //    User = Mapper.Map(user)
+                //};
+
+                return Ok(Program.CreateJWT(user));
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"---> Error occurred: {ex.Message} \n{ex.InnerException?.Message}");
                 return BadRequest($"Error occurred: {ex.Message} \n{ex.InnerException?.Message}");
             }
+        }
+
+        [Authorize]
+        [HttpGet("test")]
+        public async Task<IActionResult> Get()
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity)
+                return Unauthorized();
+
+            // Extract claims
+            var userIdClaim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim is null)
+                return Unauthorized();
+
+            var usernameClaim = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+
+            return Ok(Mapper.Map(await ReadService.Get(userIdClaim, "all")));
         }
 
         [HttpGet("client/{guid}")]

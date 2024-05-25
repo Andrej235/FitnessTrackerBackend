@@ -24,8 +24,8 @@ namespace FitnessTracker.Controllers
 
         private object Map(Exercise entity)
         {
-            var muscleGroupMapper = entity.PrimaryMuscleGroups.Any() || entity.SecondaryMuscleGroups.Any() ? Program.serviceProvider.GetService(typeof(IEntityMapper<MuscleGroup, MuscleGroupDTO>)) as IEntityMapper<MuscleGroup, MuscleGroupDTO> : null;
-            var muscleMapper = entity.PrimaryMuscles.Any() || entity.SecondaryMuscles.Any() ? Program.serviceProvider.GetService(typeof(IEntityMapper<Muscle, MuscleDTO>)) as IEntityMapper<Muscle, MuscleDTO> : null;
+            var muscleGroupMapper = entity.PrimaryMuscleGroups.Any() || entity.SecondaryMuscleGroups.Any() ? Program.GetService(typeof(IEntityMapper<MuscleGroup, MuscleGroupDTO>)) as IEntityMapper<MuscleGroup, MuscleGroupDTO> : null;
+            var muscleMapper = entity.PrimaryMuscles.Any() || entity.SecondaryMuscles.Any() ? Program.GetService(typeof(IEntityMapper<Muscle, MuscleDTO>)) as IEntityMapper<Muscle, MuscleDTO> : null;
 
             return new
             {
@@ -35,10 +35,10 @@ namespace FitnessTracker.Controllers
                 SecondaryMuscleGroups = muscleGroupMapper is null ? [] : entity.SecondaryMuscleGroups.Select(muscleGroupMapper.Map),
                 PrimaryMuscles = muscleMapper is null ? [] : entity.PrimaryMuscles.Select(muscleMapper.Map),
                 SecondaryMuscles = muscleMapper is null ? [] : entity.SecondaryMuscles.Select(muscleMapper.Map),
-                Equipment = !entity.Equipment.Any() || Program.serviceProvider.GetService(typeof(IEntityMapper<Equipment, EquipmentDTO>)) is not IEntityMapper<Equipment, EquipmentDTO> equipmentMapper ? [] : entity.Equipment.Select(equipmentMapper.Map),
-                Images = !entity.Images.Any() || Program.serviceProvider.GetService(typeof(IEntityMapper<Image, ImageDTO>)) is not IEntityMapper<Image, ImageDTO> imageMapper ? [] : entity.Images.Select(imageMapper.Map),
-                Notes = !entity.Notes.Any() || Program.serviceProvider.GetService(typeof(IEntityMapper<Note, NoteDTO>)) is not IEntityMapper<Note, NoteDTO> noteMapper ? [] : entity.Notes.Select(noteMapper.Map),
-                Aliases = !entity.Aliases.Any() || Program.serviceProvider.GetService(typeof(IEntityMapper<Alias, AliasDTO>)) is not IEntityMapper<Alias, AliasDTO> aliasMapper ? [] : entity.Aliases.Select(aliasMapper.Map),
+                Equipment = !entity.Equipment.Any() || Program.GetService(typeof(IEntityMapper<Equipment, EquipmentDTO>)) is not IEntityMapper<Equipment, EquipmentDTO> equipmentMapper ? [] : entity.Equipment.Select(equipmentMapper.Map),
+                Images = !entity.Images.Any() || Program.GetService(typeof(IEntityMapper<Image, ImageDTO>)) is not IEntityMapper<Image, ImageDTO> imageMapper ? [] : entity.Images.Select(imageMapper.Map),
+                Notes = !entity.Notes.Any() || Program.GetService(typeof(IEntityMapper<Note, NoteDTO>)) is not IEntityMapper<Note, NoteDTO> noteMapper ? [] : entity.Notes.Select(noteMapper.Map),
+                Aliases = !entity.Aliases.Any() || Program.GetService(typeof(IEntityMapper<Alias, AliasDTO>)) is not IEntityMapper<Alias, AliasDTO> aliasMapper ? [] : entity.Aliases.Select(aliasMapper.Map),
                 //Bookmarks = !entity.Bookmarks.Any() || Program.serviceProvider.GetService(typeof(IEntityMapper<User, UserDTO>)) is not IEntityMapper<User, UserDTO> bookmarkMapper ? [] : entity.Bookmarks.Select(bookmarkMapper.Map)
             };
         }
