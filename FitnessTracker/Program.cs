@@ -101,8 +101,9 @@ namespace ProjectGym
             #endregion
 
             #region User
-            builder.Services.AddTransient<IReadService<User>, UserReadService>();
             builder.Services.AddTransient<ICreateService<User>, UserCreateService>();
+            builder.Services.AddTransient<IReadService<User>, UserReadService>();
+            builder.Services.AddTransient<IDeleteService<User>, DeleteService<User>>();
             builder.Services.AddTransient<IEntityMapper<User, UserDTO>, UserMapper>();
             #endregion
 

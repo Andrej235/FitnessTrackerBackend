@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProjectGym.DTOs;
 using ProjectGym.Models;
 using ProjectGym.Services.Create;
+using ProjectGym.Services.Delete;
 using ProjectGym.Services.Mapping;
 using ProjectGym.Services.Read;
 using ProjectGym.Services.Update;
@@ -18,11 +19,13 @@ namespace ProjectGym.Controllers
     [ApiController]
     public partial class UserController(IReadService<User> readService,
                           IEntityMapper<User, UserDTO> mapper,
-                          ICreateService<User> createService) : ControllerBase, ICreateController<User, RegisterDTO>
+                          ICreateService<User> createService,
+                          IDeleteService<User> deleteService) : ControllerBase, ICreateController<User, RegisterDTO>, IDeleteController<User>
     {
         public IReadService<User> ReadService { get; } = readService;
         public IEntityMapper<User, UserDTO> Mapper { get; } = mapper;
         public ICreateService<User> CreateService { get; } = createService;
+        public IDeleteService<User> DeleteService { get; } = deleteService;
 
         [HttpPost("register")]
         public async Task<IActionResult> Create([FromBody] RegisterDTO userDTO)
@@ -54,22 +57,22 @@ namespace ProjectGym.Controllers
         {
             try
             {
+                //This is just so the server doesn't waste time on checking for an invalid email
+                if (!ValidEmailRegex().IsMatch(userDTO.Email) || userDTO.Password.Length < 8)
+                    return BadRequest("Incorrect email or password");
+
                 var user = await ReadService.Get(x => x.Email == userDTO.Email, "none");
 
                 var hash = userDTO.Password.HashPassword(user.Salt);
                 if (!user.PasswordHash.SequenceEqual(hash))
-                    return BadRequest("Incorrect password");
+                    return BadRequest("Incorrect email or password");
 
                 return Ok(Program.CreateJWT(user));
-            }
-            catch (NullReferenceException)
-            {
-                return NotFound("User does not exist");
             }
             catch (Exception ex)
             {
                 ex.LogError();
-                return BadRequest(ex.GetErrorMessage());
+                return BadRequest(ex.GetErrorMessage(false));
             }
         }
 
@@ -84,7 +87,38 @@ namespace ProjectGym.Controllers
             if (userIdClaim is null)
                 return Unauthorized();
 
-            return Ok(Mapper.Map(await ReadService.Get(userIdClaim, "all")));
+            try
+            {
+                return Ok(Mapper.Map(await ReadService.Get(userIdClaim, "all")));
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return BadRequest(ex.GetErrorMessage(false));
+            }
+        }
+
+        [Authorize]
+        [HttpDelete]
+        public async Task<IActionResult> Delete()
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity)
+                return Unauthorized();
+
+            var userIdClaim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim is null)
+                return Unauthorized();
+
+            try
+            {
+                await DeleteService.Delete(userIdClaim);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return BadRequest(ex.GetErrorMessage(false));
+            }
         }
 
         public class RegisterDTO
@@ -102,5 +136,10 @@ namespace ProjectGym.Controllers
 
         [GeneratedRegex(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")]
         private static partial Regex ValidEmailRegex();
+
+        public Task<IActionResult> Delete(string primaryKey)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
