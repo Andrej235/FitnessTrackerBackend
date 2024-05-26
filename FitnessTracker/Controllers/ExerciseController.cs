@@ -73,16 +73,9 @@ namespace ProjectGym.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ExerciseDTO entityDTO)
         {
-            try
-            {
-                var entity = await Mapper.MapAsync(entityDTO);
-                var newId = await CreateService.Add(entity);
-                return newId != default ? Ok(newId) : BadRequest("Entity already exists");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error occurred: {ex.Message}");
-            }
+            var entity = await Mapper.MapAsync(entityDTO);
+            var newId = await CreateService.Add(entity);
+            return newId != default ? Ok(newId) : BadRequest("Entity already exists");
         }
 
         public async Task<IActionResult> Update([FromBody] ExerciseDTO updatedEntity)

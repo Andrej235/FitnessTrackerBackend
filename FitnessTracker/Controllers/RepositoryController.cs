@@ -32,16 +32,8 @@ namespace ProjectGym.Controllers
         [HttpPost]
         public virtual async Task<IActionResult> Create([FromBody] TDTO entityDTO)
         {
-            try
-            {
-                var newEntityId = await CreateService.Add(Mapper.Map(entityDTO));
-                return Ok(newEntityId);
-            }
-            catch (Exception ex)
-            {
-                LogDebugger.LogError(ex);
-                return BadRequest(LogDebugger.GetErrorMessage(ex));
-            }
+            var newEntityId = await CreateService.Add(Mapper.Map(entityDTO));
+            return Ok(newEntityId);
         }
 
         [HttpGet("{id}")]

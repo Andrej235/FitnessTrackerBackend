@@ -6,7 +6,7 @@ namespace ProjectGym.Services.Create
 {
     public class CreateService<T>(ExerciseContext context) : ICreateService<T> where T : class
     {
-        public async Task<object> Add(T toAdd)
+        public async Task<object?> Add(T toAdd)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace ProjectGym.Services.Create
             catch (Exception ex)
             {
                 LogDebugger.LogError(ex);
-                throw;
+                return null;
             }
         }
 

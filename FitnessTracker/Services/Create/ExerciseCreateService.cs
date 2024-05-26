@@ -8,7 +8,7 @@ namespace ProjectGym.Services.Create
 {
     public class ExerciseCreateService(ExerciseContext context, IReadService<Exercise> readService) : ICreateService<Exercise>
     {
-        public async Task<object> Add(Exercise toAdd)
+        public async Task<object?> Add(Exercise toAdd)
         {
             try
             {
@@ -32,13 +32,13 @@ namespace ProjectGym.Services.Create
                 catch (Exception ex)
                 {
                     LogDebugger.LogError(ex);
-                    throw;
+                    return default;
                 }
             }
             catch (Exception ex)
             {
                 LogDebugger.LogError(ex);
-                throw;
+                return default;
             }
         }
     }

@@ -13,7 +13,7 @@ namespace ProjectGym.Services.Create
                                      IUpdateService<PersonalExerciseWeight> weightUpdateService,
                                      IReadService<Exercise> exerciseReadService) : ICreateService<PersonalExerciseWeight>
     {
-        public async Task<object> Add(PersonalExerciseWeight toAdd)
+        public async Task<object?> Add(PersonalExerciseWeight toAdd)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace ProjectGym.Services.Create
             catch (Exception ex)
             {
                 LogDebugger.LogError(ex);
-                throw;
+                return default;
             }
         }
     }

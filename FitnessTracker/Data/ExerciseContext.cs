@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FitnessTracker.Models;
+using Microsoft.EntityFrameworkCore;
 using ProjectGym.Models;
 
 namespace ProjectGym.Data
@@ -24,6 +25,8 @@ namespace ProjectGym.Data
         public DbSet<PersonalExerciseWeight> Weights { get; set; }
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<WorkoutSet> WorkoutSets { get; set; }
+
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
 
@@ -182,6 +185,12 @@ namespace ProjectGym.Data
                     }
                 );
             #endregion
+
+            modelBuilder.Entity<RefreshToken>()
+                .HasOne(x => x.User)
+                .WithMany()
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
