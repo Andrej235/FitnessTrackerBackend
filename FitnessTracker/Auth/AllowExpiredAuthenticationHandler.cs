@@ -12,11 +12,11 @@ namespace FitnessTracker.Auth
     {
         private readonly ConfigurationManager configuration = configuration;
 
-        protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
+        protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
             var token = Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last();
             if (string.IsNullOrEmpty(token))
-                return AuthenticateResult.NoResult();
+                return Task.FromResult(AuthenticateResult.NoResult());
 
             try
             {
@@ -35,14 +35,14 @@ namespace FitnessTracker.Auth
 
                 var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
                 if (validatedToken is not JwtSecurityToken jwtToken)
-                    return AuthenticateResult.Fail("Invalid token");
+                    return Task.FromResult(AuthenticateResult.Fail("Invalid token"));
 
-                return AuthenticateResult.Success(new AuthenticationTicket(principal, Scheme.Name));
+                return Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(principal, Scheme.Name)));
             }
             catch (Exception ex)
             {
                 ex.LogError();
-                return AuthenticateResult.Fail(ex);
+                return Task.FromResult(AuthenticateResult.Fail(ex));
             }
         }
     }

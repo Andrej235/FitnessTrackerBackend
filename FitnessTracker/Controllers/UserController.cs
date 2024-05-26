@@ -62,7 +62,7 @@ namespace ProjectGym.Controllers
             {
                 HttpOnly = true,
                 Secure = false, //TODO-PROD:  Set to true in production
-                SameSite = SameSiteMode.None,
+                SameSite = SameSiteMode.Strict,
                 Expires = DateTime.UtcNow.AddDays(7)
             };
             Response.Cookies.Append("refreshToken", refresh, cookieOptions);
@@ -91,7 +91,7 @@ namespace ProjectGym.Controllers
                 {
                     HttpOnly = true,
                     Secure = false, //TODO-PROD:  Set to true in production
-                    SameSite = SameSiteMode.None,
+                    SameSite = SameSiteMode.Strict,
                     Expires = DateTime.UtcNow.AddDays(7)
                 };
                 Response.Cookies.Append("refreshToken", refresh, cookieOptions);
@@ -137,8 +137,6 @@ namespace ProjectGym.Controllers
             {
                 if (User.Identity is not ClaimsIdentity claimsIdentity)
                     return Unauthorized();
-
-                var a = Request.Cookies["refreshToken"];
 
                 if (claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                     || claimsIdentity.FindFirst(JwtRegisteredClaimNames.Jti)?.Value is not string jwtIdString

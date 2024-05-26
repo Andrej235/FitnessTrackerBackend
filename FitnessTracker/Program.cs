@@ -211,6 +211,7 @@ namespace ProjectGym
             builder.Services.AddControllers();
 
             var app = builder.Build();
+            app.UseCors();
             serviceProvider = app.Services;
 
             //app.UseHttpsRedirection();
@@ -219,7 +220,6 @@ namespace ProjectGym
             app.UseAuthorization();
 
             app.MapControllers();
-            app.UseCors();
             app.Run();
         }
     }
