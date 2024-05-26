@@ -1,3 +1,8 @@
+using FitnessTracker.Auth;
+using FitnessTracker.Models;
+using FitnessTracker.Services.Create;
+using FitnessTracker.Services.Read;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using ProjectGym.Data;
@@ -22,32 +27,6 @@ namespace ProjectGym
         public static object? GetService<T>() => serviceProvider.GetService(typeof(T));
         public static object? GetService(Type type) => serviceProvider.GetService(type);
 
-        public static string CreateJWT(User user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]!);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(
-                    [
-                        new Claim(ClaimTypes.Name, user.Name),
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                    ]
-                ),
-
-                Expires = DateTime.UtcNow.Add(TimeSpan.Parse(configuration["Jwt:TokenLifespan"]!)),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                Issuer = configuration["Jwt:Issuer"],
-                Audience = configuration["Jwt:Audience"]
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-
-            return tokenString;
-        }
-
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -69,9 +48,11 @@ namespace ProjectGym
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey
-                        (Encoding.UTF8.GetBytes(configuration["JWT:Key"]!))
+                        (Encoding.UTF8.GetBytes(configuration["JWT:Key"]!)),
+                    ClockSkew = TimeSpan.Zero
                 };
-            });
+            })
+            .AddScheme<AuthenticationSchemeOptions, AllowExpiredAuthenticationHandler>("AllowExpired", (p) => { });
 
             builder.Services.AddAuthorization();
 
@@ -87,6 +68,8 @@ namespace ProjectGym
             });
 
             builder.Services.AddTransient<ExerciseContext>();
+            builder.Services.AddSingleton(configuration);
+            builder.Services.AddSingleton<TokenManager>();
 
             #region Exercise
             builder.Services.AddTransient<ICreateService<Exercise>, ExerciseCreateService>();
@@ -217,6 +200,12 @@ namespace ProjectGym
             builder.Services.AddTransient<ICreateService<ExerciseBookmark>, BookmarkCreateService>();
             builder.Services.AddTransient<IReadService<ExerciseBookmark>, BookmarkReadService>();
             builder.Services.AddTransient<IDeleteService<ExerciseBookmark>, DeleteService<ExerciseBookmark>>();
+            #endregion
+
+            #region RefreshTokens
+            builder.Services.AddTransient<ICreateService<RefreshToken>, RefreshTokenCreateService>();
+            builder.Services.AddTransient<IReadService<RefreshToken>, RefreshTokenReadService>();
+            builder.Services.AddTransient<IUpdateService<RefreshToken>, UpdateService<RefreshToken>>();
             #endregion
 
             builder.Services.AddControllers();

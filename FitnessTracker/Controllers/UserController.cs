@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FitnessTracker.Auth;
+using FitnessTracker.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjectGym.DTOs;
 using ProjectGym.Models;
@@ -9,6 +11,7 @@ using ProjectGym.Services.Read;
 using ProjectGym.Services.Update;
 using ProjectGym.Utilities;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using static ProjectGym.Controllers.UserController;
@@ -21,13 +24,15 @@ namespace ProjectGym.Controllers
                           IEntityMapper<User, UserDTO> mapper,
                           ICreateService<User> createService,
                           IDeleteService<User> deleteService,
-                          IUpdateService<User> updateService) : ControllerBase, ICreateController<User, RegisterDTO>
+                          IUpdateService<User> updateService,
+                          TokenManager tokenManager) : ControllerBase, ICreateController<User, RegisterDTO>
     {
         public IReadService<User> ReadService { get; } = readService;
         public IEntityMapper<User, UserDTO> Mapper { get; } = mapper;
         public ICreateService<User> CreateService { get; } = createService;
         public IDeleteService<User> DeleteService { get; } = deleteService;
         public IUpdateService<User> UpdateService { get; } = updateService;
+        public TokenManager TokenManager { get; } = tokenManager;
 
         [HttpPost("register")]
         public async Task<IActionResult> Create([FromBody] RegisterDTO userDTO)
@@ -51,7 +56,18 @@ namespace ProjectGym.Controllers
             if (newEntityId == default)
                 return BadRequest("User already exists");
 
-            return Ok(Program.CreateJWT(user));
+            var (jwt, refresh) = TokenManager.CreateJWTAndRefreshToken(user);
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = false, //TODO-PROD:  Set to true in production
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddDays(7)
+            };
+            Response.Cookies.Append("refreshToken", refresh, cookieOptions);
+
+            return Ok(jwt);
         }
 
         [HttpPost("login")]
@@ -69,7 +85,18 @@ namespace ProjectGym.Controllers
                 if (!user.PasswordHash.SequenceEqual(hash))
                     return BadRequest("Incorrect email or password");
 
-                return Ok(Program.CreateJWT(user));
+                var (jwt, refresh) = TokenManager.CreateJWTAndRefreshToken(user);
+
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = false, //TODO-PROD:  Set to true in production
+                    SameSite = SameSiteMode.None,
+                    Expires = DateTime.UtcNow.AddDays(7)
+                };
+                Response.Cookies.Append("refreshToken", refresh, cookieOptions);
+
+                return Ok(jwt);
             }
             catch (Exception ex)
             {
@@ -82,6 +109,7 @@ namespace ProjectGym.Controllers
         [HttpGet("authenticate")]
         public async Task<IActionResult> Authenticate()
         {
+            var a = Request.Cookies["refreshToken"];
             if (User.Identity is not ClaimsIdentity claimsIdentity)
                 return Unauthorized();
 
@@ -97,6 +125,35 @@ namespace ProjectGym.Controllers
             {
                 ex.LogError();
                 return BadRequest(ex.GetErrorMessage(false));
+            }
+        }
+
+        //TODO: Create a custom authentication handler which allows expired tokens to be refreshed
+        [Authorize(AuthenticationSchemes = "AllowExpired")]
+        [HttpPut("refresh")]
+        public async Task<IActionResult> Refresh()
+        {
+            try
+            {
+                if (User.Identity is not ClaimsIdentity claimsIdentity)
+                    return Unauthorized();
+
+                var a = Request.Cookies["refreshToken"];
+
+                if (claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                    || claimsIdentity.FindFirst(JwtRegisteredClaimNames.Jti)?.Value is not string jwtIdString
+                    || !Request.Cookies.TryGetValue("refreshToken", out var refreshTokenString)
+                    || !Guid.TryParse(jwtIdString, out var jwtId)
+                    || !Guid.TryParse(userIdString, out var userId)
+                    || !Guid.TryParse(refreshTokenString, out var refreshToken))
+                    return BadRequest("Invalid token");
+
+                var newJwt = await TokenManager.RefreshJWT(jwtId, refreshToken, userId);
+                return Ok(newJwt);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Invalid token");
             }
         }
 

@@ -7,7 +7,7 @@ namespace FitnessTracker.Models
     {
         [Key]
         public Guid Token { get; set; }
-        public string JwtId { get; set; } = null!;
+        public Guid JwtId { get; set; }
         public DateTime ExpiryDate { get; set; }
 
         public Guid UserId { get; set; }
