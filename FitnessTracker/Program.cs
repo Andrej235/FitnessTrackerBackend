@@ -206,6 +206,7 @@ namespace ProjectGym
             builder.Services.AddTransient<ICreateService<RefreshToken>, RefreshTokenCreateService>();
             builder.Services.AddTransient<IReadService<RefreshToken>, RefreshTokenReadService>();
             builder.Services.AddTransient<IUpdateService<RefreshToken>, UpdateService<RefreshToken>>();
+            builder.Services.AddTransient<IDeleteService<RefreshToken>, DeleteService<RefreshToken>>();
             #endregion
 
             builder.Services.AddControllers();

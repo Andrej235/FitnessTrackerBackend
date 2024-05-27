@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using ProjectGym.Models;
 using ProjectGym.Services.Create;
+using ProjectGym.Services.Delete;
 using ProjectGym.Services.Read;
 using ProjectGym.Services.Update;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,12 +11,13 @@ using System.Text;
 
 namespace FitnessTracker.Auth
 {
-    public class TokenManager(ConfigurationManager configuration, IReadService<RefreshToken> readService, ICreateService<RefreshToken> createService, IUpdateService<RefreshToken> updateService)
+    public class TokenManager(ConfigurationManager configuration, IReadService<RefreshToken> readService, ICreateService<RefreshToken> createService, IUpdateService<RefreshToken> updateService, IDeleteService<RefreshToken> deleteService)
     {
         private readonly ConfigurationManager configuration = configuration;
         private readonly IReadService<RefreshToken> readService = readService;
         private readonly ICreateService<RefreshToken> createService = createService;
         private readonly IUpdateService<RefreshToken> updateService = updateService;
+        private readonly IDeleteService<RefreshToken> deleteService = deleteService;
 
         public string CreateJWT(User user)
         {
@@ -98,5 +100,7 @@ namespace FitnessTracker.Auth
 
             return newJwt;
         }
+
+        public Task InvalidateAllTokensForUser(Guid userId) => deleteService.DeleteAll(x => x.UserId == userId);
     }
 }

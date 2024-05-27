@@ -34,6 +34,22 @@ namespace ProjectGym.Controllers
         public IUpdateService<User> UpdateService { get; } = updateService;
         public TokenManager TokenManager { get; } = tokenManager;
 
+        private OkObjectResult SetupTokens(User user)
+        {
+            var (jwt, refresh) = TokenManager.CreateJWTAndRefreshToken(user);
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = false, //TODO-PROD: Set to true in production
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddDays(7)
+            };
+            Response.Cookies.Append("refreshToken", refresh, cookieOptions);
+
+            return Ok(jwt);
+        }
+
         [HttpPost("register")]
         public async Task<IActionResult> Create([FromBody] RegisterDTO userDTO)
         {
@@ -56,18 +72,7 @@ namespace ProjectGym.Controllers
             if (newEntityId == default)
                 return BadRequest("User already exists");
 
-            var (jwt, refresh) = TokenManager.CreateJWTAndRefreshToken(user);
-
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = false, //TODO-PROD:  Set to true in production
-                SameSite = SameSiteMode.Strict,
-                Expires = DateTime.UtcNow.AddDays(7)
-            };
-            Response.Cookies.Append("refreshToken", refresh, cookieOptions);
-
-            return Ok(jwt);
+            return SetupTokens(user);
         }
 
         [HttpPost("login")]
@@ -85,18 +90,7 @@ namespace ProjectGym.Controllers
                 if (!user.PasswordHash.SequenceEqual(hash))
                     return BadRequest("Incorrect email or password");
 
-                var (jwt, refresh) = TokenManager.CreateJWTAndRefreshToken(user);
-
-                var cookieOptions = new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = false, //TODO-PROD:  Set to true in production
-                    SameSite = SameSiteMode.Strict,
-                    Expires = DateTime.UtcNow.AddDays(7)
-                };
-                Response.Cookies.Append("refreshToken", refresh, cookieOptions);
-
-                return Ok(jwt);
+                return SetupTokens(user);
             }
             catch (Exception ex)
             {
@@ -128,7 +122,6 @@ namespace ProjectGym.Controllers
             }
         }
 
-        //TODO: Create a custom authentication handler which allows expired tokens to be refreshed
         [Authorize(AuthenticationSchemes = "AllowExpired")]
         [HttpPut("refresh")]
         public async Task<IActionResult> Refresh()
@@ -175,8 +168,8 @@ namespace ProjectGym.Controllers
                 user.PasswordHash = dto.NewPassword.HashPassword(user.Salt);
                 await UpdateService.Update(user);
 
-                //TODO: Invalidate all JWTs / tokens for this user and return a new one
-                return Ok();
+                await TokenManager.InvalidateAllTokensForUser(user.Id);
+                return SetupTokens(user);
             }
             catch (Exception ex)
             {
