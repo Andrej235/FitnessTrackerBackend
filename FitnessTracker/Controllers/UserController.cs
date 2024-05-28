@@ -65,7 +65,8 @@ namespace ProjectGym.Controllers
                 Name = userDTO.Name,
                 Email = userDTO.Email,
                 Salt = salt,
-                PasswordHash = userDTO.Password.HashPassword(salt)
+                PasswordHash = userDTO.Password.HashPassword(salt),
+                RoleId = 3
             };
 
             var newEntityId = await CreateService.Add(user);

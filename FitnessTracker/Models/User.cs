@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ProjectGym.Services.DatabaseSerialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProjectGym.Models
 {
@@ -16,5 +17,8 @@ namespace ProjectGym.Models
         public IEnumerable<Set> CreatedExerciseSets { get; set; } = new List<Set>();
 
         public IEnumerable<Exercise> Bookmarks { get; set; } = new List<Exercise>();
+
+        [ModelReference("Role")]
+        public int RoleId { get; set; }
     }
 }

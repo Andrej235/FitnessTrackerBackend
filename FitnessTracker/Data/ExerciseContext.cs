@@ -27,6 +27,7 @@ namespace ProjectGym.Data
         public DbSet<WorkoutSet> WorkoutSets { get; set; }
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
 
 
