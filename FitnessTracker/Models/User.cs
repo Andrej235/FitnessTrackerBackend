@@ -1,4 +1,5 @@
-﻿using ProjectGym.Services.DatabaseSerialization;
+﻿using FitnessTracker.Models;
+using ProjectGym.Services.DatabaseSerialization;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProjectGym.Models
@@ -20,5 +21,6 @@ namespace ProjectGym.Models
 
         [ModelReference("Role")]
         public int RoleId { get; set; }
+        public Role Role { get; set; } = null!;
     }
 }

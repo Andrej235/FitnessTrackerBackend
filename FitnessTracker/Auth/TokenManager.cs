@@ -27,9 +27,9 @@ namespace FitnessTracker.Auth
             {
                 Subject = new ClaimsIdentity(
                     [
-                        new Claim(ClaimTypes.Name, user.Name),
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        new Claim(ClaimTypes.Role, user.Role.Name)
                     ]
                 ),
 
@@ -55,9 +55,9 @@ namespace FitnessTracker.Auth
             {
                 Subject = new ClaimsIdentity(
                     [
-                        new Claim(ClaimTypes.Name, user.Name),
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                        new Claim(JwtRegisteredClaimNames.Jti, jwtId.ToString())
+                        new Claim(JwtRegisteredClaimNames.Jti, jwtId.ToString()),
+                        new Claim(ClaimTypes.Role, user.Role.Name)
                     ]
                 ),
 
