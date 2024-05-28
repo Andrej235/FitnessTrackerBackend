@@ -40,7 +40,7 @@ namespace ProjectGym.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id, [FromQuery] string? include)
         {
-            await Task.Delay(1000);
+            //await Task.Delay(1000);
             try
             {
                 var exercise = await ReadService.Get(id, include);

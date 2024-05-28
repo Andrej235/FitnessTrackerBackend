@@ -11,13 +11,14 @@ using System.Text;
 
 namespace FitnessTracker.Auth
 {
-    public class TokenManager(ConfigurationManager configuration, IReadService<RefreshToken> readService, ICreateService<RefreshToken> createService, IUpdateService<RefreshToken> updateService, IDeleteService<RefreshToken> deleteService)
+    public class TokenManager(ConfigurationManager configuration, IReadService<RefreshToken> readService, ICreateService<RefreshToken> createService, IUpdateService<RefreshToken> updateService, IDeleteService<RefreshToken> deleteService, IReadService<Role> roleReadService)
     {
         private readonly ConfigurationManager configuration = configuration;
         private readonly IReadService<RefreshToken> readService = readService;
         private readonly ICreateService<RefreshToken> createService = createService;
         private readonly IUpdateService<RefreshToken> updateService = updateService;
         private readonly IDeleteService<RefreshToken> deleteService = deleteService;
+        private readonly IReadService<Role> roleReadService = roleReadService;
 
         public string CreateJWT(User user)
         {
@@ -57,7 +58,7 @@ namespace FitnessTracker.Auth
                     [
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                         new Claim(JwtRegisteredClaimNames.Jti, jwtId.ToString()),
-                        new Claim(ClaimTypes.Role, user.Role.Name)
+                        new Claim(ClaimTypes.Role, user.RoleId.ToString())
                     ]
                 ),
 

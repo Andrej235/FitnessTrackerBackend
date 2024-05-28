@@ -1,6 +1,7 @@
 using FitnessTracker.Auth;
 using FitnessTracker.Models;
 using FitnessTracker.Services.Create;
+using FitnessTracker.Services.Mapping;
 using FitnessTracker.Services.Read;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -77,6 +78,7 @@ namespace ProjectGym
             builder.Services.AddTransient<IUpdateService<Exercise>, ExerciseUpdateService>();
             builder.Services.AddTransient<IDeleteService<Exercise>, DeleteService<Exercise>>();
             builder.Services.AddTransient<IEntityMapper<Exercise, ExerciseDTO>, ExerciseMapper>();
+            builder.Services.AddTransient<IEntityMapper<Exercise, object>, FullExerciseMapper>();
             builder.Services.AddTransient<IEntityMapperAsync<Exercise, ExerciseDTO>, ExerciseMapper>();
             #endregion
 
