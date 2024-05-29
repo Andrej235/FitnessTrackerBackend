@@ -19,8 +19,6 @@ namespace ProjectGym.Models
 
         public IEnumerable<Exercise> Bookmarks { get; set; } = new List<Exercise>();
 
-        [ModelReference("Role")]
-        public int RoleId { get; set; }
-        public Role Role { get; set; } = null!;
+        public string Role { get; set; } = null!;
     }
 }

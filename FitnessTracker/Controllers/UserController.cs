@@ -1,5 +1,6 @@
 ﻿using FitnessTracker.Auth;
 using FitnessTracker.Models;
+using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjectGym.DTOs;
@@ -66,7 +67,7 @@ namespace ProjectGym.Controllers
                 Email = userDTO.Email,
                 Salt = salt,
                 PasswordHash = userDTO.Password.HashPassword(salt),
-                RoleId = 3
+                Role = Role.User
             };
 
             var newEntityId = await CreateService.Add(user);
@@ -104,7 +105,6 @@ namespace ProjectGym.Controllers
         [HttpGet("authenticate")]
         public async Task<IActionResult> Authenticate()
         {
-            var a = Request.Cookies["refreshToken"];
             if (User.Identity is not ClaimsIdentity claimsIdentity)
                 return Unauthorized();
 

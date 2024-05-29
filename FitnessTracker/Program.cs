@@ -211,10 +211,6 @@ namespace ProjectGym
             builder.Services.AddTransient<IDeleteService<RefreshToken>, DeleteService<RefreshToken>>();
             #endregion
 
-            #region Roles
-            builder.Services.AddTransient<IReadService<Role>, RoleReadService>();
-            #endregion
-
             builder.Services.AddControllers();
 
             var app = builder.Build();

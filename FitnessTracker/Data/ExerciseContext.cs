@@ -27,7 +27,6 @@ namespace ProjectGym.Data
         public DbSet<WorkoutSet> WorkoutSets { get; set; }
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
-        public DbSet<Role> Roles { get; set; }
 
 
 
@@ -191,12 +190,6 @@ namespace ProjectGym.Data
                 .HasOne(x => x.User)
                 .WithMany()
                 .HasForeignKey(x => x.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<User>()
-                .HasOne(x => x.Role)
-                .WithMany()
-                .HasForeignKey(x => x.RoleId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
