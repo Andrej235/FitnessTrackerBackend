@@ -202,6 +202,13 @@ namespace ProjectGym.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin")]
+        public IActionResult AdminTest()
+        {
+            return Ok();
+        }
+
         public class RegisterDTO
         {
             public string Name { get; set; } = null!;

@@ -1,6 +1,4 @@
-﻿using FitnessTracker.Models;
-using ProjectGym.Services.DatabaseSerialization;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ProjectGym.Models
 {
