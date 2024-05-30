@@ -10,8 +10,6 @@ namespace ProjectGym.Data
         public DbSet<MuscleGroup> MuscleGroups { get; set; }
         public DbSet<Muscle> Muscles { get; set; }
         public DbSet<Equipment> Equipment { get; set; }
-        public DbSet<Image> Images { get; set; }
-        public DbSet<Note> Notes { get; set; }
         public DbSet<Alias> Aliases { get; set; }
         public DbSet<PrimaryMuscleGroupInExercise> PrimaryMuscleGroups { get; set; }
         public DbSet<SecondaryMuscleGroupInExercise> SecondaryMuscleGroups { get; set; }
@@ -20,7 +18,6 @@ namespace ProjectGym.Data
         public DbSet<EquipmentUsage> EquipmentUsages { get; set; }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<ExerciseBookmark> ExerciseBookmarks { get; set; }
         public DbSet<Set> Sets { get; set; }
         public DbSet<PersonalExerciseWeight> Weights { get; set; }
         public DbSet<Workout> Workouts { get; set; }
@@ -107,18 +104,6 @@ namespace ProjectGym.Data
                 );
 
             modelBuilder.Entity<Exercise>()
-                .HasMany(e => e.Images)
-                .WithOne(i => i.Exercise)
-                .HasForeignKey(i => i.ExerciseId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Exercise>()
-                .HasMany(e => e.Notes)
-                .WithOne(n => n.Exercise)
-                .HasForeignKey(n => n.ExerciseId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Exercise>()
                 .HasMany(e => e.Aliases)
                 .WithOne(a => a.Exercise)
                 .HasForeignKey(a => a.ExerciseId)
@@ -169,21 +154,6 @@ namespace ProjectGym.Data
                 .WithMany()
                 .HasForeignKey(s => s.ExerciseId)
                 .OnDelete(DeleteBehavior.Cascade);
-            #endregion
-
-            #region Bookmarks
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Bookmarks)
-                .WithMany(e => e.Bookmarks)
-                .UsingEntity<ExerciseBookmark>(
-                    j => j.HasOne<Exercise>().WithMany().HasForeignKey(e => e.ExerciseId).OnDelete(DeleteBehavior.Cascade),
-                    j => j.HasOne<User>().WithMany().HasForeignKey(u => u.UserId).OnDelete(DeleteBehavior.Cascade),
-                    j =>
-                    {
-                        j.Property(x => x.Id).ValueGeneratedOnAdd();
-                        j.HasKey(x => x.Id);
-                    }
-                );
             #endregion
 
             modelBuilder.Entity<RefreshToken>()

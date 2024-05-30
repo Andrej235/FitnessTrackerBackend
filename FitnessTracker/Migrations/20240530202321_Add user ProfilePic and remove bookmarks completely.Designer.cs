@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectGym.Data;
 
@@ -11,9 +12,11 @@ using ProjectGym.Data;
 namespace ProjectGym.Migrations
 {
     [DbContext(typeof(ExerciseContext))]
-    partial class ExerciseContextModelSnapshot : ModelSnapshot
+    [Migration("20240530202321_Add user ProfilePic and remove bookmarks completely")]
+    partial class AdduserProfilePicandremovebookmarkscompletely
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,14 +117,6 @@ namespace ProjectGym.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EncodedImage")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -129,6 +124,28 @@ namespace ProjectGym.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Exercises");
+                });
+
+            modelBuilder.Entity("ProjectGym.Models.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ExerciseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("ProjectGym.Models.Muscle", b =>
@@ -168,6 +185,28 @@ namespace ProjectGym.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MuscleGroups");
+                });
+
+            modelBuilder.Entity("ProjectGym.Models.Note", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ExerciseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NoteText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.ToTable("Notes");
                 });
 
             modelBuilder.Entity("ProjectGym.Models.PersonalExerciseWeight", b =>
@@ -448,6 +487,17 @@ namespace ProjectGym.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProjectGym.Models.Image", b =>
+                {
+                    b.HasOne("ProjectGym.Models.Exercise", "Exercise")
+                        .WithMany("Images")
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+                });
+
             modelBuilder.Entity("ProjectGym.Models.Muscle", b =>
                 {
                     b.HasOne("ProjectGym.Models.MuscleGroup", "MuscleGroup")
@@ -457,6 +507,17 @@ namespace ProjectGym.Migrations
                         .IsRequired();
 
                     b.Navigation("MuscleGroup");
+                });
+
+            modelBuilder.Entity("ProjectGym.Models.Note", b =>
+                {
+                    b.HasOne("ProjectGym.Models.Exercise", "Exercise")
+                        .WithMany("Notes")
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
                 });
 
             modelBuilder.Entity("ProjectGym.Models.PersonalExerciseWeight", b =>
@@ -599,6 +660,10 @@ namespace ProjectGym.Migrations
                     b.Navigation("Aliases");
 
                     b.Navigation("Bookmarks");
+
+                    b.Navigation("Images");
+
+                    b.Navigation("Notes");
                 });
 
             modelBuilder.Entity("ProjectGym.Models.MuscleGroup", b =>

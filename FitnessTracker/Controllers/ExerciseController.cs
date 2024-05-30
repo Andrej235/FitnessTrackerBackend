@@ -32,7 +32,6 @@ namespace ProjectGym.Controllers
         public async Task<IActionResult> Get([FromQuery] int? offset, [FromQuery] int? limit, [FromQuery] string? include, [FromQuery] string? q)
         {
             var exercises = await ReadService.Get(q, offset, limit, include);
-            //await Task.Delay(2000);
 
             return Ok(exercises.Select(Mapper.Map).ToList());
         }
@@ -40,7 +39,6 @@ namespace ProjectGym.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id, [FromQuery] string? include)
         {
-            //await Task.Delay(1000);
             try
             {
                 var exercise = await ReadService.Get(id, include);

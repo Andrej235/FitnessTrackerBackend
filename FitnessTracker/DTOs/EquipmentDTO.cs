@@ -5,6 +5,6 @@
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
 
-        public IEnumerable<int> UsedInExerciseIds { get; set; } = new List<int>();
+        public IEnumerable<int> UsedInExerciseIds { get; set; } = [];
     }
 }

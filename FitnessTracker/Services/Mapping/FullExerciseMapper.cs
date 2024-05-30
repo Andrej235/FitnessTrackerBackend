@@ -21,8 +21,6 @@ namespace FitnessTracker.Services.Mapping
                 PrimaryMuscles = muscleMapper is null ? [] : entity.PrimaryMuscles.Select(muscleMapper.Map),
                 SecondaryMuscles = muscleMapper is null ? [] : entity.SecondaryMuscles.Select(muscleMapper.Map),
                 Equipment = !entity.Equipment.Any() || Program.GetService(typeof(IEntityMapper<Equipment, EquipmentDTO>)) is not IEntityMapper<Equipment, EquipmentDTO> equipmentMapper ? [] : entity.Equipment.Select(equipmentMapper.Map),
-                Images = !entity.Images.Any() || Program.GetService(typeof(IEntityMapper<Image, ImageDTO>)) is not IEntityMapper<Image, ImageDTO> imageMapper ? [] : entity.Images.Select(imageMapper.Map),
-                Notes = !entity.Notes.Any() || Program.GetService(typeof(IEntityMapper<Note, NoteDTO>)) is not IEntityMapper<Note, NoteDTO> noteMapper ? [] : entity.Notes.Select(noteMapper.Map),
                 Aliases = !entity.Aliases.Any() || Program.GetService(typeof(IEntityMapper<Alias, AliasDTO>)) is not IEntityMapper<Alias, AliasDTO> aliasMapper ? [] : entity.Aliases.Select(aliasMapper.Map),
                 //Bookmarks = !entity.Bookmarks.Any() || Program.serviceProvider.GetService(typeof(IEntityMapper<User, UserDTO>)) is not IEntityMapper<User, UserDTO> bookmarkMapper ? [] : entity.Bookmarks.Select(bookmarkMapper.Map)
             };

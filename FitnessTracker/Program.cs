@@ -160,22 +160,6 @@ namespace ProjectGym
             builder.Services.AddTransient<IEntityMapper<Alias, AliasDTO>, AliasMapper>();
             #endregion
 
-            #region Note
-            builder.Services.AddTransient<IReadService<Note>, NoteReadService>();
-            builder.Services.AddTransient<ICreateService<Note>, NoteCreateService>();
-            builder.Services.AddTransient<IUpdateService<Note>, UpdateService<Note>>();
-            builder.Services.AddTransient<IDeleteService<Note>, DeleteService<Note>>();
-            builder.Services.AddTransient<IEntityMapper<Note, NoteDTO>, NoteMapper>();
-            #endregion
-
-            #region Image
-            builder.Services.AddTransient<ICreateService<Image>, ImageCreateService>();
-            builder.Services.AddTransient<IReadService<Image>, ImageReadService>();
-            builder.Services.AddTransient<IUpdateService<Image>, UpdateService<Image>>();
-            builder.Services.AddTransient<IDeleteService<Image>, DeleteService<Image>>();
-            builder.Services.AddTransient<IEntityMapper<Image, ImageDTO>, ImageMapper>();
-            #endregion
-
             #region Primary muscle group
             builder.Services.AddTransient<ICreateService<PrimaryMuscleGroupInExercise>, PrimaryMuscleExerciseConnectionCreateService>();
             builder.Services.AddTransient<IReadService<PrimaryMuscleGroupInExercise>, PrimaryMuscleGroupReadService>();
@@ -196,12 +180,6 @@ namespace ProjectGym
             #region Secondary muscle
             builder.Services.AddTransient<IReadService<SecondaryMuscleInExercise>, SecondaryMuscleReadService>();
             builder.Services.AddTransient<IDeleteService<SecondaryMuscleInExercise>, DeleteService<SecondaryMuscleInExercise>>();
-            #endregion
-
-            #region Bookmarks
-            builder.Services.AddTransient<ICreateService<ExerciseBookmark>, BookmarkCreateService>();
-            builder.Services.AddTransient<IReadService<ExerciseBookmark>, BookmarkReadService>();
-            builder.Services.AddTransient<IDeleteService<ExerciseBookmark>, DeleteService<ExerciseBookmark>>();
             #endregion
 
             #region RefreshTokens
