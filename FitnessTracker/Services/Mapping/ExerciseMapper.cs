@@ -12,6 +12,8 @@ namespace ProjectGym.Services.Mapping
         {
             Id = entity.Id,
             Name = entity.Name,
+            Description = entity.Description,
+            Image = entity.EncodedImage,
             AliasIds = entity.Aliases.Select(x => x.Id),
             EquipmentIds = entity.Equipment.Select(x => x.Id),
             PrimaryMuscleGroupIds = entity.PrimaryMuscleGroups.Select(x => x.Id),
@@ -24,6 +26,8 @@ namespace ProjectGym.Services.Mapping
         {
             Id = dto.Id,
             Name = dto.Name,
+            Description = dto.Description,
+            EncodedImage = dto.Image,
             Equipment = await equipmentReadService.Get(x => dto.EquipmentIds.Contains(x.Id), 0, -1, "none"),
             PrimaryMuscleGroups = await muscleGroupReadService.Get(x => dto.PrimaryMuscleGroupIds.Contains(x.Id), 0, -1, "none"),
             SecondaryMuscleGroups = await muscleGroupReadService.Get(x => dto.SecondaryMuscleGroupIds.Contains(x.Id), 0, -1, "none"),

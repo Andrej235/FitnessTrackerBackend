@@ -102,7 +102,7 @@ namespace ProjectGym.Controllers
         }
 
         [Authorize]
-        [HttpGet("authenticate")]
+        [HttpGet]
         public async Task<IActionResult> Authenticate()
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity)
@@ -124,7 +124,7 @@ namespace ProjectGym.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "AllowExpired")]
-        [HttpPut("refresh")]
+        [HttpGet("refresh")]
         public async Task<IActionResult> Refresh()
         {
             try

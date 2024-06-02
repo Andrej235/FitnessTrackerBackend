@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProjectGym.DTOs;
 using ProjectGym.Models;
 using ProjectGym.Services.Create;
@@ -55,6 +56,7 @@ namespace ProjectGym.Controllers
         }
 
         [HttpDelete("{primaryKey}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string primaryKey)
         {
             try
@@ -69,6 +71,7 @@ namespace ProjectGym.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] ExerciseDTO entityDTO)
         {
             var entity = await Mapper.MapAsync(entityDTO);
@@ -76,6 +79,9 @@ namespace ProjectGym.Controllers
             return newId != default ? Ok(newId) : BadRequest("Entity already exists");
         }
 
+        //TODO: Create a patch endpoint
+
+        [HttpPut]
         public async Task<IActionResult> Update([FromBody] ExerciseDTO updatedEntity)
         {
             try

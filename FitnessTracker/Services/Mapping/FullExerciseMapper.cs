@@ -16,6 +16,8 @@ namespace FitnessTracker.Services.Mapping
             {
                 entity.Id,
                 entity.Name,
+                entity.Description,
+                Image = entity.EncodedImage,
                 PrimaryMuscleGroups = muscleGroupMapper is null ? [] : entity.PrimaryMuscleGroups.Select(muscleGroupMapper.Map),
                 SecondaryMuscleGroups = muscleGroupMapper is null ? [] : entity.SecondaryMuscleGroups.Select(muscleGroupMapper.Map),
                 PrimaryMuscles = muscleMapper is null ? [] : entity.PrimaryMuscles.Select(muscleMapper.Map),
