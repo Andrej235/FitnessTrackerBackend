@@ -138,7 +138,7 @@ namespace ProjectGym.Controllers
                     || !Guid.TryParse(jwtIdString, out var jwtId)
                     || !Guid.TryParse(userIdString, out var userId)
                     || !Guid.TryParse(refreshTokenString, out var refreshToken))
-                    return BadRequest("Invalid token");
+                    return Unauthorized("Invalid token");
 
                 var newJwt = await TokenManager.RefreshJWT(jwtId, refreshToken, userId);
                 return Ok(newJwt);
@@ -147,6 +147,17 @@ namespace ProjectGym.Controllers
             {
                 return BadRequest("Invalid token");
             }
+        }
+
+        [Authorize]
+        [HttpDelete("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            if (!Request.Cookies.TryGetValue("refreshToken", out var refreshTokenString) || !Guid.TryParse(refreshTokenString, out var refreshToken))
+                return Unauthorized("Invalid token");
+
+            await TokenManager.InvalidateRefreshToken(refreshToken);
+            return Ok();
         }
 
         [Authorize]

@@ -102,5 +102,7 @@ namespace FitnessTracker.Auth
         }
 
         public Task InvalidateAllTokensForUser(Guid userId) => deleteService.DeleteAll(x => x.UserId == userId);
+
+        public Task InvalidateRefreshToken(Guid refreshToken) => deleteService.DeleteFirst(x => x.Token == refreshToken);
     }
 }

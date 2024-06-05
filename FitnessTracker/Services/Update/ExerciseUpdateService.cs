@@ -21,26 +21,21 @@ namespace ProjectGym.Services.Update
                 var exercise = await readService.Get(x => x.Id == updatedEntity.Id, "none") ?? throw new NullReferenceException("Exercise was not found.");
                 context.AttachRange(exercise);
 
-                if (updatedEntity.Equipment.Any())
-                {
-                    await equipmentUsageDeleteService.DeleteAll(x => x.ExerciseId == exercise.Id);
-                    exercise.Equipment = updatedEntity.Equipment;
-                }
+                exercise.Name = updatedEntity.Name;
+                exercise.Description = updatedEntity.Description;
+                exercise.EncodedImage = updatedEntity.EncodedImage;
 
-                if (updatedEntity.PrimaryMuscleGroups.Any())
-                {
-                    await primaryMuscleGroupDeleteService.DeleteAll(x => x.ExerciseId == exercise.Id);
-                    exercise.PrimaryMuscleGroups = updatedEntity.PrimaryMuscleGroups;
-                }
+                await equipmentUsageDeleteService.DeleteAll(x => x.ExerciseId == exercise.Id);
+                exercise.Equipment = updatedEntity.Equipment;
+
+                await primaryMuscleGroupDeleteService.DeleteAll(x => x.ExerciseId == exercise.Id);
+                exercise.PrimaryMuscleGroups = updatedEntity.PrimaryMuscleGroups;
 
                 await secondaryMuscleGroupDeleteService.DeleteAll(x => x.ExerciseId == exercise.Id);
                 exercise.SecondaryMuscleGroups = updatedEntity.SecondaryMuscleGroups;
 
-                if (updatedEntity.PrimaryMuscles.Any())
-                {
-                    await primaryMuscleDeleteService.DeleteAll(x => x.ExerciseId == exercise.Id);
-                    exercise.PrimaryMuscles = updatedEntity.PrimaryMuscles;
-                }
+                await primaryMuscleDeleteService.DeleteAll(x => x.ExerciseId == exercise.Id);
+                exercise.PrimaryMuscles = updatedEntity.PrimaryMuscles;
 
                 await secondaryMuscleDeleteService.DeleteAll(x => x.ExerciseId == exercise.Id);
                 exercise.SecondaryMuscles = updatedEntity.SecondaryMuscles;
