@@ -1,4 +1,5 @@
-﻿using ProjectGym.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using ProjectGym.Data;
 using ProjectGym.Models;
 using System.Linq.Expressions;
 
@@ -13,7 +14,7 @@ namespace ProjectGym.Services.Read
                 if (string.IsNullOrWhiteSpace(value))
                     throw new NullReferenceException("Value in a search query cannot be null or empty.");
 
-                return e => e.Name.ToLower().Contains(value.ToLower()) || e.Aliases.Any(x => x.AliasName.ToLower().Contains(value.ToLower()));
+                return e => EF.Functions.Like(e.Name, $"%{value}%");
             }
             else
             {
@@ -30,9 +31,6 @@ namespace ProjectGym.Services.Read
                         _ => throw new NotSupportedException($"Invalid key in search query. Entered key: {key}"),
                     };
                 }
-
-                if (key == "bookmarkedby" && Guid.TryParse(value, out Guid userId))
-                    return x => x.Bookmarks.Any(x => x.Id == userId);
 
                 if (value.Contains(','))
                 {

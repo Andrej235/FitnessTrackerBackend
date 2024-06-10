@@ -14,7 +14,6 @@ namespace ProjectGym.Services.Mapping
             Name = entity.Name,
             Description = entity.Description,
             Image = entity.EncodedImage,
-            AliasIds = entity.Aliases.Select(x => x.Id),
             EquipmentIds = entity.Equipment.Select(x => x.Id),
             PrimaryMuscleGroupIds = entity.PrimaryMuscleGroups.Select(x => x.Id),
             SecondaryMuscleGroupIds = entity.SecondaryMuscleGroups.Select(x => x.Id),

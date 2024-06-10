@@ -10,7 +10,6 @@ namespace ProjectGym.Services.Mapping
         {
             Id = entity.Id,
             Name = entity.Name,
-            MuscleIds = entity.Muscles.Select(x => x.Id),
             PrimaryInExercises = entity.PrimaryInExercises.Select(x => x.Id),
             SecondaryInExercises = entity.SecondaryInExercises.Select(x => x.Id),
         };

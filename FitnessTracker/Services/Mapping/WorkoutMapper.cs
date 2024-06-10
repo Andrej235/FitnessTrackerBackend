@@ -19,7 +19,7 @@ namespace ProjectGym.Services.Mapping
             Name = entity.Name,
             IsPublic = entity.IsPublic,
             CreatorId = entity.CreatorId,
-            WorkoutSetIds = entity.WorkoutSets.Select(x => x.Id),
+            WorkoutSetIds = entity.Sets.Select(x => x.Id),
         };
     }
 }

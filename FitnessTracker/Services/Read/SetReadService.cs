@@ -8,16 +8,7 @@ namespace ProjectGym.Services.Read
     {
         protected override Expression<Func<Set, bool>> TranslateKeyValueToExpression(string key, string value)
         {
-            if (bool.TryParse(value, out bool boolValue))
-            {
-                return key switch
-                {
-                    "tofaliure" => x => x.ToFaliure == boolValue,
-                    "partials" => x => x.ToFaliure == boolValue,
-                    _ => throw new NotSupportedException($"Invalid value in search query. Entered value '{value}' for key '{key}'")
-                };
-            }
-            else if (int.TryParse(value, out int valueId))
+            if (int.TryParse(value, out int valueId))
             {
                 return key switch
                 {

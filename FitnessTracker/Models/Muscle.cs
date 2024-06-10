@@ -10,7 +10,6 @@ namespace ProjectGym.Models
         public IEnumerable<Exercise> PrimaryInExercises { get; set; } = new List<Exercise>();
         public IEnumerable<Exercise> SecondaryInExercises { get; set; } = new List<Exercise>();
 
-        public MuscleGroup MuscleGroup { get; set; } = null!;
         [ModelReference("MuscleGroup")]
         public int MuscleGroupId { get; set; }
     }

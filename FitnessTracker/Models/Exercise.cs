@@ -12,9 +12,5 @@
         public IEnumerable<Muscle> PrimaryMuscles { get; set; } = new List<Muscle>();
         public IEnumerable<Muscle> SecondaryMuscles { get; set; } = new List<Muscle>();
         public IEnumerable<Equipment> Equipment { get; set; } = new List<Equipment>();
-
-        public IEnumerable<Alias> Aliases { get; set; } = new List<Alias>();
-
-        public IEnumerable<User> Bookmarks { get; set; } = new List<User>();
     }
 }

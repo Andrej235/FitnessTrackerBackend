@@ -90,28 +90,12 @@ namespace ProjectGym
             builder.Services.AddTransient<IEntityMapper<User, UserDTO>, UserMapper>();
             #endregion
 
-            #region Weight
-            builder.Services.AddTransient<ICreateService<PersonalExerciseWeight>, WeightCreateService>();
-            builder.Services.AddTransient<IReadService<PersonalExerciseWeight>, WeightReadService>();
-            builder.Services.AddTransient<IUpdateService<PersonalExerciseWeight>, UpdateService<PersonalExerciseWeight>>();
-            builder.Services.AddTransient<IDeleteService<PersonalExerciseWeight>, DeleteService<PersonalExerciseWeight>>();
-            builder.Services.AddTransient<IEntityMapper<PersonalExerciseWeight, PersonalExerciseWeightDTO>, WeightMapper>();
-            #endregion
-
             #region Set
             builder.Services.AddTransient<ICreateService<Set>, CreateService<Set>>();
             builder.Services.AddTransient<IReadService<Set>, SetReadService>();
             builder.Services.AddTransient<IUpdateService<Set>, UpdateService<Set>>();
             builder.Services.AddTransient<IDeleteService<Set>, DeleteService<Set>>();
             builder.Services.AddTransient<IEntityMapper<Set, SetDTO>, SetMapper>();
-            #endregion
-
-            #region Workout Set
-            builder.Services.AddTransient<ICreateService<WorkoutSet>, WorkoutSetCreateService>();
-            builder.Services.AddTransient<IReadService<WorkoutSet>, WorkoutSetReadService>();
-            builder.Services.AddTransient<IUpdateService<WorkoutSet>, UpdateService<WorkoutSet>>();
-            builder.Services.AddTransient<IDeleteService<WorkoutSet>, DeleteService<WorkoutSet>>();
-            builder.Services.AddTransient<IEntityMapper<WorkoutSet, WorkoutSetDTO>, WorkoutSetMapper>();
             #endregion
 
             #region Workouts
@@ -150,14 +134,6 @@ namespace ProjectGym
             builder.Services.AddTransient<IUpdateService<Equipment>, UpdateService<Equipment>>();
             builder.Services.AddTransient<IDeleteService<Equipment>, DeleteService<Equipment>>();
             builder.Services.AddTransient<IEntityMapper<Equipment, EquipmentDTO>, EquipmentMapper>();
-            #endregion
-
-            #region Alias
-            builder.Services.AddTransient<IReadService<Alias>, AliasReadService>();
-            builder.Services.AddTransient<ICreateService<Alias>, AliasCreateService>();
-            builder.Services.AddTransient<IUpdateService<Alias>, UpdateService<Alias>>();
-            builder.Services.AddTransient<IDeleteService<Alias>, DeleteService<Alias>>();
-            builder.Services.AddTransient<IEntityMapper<Alias, AliasDTO>, AliasMapper>();
             #endregion
 
             #region Primary muscle group

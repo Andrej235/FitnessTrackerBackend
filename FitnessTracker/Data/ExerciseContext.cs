@@ -10,7 +10,6 @@ namespace ProjectGym.Data
         public DbSet<MuscleGroup> MuscleGroups { get; set; }
         public DbSet<Muscle> Muscles { get; set; }
         public DbSet<Equipment> Equipment { get; set; }
-        public DbSet<Alias> Aliases { get; set; }
         public DbSet<PrimaryMuscleGroupInExercise> PrimaryMuscleGroups { get; set; }
         public DbSet<SecondaryMuscleGroupInExercise> SecondaryMuscleGroups { get; set; }
         public DbSet<PrimaryMuscleInExercise> PrimaryMuscles { get; set; }
@@ -19,9 +18,7 @@ namespace ProjectGym.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Set> Sets { get; set; }
-        public DbSet<PersonalExerciseWeight> Weights { get; set; }
         public DbSet<Workout> Workouts { get; set; }
-        public DbSet<WorkoutSet> WorkoutSets { get; set; }
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
@@ -102,52 +99,14 @@ namespace ProjectGym.Data
                         j.HasKey(ee => ee.Id);
                     }
                 );
-
-            modelBuilder.Entity<Exercise>()
-                .HasMany(e => e.Aliases)
-                .WithOne(a => a.Exercise)
-                .HasForeignKey(a => a.ExerciseId)
-                .OnDelete(DeleteBehavior.Cascade);
-            #endregion
-
-            #region Weight
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Weights)
-                .WithOne(w => w.User)
-                .HasForeignKey(w => w.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<PersonalExerciseWeight>()
-                .HasOne(w => w.Exercise)
-                .WithMany()
-                .HasForeignKey(w => w.ExerciseId)
-                .OnDelete(DeleteBehavior.Cascade);
             #endregion
 
             #region Workouts
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.CreatedWorkouts)
-                .WithOne(w => w.Creator)
-                .HasForeignKey(w => w.CreatorId)
-                .OnDelete(DeleteBehavior.Cascade);
-
             modelBuilder.Entity<Workout>()
-                .HasMany(w => w.WorkoutSets)
-                .WithOne(ws => ws.Workout)
+                .HasMany(w => w.Sets)
+                .WithOne()
                 .HasForeignKey(ws => ws.WorkoutId)
                 .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<WorkoutSet>()
-                .HasOne(ws => ws.Set)
-                .WithMany()
-                .HasForeignKey(ws => ws.SetId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Set>()
-                .HasOne(s => s.Creator)
-                .WithMany(u => u.CreatedExerciseSets)
-                .HasForeignKey(s => s.CreatorId)
-                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Set>()
                 .HasOne(s => s.Exercise)

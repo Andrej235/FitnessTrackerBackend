@@ -13,11 +13,11 @@ namespace ProjectGym.Services.Read
             {
                 return key switch
                 {
-                    "equipment" => x => x.WorkoutSets.Any(x => x.Set.Exercise.Equipment.Any(x => x.Id == valueId)),
-                    "primarymusclegroup" => x => x.WorkoutSets.Any(x => x.Set.Exercise.PrimaryMuscleGroups.Any(x => x.Id == valueId)),
-                    "secondarymusclegroup" => x => x.WorkoutSets.Any(x => x.Set.Exercise.SecondaryMuscleGroups.Any(x => x.Id == valueId)),
-                    "primarymuscle" => x => x.WorkoutSets.Any(x => x.Set.Exercise.PrimaryMuscles.Any(x => x.Id == valueId)),
-                    "secondarymuscle" => x => x.WorkoutSets.Any(x => x.Set.Exercise.SecondaryMuscles.Any(x => x.Id == valueId)),
+                    "equipment" => x => x.Sets.Any(x => x.Exercise.Equipment.Any(x => x.Id == valueId)),
+                    "primarymusclegroup" => x => x.Sets.Any(x => x.Exercise.PrimaryMuscleGroups.Any(x => x.Id == valueId)),
+                    "secondarymusclegroup" => x => x.Sets.Any(x => x.Exercise.SecondaryMuscleGroups.Any(x => x.Id == valueId)),
+                    "primarymuscle" => x => x.Sets.Any(x => x.Exercise.PrimaryMuscles.Any(x => x.Id == valueId)),
+                    "secondarymuscle" => x => x.Sets.Any(x => x.Exercise.SecondaryMuscles.Any(x => x.Id == valueId)),
                     _ => throw new NotSupportedException($"Invalid key in search query. Entered key: {key}")
                 };
             }
@@ -34,11 +34,11 @@ namespace ProjectGym.Services.Read
 
                 return key switch
                 {
-                    "primarymusclegroup" => x => x.WorkoutSets.Any(x => x.Set.Exercise.PrimaryMuscleGroups.Any(m => valueIds.Contains(m.Id))),
-                    "secondarymusclegroup" => x => x.WorkoutSets.Any(x => x.Set.Exercise.SecondaryMuscleGroups.Any(m => valueIds.Contains(m.Id))),
-                    "primarymuscle" => x => x.WorkoutSets.Any(x => x.Set.Exercise.PrimaryMuscles.Any(m => valueIds.Contains(m.Id))),
-                    "secondarymuscle" => x => x.WorkoutSets.Any(x => x.Set.Exercise.SecondaryMuscles.Any(m => valueIds.Contains(m.Id))),
-                    "equipment" => x => x.WorkoutSets.Any(x => x.Set.Exercise.Equipment.Any(eq => valueIds.Contains(eq.Id))),
+                    "primarymusclegroup" => x => x.Sets.Any(x => x.Exercise.PrimaryMuscleGroups.Any(m => valueIds.Contains(m.Id))),
+                    "secondarymusclegroup" => x => x.Sets.Any(x => x.Exercise.SecondaryMuscleGroups.Any(m => valueIds.Contains(m.Id))),
+                    "primarymuscle" => x => x.Sets.Any(x => x.Exercise.PrimaryMuscles.Any(m => valueIds.Contains(m.Id))),
+                    "secondarymuscle" => x => x.Sets.Any(x => x.Exercise.SecondaryMuscles.Any(m => valueIds.Contains(m.Id))),
+                    "equipment" => x => x.Sets.Any(x => x.Exercise.Equipment.Any(eq => valueIds.Contains(eq.Id))),
                     _ => throw new NotSupportedException($"Invalid key in search query. Entered key: {key}"),
                 };
             }

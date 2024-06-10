@@ -14,6 +14,6 @@ namespace ProjectGym.Models
         [ModelReference("User")]
         public Guid CreatorId { get; set; }
 
-        public IEnumerable<WorkoutSet> WorkoutSets { get; set; } = new List<WorkoutSet>();
+        public IEnumerable<Set> Sets { get; set; } = new HashSet<Set>();
     }
 }

@@ -8,23 +8,17 @@ namespace ProjectGym.Services.Mapping
         public Set Map(SetDTO dto) => new()
         {
             Id = dto.Id,
-            RepRange_Top = dto.RepRange_Top,
-            RepRange_Bottom = dto.RepRange_Bottom,
-            ToFaliure = dto.ToFailure,
-            CreatorId = dto.CreatorId,
+            TopRepRange  = dto.RepRange_Top,
+            BottomRepRange = dto.RepRange_Bottom,
             ExerciseId = dto.ExerciseId,
-            DropSet = dto.DropSet,
         };
 
         public SetDTO Map(Set entity) => new()
         {
             Id = entity.Id,
-            ToFailure = entity.ToFaliure,
-            RepRange_Top = entity.RepRange_Top,
-            RepRange_Bottom = entity.RepRange_Bottom,
-            CreatorId = entity.CreatorId,
+            RepRange_Top = entity.TopRepRange ,
+            RepRange_Bottom = entity.BottomRepRange,
             ExerciseId = entity.ExerciseId,
-            DropSet = entity.DropSet,
         };
     }
 }
