@@ -78,96 +78,96 @@ namespace ProjectGym
             builder.Services.AddScoped<TokenManager>();
 
             #region Exercise
-            builder.Services.AddTransient<ICreateService<Exercise>, ExerciseCreateService>();
-            builder.Services.AddTransient<IReadService<Exercise>, ExerciseReadService>();
-            builder.Services.AddTransient<IUpdateService<Exercise>, ExerciseUpdateService>();
-            builder.Services.AddTransient<IDeleteService<Exercise>, DeleteService<Exercise>>();
-            builder.Services.AddTransient<IEntityMapper<Exercise, ExerciseDTO>, ExerciseMapper>();
-            builder.Services.AddTransient<IEntityMapper<Exercise, object>, FullExerciseMapper>();
-            builder.Services.AddTransient<IEntityMapperAsync<Exercise, ExerciseDTO>, ExerciseMapper>();
+            builder.Services.AddScoped<ICreateService<Exercise>, ExerciseCreateService>();
+            builder.Services.AddScoped<IReadService<Exercise>, ExerciseReadService>();
+            builder.Services.AddScoped<IUpdateService<Exercise>, ExerciseUpdateService>();
+            builder.Services.AddScoped<IDeleteService<Exercise>, DeleteService<Exercise>>();
+            builder.Services.AddScoped<IEntityMapper<Exercise, ExerciseDTO>, ExerciseMapper>();
+            builder.Services.AddScoped<IEntityMapper<Exercise, object>, FullExerciseMapper>();
+            builder.Services.AddScoped<IEntityMapperAsync<Exercise, ExerciseDTO>, ExerciseMapper>();
             #endregion
 
             #region User
-            builder.Services.AddTransient<ICreateService<User>, UserCreateService>();
-            builder.Services.AddTransient<IReadService<User>, UserReadService>();
-            builder.Services.AddTransient<IUpdateService<User>, UpdateService<User>>();
-            builder.Services.AddTransient<IDeleteService<User>, DeleteService<User>>();
-            builder.Services.AddTransient<IEntityMapper<User, UserDTO>, UserMapper>();
+            builder.Services.AddScoped<ICreateService<User>, UserCreateService>();
+            builder.Services.AddScoped<IReadService<User>, UserReadService>();
+            builder.Services.AddScoped<IUpdateService<User>, UpdateService<User>>();
+            builder.Services.AddScoped<IDeleteService<User>, DeleteService<User>>();
+            builder.Services.AddScoped<IEntityMapper<User, UserDTO>, UserMapper>();
             #endregion
 
             #region Set
-            builder.Services.AddTransient<ICreateService<Set>, CreateService<Set>>();
-            builder.Services.AddTransient<IReadService<Set>, SetReadService>();
-            builder.Services.AddTransient<IUpdateService<Set>, UpdateService<Set>>();
-            builder.Services.AddTransient<IDeleteService<Set>, DeleteService<Set>>();
-            builder.Services.AddTransient<IEntityMapper<Set, SetDTO>, SetMapper>();
+            builder.Services.AddScoped<ICreateService<Set>, CreateService<Set>>();
+            builder.Services.AddScoped<IReadService<Set>, SetReadService>();
+            builder.Services.AddScoped<IUpdateService<Set>, UpdateService<Set>>();
+            builder.Services.AddScoped<IDeleteService<Set>, DeleteService<Set>>();
+            builder.Services.AddScoped<IEntityMapper<Set, SetDTO>, SetMapper>();
             #endregion
 
             #region Workouts
-            builder.Services.AddTransient<IReadService<Workout>, WorkoutReadService>();
-            builder.Services.AddTransient<ICreateService<Workout>, CreateService<Workout>>();
-            builder.Services.AddTransient<IUpdateService<Workout>, WorkoutUpdateService>();
-            builder.Services.AddTransient<IDeleteService<Workout>, DeleteService<Workout>>();
-            builder.Services.AddTransient<IEntityMapper<Workout, WorkoutDTO>, WorkoutMapper>();
+            builder.Services.AddScoped<IReadService<Workout>, WorkoutReadService>();
+            builder.Services.AddScoped<ICreateService<Workout>, CreateService<Workout>>();
+            builder.Services.AddScoped<IUpdateService<Workout>, WorkoutUpdateService>();
+            builder.Services.AddScoped<IDeleteService<Workout>, DeleteService<Workout>>();
+            builder.Services.AddScoped<IEntityMapper<Workout, WorkoutDTO>, WorkoutMapper>();
             #endregion
 
             #region Muscle group
-            builder.Services.AddTransient<ICreateService<MuscleGroup>, MuscleGroupCreateService>();
-            builder.Services.AddTransient<IReadService<MuscleGroup>, MuscleGroupReadService>();
-            builder.Services.AddTransient<IUpdateService<MuscleGroup>, UpdateService<MuscleGroup>>();
-            builder.Services.AddTransient<IDeleteService<MuscleGroup>, DeleteService<MuscleGroup>>();
-            builder.Services.AddTransient<IEntityMapper<MuscleGroup, MuscleGroupDTO>, MuscleGroupMapper>();
+            builder.Services.AddScoped<ICreateService<MuscleGroup>, MuscleGroupCreateService>();
+            builder.Services.AddScoped<IReadService<MuscleGroup>, MuscleGroupReadService>();
+            builder.Services.AddScoped<IUpdateService<MuscleGroup>, UpdateService<MuscleGroup>>();
+            builder.Services.AddScoped<IDeleteService<MuscleGroup>, DeleteService<MuscleGroup>>();
+            builder.Services.AddScoped<IEntityMapper<MuscleGroup, MuscleGroupDTO>, MuscleGroupMapper>();
             #endregion
 
             #region Muscle
-            builder.Services.AddTransient<ICreateService<Muscle>, CreateService<Muscle>>();
-            builder.Services.AddTransient<IReadService<Muscle>, MuscleReadService>();
-            builder.Services.AddTransient<IUpdateService<Muscle>, UpdateService<Muscle>>();
-            builder.Services.AddTransient<IDeleteService<Muscle>, DeleteService<Muscle>>();
-            builder.Services.AddTransient<IEntityMapper<Muscle, MuscleDTO>, MuscleMapper>();
+            builder.Services.AddScoped<ICreateService<Muscle>, CreateService<Muscle>>();
+            builder.Services.AddScoped<IReadService<Muscle>, MuscleReadService>();
+            builder.Services.AddScoped<IUpdateService<Muscle>, UpdateService<Muscle>>();
+            builder.Services.AddScoped<IDeleteService<Muscle>, DeleteService<Muscle>>();
+            builder.Services.AddScoped<IEntityMapper<Muscle, MuscleDTO>, MuscleMapper>();
             #endregion
 
             #region Equipment exercise usage
-            builder.Services.AddTransient<ICreateService<EquipmentUsage>, EquipmentExerciseUsageCreateService>();
-            builder.Services.AddTransient<IReadService<EquipmentUsage>, EquipmentExerciseUsageReadService>();
-            builder.Services.AddTransient<IDeleteService<EquipmentUsage>, DeleteService<EquipmentUsage>>();
+            builder.Services.AddScoped<ICreateService<EquipmentUsage>, EquipmentExerciseUsageCreateService>();
+            builder.Services.AddScoped<IReadService<EquipmentUsage>, EquipmentExerciseUsageReadService>();
+            builder.Services.AddScoped<IDeleteService<EquipmentUsage>, DeleteService<EquipmentUsage>>();
             #endregion
 
             #region Equipment
-            builder.Services.AddTransient<ICreateService<Equipment>, EquipmentCreateService>();
-            builder.Services.AddTransient<IReadService<Equipment>, EquipmentReadService>();
-            builder.Services.AddTransient<IUpdateService<Equipment>, UpdateService<Equipment>>();
-            builder.Services.AddTransient<IDeleteService<Equipment>, DeleteService<Equipment>>();
-            builder.Services.AddTransient<IEntityMapper<Equipment, EquipmentDTO>, EquipmentMapper>();
+            builder.Services.AddScoped<ICreateService<Equipment>, EquipmentCreateService>();
+            builder.Services.AddScoped<IReadService<Equipment>, EquipmentReadService>();
+            builder.Services.AddScoped<IUpdateService<Equipment>, UpdateService<Equipment>>();
+            builder.Services.AddScoped<IDeleteService<Equipment>, DeleteService<Equipment>>();
+            builder.Services.AddScoped<IEntityMapper<Equipment, EquipmentDTO>, EquipmentMapper>();
             #endregion
 
             #region Primary muscle group
-            builder.Services.AddTransient<ICreateService<PrimaryMuscleGroupInExercise>, PrimaryMuscleExerciseConnectionCreateService>();
-            builder.Services.AddTransient<IReadService<PrimaryMuscleGroupInExercise>, PrimaryMuscleGroupReadService>();
-            builder.Services.AddTransient<IDeleteService<PrimaryMuscleGroupInExercise>, DeleteService<PrimaryMuscleGroupInExercise>>();
+            builder.Services.AddScoped<ICreateService<PrimaryMuscleGroupInExercise>, PrimaryMuscleExerciseConnectionCreateService>();
+            builder.Services.AddScoped<IReadService<PrimaryMuscleGroupInExercise>, PrimaryMuscleGroupReadService>();
+            builder.Services.AddScoped<IDeleteService<PrimaryMuscleGroupInExercise>, DeleteService<PrimaryMuscleGroupInExercise>>();
             #endregion
 
             #region Secondary muscle group
-            builder.Services.AddTransient<IReadService<SecondaryMuscleGroupInExercise>, SecondaryMuscleGroupReadService>();
-            builder.Services.AddTransient<ICreateService<SecondaryMuscleGroupInExercise>, SecondaryMuscleExerciseConnectionCreateService>();
-            builder.Services.AddTransient<IDeleteService<SecondaryMuscleGroupInExercise>, DeleteService<SecondaryMuscleGroupInExercise>>();
+            builder.Services.AddScoped<IReadService<SecondaryMuscleGroupInExercise>, SecondaryMuscleGroupReadService>();
+            builder.Services.AddScoped<ICreateService<SecondaryMuscleGroupInExercise>, SecondaryMuscleExerciseConnectionCreateService>();
+            builder.Services.AddScoped<IDeleteService<SecondaryMuscleGroupInExercise>, DeleteService<SecondaryMuscleGroupInExercise>>();
             #endregion
 
             #region Primary muscle
-            builder.Services.AddTransient<IReadService<PrimaryMuscleInExercise>, PrimaryMuscleReadService>();
-            builder.Services.AddTransient<IDeleteService<PrimaryMuscleInExercise>, DeleteService<PrimaryMuscleInExercise>>();
+            builder.Services.AddScoped<IReadService<PrimaryMuscleInExercise>, PrimaryMuscleReadService>();
+            builder.Services.AddScoped<IDeleteService<PrimaryMuscleInExercise>, DeleteService<PrimaryMuscleInExercise>>();
             #endregion
 
             #region Secondary muscle
-            builder.Services.AddTransient<IReadService<SecondaryMuscleInExercise>, SecondaryMuscleReadService>();
-            builder.Services.AddTransient<IDeleteService<SecondaryMuscleInExercise>, DeleteService<SecondaryMuscleInExercise>>();
+            builder.Services.AddScoped<IReadService<SecondaryMuscleInExercise>, SecondaryMuscleReadService>();
+            builder.Services.AddScoped<IDeleteService<SecondaryMuscleInExercise>, DeleteService<SecondaryMuscleInExercise>>();
             #endregion
 
             #region RefreshTokens
-            builder.Services.AddTransient<ICreateService<RefreshToken>, RefreshTokenCreateService>();
-            builder.Services.AddTransient<IReadService<RefreshToken>, RefreshTokenReadService>();
-            builder.Services.AddTransient<IUpdateService<RefreshToken>, UpdateService<RefreshToken>>();
-            builder.Services.AddTransient<IDeleteService<RefreshToken>, DeleteService<RefreshToken>>();
+            builder.Services.AddScoped<ICreateService<RefreshToken>, RefreshTokenCreateService>();
+            builder.Services.AddScoped<IReadService<RefreshToken>, RefreshTokenReadService>();
+            builder.Services.AddScoped<IUpdateService<RefreshToken>, UpdateService<RefreshToken>>();
+            builder.Services.AddScoped<IDeleteService<RefreshToken>, DeleteService<RefreshToken>>();
             #endregion
 
             builder.Services.AddControllers();

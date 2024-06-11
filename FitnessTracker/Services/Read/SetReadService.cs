@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace ProjectGym.Services.Read
 {
-    public class SetReadService(ExerciseContext context) : ReadService<Set>(context)
+    public class SetReadService(ExerciseContext context) : AbstractReadService<Set>(context)
     {
         protected override Expression<Func<Set, bool>> TranslateKeyValueToExpression(string key, string value)
         {

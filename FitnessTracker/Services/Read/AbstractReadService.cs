@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ProjectGym.Data;
 using ProjectGym.Utilities;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace ProjectGym.Services.Read
 {
-    public abstract class AbstractReadService<T> : IReadService<T> where T : class
+    public abstract class AbstractReadService<T>(ExerciseContext context) : IReadService<T> where T : class
     {
         public virtual async Task<T> Get(Expression<Func<T, bool>> criteria, string? include = "all")
         {
@@ -73,7 +75,6 @@ namespace ProjectGym.Services.Read
             });
         }
 
-        protected abstract IQueryable<T> GetIncluded(IEnumerable<string>? include);
         protected abstract Expression<Func<T, bool>> TranslateKeyValueToExpression(string key, string value);
 
         protected static IEnumerable<string>? SplitIncludeString(string? include) => include?.ToLower().Replace(" ", "").Split(',').Where(x => !string.IsNullOrWhiteSpace(x));
@@ -148,6 +149,40 @@ namespace ProjectGym.Services.Read
                 queryable = queryable.Take(limit ?? 0);
 
             return [.. queryable];
+        }
+
+        protected virtual IQueryable<T> GetIncluded(IEnumerable<string>? include)
+        {
+            IQueryable<T> entitiesIncluding = context.Set<T>().AsQueryable();
+            if (include is null || !include.Any() || include.Contains("none"))
+                return entitiesIncluding;
+
+            ParameterExpression parameter = Expression.Parameter(typeof(T), "x");
+            var navigationProperties = typeof(T).GetProperties()
+                .Where(p => p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+
+            if (include.Contains("all"))
+            {
+                foreach (var navigationProperty in navigationProperties)
+                    entitiesIncluding = Include(entitiesIncluding, navigationProperty.Name);
+
+                return entitiesIncluding;
+            }
+
+            IEnumerable<PropertyInfo> c = navigationProperties.Where(x => include.Any(y => x.Name.Contains(y, StringComparison.CurrentCultureIgnoreCase)));
+            foreach (var navigationProperty in c)
+                entitiesIncluding = Include(entitiesIncluding, navigationProperty.Name);
+
+            return entitiesIncluding;
+        }
+
+        private static IQueryable<TEntity> Include<TEntity>(IQueryable<TEntity> query, string propertyName) where TEntity : class
+        {
+            var parameter = Expression.Parameter(typeof(TEntity), "x");
+            var property = Expression.Property(parameter, propertyName);
+            var lambda = Expression.Lambda<Func<TEntity, object>>(property, parameter);
+
+            return query.Include(lambda);
         }
 
         //**************************************************************

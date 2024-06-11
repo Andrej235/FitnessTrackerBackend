@@ -8,7 +8,7 @@ using ProjectGym.Services.Read;
 
 namespace FitnessTracker.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [Route("api/unsafe/narrow")]
     [ApiController]
     public class UNSAFE_NarrowController(ExerciseContext context, IReadService<Exercise> readService, IEntityMapper<Exercise, ExerciseDTO> mapper) : ControllerBase
@@ -30,6 +30,39 @@ namespace FitnessTracker.Controllers
             });
 
             return Ok(ApplyOffsetAndLimit(result));
+        }
+
+        [HttpGet("manual")]
+        public IActionResult GetManual([FromQuery] string include)
+        {
+            var result = context.Exercises.Select(x => new
+            {
+                id = include.Contains("id") ? (int?)x.Id : null,
+                name = include.Contains("name") ? x.Name : null,
+                description = include.Contains("description") ? x.Description : null,
+                image = include.Contains("image") ? x.EncodedImage : null,
+                equipment = include.Contains("equipment") ? x.Equipment.Select(x => x) : null,
+                primaryMuscleGroups = include.Contains("primarymusclegroups") ? x.PrimaryMuscleGroups.Select(x => x) : null,
+                secondaryMuscleGroups = include.Contains("secondarymusclegroups") ? x.SecondaryMuscleGroups.Select(x => x) : null,
+                primaryMuscles = include.Contains("primarymuscles") ? x.PrimaryMuscles.Select(x => x) : null,
+                secondaryMuscles = include.Contains("secondarymuscles") ? x.SecondaryMuscles.Select(x => x) : null,
+            });
+
+            var a = ApplyOffsetAndLimit(result);
+            var b = a.Select(x => mapper.Map(new Exercise()
+            {
+                Id = x.id ?? 0,
+                Name = x.name ?? "",
+                Description = x.description ?? "",
+                EncodedImage = x.image ?? "",
+                Equipment = x.equipment ?? [],
+                PrimaryMuscleGroups = x.primaryMuscleGroups ?? [],
+                SecondaryMuscleGroups = x.secondaryMuscleGroups ?? [],
+                PrimaryMuscles = x.primaryMuscles ?? [],
+                SecondaryMuscles = x.secondaryMuscles ?? [],
+            }));
+
+            return Ok(b);
         }
 
         [HttpGet("basic/inline")]

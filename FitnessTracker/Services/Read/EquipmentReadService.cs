@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace ProjectGym.Services.Read
 {
-    public class EquipmentReadService(ExerciseContext context) : ReadService<Equipment>(context)
+    public class EquipmentReadService(ExerciseContext context) : AbstractReadService<Equipment>(context)
     {
         protected override Expression<Func<Equipment, bool>> TranslateKeyValueToExpression(string key, string value)
         {
@@ -14,7 +14,7 @@ namespace ProjectGym.Services.Read
                 if (string.IsNullOrWhiteSpace(value))
                     throw new NullReferenceException("Value in a search query cannot be null or empty.");
 
-                return eq => eq.Name.ToLower().Contains(value.ToLower());
+                return eq => EF.Functions.Like(eq.Name, $"%{value}%");
             }
 
             if (key == "exercise" && int.TryParse(value, out var id))
