@@ -4,7 +4,7 @@ using ProjectGym.Models;
 
 namespace ProjectGym.Data
 {
-    public class ExerciseContext : DbContext
+    public class ExerciseContext(DbContextOptions options) : DbContext(options)
     {
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<MuscleGroup> MuscleGroups { get; set; }

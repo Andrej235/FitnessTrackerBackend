@@ -25,7 +25,7 @@ namespace ProjectGym.Services.Read
                 return entitiesIncluding;
             }
 
-            IEnumerable<PropertyInfo> c = navigationProperties.Where(x => include.Any(y => x.Name.ToLower().Contains(y)));
+            IEnumerable<PropertyInfo> c = navigationProperties.Where(x => include.Any(y => x.Name.Contains(y, StringComparison.CurrentCultureIgnoreCase)));
             foreach (var navigationProperty in c)
                 entitiesIncluding = Include(entitiesIncluding, navigationProperty.Name);
 

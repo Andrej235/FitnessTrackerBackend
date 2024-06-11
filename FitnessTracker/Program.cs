@@ -68,9 +68,14 @@ namespace ProjectGym
                 });
             });
 
-            builder.Services.AddTransient<ExerciseContext>();
+            builder.Services.AddDbContext<ExerciseContext>(x =>
+            {
+                x.EnableSensitiveDataLogging();
+            });
+
+
             builder.Services.AddSingleton(configuration);
-            builder.Services.AddSingleton<TokenManager>();
+            builder.Services.AddScoped<TokenManager>();
 
             #region Exercise
             builder.Services.AddTransient<ICreateService<Exercise>, ExerciseCreateService>();

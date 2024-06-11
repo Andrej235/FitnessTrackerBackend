@@ -12,6 +12,5 @@
         public IEnumerable<int> SecondaryMuscleGroupIds { get; set; } = [];
         public IEnumerable<int> PrimaryMuscleIds { get; set; } = [];
         public IEnumerable<int> SecondaryMuscleIds { get; set; } = [];
-        public IEnumerable<int> AliasIds { get; set; } = [];
     }
 }
