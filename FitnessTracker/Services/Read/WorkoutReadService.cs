@@ -56,7 +56,7 @@ namespace ProjectGym.Services.Read
         {
             return await Task.Run(() =>
             {
-                var entitiesQueryable = GetIncluded(SplitIncludeString(include));
+                var entitiesQueryable = GetIncluded(include);
                 if (query is null)
                     return ApplyOffsetAndLimit(entitiesQueryable, offset, limit).Where(x => x.IsPublic).ToList();
 

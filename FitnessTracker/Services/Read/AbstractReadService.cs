@@ -10,16 +10,16 @@ namespace ProjectGym.Services.Read
     {
         public virtual async Task<T> Get(Expression<Func<T, bool>> criteria, string? include = "all")
         {
-            IQueryable<T> entitesQueryable = GetIncluded(SplitIncludeString(include));
+            IQueryable<T> entitesQueryable = GetIncluded(include);
             T? entity = await entitesQueryable.FirstOrDefaultAsync(criteria);
             return entity ?? throw new NullReferenceException();
         }
 
-        public async Task<T> Get(object id, string? include = "all")
+        public Task<T> Get(object id, string? include = "all")
         {
-            return await Task.Run(() =>
+            return Task.Run(() =>
             {
-                IQueryable<T> entitesQueryable = GetIncluded(SplitIncludeString(include));
+                IQueryable<T> entitesQueryable = GetIncluded(include);
                 bool CheckPrimaryKey(T e)
                 {
                     var idProp = e.GetType().GetProperty("Id");
@@ -34,20 +34,20 @@ namespace ProjectGym.Services.Read
             });
         }
 
-        public virtual async Task<List<T>> Get(Expression<Func<T, bool>> criteria, int? offset = 0, int? limit = -1, string? include = "all")
+        public virtual Task<List<T>> Get(Expression<Func<T, bool>> criteria, int? offset = 0, int? limit = -1, string? include = "all")
         {
-            return await Task.Run(() =>
+            return Task.Run(() =>
             {
-                IQueryable<T> entitesQueryable = GetIncluded(SplitIncludeString(include));
+                IQueryable<T> entitesQueryable = GetIncluded(include);
                 return ApplyOffsetAndLimit(entitesQueryable.Where(criteria), offset, limit);
             });
         }
 
-        public virtual async Task<List<T>> Get(string? query, int? offset = 0, int? limit = -1, string? include = "all")
+        public virtual Task<List<T>> Get(string? query, int? offset = 0, int? limit = -1, string? include = "all")
         {
-            return await Task.Run(() =>
+            return Task.Run(() =>
             {
-                var entitiesQueryable = GetIncluded(SplitIncludeString(include));
+                var entitiesQueryable = GetIncluded(include);
                 if (query is null)
                     return ApplyOffsetAndLimit(entitiesQueryable, offset, limit);
 
@@ -68,7 +68,7 @@ namespace ProjectGym.Services.Read
                 }
                 else
                 {
-                    return ApplyOffsetAndLimit(ApplyNonStrictCriterias(entitiesQueryable, DecipherQuery(keyValuePairsInSearchQuery)), offset, limit);
+                    entitiesQueryable = ApplyNonStrictCriterias(entitiesQueryable, DecipherQuery(keyValuePairsInSearchQuery));
                 }
 
                 return ApplyOffsetAndLimit(entitiesQueryable, offset, limit);
@@ -126,19 +126,17 @@ namespace ProjectGym.Services.Read
 
         protected virtual IQueryable<T> ApplyNonStrictCriterias(IQueryable<T> entitiesQueryable, IEnumerable<Expression<Func<T, bool>>> criterias)
         {
-            criterias = criterias
-            .Where(x => x.Body is not ConstantExpression);
+            criterias = criterias.Where(x => x.Body is not ConstantExpression);
 
-            if(!criterias.Any())
+            if (!criterias.Any())
                 return entitiesQueryable;
 
             return criterias
-            .Select(x => entitiesQueryable.Where(x))
-            .SelectMany(x => x)
-            .GroupBy(x => x)
-            .OrderByDescending(g => g.Count())
-            .Select(x => x.First())
-            .AsQueryable();
+                .SelectMany(x => entitiesQueryable.Where(x))
+                .GroupBy(x => x)
+                .OrderByDescending(g => g.Count())
+                .Select(x => x.First())
+                .AsQueryable();
         }
 
         protected virtual List<T> ApplyOffsetAndLimit(IQueryable<T> queryable, int? offset = 0, int? limit = -1)
@@ -151,8 +149,9 @@ namespace ProjectGym.Services.Read
             return [.. queryable];
         }
 
-        protected virtual IQueryable<T> GetIncluded(IEnumerable<string>? include)
+        protected virtual IQueryable<T> GetIncluded(string? includeString)
         {
+            IEnumerable<string>? include = SplitIncludeString(includeString);
             IQueryable<T> entitiesIncluding = context.Set<T>().AsQueryable();
             if (include is null || !include.Any() || include.Contains("none"))
                 return entitiesIncluding;
@@ -169,8 +168,8 @@ namespace ProjectGym.Services.Read
                 return entitiesIncluding;
             }
 
-            IEnumerable<PropertyInfo> c = navigationProperties.Where(x => include.Any(y => x.Name.Contains(y, StringComparison.CurrentCultureIgnoreCase)));
-            foreach (var navigationProperty in c)
+            IEnumerable<PropertyInfo> includedNavigationProperties = navigationProperties.Where(navigationProperty => include.Any(includeMember => navigationProperty.Name.Contains(includeMember, StringComparison.CurrentCultureIgnoreCase)));
+            foreach (var navigationProperty in includedNavigationProperties)
                 entitiesIncluding = Include(entitiesIncluding, navigationProperty.Name);
 
             return entitiesIncluding;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProjectGym.Data;
 using ProjectGym.DTOs;
 using ProjectGym.Models;
@@ -11,8 +12,74 @@ namespace FitnessTracker.Controllers
     //[Authorize(Roles = "Admin")]
     [Route("api/unsafe/narrow")]
     [ApiController]
-    public class UNSAFE_NarrowController(ExerciseContext context, IReadService<Exercise> readService, IEntityMapper<Exercise, ExerciseDTO> mapper) : ControllerBase
+    public class UNSAFE_NarrowController(ExerciseContext context, IReadService<Exercise> readService, IEntityMapper<Exercise, ExerciseDTO> mapper, IEntityMapper<Exercise, object> fullMapper) : ControllerBase
     {
+        [HttpGet("fullexercise/singlequery")]
+        public IActionResult GetFullExercise_SingleQuery([FromQuery] string include)
+        {
+            var result = context.Exercises.AsSingleQuery().Select(x => new
+            {
+                id = include.Contains("id") ? (int?)x.Id : null,
+                name = include.Contains("name") ? x.Name : null,
+                description = include.Contains("description") ? x.Description : null,
+                image = include.Contains("image") ? x.EncodedImage : null,
+                equipment = include.Contains("equipment") ? x.Equipment.Select(x => x) : null,
+                primaryMuscleGroups = include.Contains("primarymusclegroups") ? x.PrimaryMuscleGroups.Select(x => x) : null,
+                secondaryMuscleGroups = include.Contains("secondarymusclegroups") ? x.SecondaryMuscleGroups.Select(x => x) : null,
+                primaryMuscles = include.Contains("primarymuscles") ? x.PrimaryMuscles.Select(x => x) : null,
+                secondaryMuscles = include.Contains("secondarymuscles") ? x.SecondaryMuscles.Select(x => x) : null,
+            });
+
+            var a = ApplyOffsetAndLimit(result);
+            var b = a.Select(x => fullMapper.Map(new Exercise()
+            {
+                Id = x.id ?? 0,
+                Name = x.name ?? "",
+                Description = x.description ?? "",
+                EncodedImage = x.image ?? "",
+                Equipment = x.equipment ?? [],
+                PrimaryMuscleGroups = x.primaryMuscleGroups ?? [],
+                SecondaryMuscleGroups = x.secondaryMuscleGroups ?? [],
+                PrimaryMuscles = x.primaryMuscles ?? [],
+                SecondaryMuscles = x.secondaryMuscles ?? [],
+            }));
+
+            return Ok(b);
+        }
+
+        [HttpGet("fullexercise/splitquery")]
+        public IActionResult GetFullExercise_SplitQuery([FromQuery] string include)
+        {
+            var result = context.Exercises.AsSplitQuery().Select(x => new
+            {
+                id = include.Contains("id") ? (int?)x.Id : null,
+                name = include.Contains("name") ? x.Name : null,
+                description = include.Contains("description") ? x.Description : null,
+                image = include.Contains("image") ? x.EncodedImage : null,
+                equipment = include.Contains("equipment") ? x.Equipment.Select(x => x) : null,
+                primaryMuscleGroups = include.Contains("primarymusclegroups") ? x.PrimaryMuscleGroups.Select(x => x) : null,
+                secondaryMuscleGroups = include.Contains("secondarymusclegroups") ? x.SecondaryMuscleGroups.Select(x => x) : null,
+                primaryMuscles = include.Contains("primarymuscles") ? x.PrimaryMuscles.Select(x => x) : null,
+                secondaryMuscles = include.Contains("secondarymuscles") ? x.SecondaryMuscles.Select(x => x) : null,
+            });
+
+            var a = ApplyOffsetAndLimit(result);
+            var b = a.Select(x => fullMapper.Map(new Exercise()
+            {
+                Id = x.id ?? 0,
+                Name = x.name ?? "",
+                Description = x.description ?? "",
+                EncodedImage = x.image ?? "",
+                Equipment = x.equipment ?? [],
+                PrimaryMuscleGroups = x.primaryMuscleGroups ?? [],
+                SecondaryMuscleGroups = x.secondaryMuscleGroups ?? [],
+                PrimaryMuscles = x.primaryMuscles ?? [],
+                SecondaryMuscles = x.secondaryMuscles ?? [],
+            }));
+
+            return Ok(b);
+        }
+
         [HttpGet]
         public IActionResult Get([FromQuery] string include)
         {

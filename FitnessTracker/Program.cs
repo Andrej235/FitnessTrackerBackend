@@ -70,7 +70,7 @@ namespace ProjectGym
 
             builder.Services.AddDbContext<ExerciseContext>(x =>
             {
-                x.EnableSensitiveDataLogging();
+                x.EnableSensitiveDataLogging(); //TODO-PROD: remove in production
             });
 
 
