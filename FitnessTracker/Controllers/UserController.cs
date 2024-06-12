@@ -3,6 +3,7 @@ using FitnessTracker.Models;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using ProjectGym.DTOs;
 using ProjectGym.Models;
 using ProjectGym.Services.Create;
@@ -87,6 +88,8 @@ namespace ProjectGym.Controllers
                     return BadRequest("Incorrect email or password");
 
                 var user = await ReadService.Get(x => x.Email == userDTO.Email, "none");
+                if (user is null)
+                    return BadRequest("Incorrect email or password");
 
                 var hash = userDTO.Password.HashPassword(user.Salt);
                 if (!user.PasswordHash.SequenceEqual(hash))
@@ -112,15 +115,11 @@ namespace ProjectGym.Controllers
             if (userIdClaim is null)
                 return Unauthorized();
 
-            try
-            {
-                return Ok(Mapper.Map(await ReadService.Get(userIdClaim, "all")));
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest(ex.GetErrorMessage(false));
-            }
+            var user = await ReadService.Get(userIdClaim, "all");
+            if (user is null)
+                return Unauthorized();
+
+            return Ok(Mapper.Map(user));
         }
 
         [Authorize(AuthenticationSchemes = "AllowExpired")]
@@ -171,23 +170,18 @@ namespace ProjectGym.Controllers
             if (userIdClaim is null)
                 return Unauthorized();
 
-            try
-            {
-                var user = await ReadService.Get(userIdClaim, "none");
-                if (!user.PasswordHash.SequenceEqual(dto.OldPassword.HashPassword(user.Salt)))
-                    return BadRequest("Incorrect old password");
+            var user = await ReadService.Get(userIdClaim, "none");
+            if (user is null)
+                return Unauthorized();
 
-                user.PasswordHash = dto.NewPassword.HashPassword(user.Salt);
-                await UpdateService.Update(user);
+            if (!user.PasswordHash.SequenceEqual(dto.OldPassword.HashPassword(user.Salt)))
+                return BadRequest("Incorrect old password");
 
-                await TokenManager.InvalidateAllTokensForUser(user.Id);
-                return SetupTokens(user);
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest(ex.GetErrorMessage(false));
-            }
+            user.PasswordHash = dto.NewPassword.HashPassword(user.Salt);
+            await UpdateService.Update(user);
+
+            await TokenManager.InvalidateAllTokensForUser(user.Id);
+            return SetupTokens(user);
         }
 
         [Authorize]

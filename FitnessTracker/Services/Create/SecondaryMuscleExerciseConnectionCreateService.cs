@@ -9,19 +9,10 @@ namespace ProjectGym.Services.Create
     {
         protected override async Task<Exception?> IsEntityValid(SecondaryMuscleGroupInExercise entity)
         {
-            try
-            {
-                await readService.Get(x => x.MuscleGroupId == entity.MuscleGroupId && x.ExerciseId == entity.ExerciseId, "none");
-                throw new EntityAlreadyExistsException();
-            }
-            catch (NullReferenceException)
-            {
-                return null;
-            }
-            catch (Exception ex)
-            {
-                return ex;
-            }
+            if (await readService.Get(x => x.MuscleGroupId == entity.MuscleGroupId && x.ExerciseId == entity.ExerciseId, "none") != null)
+                return new EntityAlreadyExistsException();
+
+            return null;
         }
     }
 }

@@ -2,6 +2,7 @@
 using ProjectGym.Models;
 using ProjectGym.Services.Delete;
 using ProjectGym.Services.Read;
+using ProjectGym.Utilities;
 using System.Diagnostics;
 
 namespace ProjectGym.Services.Update
@@ -44,7 +45,7 @@ namespace ProjectGym.Services.Update
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"---> Error occurred: {ex.Message} \n{ex.InnerException?.Message}");
+                ex.LogError();
             }
         }
     }

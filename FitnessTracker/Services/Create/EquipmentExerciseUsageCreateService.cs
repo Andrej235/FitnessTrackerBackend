@@ -1,4 +1,5 @@
 ﻿using ProjectGym.Data;
+using ProjectGym.Exceptions;
 using ProjectGym.Models;
 using ProjectGym.Services.Read;
 
@@ -10,11 +11,9 @@ namespace ProjectGym.Services.Create
         {
             try
             {
-                await readService.Get(x => x.EquipmentId == entity.EquipmentId && x.ExerciseId == entity.ExerciseId, "none");
-                return new Exception("Entity already exists");
-            }
-            catch (NullReferenceException)
-            {
+                if (await readService.Get(x => x.EquipmentId == entity.EquipmentId && x.ExerciseId == entity.ExerciseId, "none") != null)
+                    return new EntityAlreadyExistsException();
+
                 return null;
             }
             catch (Exception ex)

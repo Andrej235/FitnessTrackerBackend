@@ -1,9 +1,7 @@
 ﻿using ProjectGym.Data;
-using ProjectGym.DTOs;
+using ProjectGym.Exceptions;
 using ProjectGym.Models;
-using ProjectGym.Services.Mapping;
 using ProjectGym.Services.Read;
-using System.Diagnostics;
 
 namespace ProjectGym.Services.Create
 {
@@ -11,19 +9,10 @@ namespace ProjectGym.Services.Create
     {
         protected override async Task<Exception?> IsEntityValid(MuscleGroup entity)
         {
-            try
-            {
-                await readService.Get(x => x.Name.ToLower().Trim() == entity.Name.ToLower().Trim(), "none");
-                return new Exception("Entity already exists");
-            }
-            catch (NullReferenceException)
-            {
-                return null;
-            }
-            catch (Exception ex)
-            {
-                return ex;
-            }
+            if (await readService.Get(x => x.Name.ToLower().Trim() == entity.Name.ToLower().Trim(), "none") != null)
+                return new EntityAlreadyExistsException();
+
+            return null;
         }
     }
 }

@@ -39,30 +39,18 @@ namespace ProjectGym.Controllers
         [HttpGet("{id}")]
         public virtual async Task<IActionResult> Get(string id, [FromQuery] string? include)
         {
-            try
-            {
-                return Ok(Mapper.Map(await ReadService.Get(id, include)));
-            }
-            catch (Exception ex)
-            {
-                LogDebugger.LogError(ex);
-                return BadRequest(LogDebugger.GetErrorMessage(ex));
-            }
+            var exercise = await ReadService.Get(id, include);
+            if (exercise is null)
+                return NotFound($"Entity with id {id} was not found.");
+
+            return Ok(Mapper.Map(exercise));
         }
 
         [HttpGet]
         public virtual async Task<IActionResult> Get([FromQuery] int? offset, [FromQuery] int? limit, [FromQuery] string? include, [FromQuery] string? q)
         {
-            try
-            {
-                var entities = (await ReadService.Get(q, offset, limit, include)).Select(Mapper.Map);
-                return Ok(entities);
-            }
-            catch (Exception ex)
-            {
-                LogDebugger.LogError(ex);
-                return BadRequest(LogDebugger.GetErrorMessage(ex));
-            }
+            var entities = (await ReadService.Get(q, offset, limit, include)).Select(Mapper.Map);
+            return Ok(entities);
         }
 
         [HttpPut]

@@ -9,19 +9,10 @@ namespace ProjectGym.Services.Create
     {
         protected override async Task<Exception?> IsEntityValid(User entity)
         {
-            try
-            {
-                await readService.Get(eq => eq.Email == entity.Email, "none");
-                throw new EntityAlreadyExistsException();
-            }
-            catch (NullReferenceException)
-            {
-                return null;
-            }
-            catch (Exception ex)
-            {
-                return ex;
-            }
+            if (await readService.Get(eq => eq.Email == entity.Email, "none") != null)
+                return new EntityAlreadyExistsException();
+
+            return null;
         }
     }
 }

@@ -15,9 +15,8 @@ namespace ProjectGym.Services.Read
         /// <br/>If one of the items is 'none' no property will be included
         /// <br/>Cap insensitive
         /// </param>
-        /// <returns>Returns a first entity that fits the provided criteria, if such an entity doesn't exist a <see cref="NullReferenceException"/> will be thrown</returns>
-        /// <exception cref="NullReferenceException"></exception>
-        Task<T> Get(Expression<Func<T, bool>> criteria, string? include = "all");
+        /// <returns>Returns a first entity that fits the provided criteria or if such entity doesn't exist, null</returns>
+        Task<T?> Get(Expression<Func<T, bool>> criteria, string? include = "all");
 
         /// <summary>
         /// Finds an entity in database which has the provided id
@@ -30,8 +29,8 @@ namespace ProjectGym.Services.Read
         /// <br/>If one of the items is 'none' no property will be included
         /// <br/>Cap insensitive
         /// </param>
-        /// <returns>Returns an entity in with the provided id</returns>
-        Task<T> Get(object id, string? include = "all");
+        /// <returns>Returns an entity in with the provided id or if such entity doesn't exist, null</returns>
+        Task<T?> Get(object id, string? include = "all");
 
         /// <summary>
         /// Finds all entities in the database which fit the provided criteria

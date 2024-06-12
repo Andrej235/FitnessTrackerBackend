@@ -1,8 +1,6 @@
 ﻿using ProjectGym.Data;
-using ProjectGym.Models;
 using ProjectGym.Services.Read;
 using ProjectGym.Utilities;
-using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace ProjectGym.Services.Delete
@@ -11,7 +9,7 @@ namespace ProjectGym.Services.Delete
     {
         public async Task Delete(object id)
         {
-            T entityToDelete = await readService.Get(id, "none");
+            T entityToDelete = await readService.Get(id, "none") ?? throw new NullReferenceException("Entity not found");
 
             context.Set<T>().Remove(entityToDelete);
             await context.SaveChangesAsync();
@@ -19,7 +17,7 @@ namespace ProjectGym.Services.Delete
 
         public async Task DeleteFirst(Expression<Func<T, bool>> criteria)
         {
-            T entityToDelete = await readService.Get(criteria, "none");
+            T entityToDelete = await readService.Get(criteria, "none") ?? throw new NullReferenceException("Entity not found");
 
             context.Set<T>().Remove(entityToDelete);
             await context.SaveChangesAsync();

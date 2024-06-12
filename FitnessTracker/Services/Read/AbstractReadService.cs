@@ -8,14 +8,14 @@ namespace ProjectGym.Services.Read
 {
     public abstract class AbstractReadService<T>(ExerciseContext context) : IReadService<T> where T : class
     {
-        public virtual async Task<T> Get(Expression<Func<T, bool>> criteria, string? include = "all")
+        public virtual async Task<T?> Get(Expression<Func<T, bool>> criteria, string? include = "all")
         {
             IQueryable<T> entitesQueryable = GetIncluded(include);
             T? entity = await entitesQueryable.FirstOrDefaultAsync(criteria);
-            return entity ?? throw new NullReferenceException();
+            return entity;
         }
 
-        public Task<T> Get(object id, string? include = "all")
+        public Task<T?> Get(object id, string? include = "all")
         {
             return Task.Run(() =>
             {
@@ -30,7 +30,7 @@ namespace ProjectGym.Services.Read
                 }
 
                 T? entity = entitesQueryable.AsEnumerable().FirstOrDefault(CheckPrimaryKey);
-                return entity ?? throw new NullReferenceException();
+                return entity;
             });
         }
 

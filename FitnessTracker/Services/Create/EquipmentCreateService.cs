@@ -1,4 +1,6 @@
-﻿using ProjectGym.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using ProjectGym.Data;
+using ProjectGym.Exceptions;
 using ProjectGym.Models;
 using ProjectGym.Services.Read;
 
@@ -10,11 +12,9 @@ namespace ProjectGym.Services.Create
         {
             try
             {
-                await readService.Get(eq => eq.Name.ToLower() == entity.Name.ToLower(), "none");
-                return new Exception("Entity already exists");
-            }
-            catch (NullReferenceException)
-            {
+                if (await readService.Get(eq => EF.Functions.Like(entity.Name, $"%{entity.Name}%"), "none") != null)
+                    return new EntityAlreadyExistsException();
+
                 return null;
             }
             catch (Exception ex)

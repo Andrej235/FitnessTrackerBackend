@@ -40,19 +40,14 @@ namespace ProjectGym.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id, [FromQuery] string? include)
         {
-            try
-            {
-                var exercise = await ReadService.Get(id, include);
-                return Ok((ExerciseDTO?)Mapper.Map(exercise));
-            }
-            catch (NullReferenceException)
-            {
+            if (!int.TryParse(id, out var parsedId))
                 return NotFound($"Entity with id {id} was not found.");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+
+            var exercise = await ReadService.Get(x => x.Id == parsedId, include);
+            if (exercise is null)
+                return NotFound($"Entity with id {id} was not found.");
+
+            return Ok(Mapper.Map(exercise));
         }
 
         [HttpDelete("{primaryKey}")]
@@ -78,8 +73,6 @@ namespace ProjectGym.Controllers
             var newId = await CreateService.Add(entity);
             return newId != default ? Ok(newId) : BadRequest("Entity already exists");
         }
-
-        //TODO: Create a patch endpoint
 
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] ExerciseDTO updatedEntity)

@@ -10,9 +10,9 @@ namespace FitnessTracker.Services.Read
     {
         private readonly ExerciseContext context = context;
 
-        public async Task<RefreshToken> Get(Expression<Func<RefreshToken, bool>> criteria, string? include = "all") => await context.RefreshTokens.Include(x => x.User).FirstOrDefaultAsync(criteria) ?? throw new NullReferenceException();
+        public Task<RefreshToken?> Get(Expression<Func<RefreshToken, bool>> criteria, string? include = "all") => context.RefreshTokens.Include(x => x.User).FirstOrDefaultAsync(criteria);
 
-        public async Task<RefreshToken> Get(object id, string? include = "all") => await Get(x => x.Token == (Guid)id, "all");
+        public Task<RefreshToken?> Get(object id, string? include = "all") => Get(x => x.Token == (Guid)id, "all");
 
         public Task<List<RefreshToken>> Get(Expression<Func<RefreshToken, bool>> criteria, int? offset = 0, int? limit = -1, string? include = "all")
         {

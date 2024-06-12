@@ -23,6 +23,9 @@ namespace FitnessTracker.Controllers
         public async Task<IActionResult> Get(string id, [FromQuery] string? include)
         {
             var exercise = await ReadService.Get(id, include);
+            if (exercise is null)
+                return NotFound($"Entity with id {id} was not found.");
+
             return Ok(mapper.Map(exercise));
         }
     }
