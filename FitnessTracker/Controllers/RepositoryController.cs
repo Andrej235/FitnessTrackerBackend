@@ -15,11 +15,7 @@ namespace ProjectGym.Controllers
                                                      IDeleteService<TEntity> deleteService,
                                                      IReadService<TEntity> readService,
                                                      IEntityMapper<TEntity, TDTO> mapper)
-        : ControllerBase,
-        ICreateController<TEntity, TDTO>,
-        IReadController<TEntity, TDTO>,
-        IUpdateController<TEntity, TDTO>,
-        IDeleteController<TEntity>
+        : ControllerBase
         where TEntity : class
         where TDTO : class
     {
@@ -63,8 +59,8 @@ namespace ProjectGym.Controllers
             }
             catch (Exception ex)
             {
-                LogDebugger.LogError(ex);
-                return BadRequest(LogDebugger.GetErrorMessage(ex));
+                ex.LogError();
+                return BadRequest(ex.GetErrorMessage());
             }
         }
 
@@ -78,8 +74,8 @@ namespace ProjectGym.Controllers
             }
             catch (Exception ex)
             {
-                LogDebugger.LogError(ex);
-                return BadRequest(LogDebugger.GetErrorMessage(ex));
+                ex.LogError();
+                return BadRequest(ex.GetErrorMessage());
             }
         }
     }

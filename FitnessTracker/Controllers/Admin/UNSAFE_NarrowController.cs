@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FitnessTracker.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectGym.Data;
@@ -7,9 +8,9 @@ using ProjectGym.Models;
 using ProjectGym.Services.Mapping;
 using ProjectGym.Services.Read;
 
-namespace FitnessTracker.Controllers
+namespace FitnessTracker.Controllers.Admin
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = Role.Admin)]
     [Route("api/unsafe/narrow")]
     [ApiController]
     public class UNSAFE_NarrowController(ExerciseContext context, IReadService<Exercise> readService, IEntityMapper<Exercise, ExerciseDTO> mapper, IEntityMapper<Exercise, object> fullMapper) : ControllerBase

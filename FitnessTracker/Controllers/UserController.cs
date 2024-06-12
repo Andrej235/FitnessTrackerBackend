@@ -1,9 +1,7 @@
 ﻿using FitnessTracker.Auth;
-using FitnessTracker.Models;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using ProjectGym.DTOs;
 using ProjectGym.Models;
 using ProjectGym.Services.Create;
@@ -12,11 +10,9 @@ using ProjectGym.Services.Mapping;
 using ProjectGym.Services.Read;
 using ProjectGym.Services.Update;
 using ProjectGym.Utilities;
-using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
-using static ProjectGym.Controllers.UserController;
 
 namespace ProjectGym.Controllers
 {
@@ -27,7 +23,7 @@ namespace ProjectGym.Controllers
                           ICreateService<User> createService,
                           IDeleteService<User> deleteService,
                           IUpdateService<User> updateService,
-                          TokenManager tokenManager) : ControllerBase, ICreateController<User, RegisterDTO>
+                          TokenManager tokenManager) : ControllerBase
     {
         public IReadService<User> ReadService { get; } = readService;
         public IEntityMapper<User, UserDTO> Mapper { get; } = mapper;
@@ -207,7 +203,7 @@ namespace ProjectGym.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Role.Admin)]
         [HttpGet("admin")]
         public IActionResult AdminTest()
         {

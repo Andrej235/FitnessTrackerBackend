@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FitnessTracker.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjectGym.DTOs;
 using ProjectGym.Models;
@@ -17,11 +18,7 @@ namespace ProjectGym.Controllers
                                     IReadService<Exercise> readService,
                                     IUpdateService<Exercise> updateService,
                                     IDeleteService<Exercise> deleteService,
-                                    IEntityMapperAsync<Exercise, ExerciseDTO> mapper) : ControllerBase,
-                                                                              ICreateController<Exercise, ExerciseDTO>,
-                                                                              IReadController<Exercise, ExerciseDTO>,
-                                                                              IUpdateController<Exercise, ExerciseDTO>,
-                                                                              IDeleteController<Exercise>
+                                    IEntityMapperAsync<Exercise, ExerciseDTO> mapper) : ControllerBase
     {
         public IReadService<Exercise> ReadService { get; } = readService;
         public IEntityMapperAsync<Exercise, ExerciseDTO> Mapper { get; } = mapper;
@@ -51,7 +48,7 @@ namespace ProjectGym.Controllers
         }
 
         [HttpDelete("{primaryKey}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Role.Admin)]
         public async Task<IActionResult> Delete(string primaryKey)
         {
             try
@@ -66,7 +63,7 @@ namespace ProjectGym.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Role.Admin)]
         public async Task<IActionResult> Create([FromBody] ExerciseDTO entityDTO)
         {
             var entity = await Mapper.MapAsync(entityDTO);

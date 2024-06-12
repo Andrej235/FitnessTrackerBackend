@@ -22,11 +22,11 @@ namespace ProjectGym.Services.Create
             }
             catch (Exception ex)
             {
-                LogDebugger.LogError(ex);
+                ex.LogError();
                 return null;
             }
         }
 
-        protected virtual async Task<Exception?> IsEntityValid(T entity) => await Task.Run(() => default(Exception));
+        protected virtual Task<Exception?> IsEntityValid(T entity) => Task.FromResult(default(Exception));
     }
 }

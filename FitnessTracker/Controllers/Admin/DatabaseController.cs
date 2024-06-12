@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FitnessTracker.Utilities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProjectGym.Data;
 using ProjectGym.Services.DatabaseSerialization;
 using ProjectGym.Utilities;
 using System.Text;
 
-namespace ProjectGym.Controllers
+namespace FitnessTracker.Controllers.Admin
 {
     [ApiController]
+    [Authorize(Roles = Role.Admin)]
     [Route("api/database")]
     public class DatabaseController(ExerciseContext context) : ControllerBase
     {
@@ -25,8 +28,8 @@ namespace ProjectGym.Controllers
             }
             catch (Exception ex)
             {
-                LogDebugger.LogError(ex);
-                return BadRequest(LogDebugger.GetErrorMessage(ex));
+                ex.LogError();
+                return BadRequest(ex.GetErrorMessage());
             }
         }
 
@@ -46,8 +49,8 @@ namespace ProjectGym.Controllers
             }
             catch (Exception ex)
             {
-                LogDebugger.LogError(ex);
-                return BadRequest(LogDebugger.GetErrorMessage(ex));
+                ex.LogError();
+                return BadRequest(ex.GetErrorMessage());
             }
         }
 
@@ -61,8 +64,8 @@ namespace ProjectGym.Controllers
             }
             catch (Exception ex)
             {
-                LogDebugger.LogError(ex);
-                return BadRequest(LogDebugger.GetErrorMessage(ex));
+                ex.LogError();
+                return BadRequest(ex.GetErrorMessage());
             }
         }
 
@@ -76,8 +79,8 @@ namespace ProjectGym.Controllers
             }
             catch (Exception ex)
             {
-                LogDebugger.LogError(ex);
-                return BadRequest(LogDebugger.GetErrorMessage(ex));
+                ex.LogError();
+                return BadRequest(ex.GetErrorMessage());
             }
         }
 
