@@ -13,7 +13,7 @@ namespace FitnessTracker.Controllers.Admin
     [Authorize(Roles = Role.Admin)]
     [Route("api/unsafe/narrow")]
     [ApiController]
-    public class UNSAFE_NarrowController(ExerciseContext context, IReadService<Exercise> readService, IEntityMapper<Exercise, ExerciseDTO> mapper, IEntityMapper<Exercise, object> fullMapper) : ControllerBase
+    public class UNSAFE_NarrowController(DataContext context, IReadService<Exercise> readService, IEntityMapper<Exercise, ExerciseDTO> mapper, IEntityMapper<Exercise, object> fullMapper) : ControllerBase
     {
         [HttpGet("fullexercise/singlequery")]
         public IActionResult GetFullExercise_SingleQuery([FromQuery] string include)
@@ -23,7 +23,7 @@ namespace FitnessTracker.Controllers.Admin
                 id = include.Contains("id") ? (int?)x.Id : null,
                 name = include.Contains("name") ? x.Name : null,
                 description = include.Contains("description") ? x.Description : null,
-                image = include.Contains("image") ? x.EncodedImage : null,
+                image = include.Contains("image") ? x.Image : null,
                 equipment = include.Contains("equipment") ? x.Equipment.Select(x => x) : null,
                 primaryMuscleGroups = include.Contains("primarymusclegroups") ? x.PrimaryMuscleGroups.Select(x => x) : null,
                 secondaryMuscleGroups = include.Contains("secondarymusclegroups") ? x.SecondaryMuscleGroups.Select(x => x) : null,
@@ -37,7 +37,7 @@ namespace FitnessTracker.Controllers.Admin
                 Id = x.id ?? 0,
                 Name = x.name ?? "",
                 Description = x.description ?? "",
-                EncodedImage = x.image ?? "",
+                Image = x.image ?? "",
                 Equipment = x.equipment ?? [],
                 PrimaryMuscleGroups = x.primaryMuscleGroups ?? [],
                 SecondaryMuscleGroups = x.secondaryMuscleGroups ?? [],
@@ -56,7 +56,7 @@ namespace FitnessTracker.Controllers.Admin
                 id = include.Contains("id") ? (int?)x.Id : null,
                 name = include.Contains("name") ? x.Name : null,
                 description = include.Contains("description") ? x.Description : null,
-                image = include.Contains("image") ? x.EncodedImage : null,
+                image = include.Contains("image") ? x.Image : null,
                 equipment = include.Contains("equipment") ? x.Equipment.Select(x => x) : null,
                 primaryMuscleGroups = include.Contains("primarymusclegroups") ? x.PrimaryMuscleGroups.Select(x => x) : null,
                 secondaryMuscleGroups = include.Contains("secondarymusclegroups") ? x.SecondaryMuscleGroups.Select(x => x) : null,
@@ -70,7 +70,7 @@ namespace FitnessTracker.Controllers.Admin
                 Id = x.id ?? 0,
                 Name = x.name ?? "",
                 Description = x.description ?? "",
-                EncodedImage = x.image ?? "",
+                Image = x.image ?? "",
                 Equipment = x.equipment ?? [],
                 PrimaryMuscleGroups = x.primaryMuscleGroups ?? [],
                 SecondaryMuscleGroups = x.secondaryMuscleGroups ?? [],
@@ -89,7 +89,7 @@ namespace FitnessTracker.Controllers.Admin
                 id = include.Contains("id") ? (int?)x.Id : null,
                 name = include.Contains("name") ? x.Name : null,
                 description = include.Contains("description") ? x.Description : null,
-                image = include.Contains("image") ? x.EncodedImage : null,
+                image = include.Contains("image") ? x.Image : null,
                 equipment = include.Contains("equipment") ? x.Equipment.Select(x => x.Id) : null,
                 primaryMuscleGroups = include.Contains("primarymusclegroups") ? x.PrimaryMuscleGroups.Select(x => x.Id) : null,
                 secondaryMuscleGroups = include.Contains("secondarymusclegroups") ? x.SecondaryMuscleGroups.Select(x => x.Id) : null,
@@ -108,7 +108,7 @@ namespace FitnessTracker.Controllers.Admin
                 id = include.Contains("id") ? (int?)x.Id : null,
                 name = include.Contains("name") ? x.Name : null,
                 description = include.Contains("description") ? x.Description : null,
-                image = include.Contains("image") ? x.EncodedImage : null,
+                image = include.Contains("image") ? x.Image : null,
                 equipment = include.Contains("equipment") ? x.Equipment.Select(x => x) : null,
                 primaryMuscleGroups = include.Contains("primarymusclegroups") ? x.PrimaryMuscleGroups.Select(x => x) : null,
                 secondaryMuscleGroups = include.Contains("secondarymusclegroups") ? x.SecondaryMuscleGroups.Select(x => x) : null,
@@ -122,7 +122,7 @@ namespace FitnessTracker.Controllers.Admin
                 Id = x.id ?? 0,
                 Name = x.name ?? "",
                 Description = x.description ?? "",
-                EncodedImage = x.image ?? "",
+                Image = x.image ?? "",
                 Equipment = x.equipment ?? [],
                 PrimaryMuscleGroups = x.primaryMuscleGroups ?? [],
                 SecondaryMuscleGroups = x.secondaryMuscleGroups ?? [],
@@ -141,7 +141,7 @@ namespace FitnessTracker.Controllers.Admin
                 x.Id,
                 x.Name,
                 x.Description,
-                x.EncodedImage,
+                x.Image,
             });
             List<object> result = [.. mappedExercises.Skip(0)];// ApplyOffsetAndLimit(mappedExercises);
 
@@ -156,7 +156,7 @@ namespace FitnessTracker.Controllers.Admin
                 x.Id,
                 x.Name,
                 x.Description,
-                x.EncodedImage,
+                x.Image,
             });
             var result = ApplyOffsetAndLimit(mappedExercises);
 
@@ -171,7 +171,7 @@ namespace FitnessTracker.Controllers.Admin
                 x.Id,
                 x.Name,
                 x.Description,
-                x.EncodedImage,
+                x.Image,
             });
             var result = ApplyOffsetAndLimitList(mappedExercises);
 
@@ -186,7 +186,7 @@ namespace FitnessTracker.Controllers.Admin
                 x.Id,
                 x.Name,
                 x.Description,
-                x.EncodedImage,
+                x.Image,
             });
             var result = ApplyOffsetAndLimitQ(mappedExercises);
 

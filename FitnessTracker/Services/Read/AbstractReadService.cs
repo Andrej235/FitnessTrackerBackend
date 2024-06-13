@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace FitnessTracker.Services.Read
 {
-    public abstract class AbstractReadService<T>(ExerciseContext context) : IReadService<T> where T : class
+    public abstract class AbstractReadService<T>(DataContext context) : IReadService<T> where T : class
     {
         public virtual async Task<T?> Get(Expression<Func<T, bool>> criteria, string? include = "all")
         {

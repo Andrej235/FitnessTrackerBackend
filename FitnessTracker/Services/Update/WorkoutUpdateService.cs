@@ -4,7 +4,7 @@ using FitnessTracker.Services.Read;
 
 namespace FitnessTracker.Services.Update
 {
-    public class WorkoutUpdateService(ExerciseContext context,
+    public class WorkoutUpdateService(DataContext context,
                                       IReadService<Workout> readService) : IUpdateService<Workout>
     {
         public async Task Update(Workout updatedEntity)

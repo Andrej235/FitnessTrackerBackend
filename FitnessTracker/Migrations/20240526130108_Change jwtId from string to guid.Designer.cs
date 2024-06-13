@@ -11,7 +11,7 @@ using FitnessTracker.Data;
 
 namespace FitnessTracker.Migrations
 {
-    [DbContext(typeof(ExerciseContext))]
+    [DbContext(typeof(DataContext))]
     [Migration("20240526130108_Change jwtId from string to guid")]
     partial class ChangejwtIdfromstringtoguid
     {

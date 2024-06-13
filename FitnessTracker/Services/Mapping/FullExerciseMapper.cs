@@ -13,7 +13,7 @@ namespace FitnessTracker.Services.Mapping
                 entity.Id,
                 entity.Name,
                 entity.Description,
-                Image = entity.EncodedImage,
+                Image = entity.Image,
                 PrimaryMuscleGroups = entity.PrimaryMuscleGroups.Select(muscleGroupMapper.Map),
                 SecondaryMuscleGroups = entity.SecondaryMuscleGroups.Select(muscleGroupMapper.Map),
                 PrimaryMuscles = entity.PrimaryMuscles.Select(muscleMapper.Map),

@@ -11,7 +11,7 @@ using FitnessTracker.Data;
 
 namespace FitnessTracker.Migrations
 {
-    [DbContext(typeof(ExerciseContext))]
+    [DbContext(typeof(DataContext))]
     [Migration("20240610200135_Remove weights, aliases and workout sets")]
     partial class Removeweightsaliasesandworkoutsets
     {

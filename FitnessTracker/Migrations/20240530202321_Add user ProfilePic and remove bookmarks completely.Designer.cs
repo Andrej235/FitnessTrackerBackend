@@ -11,7 +11,7 @@ using FitnessTracker.Data;
 
 namespace FitnessTracker.Migrations
 {
-    [DbContext(typeof(ExerciseContext))]
+    [DbContext(typeof(DataContext))]
     [Migration("20240530202321_Add user ProfilePic and remove bookmarks completely")]
     partial class AdduserProfilePicandremovebookmarkscompletely
     {

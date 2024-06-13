@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace FitnessTracker.Services.Delete
 {
-    public class DeleteService<T>(ExerciseContext context, IReadService<T> readService) : IDeleteService<T> where T : class
+    public class DeleteService<T>(DataContext context, IReadService<T> readService) : IDeleteService<T> where T : class
     {
         public async Task Delete(object id)
         {

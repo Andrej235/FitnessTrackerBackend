@@ -3,7 +3,7 @@ using FitnessTracker.Data;
 
 namespace FitnessTracker.Services.Update
 {
-    public class UpdateService<T>(ExerciseContext context) : IUpdateService<T> where T : class
+    public class UpdateService<T>(DataContext context) : IUpdateService<T> where T : class
     {
         public async Task Update(T updatedEntity)
         {

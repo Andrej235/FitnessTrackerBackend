@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace FitnessTracker.Services.Update
 {
-    public class ExerciseUpdateService(ExerciseContext context,
+    public class ExerciseUpdateService(DataContext context,
                                        IReadService<Exercise> readService,
                                        IDeleteService<EquipmentUsage> equipmentUsageDeleteService,
                                        IDeleteService<PrimaryMuscleGroupInExercise> primaryMuscleGroupDeleteService,
@@ -24,7 +24,7 @@ namespace FitnessTracker.Services.Update
 
                 exercise.Name = updatedEntity.Name;
                 exercise.Description = updatedEntity.Description;
-                exercise.EncodedImage = updatedEntity.EncodedImage;
+                exercise.Image = updatedEntity.Image;
 
                 await equipmentUsageDeleteService.DeleteAll(x => x.ExerciseId == exercise.Id);
                 exercise.Equipment = updatedEntity.Equipment;

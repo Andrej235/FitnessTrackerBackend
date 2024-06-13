@@ -11,7 +11,7 @@ using FitnessTracker.Data;
 
 namespace FitnessTracker.Migrations
 {
-    [DbContext(typeof(ExerciseContext))]
+    [DbContext(typeof(DataContext))]
     [Migration("20240528080754_Add role navigation property to user")]
     partial class Addrolenavigationpropertytouser
     {

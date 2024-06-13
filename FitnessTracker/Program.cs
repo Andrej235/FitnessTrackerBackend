@@ -8,15 +8,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using FitnessTracker.Data;
 using FitnessTracker.DTOs;
-using FitnessTracker.Models;
-using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
-using FitnessTracker.Services.Mapping;
-using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace FitnessTracker
 {
@@ -68,8 +63,9 @@ namespace FitnessTracker
                 });
             });
 
-            builder.Services.AddDbContext<ExerciseContext>(x =>
+            builder.Services.AddDbContext<DataContext>(x =>
             {
+                x.UseSqlServer(builder.Configuration.GetConnectionString("SQLConnectionString"));
                 x.EnableSensitiveDataLogging(); //TODO-PROD: remove in production
             });
 

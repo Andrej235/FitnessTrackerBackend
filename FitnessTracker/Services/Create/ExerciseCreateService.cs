@@ -5,7 +5,7 @@ using FitnessTracker.Utilities;
 
 namespace FitnessTracker.Services.Create
 {
-    public class ExerciseCreateService(ExerciseContext context, IReadService<Exercise> readService) : ICreateService<Exercise>
+    public class ExerciseCreateService(DataContext context, IReadService<Exercise> readService) : ICreateService<Exercise>
     {
         public async Task<object?> Add(Exercise toAdd)
         {

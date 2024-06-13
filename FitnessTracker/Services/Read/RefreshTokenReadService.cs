@@ -6,9 +6,9 @@ using System.Linq.Expressions;
 
 namespace FitnessTracker.Services.Read
 {
-    public class RefreshTokenReadService(ExerciseContext context) : IReadService<RefreshToken>
+    public class RefreshTokenReadService(DataContext context) : IReadService<RefreshToken>
     {
-        private readonly ExerciseContext context = context;
+        private readonly DataContext context = context;
 
         public Task<RefreshToken?> Get(Expression<Func<RefreshToken, bool>> criteria, string? include = "all") => context.RefreshTokens.Include(x => x.User).FirstOrDefaultAsync(criteria);
 

@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace FitnessTracker.Models
+﻿namespace FitnessTracker.Models
 {
     public class User
     {
-        [Key]
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
         public string Email { get; set; } = null!;
@@ -13,5 +10,8 @@ namespace FitnessTracker.Models
         public string? ProfilePic { get; set; }
 
         public string Role { get; set; } = null!;
+
+        public Guid? SplitId { get; set; }
+        public Split? Split { get; set; }
     }
 }

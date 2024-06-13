@@ -11,7 +11,7 @@ using FitnessTracker.Data;
 
 namespace FitnessTracker.Migrations
 {
-    [DbContext(typeof(ExerciseContext))]
+    [DbContext(typeof(DataContext))]
     [Migration("20240526102854_Add RefreshToken")]
     partial class AddRefreshToken
     {

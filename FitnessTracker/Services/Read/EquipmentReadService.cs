@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace FitnessTracker.Services.Read
 {
-    public class EquipmentReadService(ExerciseContext context) : AbstractReadService<Equipment>(context)
+    public class EquipmentReadService(DataContext context) : AbstractReadService<Equipment>(context)
     {
         protected override Expression<Func<Equipment, bool>> TranslateKeyValueToExpression(string key, string value)
         {

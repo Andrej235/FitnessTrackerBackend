@@ -11,7 +11,7 @@ using FitnessTracker.Data;
 
 namespace FitnessTracker.Migrations
 {
-    [DbContext(typeof(ExerciseContext))]
+    [DbContext(typeof(DataContext))]
     [Migration("20240529202205_Remove Roles table and add role column to user")]
     partial class RemoveRolestableandaddrolecolumntouser
     {

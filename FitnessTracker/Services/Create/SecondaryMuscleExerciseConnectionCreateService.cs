@@ -5,7 +5,7 @@ using FitnessTracker.Services.Read;
 
 namespace FitnessTracker.Services.Create
 {
-    public class SecondaryMuscleExerciseConnectionCreateService(ExerciseContext context, IReadService<SecondaryMuscleGroupInExercise> readService) : CreateService<SecondaryMuscleGroupInExercise>(context)
+    public class SecondaryMuscleExerciseConnectionCreateService(DataContext context, IReadService<SecondaryMuscleGroupInExercise> readService) : CreateService<SecondaryMuscleGroupInExercise>(context)
     {
         protected override async Task<Exception?> IsEntityValid(SecondaryMuscleGroupInExercise entity)
         {

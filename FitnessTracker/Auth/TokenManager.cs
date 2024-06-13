@@ -1,6 +1,5 @@
 ﻿using FitnessTracker.Models;
 using Microsoft.IdentityModel.Tokens;
-using FitnessTracker.Models;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Read;

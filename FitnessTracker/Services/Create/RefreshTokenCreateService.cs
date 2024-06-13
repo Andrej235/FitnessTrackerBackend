@@ -4,9 +4,9 @@ using FitnessTracker.Services.Create;
 
 namespace FitnessTracker.Services.Create
 {
-    public class RefreshTokenCreateService(ExerciseContext context) : ICreateService<RefreshToken>
+    public class RefreshTokenCreateService(DataContext context) : ICreateService<RefreshToken>
     {
-        private readonly ExerciseContext context = context;
+        private readonly DataContext context = context;
 
         public async Task<object?> Add(RefreshToken toAdd)
         {

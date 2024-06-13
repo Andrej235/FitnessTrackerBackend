@@ -9,7 +9,6 @@ using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping;
 using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
-using FitnessTracker.Utilities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.RegularExpressions;

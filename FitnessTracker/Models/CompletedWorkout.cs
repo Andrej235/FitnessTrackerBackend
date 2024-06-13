@@ -2,7 +2,9 @@
 {
     public class CompletedWorkout
     {
+        public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public Guid WorkoutId { get; set; }
+        public DateTime CompletedAt { get; set; }
     }
 }
