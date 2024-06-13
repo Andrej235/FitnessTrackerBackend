@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace ProjectGym.Utilities
+namespace FitnessTracker.Utilities
 {
     public static class HashingService
     {

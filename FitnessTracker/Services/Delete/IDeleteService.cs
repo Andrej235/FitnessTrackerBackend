@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace ProjectGym.Services.Delete
+namespace FitnessTracker.Services.Delete
 {
     public interface IDeleteService<T> where T : class
     {

@@ -1,8 +1,8 @@
-﻿using ProjectGym.Data;
-using ProjectGym.Exceptions;
-using ProjectGym.Utilities;
+﻿using FitnessTracker.Data;
+using FitnessTracker.Exceptions;
+using FitnessTracker.Utilities;
 
-namespace ProjectGym.Services.Create
+namespace FitnessTracker.Services.Create
 {
     public class CreateService<T>(ExerciseContext context) : ICreateService<T> where T : class
     {

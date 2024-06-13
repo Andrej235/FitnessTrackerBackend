@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProjectGym.Data;
+using FitnessTracker.Data;
 
-namespace ProjectGym.Services.Update
+namespace FitnessTracker.Services.Update
 {
     public class UpdateService<T>(ExerciseContext context) : IUpdateService<T> where T : class
     {

@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProjectGym.Data;
-using ProjectGym.Exceptions;
-using ProjectGym.Models;
-using ProjectGym.Services.Read;
+using FitnessTracker.Data;
+using FitnessTracker.Exceptions;
+using FitnessTracker.Models;
+using FitnessTracker.Services.Read;
 
-namespace ProjectGym.Services.Create
+namespace FitnessTracker.Services.Create
 {
     public class EquipmentCreateService(ExerciseContext context, IReadService<Equipment> readService) : CreateService<Equipment>(context)
     {

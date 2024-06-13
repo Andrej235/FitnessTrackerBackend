@@ -1,6 +1,6 @@
 ﻿using FitnessTracker.Models;
-using ProjectGym.Data;
-using ProjectGym.Services.Create;
+using FitnessTracker.Data;
+using FitnessTracker.Services.Create;
 
 namespace FitnessTracker.Services.Create
 {

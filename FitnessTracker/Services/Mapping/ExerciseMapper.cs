@@ -1,8 +1,8 @@
-﻿using ProjectGym.DTOs;
-using ProjectGym.Models;
-using ProjectGym.Services.Read;
+﻿using FitnessTracker.DTOs;
+using FitnessTracker.Models;
+using FitnessTracker.Services.Read;
 
-namespace ProjectGym.Services.Mapping
+namespace FitnessTracker.Services.Mapping
 {
     public class ExerciseMapper(IReadService<Equipment> equipmentReadService,
                                 IReadService<MuscleGroup> muscleGroupReadService,

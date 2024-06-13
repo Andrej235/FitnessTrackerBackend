@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ProjectGym.Data;
+using FitnessTracker.Data;
 
 #nullable disable
 
-namespace ProjectGym.Migrations
+namespace FitnessTracker.Migrations
 {
     [DbContext(typeof(ExerciseContext))]
     partial class ExerciseContextModelSnapshot : ModelSnapshot

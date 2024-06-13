@@ -1,8 +1,8 @@
 ﻿using FitnessTracker.Models;
 using Microsoft.EntityFrameworkCore;
-using ProjectGym.Models;
+using FitnessTracker.Models;
 
-namespace ProjectGym.Data
+namespace FitnessTracker.Data
 {
     public class ExerciseContext(DbContextOptions options) : DbContext(options)
     {
@@ -32,8 +32,6 @@ namespace ProjectGym.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //base.OnModelCreating(modelBuilder);
-
             #region Exercise
             modelBuilder.Entity<Exercise>()
                 .HasMany(e => e.PrimaryMuscleGroups)

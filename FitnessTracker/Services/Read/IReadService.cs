@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace ProjectGym.Services.Read
+namespace FitnessTracker.Services.Read
 {
     public interface IReadService<T> where T : class
     {

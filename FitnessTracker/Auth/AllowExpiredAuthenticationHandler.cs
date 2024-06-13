@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using ProjectGym.Utilities;
+using FitnessTracker.Utilities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Encodings.Web;

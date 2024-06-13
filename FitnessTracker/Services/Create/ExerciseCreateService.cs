@@ -1,9 +1,9 @@
-﻿using ProjectGym.Data;
-using ProjectGym.Models;
-using ProjectGym.Services.Read;
-using ProjectGym.Utilities;
+﻿using FitnessTracker.Data;
+using FitnessTracker.Models;
+using FitnessTracker.Services.Read;
+using FitnessTracker.Utilities;
 
-namespace ProjectGym.Services.Create
+namespace FitnessTracker.Services.Create
 {
     public class ExerciseCreateService(ExerciseContext context, IReadService<Exercise> readService) : ICreateService<Exercise>
     {

@@ -1,6 +1,4 @@
-﻿using ProjectGym.Services.DatabaseSerialization;
-
-namespace ProjectGym.Models
+﻿namespace FitnessTracker.Models
 {
     public class Muscle
     {
@@ -10,7 +8,6 @@ namespace ProjectGym.Models
         public IEnumerable<Exercise> PrimaryInExercises { get; set; } = new List<Exercise>();
         public IEnumerable<Exercise> SecondaryInExercises { get; set; } = new List<Exercise>();
 
-        [ModelReference("MuscleGroup")]
         public int MuscleGroupId { get; set; }
     }
 }

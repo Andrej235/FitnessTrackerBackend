@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProjectGym.Models;
-using ProjectGym.Services.Mapping;
-using ProjectGym.Services.Read;
+using FitnessTracker.Models;
+using FitnessTracker.Services.Mapping;
+using FitnessTracker.Services.Read;
 
 namespace FitnessTracker.Controllers
 {

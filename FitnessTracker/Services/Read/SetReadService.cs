@@ -1,8 +1,8 @@
-﻿using ProjectGym.Data;
-using ProjectGym.Models;
+﻿using FitnessTracker.Data;
+using FitnessTracker.Models;
 using System.Linq.Expressions;
 
-namespace ProjectGym.Services.Read
+namespace FitnessTracker.Services.Read
 {
     public class SetReadService(ExerciseContext context) : AbstractReadService<Set>(context)
     {

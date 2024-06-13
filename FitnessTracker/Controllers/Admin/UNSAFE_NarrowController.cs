@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ProjectGym.Data;
-using ProjectGym.DTOs;
-using ProjectGym.Models;
-using ProjectGym.Services.Mapping;
-using ProjectGym.Services.Read;
+using FitnessTracker.Data;
+using FitnessTracker.DTOs;
+using FitnessTracker.Models;
+using FitnessTracker.Services.Mapping;
+using FitnessTracker.Services.Read;
 
 namespace FitnessTracker.Controllers.Admin
 {

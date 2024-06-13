@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace ProjectGym.Utilities
+namespace FitnessTracker.Utilities
 {
     public static class LogDebugger
     {

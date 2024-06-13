@@ -1,9 +1,9 @@
-﻿using ProjectGym.Data;
-using ProjectGym.Services.Read;
-using ProjectGym.Utilities;
+﻿using FitnessTracker.Data;
+using FitnessTracker.Services.Read;
+using FitnessTracker.Utilities;
 using System.Linq.Expressions;
 
-namespace ProjectGym.Services.Delete
+namespace FitnessTracker.Services.Delete
 {
     public class DeleteService<T>(ExerciseContext context, IReadService<T> readService) : IDeleteService<T> where T : class
     {

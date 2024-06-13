@@ -1,4 +1,4 @@
-﻿namespace ProjectGym.Services.Create
+﻿namespace FitnessTracker.Services.Create
 {
     public interface ICreateService<TEntity> where TEntity : class
     {

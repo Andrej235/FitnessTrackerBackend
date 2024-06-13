@@ -1,12 +1,12 @@
-﻿using ProjectGym.DTOs;
-using ProjectGym.Models;
-using ProjectGym.Services.Create;
-using ProjectGym.Services.Delete;
-using ProjectGym.Services.Mapping;
-using ProjectGym.Services.Read;
-using ProjectGym.Services.Update;
+﻿using FitnessTracker.DTOs;
+using FitnessTracker.Models;
+using FitnessTracker.Services.Create;
+using FitnessTracker.Services.Delete;
+using FitnessTracker.Services.Mapping;
+using FitnessTracker.Services.Read;
+using FitnessTracker.Services.Update;
 
-namespace ProjectGym.Controllers
+namespace FitnessTracker.Controllers
 {
     public class WorkoutController(ICreateService<Workout> createService, IUpdateService<Workout> updateService, IDeleteService<Workout> deleteService, IReadService<Workout> readService, IEntityMapper<Workout, WorkoutDTO> mapper) : RepositoryController<Workout, WorkoutDTO>(createService, updateService, deleteService, readService, mapper) { }
 }

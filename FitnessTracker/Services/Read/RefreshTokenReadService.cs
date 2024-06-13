@@ -1,7 +1,7 @@
 ﻿using FitnessTracker.Models;
 using Microsoft.EntityFrameworkCore;
-using ProjectGym.Data;
-using ProjectGym.Services.Read;
+using FitnessTracker.Data;
+using FitnessTracker.Services.Read;
 using System.Linq.Expressions;
 
 namespace FitnessTracker.Services.Read

@@ -1,4 +1,4 @@
-﻿namespace ProjectGym.Services.Mapping
+﻿namespace FitnessTracker.Services.Mapping
 {
     public interface IEntityMapper<TEntity, TDTO>
     {

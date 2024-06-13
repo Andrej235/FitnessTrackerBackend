@@ -1,7 +1,7 @@
-﻿using ProjectGym.DTOs;
-using ProjectGym.Models;
+﻿using FitnessTracker.DTOs;
+using FitnessTracker.Models;
 
-namespace ProjectGym.Services.Mapping
+namespace FitnessTracker.Services.Mapping
 {
     public class MuscleMapper : IEntityMapper<Muscle, MuscleDTO>
     {

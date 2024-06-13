@@ -1,6 +1,6 @@
-﻿using ProjectGym.DTOs;
-using ProjectGym.Models;
-using ProjectGym.Services.Mapping;
+﻿using FitnessTracker.DTOs;
+using FitnessTracker.Models;
+using FitnessTracker.Services.Mapping;
 
 namespace FitnessTracker.Services.Mapping
 {

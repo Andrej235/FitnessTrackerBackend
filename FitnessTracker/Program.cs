@@ -6,19 +6,19 @@ using FitnessTracker.Services.Read;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using ProjectGym.Data;
-using ProjectGym.DTOs;
-using ProjectGym.Models;
-using ProjectGym.Services.Create;
-using ProjectGym.Services.Delete;
-using ProjectGym.Services.Mapping;
-using ProjectGym.Services.Read;
-using ProjectGym.Services.Update;
+using FitnessTracker.Data;
+using FitnessTracker.DTOs;
+using FitnessTracker.Models;
+using FitnessTracker.Services.Create;
+using FitnessTracker.Services.Delete;
+using FitnessTracker.Services.Mapping;
+using FitnessTracker.Services.Read;
+using FitnessTracker.Services.Update;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace ProjectGym
+namespace FitnessTracker
 {
     public class Program
     {

@@ -1,10 +1,10 @@
 ﻿using FitnessTracker.Models;
 using Microsoft.IdentityModel.Tokens;
-using ProjectGym.Models;
-using ProjectGym.Services.Create;
-using ProjectGym.Services.Delete;
-using ProjectGym.Services.Read;
-using ProjectGym.Services.Update;
+using FitnessTracker.Models;
+using FitnessTracker.Services.Create;
+using FitnessTracker.Services.Delete;
+using FitnessTracker.Services.Read;
+using FitnessTracker.Services.Update;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

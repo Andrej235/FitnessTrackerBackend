@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProjectGym.Data;
-using ProjectGym.Utilities;
+using FitnessTracker.Data;
+using FitnessTracker.Utilities;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace ProjectGym.Services.Read
+namespace FitnessTracker.Services.Read
 {
     public abstract class AbstractReadService<T>(ExerciseContext context) : IReadService<T> where T : class
     {

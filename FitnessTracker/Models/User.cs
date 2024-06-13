@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ProjectGym.Models
+namespace FitnessTracker.Models
 {
     public class User
     {

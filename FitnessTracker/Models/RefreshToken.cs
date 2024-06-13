@@ -1,5 +1,4 @@
-﻿using ProjectGym.Models;
-using ProjectGym.Services.DatabaseSerialization;
+﻿using FitnessTracker.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace FitnessTracker.Models
@@ -11,7 +10,6 @@ namespace FitnessTracker.Models
         public Guid JwtId { get; set; }
         public DateTime ExpiryDate { get; set; }
 
-        [ModelReference("User")]
         public Guid UserId { get; set; }
         public User User { get; set; } = null!;
     }

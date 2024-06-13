@@ -1,8 +1,8 @@
-﻿using ProjectGym.Data;
-using ProjectGym.Models;
-using ProjectGym.Services.Read;
+﻿using FitnessTracker.Data;
+using FitnessTracker.Models;
+using FitnessTracker.Services.Read;
 
-namespace ProjectGym.Services.Update
+namespace FitnessTracker.Services.Update
 {
     public class WorkoutUpdateService(ExerciseContext context,
                                       IReadService<Workout> readService) : IUpdateService<Workout>

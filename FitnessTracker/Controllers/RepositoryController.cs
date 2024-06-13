@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProjectGym.Services.Create;
-using ProjectGym.Services.Delete;
-using ProjectGym.Services.Mapping;
-using ProjectGym.Services.Read;
-using ProjectGym.Services.Update;
-using ProjectGym.Utilities;
+using FitnessTracker.Services.Create;
+using FitnessTracker.Services.Delete;
+using FitnessTracker.Services.Mapping;
+using FitnessTracker.Services.Read;
+using FitnessTracker.Services.Update;
+using FitnessTracker.Utilities;
 
-namespace ProjectGym.Controllers
+namespace FitnessTracker.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

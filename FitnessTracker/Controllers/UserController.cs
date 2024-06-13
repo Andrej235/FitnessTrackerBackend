@@ -2,19 +2,19 @@
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProjectGym.DTOs;
-using ProjectGym.Models;
-using ProjectGym.Services.Create;
-using ProjectGym.Services.Delete;
-using ProjectGym.Services.Mapping;
-using ProjectGym.Services.Read;
-using ProjectGym.Services.Update;
-using ProjectGym.Utilities;
+using FitnessTracker.DTOs;
+using FitnessTracker.Models;
+using FitnessTracker.Services.Create;
+using FitnessTracker.Services.Delete;
+using FitnessTracker.Services.Mapping;
+using FitnessTracker.Services.Read;
+using FitnessTracker.Services.Update;
+using FitnessTracker.Utilities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 
-namespace ProjectGym.Controllers
+namespace FitnessTracker.Controllers
 {
     [Route("api/user")]
     [ApiController]

@@ -1,5 +1,5 @@
 ﻿
-namespace ProjectGym.DTOs
+namespace FitnessTracker.DTOs
 {
     public class MuscleDTO
     {

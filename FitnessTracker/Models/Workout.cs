@@ -1,7 +1,6 @@
-﻿using ProjectGym.Services.DatabaseSerialization;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace ProjectGym.Models
+namespace FitnessTracker.Models
 {
     public class Workout
     {
@@ -11,7 +10,6 @@ namespace ProjectGym.Models
         public bool IsPublic { get; set; }
 
         public User Creator { get; set; } = null!;
-        [ModelReference("User")]
         public Guid CreatorId { get; set; }
 
         public IEnumerable<Set> Sets { get; set; } = new HashSet<Set>();

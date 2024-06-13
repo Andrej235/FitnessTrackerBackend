@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace ProjectGym.Migrations
+namespace FitnessTracker.Migrations
 {
     /// <inheritdoc />
     public partial class Addroles : Migration

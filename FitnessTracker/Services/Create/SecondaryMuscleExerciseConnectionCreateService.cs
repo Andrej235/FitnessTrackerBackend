@@ -1,9 +1,9 @@
-﻿using ProjectGym.Data;
-using ProjectGym.Exceptions;
-using ProjectGym.Models;
-using ProjectGym.Services.Read;
+﻿using FitnessTracker.Data;
+using FitnessTracker.Exceptions;
+using FitnessTracker.Models;
+using FitnessTracker.Services.Read;
 
-namespace ProjectGym.Services.Create
+namespace FitnessTracker.Services.Create
 {
     public class SecondaryMuscleExerciseConnectionCreateService(ExerciseContext context, IReadService<SecondaryMuscleGroupInExercise> readService) : CreateService<SecondaryMuscleGroupInExercise>(context)
     {

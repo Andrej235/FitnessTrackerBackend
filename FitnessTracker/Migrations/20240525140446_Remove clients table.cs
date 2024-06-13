@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace ProjectGym.Migrations
+namespace FitnessTracker.Migrations
 {
     /// <inheritdoc />
     public partial class Removeclientstable : Migration

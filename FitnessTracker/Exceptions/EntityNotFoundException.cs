@@ -1,4 +1,4 @@
-﻿namespace ProjectGym.Exceptions
+﻿namespace FitnessTracker.Exceptions
 {
     [Serializable]
     public class EntityNotFoundException : Exception

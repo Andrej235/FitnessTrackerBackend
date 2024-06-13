@@ -1,4 +1,4 @@
-﻿namespace ProjectGym.Models
+﻿namespace FitnessTracker.Models
 {
     public class Equipment
     {
