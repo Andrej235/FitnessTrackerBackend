@@ -1,8 +1,8 @@
 ﻿namespace FitnessTracker.Models
 {
-    public class SplitLike
+    public class WorkoutCommentLike
     {
         public Guid UserId { get; set; }
-        public Guid SplitId { get; set; }
+        public Guid CommentId { get; set; }
     }
 }

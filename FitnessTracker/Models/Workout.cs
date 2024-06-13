@@ -11,5 +11,7 @@
 
         public IEnumerable<Set> Sets { get; set; } = new HashSet<Set>();
         public IEnumerable<Split> Splits { get; set; } = new HashSet<Split>();
+        public IEnumerable<User> Likes { get; set; } = new HashSet<User>();
+        public IEnumerable<WorkoutComment> Comments { get; set; } = new HashSet<WorkoutComment>();
     }
 }

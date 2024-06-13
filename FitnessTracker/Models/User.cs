@@ -13,5 +13,8 @@
 
         public Guid? SplitId { get; set; }
         public Split? Split { get; set; }
+
+        public IEnumerable<User> Following { get; set; } = new HashSet<User>();
+        public IEnumerable<User> Followers { get; set; } = new HashSet<User>();
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace FitnessTracker.Models
+﻿namespace FitnessTracker.Models
 {
     public class Set
     {
