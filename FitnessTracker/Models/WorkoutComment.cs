@@ -2,6 +2,7 @@
 {
     public class WorkoutComment
     {
+        public Guid Id { get; set; }
         public Guid WorkoutId { get; set; }
         public Guid CreatorId { get; set; }
         public User Creator { get; set; } = null!;

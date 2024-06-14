@@ -2,11 +2,11 @@
 {
     public class Post
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Title { get; set; } = null!;
         public string Content { get; set; } = null!;
 
-        public int CreatorId { get; set; }
+        public Guid CreatorId { get; set; }
         public User Creator { get; set; } = null!;
 
         public IEnumerable<User> Likes { get; set; } = new HashSet<User>();

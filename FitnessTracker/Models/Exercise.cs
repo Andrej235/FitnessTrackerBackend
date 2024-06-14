@@ -12,5 +12,6 @@
         public IEnumerable<Muscle> PrimaryMuscles { get; set; } = new HashSet<Muscle>();
         public IEnumerable<Muscle> SecondaryMuscles { get; set; } = new HashSet<Muscle>();
         public IEnumerable<Equipment> Equipment { get; set; } = new HashSet<Equipment>();
+        public IEnumerable<User> Favorites { get; set; } = new HashSet<User>();
     }
 }

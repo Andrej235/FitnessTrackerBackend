@@ -2,6 +2,7 @@
 {
     public class SplitComment
     {
+        public Guid Id { get; set; }
         public Guid SplitId { get; set; }
         public Guid CreatorId { get; set; }
         public User Creator { get; set; } = null!;

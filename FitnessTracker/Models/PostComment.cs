@@ -2,6 +2,7 @@
 {
     public class PostComment
     {
+        public Guid Id { get; set; }
         public Guid PostId { get; set; }
         public Guid CreatorId { get; set; }
         public User Creator { get; set; } = null!;

@@ -9,6 +9,9 @@ namespace FitnessTracker.Data
         public DbSet<Equipment> Equipment { get; set; } //
         public DbSet<EquipmentUsage> EquipmentUsage { get; set; } //
         public DbSet<Exercise> Exercises { get; set; } //
+        public DbSet<FavoriteExercise> FavoriteExercises { get; set; } //
+        public DbSet<FavoriteSplit> FavoriteSplits { get; set; } //
+        public DbSet<FavoriteWorkout> FavoriteWorkouts { get; set; } //
         public DbSet<Muscle> Muscles { get; set; } //
         public DbSet<MuscleGroup> MusclesGroups { get; set; } //
         public DbSet<Post> Posts { get; set; } //
@@ -33,7 +36,11 @@ namespace FitnessTracker.Data
         public DbSet<WorkoutCommentLike> WorkoutCommentLikes { get; set; } //
         public DbSet<WorkoutLike> WorkoutLikes { get; set; } //
 
-
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=FitnessTracker;Integrated Security=True");
+            base.OnConfiguring(optionsBuilder);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,7 +64,7 @@ namespace FitnessTracker.Data
                 .HasKey(p => p.Id);
 
             modelBuilder.Entity<PostComment>()
-                .HasKey(p => new { p.PostId, p.CreatorId });
+                .HasKey(p => p.Id);
 
             modelBuilder.Entity<RefreshToken>()
                 .HasKey(p => p.Token);
@@ -69,7 +76,7 @@ namespace FitnessTracker.Data
                 .HasKey(s => s.Id);
 
             modelBuilder.Entity<SplitComment>()
-                .HasKey(s => new { s.SplitId, s.CreatorId });
+                .HasKey(s => s.Id);
 
             modelBuilder.Entity<User>()
                 .HasKey(u => u.Id);
@@ -78,7 +85,7 @@ namespace FitnessTracker.Data
                 .HasKey(w => w.Id);
 
             modelBuilder.Entity<WorkoutComment>()
-                .HasKey(wc => new { wc.WorkoutId, wc.CreatorId });
+                .HasKey(w => w.Id);
             #endregion
 
             #region Completed workouts
@@ -86,13 +93,13 @@ namespace FitnessTracker.Data
                 .HasOne(cw => cw.Workout)
                 .WithMany()
                 .HasForeignKey(cw => cw.WorkoutId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<CompletedWorkout>()
                 .HasOne<User>()
                 .WithMany()
                 .HasForeignKey(cw => cw.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
             #endregion
 
             #region Exercises
@@ -145,6 +152,18 @@ namespace FitnessTracker.Data
                     j.HasOne<Equipment>().WithMany().HasForeignKey(x => x.EquipmentId).OnDelete(DeleteBehavior.Cascade);
                     j.HasKey(x => new { x.ExerciseId, x.EquipmentId });
                 });
+
+            modelBuilder.Entity<Exercise>()
+                .HasMany(e => e.Favorites)
+                .WithMany()
+                .UsingEntity<FavoriteExercise>(j =>
+                {
+                    j.HasOne<Exercise>().WithMany().HasForeignKey(x => x.ExerciseId).OnDelete(DeleteBehavior.Cascade);
+                    j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+                    j.HasKey(x => new { x.ExerciseId, x.UserId });
+                    j.HasIndex(x => x.ExerciseId);
+                    j.HasIndex(x => new { x.ExerciseId, x.UserId }).IsUnique();
+                });
             #endregion
 
             #region Muscles
@@ -160,7 +179,7 @@ namespace FitnessTracker.Data
                 .HasOne(p => p.Creator)
                 .WithMany()
                 .HasForeignKey(p => p.CreatorId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Post>()
                 .HasMany(p => p.Likes)
@@ -193,8 +212,8 @@ namespace FitnessTracker.Data
                 .WithMany()
                 .UsingEntity<PostCommentLike>(j =>
                 {
-                    j.HasOne<PostComment>().WithMany().HasForeignKey(x => x.CommentId).OnDelete(DeleteBehavior.Cascade);
-                    j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+                    j.HasOne<PostComment>().WithMany().HasForeignKey(x => x.CommentId).OnDelete(DeleteBehavior.NoAction);
+                    j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
                     j.HasKey(x => new { x.CommentId, x.UserId });
                     j.HasIndex(x => x.CommentId);
                     j.HasIndex(x => new { x.CommentId, x.UserId }).IsUnique();
@@ -229,9 +248,9 @@ namespace FitnessTracker.Data
             #region Splits
             modelBuilder.Entity<Split>()
                 .HasOne(s => s.Creator)
-                .WithMany()
+                .WithMany(u => u.CreatedSplits)
                 .HasForeignKey(s => s.CreatorId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Split>()
                 .HasMany(s => s.Likes)
@@ -261,6 +280,18 @@ namespace FitnessTracker.Data
                     j.HasKey(x => new { x.SplitId, x.WorkoutId });
                     j.HasIndex(x => x.SplitId);
                 });
+
+            modelBuilder.Entity<Split>()
+                .HasMany(s => s.Favorites)
+                .WithMany()
+                .UsingEntity<FavoriteSplit>(j =>
+                {
+                    j.HasOne<Split>().WithMany().HasForeignKey(x => x.SplitId).OnDelete(DeleteBehavior.Cascade);
+                    j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+                    j.HasKey(x => new { x.SplitId, x.UserId });
+                    j.HasIndex(x => x.SplitId);
+                    j.HasIndex(x => new { x.SplitId, x.UserId }).IsUnique();
+                });
             #endregion
 
             #region Split comments
@@ -275,8 +306,8 @@ namespace FitnessTracker.Data
                 .WithMany()
                 .UsingEntity<SplitCommentLike>(j =>
                 {
-                    j.HasOne<SplitComment>().WithMany().HasForeignKey(x => x.CommentId).OnDelete(DeleteBehavior.Cascade);
-                    j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+                    j.HasOne<SplitComment>().WithMany().HasForeignKey(x => x.CommentId).OnDelete(DeleteBehavior.NoAction);
+                    j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
                     j.HasKey(x => new { x.CommentId, x.UserId });
                     j.HasIndex(x => x.CommentId);
                     j.HasIndex(x => new { x.CommentId, x.UserId }).IsUnique();
@@ -285,18 +316,20 @@ namespace FitnessTracker.Data
 
             #region Users
             modelBuilder.Entity<User>()
-                .HasOne(u => u.Split)
+                .HasOne(u => u.CurrentSplit)
                 .WithMany()
                 .HasForeignKey(u => u.SplitId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.SetNull)
+                .IsRequired(false);
 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Followers)
                 .WithMany(u => u.Following)
                 .UsingEntity<UserFollows>(j =>
                 {
-                    j.HasOne<User>().WithMany().HasForeignKey(x => x.FollowerId).OnDelete(DeleteBehavior.Cascade);
-                    j.HasOne<User>().WithMany().HasForeignKey(x => x.FolloweeId).OnDelete(DeleteBehavior.Cascade);
+
+                    j.HasOne<User>().WithMany().HasForeignKey(x => x.FollowerId).OnDelete(DeleteBehavior.NoAction);
+                    j.HasOne<User>().WithMany().HasForeignKey(x => x.FolloweeId).OnDelete(DeleteBehavior.NoAction);
                     j.HasKey(x => new { x.FollowerId, x.FolloweeId });
                     j.HasIndex(x => x.FollowerId);
                     j.HasIndex(x => x.FolloweeId);
@@ -307,7 +340,7 @@ namespace FitnessTracker.Data
             #region Workouts
             modelBuilder.Entity<Workout>()
                 .HasOne(w => w.Creator)
-                .WithMany()
+                .WithMany(u => u.CreatedWorkouts)
                 .HasForeignKey(u => u.CreatorId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -322,8 +355,8 @@ namespace FitnessTracker.Data
                 .WithMany()
                 .UsingEntity<WorkoutLike>(j =>
                 {
-                    j.HasOne<Workout>().WithMany().HasForeignKey(x => x.WorkoutId).OnDelete(DeleteBehavior.Cascade);
-                    j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+                    j.HasOne<Workout>().WithMany().HasForeignKey(x => x.WorkoutId).OnDelete(DeleteBehavior.NoAction);
+                    j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
                     j.HasKey(x => new { x.WorkoutId, x.UserId });
                     j.HasIndex(x => x.WorkoutId);
                     j.HasIndex(x => new { x.WorkoutId, x.UserId }).IsUnique();
@@ -333,7 +366,19 @@ namespace FitnessTracker.Data
                 .HasMany(w => w.Comments)
                 .WithOne()
                 .HasForeignKey(c => c.WorkoutId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Workout>()
+                .HasMany(w => w.Favorites)
+                .WithMany()
+                .UsingEntity<FavoriteWorkout>(j =>
+                {
+                    j.HasOne<Workout>().WithMany().HasForeignKey(x => x.WorkoutId).OnDelete(DeleteBehavior.NoAction);
+                    j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
+                    j.HasKey(x => new { x.WorkoutId, x.UserId });
+                    j.HasIndex(x => x.WorkoutId);
+                    j.HasIndex(x => new { x.WorkoutId, x.UserId }).IsUnique();
+                });
             #endregion
 
             #region Workout comments
@@ -348,8 +393,8 @@ namespace FitnessTracker.Data
                 .WithMany()
                 .UsingEntity<WorkoutCommentLike>(j =>
                 {
-                    j.HasOne<WorkoutComment>().WithMany().HasForeignKey(x => x.CommentId).OnDelete(DeleteBehavior.Cascade);
-                    j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+                    j.HasOne<WorkoutComment>().WithMany().HasForeignKey(x => x.CommentId).OnDelete(DeleteBehavior.NoAction);
+                    j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
                     j.HasKey(x => new { x.CommentId, x.UserId });
                     j.HasIndex(x => x.CommentId);
                     j.HasIndex(x => new { x.CommentId, x.UserId }).IsUnique();

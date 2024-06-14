@@ -11,8 +11,11 @@
 
         public string Role { get; set; } = null!;
 
+        public IEnumerable<Workout> CreatedWorkouts { get; set; } = new HashSet<Workout>();
+        public IEnumerable<Split> CreatedSplits { get; set; } = new HashSet<Split>();
+
         public Guid? SplitId { get; set; }
-        public Split? Split { get; set; }
+        public Split? CurrentSplit { get; set; }
 
         public IEnumerable<User> Following { get; set; } = new HashSet<User>();
         public IEnumerable<User> Followers { get; set; } = new HashSet<User>();
