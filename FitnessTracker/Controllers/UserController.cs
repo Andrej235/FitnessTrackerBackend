@@ -22,28 +22,18 @@ namespace FitnessTracker.Controllers
                           ICreateService<User> createService,
                           IDeleteService<User> deleteService,
                           IUpdateService<User> updateService,
-                          TokenManager tokenManager) : ControllerBase
+                          ITokenManager tokenManager) : ControllerBase
     {
         public IReadService<User> ReadService { get; } = readService;
         public IEntityMapper<User, UserDTO> Mapper { get; } = mapper;
         public ICreateService<User> CreateService { get; } = createService;
         public IDeleteService<User> DeleteService { get; } = deleteService;
         public IUpdateService<User> UpdateService { get; } = updateService;
-        public TokenManager TokenManager { get; } = tokenManager;
+        public ITokenManager TokenManager { get; } = tokenManager;
 
-        private OkObjectResult SetupTokens(User user)
+        private async Task<OkObjectResult> SetupTokens(User user)
         {
-            var (jwt, refresh) = TokenManager.CreateJWTAndRefreshToken(user);
-
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = false, //TODO-PROD: Set to true in production
-                SameSite = SameSiteMode.Strict,
-                Expires = DateTime.UtcNow.AddDays(7)
-            };
-            Response.Cookies.Append("refreshToken", refresh, cookieOptions);
-
+            var jwt = await TokenManager.CreateJWTAndRefreshToken(user, Response.Cookies);
             return Ok(jwt);
         }
 
@@ -70,7 +60,7 @@ namespace FitnessTracker.Controllers
             if (newEntityId == default)
                 return BadRequest("User already exists");
 
-            return SetupTokens(user);
+            return await SetupTokens(user);
         }
 
         [HttpPost("login")]
@@ -90,7 +80,7 @@ namespace FitnessTracker.Controllers
                 if (!user.PasswordHash.SequenceEqual(hash))
                     return BadRequest("Incorrect email or password");
 
-                return SetupTokens(user);
+                return await SetupTokens(user);
             }
             catch (Exception ex)
             {
@@ -176,7 +166,7 @@ namespace FitnessTracker.Controllers
             await UpdateService.Update(user);
 
             await TokenManager.InvalidateAllTokensForUser(user.Id);
-            return SetupTokens(user);
+            return await SetupTokens(user);
         }
 
         [Authorize]

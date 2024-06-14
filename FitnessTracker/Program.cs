@@ -12,6 +12,8 @@ using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Update;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using FitnessTracker.Services.Mapping.Request;
+using FitnessTracker.DTOs.Requests.User;
 
 namespace FitnessTracker
 {
@@ -70,8 +72,13 @@ namespace FitnessTracker
             });
 
 
+
             builder.Services.AddSingleton(configuration);
-            builder.Services.AddScoped<TokenManager>();
+            builder.Services.AddScoped<ITokenManager, TokenManager>();
+
+            #region Request mappers
+            builder.Services.AddScoped<IRequestMapper<RegisterUserRequestDTO, User>, RegisterUserRequestMapper>();
+            #endregion
 
             #region Exercise
             builder.Services.AddScoped<ICreateService<Exercise>, ExerciseCreateService>();

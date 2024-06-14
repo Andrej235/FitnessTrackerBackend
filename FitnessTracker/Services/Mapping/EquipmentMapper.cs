@@ -9,7 +9,6 @@ namespace FitnessTracker.Services.Mapping
         {
             Id = entity.Id,
             Name = entity.Name,
-            UsedInExerciseIds = entity.UsedInExercises.Select(e => e.Id)
         };
 
         public Equipment Map(EquipmentDTO dto) => new()

@@ -7,42 +7,17 @@ using FitnessTracker.Services.Update;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Azure;
 
 namespace FitnessTracker.Auth
 {
-    public class TokenManager(ConfigurationManager configuration, IReadService<RefreshToken> readService, ICreateService<RefreshToken> createService, IUpdateService<RefreshToken> updateService, IDeleteService<RefreshToken> deleteService)
+    public class TokenManager(ConfigurationManager configuration, IReadService<RefreshToken> readService, ICreateService<RefreshToken> createService, IUpdateService<RefreshToken> updateService, IDeleteService<RefreshToken> deleteService) : ITokenManager
     {
         private readonly ConfigurationManager configuration = configuration;
         private readonly IReadService<RefreshToken> readService = readService;
         private readonly ICreateService<RefreshToken> createService = createService;
         private readonly IUpdateService<RefreshToken> updateService = updateService;
         private readonly IDeleteService<RefreshToken> deleteService = deleteService;
-
-        public string CreateJWT(User user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]!);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(
-                    [
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(ClaimTypes.Role, user.Role)
-                    ]
-                ),
-
-                Expires = DateTime.UtcNow.Add(TimeSpan.Parse(configuration["Jwt:TokenLifespan"]!)),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                Issuer = configuration["Jwt:Issuer"],
-                Audience = configuration["Jwt:Audience"]
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-
-            return tokenString;
-        }
 
         private (string jwt, Guid jwtId) CreateJWTAndId(User user)
         {
@@ -72,7 +47,7 @@ namespace FitnessTracker.Auth
             return (tokenString, jwtId);
         }
 
-        public (string jwt, string refresh) CreateJWTAndRefreshToken(User user)
+        public async Task<string> CreateJWTAndRefreshToken(User user, IResponseCookies cookies)
         {
             var (jwt, jwtId) = CreateJWTAndId(user);
 
@@ -83,13 +58,23 @@ namespace FitnessTracker.Auth
                 ExpiryDate = DateTime.UtcNow.AddDays(7),
             };
 
-            createService.Add(refresh);
-            return (jwt, refresh.Token.ToString());
+            await createService.Add(refresh);
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = false, //TODO-PROD: Set to true in production
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddDays(7) //TODO-PROD: Set to something concrete in production
+            };
+            cookies.Append("refreshToken", refresh.Token.ToString(), cookieOptions);
+
+            return jwt;
         }
 
         public async Task<string> RefreshJWT(Guid jwtId, Guid refreshToken, Guid userId)
         {
-            var token = await readService.Get(refreshToken, "none");
+            var token = await readService.Get(x => x.Token == refreshToken, "none");
             if (token is null || token.JwtId != jwtId || token.UserId != userId)
                 throw new Exception("Invalid token");
 
