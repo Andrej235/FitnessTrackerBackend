@@ -47,7 +47,7 @@ namespace FitnessTracker.Auth
             return (tokenString, jwtId);
         }
 
-        public async Task<string> CreateJWTAndRefreshToken(User user, IResponseCookies cookies)
+        public async Task<string> GenerateJWTAndRefreshToken(User user, IResponseCookies cookies)
         {
             var (jwt, jwtId) = CreateJWTAndId(user);
 

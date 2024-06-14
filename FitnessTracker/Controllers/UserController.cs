@@ -33,7 +33,7 @@ namespace FitnessTracker.Controllers
 
         private async Task<OkObjectResult> SetupTokens(User user)
         {
-            var jwt = await TokenManager.CreateJWTAndRefreshToken(user, Response.Cookies);
+            var jwt = await TokenManager.GenerateJWTAndRefreshToken(user, Response.Cookies);
             return Ok(jwt);
         }
 
@@ -52,7 +52,7 @@ namespace FitnessTracker.Controllers
                 Name = userDTO.Name,
                 Email = userDTO.Email,
                 Salt = salt,
-                PasswordHash = userDTO.Password.HashPassword(salt),
+                PasswordHash = userDTO.Password.ToHash(salt),
                 Role = Role.User
             };
 
@@ -76,7 +76,7 @@ namespace FitnessTracker.Controllers
                 if (user is null)
                     return BadRequest("Incorrect email or password");
 
-                var hash = userDTO.Password.HashPassword(user.Salt);
+                var hash = userDTO.Password.ToHash(user.Salt);
                 if (!user.PasswordHash.SequenceEqual(hash))
                     return BadRequest("Incorrect email or password");
 
@@ -159,10 +159,10 @@ namespace FitnessTracker.Controllers
             if (user is null)
                 return Unauthorized();
 
-            if (!user.PasswordHash.SequenceEqual(dto.OldPassword.HashPassword(user.Salt)))
+            if (!user.PasswordHash.SequenceEqual(dto.OldPassword.ToHash(user.Salt)))
                 return BadRequest("Incorrect old password");
 
-            user.PasswordHash = dto.NewPassword.HashPassword(user.Salt);
+            user.PasswordHash = dto.NewPassword.ToHash(user.Salt);
             await UpdateService.Update(user);
 
             await TokenManager.InvalidateAllTokensForUser(user.Id);

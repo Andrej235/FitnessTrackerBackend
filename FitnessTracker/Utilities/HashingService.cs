@@ -4,7 +4,7 @@ namespace FitnessTracker.Utilities
 {
     public static class HashingService
     {
-        public static byte[] HashPassword(this string password, byte[] salt) => SHA256.HashData(salt.CombineBytes(System.Text.Encoding.UTF8.GetBytes(password)));
+        public static byte[] ToHash(this string password, byte[] salt) => SHA256.HashData(salt.CombineBytes(System.Text.Encoding.UTF8.GetBytes(password)));
 
         public static byte[] GenerateSalt()
         {

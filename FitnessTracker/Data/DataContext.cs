@@ -222,6 +222,9 @@ namespace FitnessTracker.Data
 
             #region Refresh Tokens
             modelBuilder.Entity<RefreshToken>()
+                .HasIndex(x => x.UserId);
+
+            modelBuilder.Entity<RefreshToken>()
                 .HasOne(r => r.User)
                 .WithMany()
                 .HasForeignKey(r => r.UserId)
