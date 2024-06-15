@@ -17,7 +17,7 @@ namespace FitnessTracker.Services.Mapping.Request
                 Email = from.Email,
                 Salt = salt,
                 PasswordHash = hash,
-                Role = Role.User
+                Role = Role.Unverified
             };
         }
     }

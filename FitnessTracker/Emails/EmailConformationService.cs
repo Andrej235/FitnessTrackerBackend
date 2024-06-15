@@ -3,6 +3,7 @@ using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
+using FitnessTracker.Utilities;
 
 namespace FitnessTracker.Emails
 {
@@ -25,6 +26,7 @@ namespace FitnessTracker.Emails
                 await deleteService.DeleteFirst(x => x.UserId == userId && x.Id == confirmationCode);
                 var user = await userReadService.Get(x => x.Id == userId, "none");
                 user!.EmailConfirmed = true;
+                user!.Role = Role.User;
                 await userUpdateService.Update(user);
                 await deleteService.DeleteAll(x => x.UserId == userId);
                 return true;
@@ -35,7 +37,8 @@ namespace FitnessTracker.Emails
             }
         }
 
-        public async Task SendEmailConformation(string email, Guid userId)
+        private const string BASE_WEB_URL = "http://localhost:5173";
+        public async Task SendEmailConfirmation(string email, Guid userId)
         {
             EmailConformation emailConformation = new()
             {
@@ -46,7 +49,7 @@ namespace FitnessTracker.Emails
             if (emailConformationId == default || emailConformationId is not Guid conformationCode)
                 throw new Exception("Failed to create email conformation");
 
-            emailSender.SendEmail(new Message([email], "Email conformation", conformationCode.ToString()));
+            emailSender.SendEmail(new Message([email], "Email conformation", $"Please confirm your email by clicking <a href=\"{BASE_WEB_URL}/email-verification/{emailConformationId}\">here</a>"));
             return;
         }
     }

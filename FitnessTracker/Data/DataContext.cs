@@ -120,6 +120,8 @@ namespace FitnessTracker.Data
                 .WithMany()
                 .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            //TODO: Add index
             #endregion
 
             #region Exercises

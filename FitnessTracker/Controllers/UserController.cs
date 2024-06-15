@@ -2,6 +2,7 @@
 using FitnessTracker.DTOs;
 using FitnessTracker.DTOs.Requests.User;
 using FitnessTracker.DTOs.Responses.User;
+using FitnessTracker.Emails;
 using FitnessTracker.Models;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Mapping.Request;
@@ -22,26 +23,38 @@ namespace FitnessTracker.Controllers
                                           IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper,
                                           ICreateService<User> createService,
                                           IReadService<User> readService,
-                                          ITokenManager tokenManager) : ControllerBase
+                                          ITokenManager tokenManager,
+                                          IEmailConformationService emailConformationService) : ControllerBase
     {
         private readonly IRequestMapper<RegisterUserRequestDTO, User> registrationMapper = registrationMapper;
         private readonly ICreateService<User> createService = createService;
         private readonly IReadService<User> readService = readService;
         private readonly ITokenManager tokenManager = tokenManager;
+        private readonly IEmailConformationService emailConformationService = emailConformationService;
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequestDTO request)
         {
-            if (request.Name.Length < 3 || !ValidEmailRegex().IsMatch(request.Email.Trim()) || request.Password.Length < 8)
-                return BadRequest("Invalid registration details");
+            try
+            {
+                if (request.Name.Length < 3 || !ValidEmailRegex().IsMatch(request.Email.Trim()) || request.Password.Length < 8)
+                    return BadRequest("Invalid registration details");
 
-            var user = registrationMapper.Map(request);
-            var newUserId = await createService.Add(user);
-            if (newUserId == default)
-                return BadRequest("User already exists");
+                var user = registrationMapper.Map(request);
+                var newUserId = await createService.Add(user);
+                if (newUserId == default)
+                    return BadRequest("User already exists");
 
-            var jwt = await tokenManager.GenerateJWTAndRefreshToken(user, Response.Cookies);
-            return Ok(jwt);
+                var jwt = await tokenManager.GenerateJWTAndRefreshToken(user, Response.Cookies);
+                await emailConformationService.SendEmailConfirmation(user.Email, user.Id);
+
+                return Ok(jwt);
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return BadRequest(ex.GetErrorMessage());
+            }
         }
 
         [HttpPost("login")]
@@ -111,6 +124,27 @@ namespace FitnessTracker.Controllers
 
             await tokenManager.InvalidateRefreshToken(refreshToken);
             return Ok();
+        }
+
+        [Authorize(Roles = Role.Unverified)]
+        [HttpPost("confirm/{code:guid}")]
+        public async Task<IActionResult> Confirm(Guid code)
+        {
+            try
+            {
+                if (User.Identity is not ClaimsIdentity claimsIdentity
+                    || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                    || !Guid.TryParse(userIdString, out var userId))
+                    return Unauthorized();
+
+                var success = await emailConformationService.ConfirmEmail(userId, code);
+                return success ? Ok("Email Confirmed") : BadRequest("Invalid code");
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return BadRequest(ex.GetErrorMessage());
+            }
         }
 
         [GeneratedRegex(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")]
