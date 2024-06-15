@@ -16,6 +16,7 @@ using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.DTOs.Requests.User;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.DTOs.Responses.User;
+using FitnessTracker.Emails;
 
 namespace FitnessTracker
 {
@@ -67,6 +68,14 @@ namespace FitnessTracker
                     .AllowCredentials();
                 });
             });
+
+            var emailConfig = builder.Configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+            if (emailConfig is not null)
+                builder.Services.AddSingleton(emailConfig);
+
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 
 

@@ -7,14 +7,24 @@ using FitnessTracker.DTOs;
 using FitnessTracker.Models;
 using FitnessTracker.Services.Mapping;
 using FitnessTracker.Services.Read;
+using FitnessTracker.Emails;
 
 namespace FitnessTracker.Controllers.Admin
 {
-    [Authorize(Roles = Role.Admin)]
+    //[Authorize(Roles = Role.Admin)]
     [Route("api/unsafe/narrow")]
     [ApiController]
-    public class UNSAFE_NarrowController(DataContext context, IReadService<Exercise> readService, IEntityMapper<Exercise, ExerciseDTO> mapper, IEntityMapper<Exercise, object> fullMapper) : ControllerBase
+    public class UNSAFE_NarrowController(IEmailSender emailSender, DataContext context, IReadService<Exercise> readService, IEntityMapper<Exercise, ExerciseDTO> mapper, IEntityMapper<Exercise, object> fullMapper) : ControllerBase
     {
+        [HttpGet("mail")]
+        public IActionResult GetMail([FromQuery] string mail)
+        {
+            emailSender.SendEmail(new([mail], "Test email", "This is the content from our email."));
+            return Ok();
+        }
+
+
+
         [HttpGet("fullexercise/singlequery")]
         public IActionResult GetFullExercise_SingleQuery([FromQuery] string include)
         {
