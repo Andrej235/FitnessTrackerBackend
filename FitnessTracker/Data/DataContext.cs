@@ -97,9 +97,15 @@ namespace FitnessTracker.Data
 
             modelBuilder.Entity<CompletedWorkout>()
                 .HasOne<User>()
-                .WithMany()
+                .WithMany(cw => cw.CompletedWorkouts)
                 .HasForeignKey(cw => cw.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<CompletedWorkout>()
+                .HasIndex(x => x.UserId);
+
+            modelBuilder.Entity<CompletedWorkout>()
+                .HasIndex(x => new { x.UserId, x.WorkoutId });
             #endregion
 
             #region Exercises

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FitnessTracker.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialCommit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -601,6 +601,11 @@ namespace FitnessTracker.Migrations
                 name: "IX_CompletedWorkouts_UserId",
                 table: "CompletedWorkouts",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompletedWorkouts_UserId_WorkoutId",
+                table: "CompletedWorkouts",
+                columns: new[] { "UserId", "WorkoutId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CompletedWorkouts_WorkoutId",

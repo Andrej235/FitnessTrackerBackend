@@ -14,6 +14,8 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.DTOs.Requests.User;
+using FitnessTracker.Services.Mapping.Response;
+using FitnessTracker.DTOs.Responses.User;
 
 namespace FitnessTracker
 {
@@ -30,6 +32,7 @@ namespace FitnessTracker
             var builder = WebApplication.CreateBuilder(args);
             configuration = builder.Configuration;
 
+            #region JWT
             builder.Services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -51,9 +54,9 @@ namespace FitnessTracker
                 };
             })
             .AddScheme<AuthenticationSchemeOptions, AllowExpiredAuthenticationHandler>("AllowExpired", (p) => { });
+            #endregion
 
             builder.Services.AddAuthorization();
-
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -65,19 +68,23 @@ namespace FitnessTracker
                 });
             });
 
+
+
             builder.Services.AddDbContext<DataContext>(x =>
             {
                 x.UseSqlServer(builder.Configuration.GetConnectionString("SQLConnectionString"));
                 x.EnableSensitiveDataLogging(); //TODO-PROD: remove in production
             });
 
-
-
             builder.Services.AddSingleton(configuration);
             builder.Services.AddScoped<ITokenManager, TokenManager>();
 
             #region Request mappers
             builder.Services.AddScoped<IRequestMapper<RegisterUserRequestDTO, User>, RegisterUserRequestMapper>();
+            #endregion
+
+            #region Response mappers
+            builder.Services.AddScoped<IResponseMapper<User, DetailedUserResponseDTO>, DetailedUserResponseMapper>();
             #endregion
 
             #region Exercise

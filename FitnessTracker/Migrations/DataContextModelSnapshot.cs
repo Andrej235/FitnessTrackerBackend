@@ -43,6 +43,8 @@ namespace FitnessTracker.Migrations
 
                     b.HasIndex("WorkoutId");
 
+                    b.HasIndex("UserId", "WorkoutId");
+
                     b.ToTable("CompletedWorkouts");
                 });
 
@@ -712,7 +714,7 @@ namespace FitnessTracker.Migrations
             modelBuilder.Entity("FitnessTracker.Models.CompletedWorkout", b =>
                 {
                     b.HasOne("FitnessTracker.Models.User", null)
-                        .WithMany()
+                        .WithMany("CompletedWorkouts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -1156,6 +1158,8 @@ namespace FitnessTracker.Migrations
 
             modelBuilder.Entity("FitnessTracker.Models.User", b =>
                 {
+                    b.Navigation("CompletedWorkouts");
+
                     b.Navigation("CreatedSplits");
 
                     b.Navigation("CreatedWorkouts");

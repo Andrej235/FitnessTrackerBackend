@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessTracker.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240614214323_Initial Migration")]
-    partial class InitialMigration
+    [Migration("20240615110942_Initial Commit")]
+    partial class InitialCommit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,8 @@ namespace FitnessTracker.Migrations
                     b.HasIndex("UserId");
 
                     b.HasIndex("WorkoutId");
+
+                    b.HasIndex("UserId", "WorkoutId");
 
                     b.ToTable("CompletedWorkouts");
                 });
@@ -715,7 +717,7 @@ namespace FitnessTracker.Migrations
             modelBuilder.Entity("FitnessTracker.Models.CompletedWorkout", b =>
                 {
                     b.HasOne("FitnessTracker.Models.User", null)
-                        .WithMany()
+                        .WithMany("CompletedWorkouts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -1159,6 +1161,8 @@ namespace FitnessTracker.Migrations
 
             modelBuilder.Entity("FitnessTracker.Models.User", b =>
                 {
+                    b.Navigation("CompletedWorkouts");
+
                     b.Navigation("CreatedSplits");
 
                     b.Navigation("CreatedWorkouts");

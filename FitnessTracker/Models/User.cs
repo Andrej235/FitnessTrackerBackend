@@ -12,6 +12,7 @@
         public string Role { get; set; } = null!;
 
         public IEnumerable<Workout> CreatedWorkouts { get; set; } = new HashSet<Workout>();
+        public IEnumerable<CompletedWorkout> CompletedWorkouts { get; set; } = new HashSet<CompletedWorkout>();
         public IEnumerable<Split> CreatedSplits { get; set; } = new HashSet<Split>();
 
         public Guid? SplitId { get; set; }
