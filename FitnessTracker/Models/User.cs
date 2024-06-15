@@ -20,5 +20,7 @@
 
         public IEnumerable<User> Following { get; set; } = new HashSet<User>();
         public IEnumerable<User> Followers { get; set; } = new HashSet<User>();
+
+        public bool EmailConfirmed { get; set; }
     }
 }

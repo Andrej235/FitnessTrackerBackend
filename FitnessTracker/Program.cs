@@ -17,6 +17,7 @@ using FitnessTracker.DTOs.Requests.User;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.DTOs.Responses.User;
 using FitnessTracker.Emails;
+using MailKit.Net.Smtp;
 
 namespace FitnessTracker
 {
@@ -76,6 +77,7 @@ namespace FitnessTracker
                 builder.Services.AddSingleton(emailConfig);
 
             builder.Services.AddScoped<IEmailSender, EmailSender>();
+            builder.Services.AddScoped<IEmailConformationService, EmailConformationService>();
 
 
 
@@ -95,6 +97,13 @@ namespace FitnessTracker
             #region Response mappers
             builder.Services.AddScoped<IResponseMapper<User, DetailedUserResponseDTO>, DetailedUserResponseMapper>();
             #endregion
+
+            builder.Services.AddScoped<ICreateService<EmailConformation>, CreateService<EmailConformation>>();
+            builder.Services.AddScoped<IReadService<EmailConformation>, EmailConformationReadService>();
+            builder.Services.AddScoped<IDeleteService<EmailConformation>, DeleteService<EmailConformation>>();
+            builder.Services.AddScoped<IEmailConformationService, EmailConformationService>();
+
+            builder.Services.AddScoped<SmtpClient>();
 
             #region Exercise
             builder.Services.AddScoped<ICreateService<Exercise>, ExerciseCreateService>();

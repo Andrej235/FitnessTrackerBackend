@@ -48,6 +48,22 @@ namespace FitnessTracker.Migrations
                     b.ToTable("CompletedWorkouts");
                 });
 
+            modelBuilder.Entity("FitnessTracker.Models.EmailConformation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EmailConformations");
+                });
+
             modelBuilder.Entity("FitnessTracker.Models.Equipment", b =>
                 {
                     b.Property<int>("Id")
@@ -553,6 +569,9 @@ namespace FitnessTracker.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -725,6 +744,15 @@ namespace FitnessTracker.Migrations
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Workout");
+                });
+
+            modelBuilder.Entity("FitnessTracker.Models.EmailConformation", b =>
+                {
+                    b.HasOne("FitnessTracker.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FitnessTracker.Models.EquipmentUsage", b =>

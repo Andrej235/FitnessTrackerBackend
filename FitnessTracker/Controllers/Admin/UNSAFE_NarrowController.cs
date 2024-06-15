@@ -8,19 +8,39 @@ using FitnessTracker.Models;
 using FitnessTracker.Services.Mapping;
 using FitnessTracker.Services.Read;
 using FitnessTracker.Emails;
+using System.Security.Claims;
 
 namespace FitnessTracker.Controllers.Admin
 {
     //[Authorize(Roles = Role.Admin)]
     [Route("api/unsafe/narrow")]
     [ApiController]
-    public class UNSAFE_NarrowController(IEmailSender emailSender, DataContext context, IReadService<Exercise> readService, IEntityMapper<Exercise, ExerciseDTO> mapper, IEntityMapper<Exercise, object> fullMapper) : ControllerBase
+    public class UNSAFE_NarrowController(IEmailConformationService emailConformationService, DataContext context, IReadService<Exercise> readService, IEntityMapper<Exercise, ExerciseDTO> mapper, IEntityMapper<Exercise, object> fullMapper) : ControllerBase
     {
+        [Authorize]
         [HttpGet("mail")]
-        public IActionResult GetMail([FromQuery] string mail)
+        public async Task<IActionResult> GetMail([FromQuery] string mail)
         {
-            emailSender.SendEmail(new([mail], "Test email", "This is the content from our email."));
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            await emailConformationService.SendEmailConformation(mail, userId);
             return Ok();
+        }
+
+        [Authorize]
+        [HttpGet("confirm/{code:guid}")]
+        public async Task<IActionResult> Confirm(Guid code)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            var success = await emailConformationService.ConfirmEmail(userId, code);
+            return success ? Ok("Email Confirmed") : BadRequest("Invalid code");
         }
 
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FitnessTracker.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCommit : Migration
+    public partial class Initialmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -204,6 +204,18 @@ namespace FitnessTracker.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CompletedWorkouts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmailConformations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmailConformations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -428,7 +440,8 @@ namespace FitnessTracker.Migrations
                     Salt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     ProfilePic = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SplitId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    SplitId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -611,6 +624,11 @@ namespace FitnessTracker.Migrations
                 name: "IX_CompletedWorkouts_WorkoutId",
                 table: "CompletedWorkouts",
                 column: "WorkoutId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmailConformations_UserId",
+                table: "EmailConformations",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EquipmentUsage_EquipmentId",
@@ -927,6 +945,14 @@ namespace FitnessTracker.Migrations
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
+                name: "FK_EmailConformations_Users_UserId",
+                table: "EmailConformations",
+                column: "UserId",
+                principalTable: "Users",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_FavoriteExercises_Users_UserId",
                 table: "FavoriteExercises",
                 column: "UserId",
@@ -1097,6 +1123,9 @@ namespace FitnessTracker.Migrations
 
             migrationBuilder.DropTable(
                 name: "CompletedWorkouts");
+
+            migrationBuilder.DropTable(
+                name: "EmailConformations");
 
             migrationBuilder.DropTable(
                 name: "EquipmentUsage");

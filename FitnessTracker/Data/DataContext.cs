@@ -6,6 +6,7 @@ namespace FitnessTracker.Data
     public class DataContext(DbContextOptions options) : DbContext(options)
     {
         public DbSet<CompletedWorkout> CompletedWorkouts { get; set; } //
+        public DbSet<EmailConformation> EmailConformations { get; set; } //
         public DbSet<Equipment> Equipment { get; set; } //
         public DbSet<EquipmentUsage> EquipmentUsage { get; set; } //
         public DbSet<Exercise> Exercises { get; set; } //
@@ -36,6 +37,8 @@ namespace FitnessTracker.Data
         public DbSet<WorkoutCommentLike> WorkoutCommentLikes { get; set; } //
         public DbSet<WorkoutLike> WorkoutLikes { get; set; } //
 
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=FitnessTracker;Integrated Security=True");
@@ -47,6 +50,9 @@ namespace FitnessTracker.Data
             #region Ids
             modelBuilder.Entity<CompletedWorkout>()
                 .HasKey(c => c.Id);
+
+            modelBuilder.Entity<EmailConformation>()
+                .HasKey(e => e.Id);
 
             modelBuilder.Entity<Equipment>()
                 .HasKey(e => e.Id);
@@ -106,6 +112,14 @@ namespace FitnessTracker.Data
 
             modelBuilder.Entity<CompletedWorkout>()
                 .HasIndex(x => new { x.UserId, x.WorkoutId });
+            #endregion
+
+            #region Email Conformations
+            modelBuilder.Entity<EmailConformation>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
 
             #region Exercises

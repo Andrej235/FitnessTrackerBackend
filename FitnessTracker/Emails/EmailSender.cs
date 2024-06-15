@@ -4,9 +4,10 @@ using MimeKit;
 
 namespace FitnessTracker.Emails
 {
-    public class EmailSender(EmailConfiguration emailConfig) : IEmailSender
+    public class EmailSender(EmailConfiguration emailConfig, SmtpClient client) : IEmailSender
     {
         private readonly EmailConfiguration emailConfig = emailConfig;
+        private readonly SmtpClient client = client;
 
         public void SendEmail(Message message)
         {
@@ -23,13 +24,12 @@ namespace FitnessTracker.Emails
             emailMessage.Subject = message.Subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             {
-                Text = $"<div bgcolor=\"red\"><h1>{message.Content}</h1></div>"
+                Text = message.Content
             };
             return emailMessage;
         }
         private void Send(MimeMessage mailMessage)
         {
-            var client = new SmtpClient();
             try
             {
                 client.Connect(emailConfig.SmtpServer, emailConfig.Port, true);
@@ -41,9 +41,6 @@ namespace FitnessTracker.Emails
             {
                 ex.LogError();
             }
-
-            client.Disconnect(true);
-            client.Dispose();
         }
     }
 }

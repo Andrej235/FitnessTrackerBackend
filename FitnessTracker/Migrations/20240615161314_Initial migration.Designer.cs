@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessTracker.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240615110942_Initial Commit")]
-    partial class InitialCommit
+    [Migration("20240615161314_Initial migration")]
+    partial class Initialmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,6 +49,22 @@ namespace FitnessTracker.Migrations
                     b.HasIndex("UserId", "WorkoutId");
 
                     b.ToTable("CompletedWorkouts");
+                });
+
+            modelBuilder.Entity("FitnessTracker.Models.EmailConformation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EmailConformations");
                 });
 
             modelBuilder.Entity("FitnessTracker.Models.Equipment", b =>
@@ -556,6 +572,9 @@ namespace FitnessTracker.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -728,6 +747,15 @@ namespace FitnessTracker.Migrations
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Workout");
+                });
+
+            modelBuilder.Entity("FitnessTracker.Models.EmailConformation", b =>
+                {
+                    b.HasOne("FitnessTracker.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FitnessTracker.Models.EquipmentUsage", b =>
