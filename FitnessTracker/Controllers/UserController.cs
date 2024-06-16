@@ -19,11 +19,11 @@ namespace FitnessTracker.Controllers
     [Route("api/user")]
     [ApiController]
     public partial class UserController(IRequestMapper<RegisterUserRequestDTO, User> registrationMapper,
-                                          IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper,
-                                          ICreateService<User> createService,
-                                          IReadService<User> readService,
-                                          ITokenManager tokenManager,
-                                          IEmailConformationService emailConformationService) : ControllerBase
+                                        IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper,
+                                        ICreateService<User> createService,
+                                        IReadService<User> readService,
+                                        ITokenManager tokenManager,
+                                        IEmailConformationService emailConformationService) : ControllerBase
     {
         private readonly IRequestMapper<RegisterUserRequestDTO, User> registrationMapper = registrationMapper;
         private readonly ICreateService<User> createService = createService;
@@ -144,6 +144,23 @@ namespace FitnessTracker.Controllers
                 ex.LogError();
                 return BadRequest(ex.GetErrorMessage());
             }
+        }
+
+        [Authorize(Roles = Role.Unverified)]
+        [HttpPost("resendconformationemail")]
+        public async Task<IActionResult> GetMail()
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            var user = await readService.Get(x => x.Id == userId, "none");
+            if (user is null)
+                return Unauthorized();
+
+            await emailConformationService.SendEmailConfirmation(user.Email, userId);
+            return Ok();
         }
 
         [GeneratedRegex(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")]

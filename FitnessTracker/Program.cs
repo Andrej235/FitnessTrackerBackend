@@ -206,8 +206,33 @@ namespace FitnessTracker
                 options.GeneralRules = [
                         new() {
                             Endpoint = "*",
-                            Limit = 5,
+                            Limit = 10,
                             Period = "10s"
+                        },
+                        new() {
+                            Endpoint = "*/login",
+                            Limit = 10,
+                            Period = "30s"
+                        },
+                        new() {
+                            Endpoint = "*/register",
+                            Limit = 5,
+                            Period = "30s"
+                        },
+                        new() {
+                            Endpoint = "*/user/refresh",
+                            Limit = 1,
+                            Period = "30s"
+                        },
+                        new() {
+                            Endpoint = "*/confirm",
+                            Limit = 1,
+                            Period = "10s"
+                        },
+                        new() {
+                            Endpoint = "*/resendconformationemail",
+                            Limit = 1,
+                            Period = "1m"
                         }
                     ];
             });
