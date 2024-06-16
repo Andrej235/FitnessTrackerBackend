@@ -1,8 +1,7 @@
-﻿namespace FitnessTracker.Emails.Confirmation
+﻿namespace FitnessTracker.Services.UserServices.EmailConfirmationService
 {
     public interface IEmailConfirmationService
     {
-        Task SendEmailConfirmation(string email, Guid userId);
         Task<bool> ConfirmEmail(Guid userId, Guid confirmationCode);
     }
 }

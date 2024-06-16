@@ -1,10 +1,11 @@
-﻿using FitnessTracker.Utilities;
+﻿using FitnessTracker.Emails;
+using FitnessTracker.Utilities;
 using MailKit.Net.Smtp;
 using MimeKit;
 
-namespace FitnessTracker.Emails.Sender
+namespace FitnessTracker.Services.EmailSender
 {
-    public class EmailSender(EmailConfiguration emailConfig, SmtpClient client) : IEmailSender
+    public class EmailSenderService(EmailConfiguration emailConfig, SmtpClient client) : IEmailSenderService
     {
         private readonly EmailConfiguration emailConfig = emailConfig;
         private readonly SmtpClient client = client;

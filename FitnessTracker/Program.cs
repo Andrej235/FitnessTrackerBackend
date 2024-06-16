@@ -19,8 +19,11 @@ using FitnessTracker.DTOs.Responses.User;
 using FitnessTracker.Emails;
 using MailKit.Net.Smtp;
 using AspNetCoreRateLimit;
-using FitnessTracker.Emails.Confirmation;
-using FitnessTracker.Emails.Sender;
+using FitnessTracker.Services.UserServices.EmailConfirmationSender;
+using FitnessTracker.Services.UserServices.EmailConfirmationService;
+using FitnessTracker.Services.UserServices.ResetPasswordSender;
+using FitnessTracker.Services.UserServices.ResetPasswordService;
+using FitnessTracker.Services.EmailSender;
 
 namespace FitnessTracker
 {
@@ -72,8 +75,11 @@ namespace FitnessTracker
             if (emailConfig is not null)
                 builder.Services.AddSingleton(emailConfig);
 
-            builder.Services.AddScoped<IEmailSender, EmailSender>();
+            builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
+            builder.Services.AddScoped<IEmailConfirmationSender, EmailConfirmationSender>();
             builder.Services.AddScoped<IEmailConfirmationService, EmailConfirmationService>();
+            builder.Services.AddScoped<IResetPasswordEmailSender, ResetPasswordEmailSender>();
+            builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
 
 
 
@@ -95,9 +101,9 @@ namespace FitnessTracker
             #endregion
 
             builder.Services.AddScoped<ICreateService<EmailConfirmation>, CreateService<EmailConfirmation>>();
-            builder.Services.AddScoped<IReadService<EmailConfirmation>, EmailConformationReadService>();
+            builder.Services.AddScoped<IReadService<EmailConfirmation>, EmailConfirmationReadService>();
             builder.Services.AddScoped<IDeleteService<EmailConfirmation>, DeleteService<EmailConfirmation>>();
-            builder.Services.AddScoped<IEmailConfirmationService, EmailConfirmationService>();
+            builder.Services.AddScoped<IEmailConfirmationSender, EmailConfirmationSender>();
 
             builder.Services.AddScoped<SmtpClient>();
 
@@ -231,7 +237,7 @@ namespace FitnessTracker
                             Period = "10s"
                         },
                         new() {
-                            Endpoint = "*/resendconformationemail",
+                            Endpoint = "*/resendconfirmationemail",
                             Limit = 1,
                             Period = "1m"
                         }

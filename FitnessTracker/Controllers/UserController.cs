@@ -1,12 +1,13 @@
 ﻿using FitnessTracker.Auth;
 using FitnessTracker.DTOs.Requests.User;
 using FitnessTracker.DTOs.Responses.User;
-using FitnessTracker.Emails.Confirmation;
 using FitnessTracker.Models;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read;
+using FitnessTracker.Services.UserServices.EmailConfirmationSender;
+using FitnessTracker.Services.UserServices.EmailConfirmationService;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,13 +24,16 @@ namespace FitnessTracker.Controllers
                                         ICreateService<User> createService,
                                         IReadService<User> readService,
                                         ITokenManager tokenManager,
-                                        IEmailConfirmationService emailConformationService) : ControllerBase
+                                        IEmailConfirmationSender emailConfirmationSender,
+                                        IEmailConfirmationService emailConfirmationService) : ControllerBase
     {
         private readonly IRequestMapper<RegisterUserRequestDTO, User> registrationMapper = registrationMapper;
+        private readonly IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper = detailedResponseMapper;
         private readonly ICreateService<User> createService = createService;
         private readonly IReadService<User> readService = readService;
         private readonly ITokenManager tokenManager = tokenManager;
-        private readonly IEmailConfirmationService emailConformationService = emailConformationService;
+        private readonly IEmailConfirmationSender emailConfirmationSender = emailConfirmationSender;
+        private readonly IEmailConfirmationService emailConfirmationService = emailConfirmationService;
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequestDTO request)
@@ -45,14 +49,14 @@ namespace FitnessTracker.Controllers
                     return BadRequest("User already exists");
 
                 var jwt = await tokenManager.GenerateJWTAndRefreshToken(user, Response.Cookies);
-                await emailConformationService.SendEmailConfirmation(user.Email, user.Id);
+                await emailConfirmationSender.SendEmailConfirmation(user.Email, user.Id);
 
                 return Ok(jwt);
             }
             catch (Exception ex)
             {
                 ex.LogError();
-                return BadRequest(ex.GetErrorMessage());
+                return BadRequest(ex.GetErrorMessage(false));
             }
         }
 
@@ -136,31 +140,39 @@ namespace FitnessTracker.Controllers
                     || !Guid.TryParse(userIdString, out var userId))
                     return Unauthorized();
 
-                var success = await emailConformationService.ConfirmEmail(userId, code);
+                var success = await emailConfirmationService.ConfirmEmail(userId, code);
                 return success ? Ok("Email Confirmed") : BadRequest("Invalid code");
             }
             catch (Exception ex)
             {
                 ex.LogError();
-                return BadRequest(ex.GetErrorMessage());
+                return BadRequest(ex.GetErrorMessage(false));
             }
         }
 
         [Authorize(Roles = Role.Unverified)]
-        [HttpPost("resendconformationemail")]
+        [HttpPost("resendconfirmationemail")]
         public async Task<IActionResult> GetMail()
         {
-            if (User.Identity is not ClaimsIdentity claimsIdentity
-                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
-                return Unauthorized();
+            try
+            {
+                if (User.Identity is not ClaimsIdentity claimsIdentity
+                    || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                    || !Guid.TryParse(userIdString, out var userId))
+                    return Unauthorized();
 
-            var user = await readService.Get(x => x.Id == userId, "none");
-            if (user is null)
-                return Unauthorized();
+                var user = await readService.Get(x => x.Id == userId, "none");
+                if (user is null)
+                    return Unauthorized();
 
-            await emailConformationService.SendEmailConfirmation(user.Email, userId);
-            return Ok();
+                await emailConfirmationSender.SendEmailConfirmation(user.Email, userId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return BadRequest(ex.GetErrorMessage(false));
+            }
         }
 
         [GeneratedRegex(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")]
