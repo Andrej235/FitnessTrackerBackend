@@ -1,6 +1,6 @@
 ﻿namespace FitnessTracker.Models
 {
-    public class EmailConformation
+    public class EmailConfirmation
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }

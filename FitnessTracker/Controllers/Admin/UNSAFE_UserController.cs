@@ -1,4 +1,4 @@
-﻿using FitnessTracker.Emails;
+﻿using FitnessTracker.Emails.Confirmation;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +8,7 @@ namespace FitnessTracker.Controllers.Admin
 {
     [Route("api/unsafe/user")]
     [ApiController]
-    public class UNSAFE_UserController(IEmailConformationService emailConformationService) : ControllerBase
+    public class UNSAFE_UserController(IEmailConfirmationService emailConformationService) : ControllerBase
     {
         [Authorize(Roles = Role.Unverified)]
         [HttpGet("mail")]

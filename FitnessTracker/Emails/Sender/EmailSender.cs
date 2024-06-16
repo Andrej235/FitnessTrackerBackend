@@ -2,7 +2,7 @@
 using MailKit.Net.Smtp;
 using MimeKit;
 
-namespace FitnessTracker.Emails
+namespace FitnessTracker.Emails.Sender
 {
     public class EmailSender(EmailConfiguration emailConfig, SmtpClient client) : IEmailSender
     {

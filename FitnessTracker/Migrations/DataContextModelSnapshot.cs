@@ -48,7 +48,7 @@ namespace FitnessTracker.Migrations
                     b.ToTable("CompletedWorkouts");
                 });
 
-            modelBuilder.Entity("FitnessTracker.Models.EmailConformation", b =>
+            modelBuilder.Entity("FitnessTracker.Models.EmailConfirmation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,9 +59,11 @@ namespace FitnessTracker.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Id");
+
                     b.HasIndex("UserId");
 
-                    b.ToTable("EmailConformations");
+                    b.ToTable("EmailConfirmations");
                 });
 
             modelBuilder.Entity("FitnessTracker.Models.Equipment", b =>
@@ -746,7 +748,7 @@ namespace FitnessTracker.Migrations
                     b.Navigation("Workout");
                 });
 
-            modelBuilder.Entity("FitnessTracker.Models.EmailConformation", b =>
+            modelBuilder.Entity("FitnessTracker.Models.EmailConfirmation", b =>
                 {
                     b.HasOne("FitnessTracker.Models.User", null)
                         .WithMany()

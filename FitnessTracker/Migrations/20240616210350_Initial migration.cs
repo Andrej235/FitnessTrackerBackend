@@ -207,7 +207,7 @@ namespace FitnessTracker.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmailConformations",
+                name: "EmailConfirmations",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -215,7 +215,7 @@ namespace FitnessTracker.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmailConformations", x => x.Id);
+                    table.PrimaryKey("PK_EmailConfirmations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -626,8 +626,13 @@ namespace FitnessTracker.Migrations
                 column: "WorkoutId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmailConformations_UserId",
-                table: "EmailConformations",
+                name: "IX_EmailConfirmations_Id",
+                table: "EmailConfirmations",
+                column: "Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmailConfirmations_UserId",
+                table: "EmailConfirmations",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -945,8 +950,8 @@ namespace FitnessTracker.Migrations
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_EmailConformations_Users_UserId",
-                table: "EmailConformations",
+                name: "FK_EmailConfirmations_Users_UserId",
+                table: "EmailConfirmations",
                 column: "UserId",
                 principalTable: "Users",
                 principalColumn: "Id",
@@ -1125,7 +1130,7 @@ namespace FitnessTracker.Migrations
                 name: "CompletedWorkouts");
 
             migrationBuilder.DropTable(
-                name: "EmailConformations");
+                name: "EmailConfirmations");
 
             migrationBuilder.DropTable(
                 name: "EquipmentUsage");

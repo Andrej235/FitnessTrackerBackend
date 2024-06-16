@@ -4,8 +4,8 @@ using System.Linq.Expressions;
 
 namespace FitnessTracker.Services.Read
 {
-    public class EmailConformationReadService(DataContext context) : AbstractReadService<EmailConformation>(context)
+    public class EmailConformationReadService(DataContext context) : AbstractReadService<EmailConfirmation>(context)
     {
-        protected override Expression<Func<EmailConformation, bool>> TranslateKeyValueToExpression(string key, string value) => x => true;
+        protected override Expression<Func<EmailConfirmation, bool>> TranslateKeyValueToExpression(string key, string value) => x => true;
     }
 }

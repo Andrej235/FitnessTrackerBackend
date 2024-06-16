@@ -1,4 +1,4 @@
-﻿namespace FitnessTracker.Emails
+﻿namespace FitnessTracker.Emails.Sender
 {
     public interface IEmailSender
     {

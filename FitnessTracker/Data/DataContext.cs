@@ -6,7 +6,7 @@ namespace FitnessTracker.Data
     public class DataContext(DbContextOptions options) : DbContext(options)
     {
         public DbSet<CompletedWorkout> CompletedWorkouts { get; set; } //
-        public DbSet<EmailConformation> EmailConformations { get; set; } //
+        public DbSet<EmailConfirmation> EmailConfirmations { get; set; } //
         public DbSet<Equipment> Equipment { get; set; } //
         public DbSet<EquipmentUsage> EquipmentUsage { get; set; } //
         public DbSet<Exercise> Exercises { get; set; } //
@@ -51,7 +51,7 @@ namespace FitnessTracker.Data
             modelBuilder.Entity<CompletedWorkout>()
                 .HasKey(c => c.Id);
 
-            modelBuilder.Entity<EmailConformation>()
+            modelBuilder.Entity<EmailConfirmation>()
                 .HasKey(e => e.Id);
 
             modelBuilder.Entity<Equipment>()
@@ -114,14 +114,18 @@ namespace FitnessTracker.Data
                 .HasIndex(x => new { x.UserId, x.WorkoutId });
             #endregion
 
-            #region Email Conformations
-            modelBuilder.Entity<EmailConformation>()
+            #region Email Confirmations
+            modelBuilder.Entity<EmailConfirmation>()
                 .HasOne<User>()
                 .WithMany()
                 .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            //TODO: Add index
+            modelBuilder.Entity<EmailConfirmation>()
+                .HasIndex(x => x.UserId);
+
+            modelBuilder.Entity<EmailConfirmation>()
+                .HasIndex(x => x.Id);
             #endregion
 
             #region Exercises

@@ -1,22 +1,23 @@
-﻿using FitnessTracker.Models;
+﻿using FitnessTracker.Emails.Sender;
+using FitnessTracker.Models;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Utilities;
 
-namespace FitnessTracker.Emails
+namespace FitnessTracker.Emails.Confirmation
 {
-    public class EmailConformationService(ICreateService<EmailConformation> createService,
+    public class EmailConfirmationService(ICreateService<EmailConfirmation> createService,
                                           IReadService<User> userReadService,
                                           IUpdateService<User> userUpdateService,
-                                          IDeleteService<EmailConformation> deleteService,
-                                          IEmailSender emailSender) : IEmailConformationService
+                                          IDeleteService<EmailConfirmation> deleteService,
+                                          IEmailSender emailSender) : IEmailConfirmationService
     {
-        private readonly ICreateService<EmailConformation> createService = createService;
+        private readonly ICreateService<EmailConfirmation> createService = createService;
         private readonly IReadService<User> userReadService = userReadService;
         private readonly IUpdateService<User> userUpdateService = userUpdateService;
-        private readonly IDeleteService<EmailConformation> deleteService = deleteService;
+        private readonly IDeleteService<EmailConfirmation> deleteService = deleteService;
         private readonly IEmailSender emailSender = emailSender;
 
         public async Task<bool> ConfirmEmail(Guid userId, Guid confirmationCode)
@@ -40,7 +41,7 @@ namespace FitnessTracker.Emails
         private const string BASE_WEB_URL = "http://localhost:5173";
         public async Task SendEmailConfirmation(string email, Guid userId)
         {
-            EmailConformation emailConformation = new()
+            EmailConfirmation emailConformation = new()
             {
                 UserId = userId
             };

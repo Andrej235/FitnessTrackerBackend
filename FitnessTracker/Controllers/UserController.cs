@@ -1,7 +1,7 @@
 ﻿using FitnessTracker.Auth;
 using FitnessTracker.DTOs.Requests.User;
 using FitnessTracker.DTOs.Responses.User;
-using FitnessTracker.Emails;
+using FitnessTracker.Emails.Confirmation;
 using FitnessTracker.Models;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Mapping.Request;
@@ -23,13 +23,13 @@ namespace FitnessTracker.Controllers
                                         ICreateService<User> createService,
                                         IReadService<User> readService,
                                         ITokenManager tokenManager,
-                                        IEmailConformationService emailConformationService) : ControllerBase
+                                        IEmailConfirmationService emailConformationService) : ControllerBase
     {
         private readonly IRequestMapper<RegisterUserRequestDTO, User> registrationMapper = registrationMapper;
         private readonly ICreateService<User> createService = createService;
         private readonly IReadService<User> readService = readService;
         private readonly ITokenManager tokenManager = tokenManager;
-        private readonly IEmailConformationService emailConformationService = emailConformationService;
+        private readonly IEmailConfirmationService emailConformationService = emailConformationService;
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequestDTO request)
