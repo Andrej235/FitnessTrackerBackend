@@ -18,21 +18,17 @@ using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.DTOs.Responses.User;
 using FitnessTracker.Emails;
 using MailKit.Net.Smtp;
+using AspNetCoreRateLimit;
+using FitnessTracker.Utilities;
 
 namespace FitnessTracker
 {
     public class Program
     {
-        private static IServiceProvider serviceProvider = null!;
-        private static ConfigurationManager configuration = null!;
-
-        public static object? GetService<T>() => serviceProvider.GetService(typeof(T));
-        public static object? GetService(Type type) => serviceProvider.GetService(type);
-
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            configuration = builder.Configuration;
+            var configuration = builder.Configuration;
 
             #region JWT
             builder.Services.AddAuthentication(x =>
@@ -83,7 +79,7 @@ namespace FitnessTracker
             builder.Services.AddDbContext<DataContext>(x =>
             {
                 x.UseSqlServer(builder.Configuration.GetConnectionString("SQLConnectionString"));
-                x.EnableSensitiveDataLogging(); //TODO-PROD: remove in production
+                //x.EnableSensitiveDataLogging(); //TODO-PROD: remove in production
             });
 
             builder.Services.AddSingleton(configuration);
@@ -199,14 +195,38 @@ namespace FitnessTracker
 
             builder.Services.AddControllers();
 
+            builder.Services.AddMemoryCache();
+            builder.Services.Configure<ClientRateLimitOptions>(options =>
+            {
+                options.EnableEndpointRateLimiting = true;
+                options.StackBlockedRequests = false;
+                options.HttpStatusCode = 429;
+                options.RealIpHeader = "X-Real-Ip";
+                options.ClientIdHeader = "X-ClientId";
+                options.GeneralRules = [
+                        new() {
+                            Endpoint = "*",
+                            Limit = 5,
+                            Period = "10s"
+                        }
+                    ];
+            });
+
+            builder.Services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            builder.Services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+            builder.Services.AddInMemoryRateLimiting();
+
             var app = builder.Build();
             app.UseCors();
-            serviceProvider = app.Services;
 
             //app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseClientRateLimiting();
 
             app.MapControllers();
             app.Run();

@@ -29,6 +29,7 @@ namespace FitnessTracker.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int? offset, [FromQuery] int? limit, [FromQuery] string? include, [FromQuery] string? q)
         {
+            Console.WriteLine("Branko");
             var exercises = await readService.Get(q, offset, limit, include);
 
             return Ok(exercises.Select(mapper.Map).ToList());

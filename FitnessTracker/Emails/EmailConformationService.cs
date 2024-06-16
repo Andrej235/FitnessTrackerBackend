@@ -49,7 +49,7 @@ namespace FitnessTracker.Emails
             if (emailConformationId == default || emailConformationId is not Guid conformationCode)
                 throw new Exception("Failed to create email conformation");
 
-            emailSender.SendEmail(new Message([email], "Email conformation", $"Please confirm your email by clicking <a href=\"{BASE_WEB_URL}/email-verification/{emailConformationId}\">here</a>"));
+            emailSender.SendEmail(new Message([email], "Email conformation", $"Please confirm your email by clicking <a href=\"{BASE_WEB_URL}/email-verification/{conformationCode}\">here</a>"));
             return;
         }
     }

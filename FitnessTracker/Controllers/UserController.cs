@@ -1,5 +1,4 @@
 ﻿using FitnessTracker.Auth;
-using FitnessTracker.DTOs;
 using FitnessTracker.DTOs.Requests.User;
 using FitnessTracker.DTOs.Responses.User;
 using FitnessTracker.Emails;
