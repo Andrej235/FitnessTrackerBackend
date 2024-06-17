@@ -65,7 +65,7 @@ namespace FitnessTracker.Controllers
             catch (Exception ex)
             {
                 ex.LogError();
-                return BadRequest(ex.GetErrorMessage(false));
+                return BadRequest(ex.GetErrorMessage());
             }
         }
 
@@ -155,7 +155,7 @@ namespace FitnessTracker.Controllers
             catch (Exception ex)
             {
                 ex.LogError();
-                return BadRequest(ex.GetErrorMessage(false));
+                return BadRequest(ex.GetErrorMessage());
             }
         }
 
@@ -180,7 +180,7 @@ namespace FitnessTracker.Controllers
             catch (Exception ex)
             {
                 ex.LogError();
-                return BadRequest(ex.GetErrorMessage(false));
+                return BadRequest(ex.GetErrorMessage());
             }
         }
 
@@ -221,7 +221,7 @@ namespace FitnessTracker.Controllers
             catch (Exception ex)
             {
                 ex.LogError();
-                return BadRequest(ex.GetErrorMessage(false));
+                return BadRequest(ex.GetErrorMessage());
             }
         }
 
@@ -255,7 +255,7 @@ namespace FitnessTracker.Controllers
             catch (Exception ex)
             {
                 ex.LogError();
-                return BadRequest(ex.GetErrorMessage(false));
+                return BadRequest(ex.GetErrorMessage());
             }
         }
 

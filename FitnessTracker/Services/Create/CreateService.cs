@@ -4,7 +4,7 @@ using FitnessTracker.Utilities;
 
 namespace FitnessTracker.Services.Create
 {
-    public class CreateService<T>(DataContext context) : ICreateService<T> where T : class
+    public class CreateService<T>(DataContext context) : ICreateService<T>, ICreateRangeService<T> where T : class
     {
         public async Task<object?> Add(T toAdd)
         {
@@ -24,6 +24,29 @@ namespace FitnessTracker.Services.Create
             {
                 ex.LogError();
                 return null;
+            }
+        }
+
+        public async Task<bool> Add(IEnumerable<T> toAdd)
+        {
+            try
+            {
+                var toAddList = toAdd.ToList();
+                foreach (var item in toAddList)
+                {
+                    if (await IsEntityValid(item) != null)
+                        throw new EntityAlreadyExistsException();
+                }
+
+                await context.Set<T>().AddRangeAsync(toAddList);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return false;
             }
         }
 

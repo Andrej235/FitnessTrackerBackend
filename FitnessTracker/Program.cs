@@ -24,6 +24,8 @@ using FitnessTracker.Services.UserServices.EmailConfirmationService;
 using FitnessTracker.Services.UserServices.ResetPasswordSenderService;
 using FitnessTracker.Services.UserServices.ResetPasswordService;
 using FitnessTracker.Services.EmailSender;
+using FitnessTracker.DTOs.Requests.MuscleGroup;
+using FitnessTracker.DTOs.Responses.MuscleGroup;
 
 namespace FitnessTracker
 {
@@ -143,10 +145,13 @@ namespace FitnessTracker
 
             #region Muscle group
             builder.Services.AddScoped<ICreateService<MuscleGroup>, MuscleGroupCreateService>();
+            builder.Services.AddScoped<ICreateRangeService<MuscleGroup>, MuscleGroupCreateService>();
             builder.Services.AddScoped<IReadService<MuscleGroup>, MuscleGroupReadService>();
             builder.Services.AddScoped<IUpdateService<MuscleGroup>, UpdateService<MuscleGroup>>();
             builder.Services.AddScoped<IDeleteService<MuscleGroup>, DeleteService<MuscleGroup>>();
             builder.Services.AddScoped<IEntityMapper<MuscleGroup, MuscleGroupDTO>, MuscleGroupMapper>();
+            builder.Services.AddScoped<IRequestMapper<CreateMuscleGroupRequestDTO, MuscleGroup>, CreateMuscleGroupRequestMapper>();
+            builder.Services.AddScoped<IResponseMapper<MuscleGroup, SimpleMuscleGroupResponseDTO>, SimpleMuscleGroupResponseMapper>();
             #endregion
 
             #region Muscle
