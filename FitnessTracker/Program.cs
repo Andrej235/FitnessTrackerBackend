@@ -232,9 +232,24 @@ namespace FitnessTracker
                             Period = "30s"
                         },
                         new() {
+                            Endpoint = "*/forgotpassword",
+                            Limit = 1,
+                            Period = "30s"
+                        },
+                        new() {
+                            Endpoint = "*/forgotpassword/*",
+                            Limit = 7,
+                            Period = "7d"
+                        },
+                        new() {
+                            Endpoint = "*/chagepassword",
+                            Limit = 5,
+                            Period = "3d"
+                        },
+                        new() {
                             Endpoint = "*/confirm",
                             Limit = 1,
-                            Period = "10s"
+                            Period = "15s"
                         },
                         new() {
                             Endpoint = "*/resendconfirmationemail",
