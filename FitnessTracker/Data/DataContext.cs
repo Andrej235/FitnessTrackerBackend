@@ -408,6 +408,9 @@ namespace FitnessTracker.Data
                     j.HasIndex(x => x.WorkoutId);
                     j.HasIndex(x => new { x.WorkoutId, x.UserId }).IsUnique();
                 });
+
+            modelBuilder.Entity<Workout>()
+                .HasIndex(x => x.CreatorId);
             #endregion
 
             #region Workout comments

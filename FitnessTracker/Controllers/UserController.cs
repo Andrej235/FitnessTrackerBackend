@@ -6,7 +6,7 @@ using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read;
-using FitnessTracker.Services.UserServices.EmailConfirmationSender;
+using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
 using FitnessTracker.Services.UserServices.EmailConfirmationService;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -24,7 +24,7 @@ namespace FitnessTracker.Controllers
                                         ICreateService<User> createService,
                                         IReadService<User> readService,
                                         ITokenManager tokenManager,
-                                        IEmailConfirmationSender emailConfirmationSender,
+                                        IEmailConfirmationSenderService emailConfirmationSender,
                                         IEmailConfirmationService emailConfirmationService) : ControllerBase
     {
         private readonly IRequestMapper<RegisterUserRequestDTO, User> registrationMapper = registrationMapper;
@@ -32,7 +32,7 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<User> createService = createService;
         private readonly IReadService<User> readService = readService;
         private readonly ITokenManager tokenManager = tokenManager;
-        private readonly IEmailConfirmationSender emailConfirmationSender = emailConfirmationSender;
+        private readonly IEmailConfirmationSenderService emailConfirmationSender = emailConfirmationSender;
         private readonly IEmailConfirmationService emailConfirmationService = emailConfirmationService;
 
         [HttpPost("register")]

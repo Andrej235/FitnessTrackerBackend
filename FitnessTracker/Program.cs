@@ -19,9 +19,9 @@ using FitnessTracker.DTOs.Responses.User;
 using FitnessTracker.Emails;
 using MailKit.Net.Smtp;
 using AspNetCoreRateLimit;
-using FitnessTracker.Services.UserServices.EmailConfirmationSender;
+using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
 using FitnessTracker.Services.UserServices.EmailConfirmationService;
-using FitnessTracker.Services.UserServices.ResetPasswordSender;
+using FitnessTracker.Services.UserServices.ResetPasswordSenderService;
 using FitnessTracker.Services.UserServices.ResetPasswordService;
 using FitnessTracker.Services.EmailSender;
 
@@ -76,9 +76,9 @@ namespace FitnessTracker
                 builder.Services.AddSingleton(emailConfig);
 
             builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
-            builder.Services.AddScoped<IEmailConfirmationSender, EmailConfirmationSender>();
+            builder.Services.AddScoped<IEmailConfirmationSenderService, EmailConfirmationSenderService>();
             builder.Services.AddScoped<IEmailConfirmationService, EmailConfirmationService>();
-            builder.Services.AddScoped<IResetPasswordEmailSender, ResetPasswordEmailSender>();
+            builder.Services.AddScoped<IResetPasswordEmailSenderService, ResetPasswordEmailSender>();
             builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
 
 
@@ -103,7 +103,7 @@ namespace FitnessTracker
             builder.Services.AddScoped<ICreateService<EmailConfirmation>, CreateService<EmailConfirmation>>();
             builder.Services.AddScoped<IReadService<EmailConfirmation>, EmailConfirmationReadService>();
             builder.Services.AddScoped<IDeleteService<EmailConfirmation>, DeleteService<EmailConfirmation>>();
-            builder.Services.AddScoped<IEmailConfirmationSender, EmailConfirmationSender>();
+            builder.Services.AddScoped<IEmailConfirmationSenderService, EmailConfirmationSenderService>();
 
             builder.Services.AddScoped<SmtpClient>();
 

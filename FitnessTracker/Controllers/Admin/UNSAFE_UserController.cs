@@ -1,9 +1,9 @@
 ﻿using FitnessTracker.DTOs.Requests.User;
 using FitnessTracker.Models;
 using FitnessTracker.Services.Read;
-using FitnessTracker.Services.UserServices.EmailConfirmationSender;
+using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
 using FitnessTracker.Services.UserServices.EmailConfirmationService;
-using FitnessTracker.Services.UserServices.ResetPasswordSender;
+using FitnessTracker.Services.UserServices.ResetPasswordSenderService;
 using FitnessTracker.Services.UserServices.ResetPasswordService;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -14,10 +14,10 @@ namespace FitnessTracker.Controllers.Admin
 {
     [Route("api/unsafe/user")]
     [ApiController]
-    public class UNSAFE_UserController(IEmailConfirmationSender emailConfirmationSender,
+    public class UNSAFE_UserController(IEmailConfirmationSenderService emailConfirmationSender,
                                        IEmailConfirmationService emailConfirmationService,
                                        IReadService<User> readService,
-                                       IResetPasswordEmailSender passwordResetEmailSender,
+                                       IResetPasswordEmailSenderService passwordResetEmailSender,
                                        IResetPasswordService passwordResetEmailService) : ControllerBase
     {
         [Authorize(Roles = Role.Unverified)]
