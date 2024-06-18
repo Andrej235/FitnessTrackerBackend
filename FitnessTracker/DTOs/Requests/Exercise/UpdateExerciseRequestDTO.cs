@@ -2,5 +2,6 @@
 {
     public class UpdateExerciseRequestDTO : BaseExerciseRequestDTO
     {
+        public int Id { get; set; }
     }
 }

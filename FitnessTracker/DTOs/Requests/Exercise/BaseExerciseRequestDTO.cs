@@ -7,10 +7,9 @@
         public string? Image { get; set; }
 
         public IEnumerable<int> PrimaryMuscleGroups { get; set; } = [];
-        public IEnumerable<int> SecondaryMuscleGroups { get; set; } = [];
         public IEnumerable<int> PrimaryMuscles { get; set; } = [];
+        public IEnumerable<int> SecondaryMuscleGroups { get; set; } = [];
         public IEnumerable<int> SecondaryMuscles { get; set; } = [];
         public IEnumerable<int> Equipment { get; set; } = [];
-        public IEnumerable<Guid> Favorites { get; set; } = [];
     }
 }

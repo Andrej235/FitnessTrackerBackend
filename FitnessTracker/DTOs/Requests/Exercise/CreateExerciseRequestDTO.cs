@@ -1,6 +1,4 @@
 ﻿namespace FitnessTracker.DTOs.Requests.Exercise
 {
-    public class CreateExerciseRequestDTO : BaseExerciseRequestDTO
-    {
-    }
+    public class CreateExerciseRequestDTO : BaseExerciseRequestDTO { }
 }
