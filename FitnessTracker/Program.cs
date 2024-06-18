@@ -30,6 +30,8 @@ using FitnessTracker.DTOs.Requests.Muscle;
 using FitnessTracker.DTOs.Responses.Muscle;
 using FitnessTracker.DTOs.Requests.Equipment;
 using FitnessTracker.DTOs.Responses.Equipment;
+using FitnessTracker.DTOs.Requests.Exercise;
+using FitnessTracker.DTOs.Responses.Exercises;
 
 namespace FitnessTracker
 {
@@ -100,7 +102,6 @@ namespace FitnessTracker
             builder.Services.AddScoped<SmtpClient>();
             #endregion
 
-
             #region Email verification tokens
             builder.Services.AddScoped<ICreateService<EmailConfirmation>, CreateService<EmailConfirmation>>();
             builder.Services.AddScoped<IReadService<EmailConfirmation>, EmailConfirmationReadService>();
@@ -112,6 +113,9 @@ namespace FitnessTracker
             builder.Services.AddScoped<IReadService<Exercise>, ExerciseReadService>();
             builder.Services.AddScoped<IUpdateService<Exercise>, ExerciseUpdateService>();
             builder.Services.AddScoped<IDeleteService<Exercise>, DeleteService<Exercise>>();
+            builder.Services.AddScoped<IRequestMapper<CreateExerciseRequestDTO, Exercise>, CreateExerciseRequestMapper>();
+            builder.Services.AddScoped<IResponseMapper<Exercise, SimpleExerciseResponseDTO>, SimpleExerciseResponseMapper>();
+            builder.Services.AddScoped<IResponseMapper<Exercise, DetailedExerciseResponseDTO>, DetailedExerciseResponseMapper>();
             #endregion
 
             #region User
