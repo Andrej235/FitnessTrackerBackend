@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace FitnessTracker.Controllers
 {
-    [Route("api/exercise")]
+/*    [Route("api/exercise")]
     [ApiController]
     public class ExerciseController(ICreateService<Exercise> createService,
                                     IReadService<Exercise> readService,
@@ -85,5 +85,5 @@ namespace FitnessTracker.Controllers
                 return BadRequest($"Error occurred: {ex.Message}");
             }
         }
-    }
+    }*/
 }

@@ -5,28 +5,28 @@ using FitnessTracker.Services.Read;
 
 namespace FitnessTracker.Controllers
 {
-    [Route("api/fullexercise")]
-    [ApiController]
-    public class FullExerciseController(IReadService<Exercise> readService, IEntityMapper<Exercise, object> mapper) : ControllerBase
-    {
-        private readonly IEntityMapper<Exercise, object> mapper = mapper;
-        public IReadService<Exercise> ReadService { get; } = readService;
-
-        [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int? offset, [FromQuery] int? limit, [FromQuery] string? include, [FromQuery] string? q)
+    /*    [Route("api/fullexercise")]
+        [ApiController]
+        public class FullExerciseController(IReadService<Exercise> readService, IEntityMapper<Exercise, object> mapper) : ControllerBase
         {
-            var exercises = await ReadService.Get(q, offset, limit, include);
-            return Ok(exercises.Select(mapper.Map).ToList());
-        }
+            private readonly IEntityMapper<Exercise, object> mapper = mapper;
+            public IReadService<Exercise> ReadService { get; } = readService;
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id, [FromQuery] string? include)
-        {
-            var exercise = await ReadService.Get(id, include);
-            if (exercise is null)
-                return NotFound($"Entity with id {id} was not found.");
+            [HttpGet]
+            public async Task<IActionResult> Get([FromQuery] int? offset, [FromQuery] int? limit, [FromQuery] string? include, [FromQuery] string? q)
+            {
+                var exercises = await ReadService.Get(q, offset, limit, include);
+                return Ok(exercises.Select(mapper.Map).ToList());
+            }
 
-            return Ok(mapper.Map(exercise));
-        }
-    }
+            [HttpGet("{id}")]
+            public async Task<IActionResult> Get(string id, [FromQuery] string? include)
+            {
+                var exercise = await ReadService.Get(id, include);
+                if (exercise is null)
+                    return NotFound($"Entity with id {id} was not found.");
+
+                return Ok(mapper.Map(exercise));
+            }
+        }*/
 }

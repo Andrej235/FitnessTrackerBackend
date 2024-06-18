@@ -28,6 +28,8 @@ using FitnessTracker.DTOs.Requests.MuscleGroup;
 using FitnessTracker.DTOs.Responses.MuscleGroup;
 using FitnessTracker.DTOs.Requests.Muscle;
 using FitnessTracker.DTOs.Responses.Muscle;
+using FitnessTracker.DTOs.Requests.Equipment;
+using FitnessTracker.DTOs.Responses.Equipment;
 
 namespace FitnessTracker
 {
@@ -37,8 +39,17 @@ namespace FitnessTracker
         {
             var builder = WebApplication.CreateBuilder(args);
             var configuration = builder.Configuration;
+            builder.Services.AddSingleton(configuration);
+            builder.Services.AddControllers();
+            builder.Services.AddDbContext<DataContext>(x =>
+            {
+                x.UseSqlServer(builder.Configuration.GetConnectionString("SQLConnectionString"));
+                //x.EnableSensitiveDataLogging(); //TODO-PROD: remove in production
+            });
 
-            #region JWT
+
+
+            #region JWT / Auth
             builder.Services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -59,9 +70,12 @@ namespace FitnessTracker
                 };
             })
             .AddScheme<AuthenticationSchemeOptions, AllowExpiredAuthenticationHandler>("AllowExpired", (p) => { });
+
+            builder.Services.AddScoped<ITokenManager, TokenManager>();
+            builder.Services.AddAuthorization();
             #endregion
 
-            builder.Services.AddAuthorization();
+            #region Cors
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -72,61 +86,44 @@ namespace FitnessTracker
                     .AllowCredentials();
                 });
             });
+            #endregion
 
+            #region Emails
             var emailConfig = builder.Configuration
                 .GetSection("EmailConfiguration")
                 .Get<EmailConfiguration>();
+
             if (emailConfig is not null)
                 builder.Services.AddSingleton(emailConfig);
 
             builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
-            builder.Services.AddScoped<IEmailConfirmationSenderService, EmailConfirmationSenderService>();
-            builder.Services.AddScoped<IEmailConfirmationService, EmailConfirmationService>();
-            builder.Services.AddScoped<IResetPasswordEmailSenderService, ResetPasswordEmailSender>();
-            builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
-
-
-
-            builder.Services.AddDbContext<DataContext>(x =>
-            {
-                x.UseSqlServer(builder.Configuration.GetConnectionString("SQLConnectionString"));
-                //x.EnableSensitiveDataLogging(); //TODO-PROD: remove in production
-            });
-
-            builder.Services.AddSingleton(configuration);
-            builder.Services.AddScoped<ITokenManager, TokenManager>();
-
-            #region Request mappers
-            builder.Services.AddScoped<IRequestMapper<RegisterUserRequestDTO, User>, RegisterUserRequestMapper>();
+            builder.Services.AddScoped<SmtpClient>();
             #endregion
 
-            #region Response mappers
-            builder.Services.AddScoped<IResponseMapper<User, DetailedUserResponseDTO>, DetailedUserResponseMapper>();
-            #endregion
 
+            #region Email verification tokens
             builder.Services.AddScoped<ICreateService<EmailConfirmation>, CreateService<EmailConfirmation>>();
             builder.Services.AddScoped<IReadService<EmailConfirmation>, EmailConfirmationReadService>();
             builder.Services.AddScoped<IDeleteService<EmailConfirmation>, DeleteService<EmailConfirmation>>();
-            builder.Services.AddScoped<IEmailConfirmationSenderService, EmailConfirmationSenderService>();
-
-            builder.Services.AddScoped<SmtpClient>();
+            #endregion
 
             #region Exercise
             builder.Services.AddScoped<ICreateService<Exercise>, ExerciseCreateService>();
             builder.Services.AddScoped<IReadService<Exercise>, ExerciseReadService>();
             builder.Services.AddScoped<IUpdateService<Exercise>, ExerciseUpdateService>();
             builder.Services.AddScoped<IDeleteService<Exercise>, DeleteService<Exercise>>();
-            builder.Services.AddScoped<IEntityMapper<Exercise, ExerciseDTO>, ExerciseMapper>();
-            builder.Services.AddScoped<IEntityMapper<Exercise, object>, FullExerciseMapper>();
-            builder.Services.AddScoped<IEntityMapperAsync<Exercise, ExerciseDTO>, ExerciseMapper>();
             #endregion
 
             #region User
             builder.Services.AddScoped<ICreateService<User>, UserCreateService>();
             builder.Services.AddScoped<IReadService<User>, UserReadService>();
             builder.Services.AddScoped<IUpdateService<User>, UpdateService<User>>();
-            builder.Services.AddScoped<IDeleteService<User>, DeleteService<User>>();
-            builder.Services.AddScoped<IEntityMapper<User, UserDTO>, UserMapper>();
+            builder.Services.AddScoped<IRequestMapper<RegisterUserRequestDTO, User>, RegisterUserRequestMapper>();
+            builder.Services.AddScoped<IResponseMapper<User, DetailedUserResponseDTO>, DetailedUserResponseMapper>();
+            builder.Services.AddScoped<IEmailConfirmationSenderService, EmailConfirmationSenderService>();
+            builder.Services.AddScoped<IEmailConfirmationService, EmailConfirmationService>();
+            builder.Services.AddScoped<IResetPasswordEmailSenderService, ResetPasswordEmailSender>();
+            builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
             #endregion
 
             #region Set
@@ -134,7 +131,6 @@ namespace FitnessTracker
             builder.Services.AddScoped<IReadService<Set>, SetReadService>();
             builder.Services.AddScoped<IUpdateService<Set>, UpdateService<Set>>();
             builder.Services.AddScoped<IDeleteService<Set>, DeleteService<Set>>();
-            builder.Services.AddScoped<IEntityMapper<Set, SetDTO>, SetMapper>();
             #endregion
 
             #region Workouts
@@ -142,7 +138,6 @@ namespace FitnessTracker
             builder.Services.AddScoped<ICreateService<Workout>, CreateService<Workout>>();
             builder.Services.AddScoped<IUpdateService<Workout>, WorkoutUpdateService>();
             builder.Services.AddScoped<IDeleteService<Workout>, DeleteService<Workout>>();
-            builder.Services.AddScoped<IEntityMapper<Workout, WorkoutDTO>, WorkoutMapper>();
             #endregion
 
             #region Muscle group
@@ -151,7 +146,6 @@ namespace FitnessTracker
             builder.Services.AddScoped<IReadService<MuscleGroup>, MuscleGroupReadService>();
             builder.Services.AddScoped<IUpdateService<MuscleGroup>, UpdateService<MuscleGroup>>();
             builder.Services.AddScoped<IDeleteService<MuscleGroup>, DeleteService<MuscleGroup>>();
-            builder.Services.AddScoped<IEntityMapper<MuscleGroup, MuscleGroupDTO>, MuscleGroupMapper>();
             builder.Services.AddScoped<IRequestMapper<CreateMuscleGroupRequestDTO, MuscleGroup>, CreateMuscleGroupRequestMapper>();
             builder.Services.AddScoped<IResponseMapper<MuscleGroup, SimpleMuscleGroupResponseDTO>, SimpleMuscleGroupResponseMapper>();
             #endregion
@@ -162,7 +156,6 @@ namespace FitnessTracker
             builder.Services.AddScoped<IReadService<Muscle>, MuscleReadService>();
             builder.Services.AddScoped<IUpdateService<Muscle>, UpdateService<Muscle>>();
             builder.Services.AddScoped<IDeleteService<Muscle>, DeleteService<Muscle>>();
-            builder.Services.AddScoped<IEntityMapper<Muscle, MuscleDTO>, MuscleMapper>();
             builder.Services.AddScoped<IRequestMapper<CreateMuscleRequestDTO, Muscle>, CreateMuscleRequestMapper>();
             builder.Services.AddScoped<IResponseMapper<Muscle, SimpleMuscleResponseDTO>, SimpleMuscleResponseMapper>();
             #endregion
@@ -174,11 +167,13 @@ namespace FitnessTracker
             #endregion
 
             #region Equipment
-            builder.Services.AddScoped<ICreateService<Equipment>, EquipmentCreateService>();
+            builder.Services.AddScoped<ICreateService<Equipment>, CreateService<Equipment>>();
+            builder.Services.AddScoped<ICreateRangeService<Equipment>, CreateService<Equipment>>();
             builder.Services.AddScoped<IReadService<Equipment>, EquipmentReadService>();
             builder.Services.AddScoped<IUpdateService<Equipment>, UpdateService<Equipment>>();
             builder.Services.AddScoped<IDeleteService<Equipment>, DeleteService<Equipment>>();
-            builder.Services.AddScoped<IEntityMapper<Equipment, EquipmentDTO>, EquipmentMapper>();
+            builder.Services.AddScoped<IRequestMapper<CreateEquipmentRequestDTO, Equipment>, CreateEquipmentRequestMapper>();
+            builder.Services.AddScoped<IResponseMapper<Equipment, SimpleEquipmentResponseDTO>, SimpleEquipmentResponseMapper>();
             #endregion
 
             #region Primary muscle group
@@ -210,8 +205,8 @@ namespace FitnessTracker
             builder.Services.AddScoped<IDeleteService<RefreshToken>, DeleteService<RefreshToken>>();
             #endregion
 
-            builder.Services.AddControllers();
 
+            #region Rate limiting
             builder.Services.AddMemoryCache();
             builder.Services.Configure<ClientRateLimitOptions>(options =>
             {
@@ -274,16 +269,19 @@ namespace FitnessTracker
             builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
             builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
             builder.Services.AddInMemoryRateLimiting();
+            #endregion
 
             var app = builder.Build();
-            app.UseCors();
 
+            #region Middleware
             //app.UseHttpsRedirection();
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseClientRateLimiting();
+            #endregion
 
             app.MapControllers();
             app.Run();

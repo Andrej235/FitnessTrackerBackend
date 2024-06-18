@@ -9,7 +9,7 @@ namespace FitnessTracker.Services.Mapping.Request
         {
             return new MuscleGroup()
             {
-                Name = from.Name
+                Name = from.Name,
             };
         }
     }
