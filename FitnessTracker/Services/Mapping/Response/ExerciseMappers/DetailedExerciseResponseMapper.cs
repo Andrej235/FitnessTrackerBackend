@@ -4,7 +4,7 @@ using FitnessTracker.DTOs.Responses.Muscle;
 using FitnessTracker.DTOs.Responses.MuscleGroup;
 using FitnessTracker.Models;
 
-namespace FitnessTracker.Services.Mapping.Response
+namespace FitnessTracker.Services.Mapping.Response.ExerciseMappers
 {
     public class DetailedExerciseResponseMapper(IResponseMapper<Equipment, SimpleEquipmentResponseDTO> equipmentResponseMapper,
                                                 IResponseMapper<MuscleGroup, SimpleMuscleGroupResponseDTO> muscleGroupResponseMapper,

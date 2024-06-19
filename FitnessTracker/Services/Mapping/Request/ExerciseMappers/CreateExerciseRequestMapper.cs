@@ -1,7 +1,7 @@
 ﻿using FitnessTracker.DTOs.Requests.Exercise;
 using FitnessTracker.Models;
 
-namespace FitnessTracker.Services.Mapping.Request
+namespace FitnessTracker.Services.Mapping.Request.ExerciseMappers
 {
     public class CreateExerciseRequestMapper : IRequestMapper<CreateExerciseRequestDTO, Exercise>
     {

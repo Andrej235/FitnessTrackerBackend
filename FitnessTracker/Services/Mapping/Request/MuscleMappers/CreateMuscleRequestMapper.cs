@@ -1,7 +1,7 @@
 ﻿using FitnessTracker.DTOs.Requests.Muscle;
 using FitnessTracker.Models;
 
-namespace FitnessTracker.Services.Mapping.Request
+namespace FitnessTracker.Services.Mapping.Request.MuscleMappers
 {
     public class CreateMuscleRequestMapper : IRequestMapper<CreateMuscleRequestDTO, Muscle>
     {

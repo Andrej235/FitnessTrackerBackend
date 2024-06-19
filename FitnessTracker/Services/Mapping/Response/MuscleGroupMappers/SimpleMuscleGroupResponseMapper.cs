@@ -1,7 +1,7 @@
 ﻿using FitnessTracker.DTOs.Responses.MuscleGroup;
 using FitnessTracker.Models;
 
-namespace FitnessTracker.Services.Mapping.Response
+namespace FitnessTracker.Services.Mapping.Response.MuscleGroupMappers
 {
     public class SimpleMuscleGroupResponseMapper : IResponseMapper<MuscleGroup, SimpleMuscleGroupResponseDTO>
     {

@@ -1,7 +1,7 @@
 ﻿using FitnessTracker.DTOs.Responses.Equipment;
 using FitnessTracker.Models;
 
-namespace FitnessTracker.Services.Mapping.Response
+namespace FitnessTracker.Services.Mapping.Response.EquipmentMappers
 {
     public class SimpleEquipmentResponseMapper : IResponseMapper<Equipment, SimpleEquipmentResponseDTO>
     {

@@ -2,7 +2,7 @@
 using FitnessTracker.Models;
 using FitnessTracker.Utilities;
 
-namespace FitnessTracker.Services.Mapping.Request
+namespace FitnessTracker.Services.Mapping.Request.UserMappers
 {
     public class RegisterUserRequestMapper : IRequestMapper<RegisterUserRequestDTO, User>
     {

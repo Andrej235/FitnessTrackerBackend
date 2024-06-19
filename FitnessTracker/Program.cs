@@ -1,13 +1,11 @@
 using FitnessTracker.Auth;
 using FitnessTracker.Models;
 using FitnessTracker.Services.Create;
-using FitnessTracker.Services.Mapping;
 using FitnessTracker.Services.Read;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using FitnessTracker.Data;
-using FitnessTracker.DTOs;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Update;
 using System.Text;
@@ -32,6 +30,16 @@ using FitnessTracker.DTOs.Requests.Equipment;
 using FitnessTracker.DTOs.Responses.Equipment;
 using FitnessTracker.DTOs.Requests.Exercise;
 using FitnessTracker.DTOs.Responses.Exercises;
+using FitnessTracker.Services.Mapping.Request.EquipmentMappers;
+using FitnessTracker.Services.Mapping.Request.ExerciseMappers;
+using FitnessTracker.Services.Mapping.Request.MuscleGroupMappers;
+using FitnessTracker.Services.Mapping.Request.MuscleMappers;
+using FitnessTracker.Services.Mapping.Request.UserMappers;
+using FitnessTracker.Services.Mapping.Response.ExerciseMappers;
+using FitnessTracker.Services.Mapping.Response.UserMappers;
+using FitnessTracker.Services.Mapping.Response.EquipmentMappers;
+using FitnessTracker.Services.Mapping.Response.MuscleGroupMappers;
+using FitnessTracker.Services.Mapping.Response.MuscleMappers;
 
 namespace FitnessTracker
 {
@@ -114,6 +122,7 @@ namespace FitnessTracker
             builder.Services.AddScoped<IUpdateService<Exercise>, ExerciseUpdateService>();
             builder.Services.AddScoped<IDeleteService<Exercise>, DeleteService<Exercise>>();
             builder.Services.AddScoped<IRequestMapper<CreateExerciseRequestDTO, Exercise>, CreateExerciseRequestMapper>();
+            builder.Services.AddScoped<IRequestMapper<UpdateExerciseRequestDTO, Exercise>, UpdateExerciseRequestMapper>();
             builder.Services.AddScoped<IResponseMapper<Exercise, SimpleExerciseResponseDTO>, SimpleExerciseResponseMapper>();
             builder.Services.AddScoped<IResponseMapper<Exercise, DetailedExerciseResponseDTO>, DetailedExerciseResponseMapper>();
             #endregion
@@ -213,7 +222,6 @@ namespace FitnessTracker
             builder.Services.AddScoped<IUpdateService<RefreshToken>, UpdateService<RefreshToken>>();
             builder.Services.AddScoped<IDeleteService<RefreshToken>, DeleteService<RefreshToken>>();
             #endregion
-
 
             #region Rate limiting
             builder.Services.AddMemoryCache();

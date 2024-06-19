@@ -1,7 +1,7 @@
 ﻿using FitnessTracker.DTOs.Responses.User;
 using FitnessTracker.Models;
 
-namespace FitnessTracker.Services.Mapping.Response
+namespace FitnessTracker.Services.Mapping.Response.UserMappers
 {
     public class DetailedUserResponseMapper : IResponseMapper<User, DetailedUserResponseDTO>
     {

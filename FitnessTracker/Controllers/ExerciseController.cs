@@ -37,9 +37,9 @@ namespace FitnessTracker.Controllers
         private readonly IRequestMapper<CreateExerciseRequestDTO, Exercise> createRequestMapper = createRequestMapper;
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] string? include)
+        public async Task<IActionResult> Get([FromQuery] string? q, [FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] string? include)
         {
-            var exercises = await readService.Get(x => true, offset, limit, include);
+            var exercises = await readService.Get(q, offset, limit, include);
             return Ok(exercises.Select(detailedResponseMapper.Map));
         }
 
