@@ -165,7 +165,8 @@ namespace FitnessTracker
             #endregion
 
             #region Equipment exercise usage
-            builder.Services.AddScoped<ICreateService<EquipmentUsage>, EquipmentExerciseUsageCreateService>();
+            builder.Services.AddScoped<ICreateService<EquipmentUsage>, CreateService<EquipmentUsage>>();
+            builder.Services.AddScoped<ICreateRangeService<EquipmentUsage>, CreateService<EquipmentUsage>>();
             builder.Services.AddScoped<IReadService<EquipmentUsage>, EquipmentExerciseUsageReadService>();
             builder.Services.AddScoped<IDeleteService<EquipmentUsage>, DeleteService<EquipmentUsage>>();
             #endregion
@@ -181,23 +182,27 @@ namespace FitnessTracker
             #endregion
 
             #region Primary muscle group
-            builder.Services.AddScoped<ICreateService<PrimaryMuscleGroupInExercise>, PrimaryMuscleExerciseConnectionCreateService>();
+            builder.Services.AddScoped<ICreateService<PrimaryMuscleGroupInExercise>, CreateService<PrimaryMuscleGroupInExercise>>();
+            builder.Services.AddScoped<ICreateRangeService<PrimaryMuscleGroupInExercise>, CreateService<PrimaryMuscleGroupInExercise>>();
             builder.Services.AddScoped<IReadService<PrimaryMuscleGroupInExercise>, PrimaryMuscleGroupReadService>();
             builder.Services.AddScoped<IDeleteService<PrimaryMuscleGroupInExercise>, DeleteService<PrimaryMuscleGroupInExercise>>();
             #endregion
 
             #region Secondary muscle group
+            builder.Services.AddScoped<ICreateService<SecondaryMuscleGroupInExercise>, CreateService<SecondaryMuscleGroupInExercise>>();
+            builder.Services.AddScoped<ICreateRangeService<SecondaryMuscleGroupInExercise>, CreateService<SecondaryMuscleGroupInExercise>>();
             builder.Services.AddScoped<IReadService<SecondaryMuscleGroupInExercise>, SecondaryMuscleGroupReadService>();
-            builder.Services.AddScoped<ICreateService<SecondaryMuscleGroupInExercise>, SecondaryMuscleExerciseConnectionCreateService>();
             builder.Services.AddScoped<IDeleteService<SecondaryMuscleGroupInExercise>, DeleteService<SecondaryMuscleGroupInExercise>>();
             #endregion
 
             #region Primary muscle
+            builder.Services.AddScoped<ICreateRangeService<PrimaryMuscleInExercise>, CreateService<PrimaryMuscleInExercise>>();
             builder.Services.AddScoped<IReadService<PrimaryMuscleInExercise>, PrimaryMuscleReadService>();
             builder.Services.AddScoped<IDeleteService<PrimaryMuscleInExercise>, DeleteService<PrimaryMuscleInExercise>>();
             #endregion
 
             #region Secondary muscle
+            builder.Services.AddScoped<ICreateRangeService<SecondaryMuscleInExercise>, CreateService<SecondaryMuscleInExercise>>();
             builder.Services.AddScoped<IReadService<SecondaryMuscleInExercise>, SecondaryMuscleReadService>();
             builder.Services.AddScoped<IDeleteService<SecondaryMuscleInExercise>, DeleteService<SecondaryMuscleInExercise>>();
             #endregion
