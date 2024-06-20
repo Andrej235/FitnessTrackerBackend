@@ -157,8 +157,9 @@ namespace FitnessTracker.Services.Read
                 return entitiesIncluding;
 
             ParameterExpression parameter = Expression.Parameter(typeof(T), "x");
-            var navigationProperties = typeof(T).GetProperties()
-                .Where(p => p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+            var navigationProperties = typeof(T).GetProperties().Where(x => 
+                (x.PropertyType.IsClass && x.PropertyType != typeof(string)) 
+                || (x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>)));
 
             if (include.Contains("all"))
             {

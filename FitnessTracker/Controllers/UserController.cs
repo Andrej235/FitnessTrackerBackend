@@ -87,8 +87,8 @@ namespace FitnessTracker.Controllers
             return Ok(jwt);
         }
 
-        [HttpGet]
         [Authorize]
+        [HttpGet]
         public async Task<IActionResult> GetDetailed()
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity

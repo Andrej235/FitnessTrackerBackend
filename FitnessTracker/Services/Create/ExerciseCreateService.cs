@@ -14,11 +14,11 @@ namespace FitnessTracker.Services.Create
 
             try
             {
-                context.AttachRange(toAdd.Equipment);
-                context.AttachRange(toAdd.PrimaryMuscleGroups);
-                context.AttachRange(toAdd.SecondaryMuscleGroups);
-                context.AttachRange(toAdd.PrimaryMuscles);
-                context.AttachRange(toAdd.SecondaryMuscles);
+                //context.AttachRange(toAdd.Equipment);
+                //context.AttachRange(toAdd.PrimaryMuscleGroups);
+                //context.AttachRange(toAdd.SecondaryMuscleGroups);
+                //context.AttachRange(toAdd.PrimaryMuscles);
+                //context.AttachRange(toAdd.SecondaryMuscles);
 
                 await context.Exercises.AddAsync(toAdd);
                 await context.SaveChangesAsync();
