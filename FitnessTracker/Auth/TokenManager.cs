@@ -7,17 +7,22 @@ using FitnessTracker.Services.Update;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Azure;
 
 namespace FitnessTracker.Auth
 {
-    public class TokenManager(ConfigurationManager configuration, IReadService<RefreshToken> readService, ICreateService<RefreshToken> createService, IUpdateService<RefreshToken> updateService, IDeleteService<RefreshToken> deleteService) : ITokenManager
+    public class TokenManager(ConfigurationManager configuration,
+                              IReadService<RefreshToken> readService,
+                              ICreateService<RefreshToken> createService,
+                              IUpdateService<RefreshToken> updateService,
+                              IDeleteService<RefreshToken> deleteService,
+                              IDeleteRangeService<RefreshToken> deleteRangeService) : ITokenManager
     {
         private readonly ConfigurationManager configuration = configuration;
         private readonly IReadService<RefreshToken> readService = readService;
         private readonly ICreateService<RefreshToken> createService = createService;
         private readonly IUpdateService<RefreshToken> updateService = updateService;
         private readonly IDeleteService<RefreshToken> deleteService = deleteService;
+        private readonly IDeleteRangeService<RefreshToken> deleteRangeService = deleteRangeService;
 
         private (string jwt, Guid jwtId) CreateJWTAndId(User user)
         {
@@ -85,8 +90,8 @@ namespace FitnessTracker.Auth
             return newJwt;
         }
 
-        public Task InvalidateAllTokensForUser(Guid userId) => deleteService.DeleteAll(x => x.UserId == userId);
+        public Task InvalidateAllTokensForUser(Guid userId) => deleteRangeService.Delete(x => x.UserId == userId);
 
-        public Task InvalidateRefreshToken(Guid refreshToken) => deleteService.DeleteFirst(x => x.Token == refreshToken);
+        public Task InvalidateRefreshToken(Guid refreshToken) => deleteService.Delete(x => x.Token == refreshToken);
     }
 }

@@ -18,6 +18,7 @@ namespace FitnessTracker.Services.Mapping.Response.ExerciseMappers
         {
             return new()
             {
+                Id = from.Id,
                 Name = from.Name,
                 Description = from.Description,
                 Image = from.Image,
