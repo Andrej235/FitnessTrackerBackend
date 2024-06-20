@@ -40,6 +40,14 @@ using FitnessTracker.Services.Mapping.Response.UserMappers;
 using FitnessTracker.Services.Mapping.Response.EquipmentMappers;
 using FitnessTracker.Services.Mapping.Response.MuscleGroupMappers;
 using FitnessTracker.Services.Mapping.Response.MuscleMappers;
+using FitnessTracker.Services.Mapping.Request.SetMappers;
+using FitnessTracker.DTOs.Requests.Set;
+using FitnessTracker.Services.Mapping.Request.WorkoutMappers;
+using FitnessTracker.DTOs.Requests.Workout;
+using FitnessTracker.Services.Mapping.Response.WorkoutMappers;
+using FitnessTracker.DTOs.Responses.Workout;
+using FitnessTracker.DTOs.Responses.Set;
+using FitnessTracker.Services.Mapping.Response.SetMappers;
 
 namespace FitnessTracker
 {
@@ -133,6 +141,7 @@ namespace FitnessTracker
             builder.Services.AddScoped<IReadService<User>, UserReadService>();
             builder.Services.AddScoped<IUpdateService<User>, UpdateService<User>>();
             builder.Services.AddScoped<IRequestMapper<RegisterUserRequestDTO, User>, RegisterUserRequestMapper>();
+            builder.Services.AddScoped<IResponseMapper<User, SimpleUserResponseDTO>, SimpleUserResponseMapper>();
             builder.Services.AddScoped<IResponseMapper<User, DetailedUserResponseDTO>, DetailedUserResponseMapper>();
             builder.Services.AddScoped<IEmailConfirmationSenderService, EmailConfirmationSenderService>();
             builder.Services.AddScoped<IEmailConfirmationService, EmailConfirmationService>();
@@ -145,6 +154,8 @@ namespace FitnessTracker
             builder.Services.AddScoped<IReadService<Set>, SetReadService>();
             builder.Services.AddScoped<IUpdateService<Set>, UpdateService<Set>>();
             builder.Services.AddScoped<IDeleteService<Set>, DeleteService<Set>>();
+            builder.Services.AddScoped<IRequestMapper<CreateSetRequestDTO, Set>, CreateSetRequestMapper>();
+            builder.Services.AddScoped<IResponseMapper<Set, DetailedSetResponseDTO>, DetailedSetResponseMapper>();
             #endregion
 
             #region Workouts
@@ -152,6 +163,9 @@ namespace FitnessTracker
             builder.Services.AddScoped<ICreateService<Workout>, CreateService<Workout>>();
             builder.Services.AddScoped<IUpdateService<Workout>, WorkoutUpdateService>();
             builder.Services.AddScoped<IDeleteService<Workout>, DeleteService<Workout>>();
+            builder.Services.AddScoped<IRequestMapper<CreateWorkoutRequestDTO, Workout>, CreateWorkoutRequestMapper>();
+            builder.Services.AddScoped<IResponseMapper<Workout, SimpleWorkoutResponseDTO>, SimpleWorkoutResponseMapper>();
+            builder.Services.AddScoped<IResponseMapper<Workout, DetailedWorkoutResponseDTO>, DetailedWorkoutResponseMapper>();
             #endregion
 
             #region Muscle group

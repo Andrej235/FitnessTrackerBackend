@@ -41,7 +41,7 @@ namespace FitnessTracker.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=FitnessTracker;Integrated Security=True");
+            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=FitnessTracker;Integrated Security=True"); // TODO-PROD: Remove
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -137,6 +137,7 @@ namespace FitnessTracker.Data
                     j.HasOne<Exercise>().WithMany().HasForeignKey(x => x.ExerciseId).OnDelete(DeleteBehavior.Cascade);
                     j.HasOne<Muscle>().WithMany().HasForeignKey(x => x.MuscleId).OnDelete(DeleteBehavior.Cascade);
                     j.HasKey(x => new { x.ExerciseId, x.MuscleId });
+                    j.HasIndex(x => x.ExerciseId);
                 });
 
             modelBuilder.Entity<Exercise>()
@@ -147,6 +148,7 @@ namespace FitnessTracker.Data
                     j.HasOne<Exercise>().WithMany().HasForeignKey(x => x.ExerciseId).OnDelete(DeleteBehavior.Cascade);
                     j.HasOne<MuscleGroup>().WithMany().HasForeignKey(x => x.MuscleGroupId).OnDelete(DeleteBehavior.Cascade);
                     j.HasKey(x => new { x.ExerciseId, x.MuscleGroupId });
+                    j.HasIndex(x => x.ExerciseId);
                 });
 
             modelBuilder.Entity<Exercise>()
@@ -157,6 +159,7 @@ namespace FitnessTracker.Data
                     j.HasOne<Exercise>().WithMany().HasForeignKey(x => x.ExerciseId).OnDelete(DeleteBehavior.Cascade);
                     j.HasOne<Muscle>().WithMany().HasForeignKey(x => x.MuscleId).OnDelete(DeleteBehavior.Cascade);
                     j.HasKey(x => new { x.ExerciseId, x.MuscleId });
+                    j.HasIndex(x => x.ExerciseId);
                 });
 
             modelBuilder.Entity<Exercise>()
@@ -167,6 +170,7 @@ namespace FitnessTracker.Data
                     j.HasOne<Exercise>().WithMany().HasForeignKey(x => x.ExerciseId).OnDelete(DeleteBehavior.Cascade);
                     j.HasOne<MuscleGroup>().WithMany().HasForeignKey(x => x.MuscleGroupId).OnDelete(DeleteBehavior.Cascade);
                     j.HasKey(x => new { x.ExerciseId, x.MuscleGroupId });
+                    j.HasIndex(x => x.ExerciseId);
                 });
 
             modelBuilder.Entity<Exercise>()
@@ -177,6 +181,7 @@ namespace FitnessTracker.Data
                     j.HasOne<Exercise>().WithMany().HasForeignKey(x => x.ExerciseId).OnDelete(DeleteBehavior.Cascade);
                     j.HasOne<Equipment>().WithMany().HasForeignKey(x => x.EquipmentId).OnDelete(DeleteBehavior.Cascade);
                     j.HasKey(x => new { x.ExerciseId, x.EquipmentId });
+                    j.HasIndex(x => x.ExerciseId);
                 });
 
             modelBuilder.Entity<Exercise>()

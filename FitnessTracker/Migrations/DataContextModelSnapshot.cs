@@ -95,6 +95,8 @@ namespace FitnessTracker.Migrations
 
                     b.HasIndex("EquipmentId");
 
+                    b.HasIndex("ExerciseId");
+
                     b.ToTable("EquipmentUsage");
                 });
 
@@ -337,6 +339,8 @@ namespace FitnessTracker.Migrations
 
                     b.HasKey("ExerciseId", "MuscleGroupId");
 
+                    b.HasIndex("ExerciseId");
+
                     b.HasIndex("MuscleGroupId");
 
                     b.ToTable("PrimaryMuscleGroups");
@@ -351,6 +355,8 @@ namespace FitnessTracker.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ExerciseId", "MuscleId");
+
+                    b.HasIndex("ExerciseId");
 
                     b.HasIndex("MuscleId");
 
@@ -389,6 +395,8 @@ namespace FitnessTracker.Migrations
 
                     b.HasKey("ExerciseId", "MuscleGroupId");
 
+                    b.HasIndex("ExerciseId");
+
                     b.HasIndex("MuscleGroupId");
 
                     b.ToTable("SecondaryMuscleGroups");
@@ -403,6 +411,8 @@ namespace FitnessTracker.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ExerciseId", "MuscleId");
+
+                    b.HasIndex("ExerciseId");
 
                     b.HasIndex("MuscleId");
 
@@ -636,6 +646,9 @@ namespace FitnessTracker.Migrations
 
                     b.Property<Guid>("CreatorId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("bit");

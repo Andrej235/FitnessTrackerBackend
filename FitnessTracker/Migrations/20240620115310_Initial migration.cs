@@ -488,6 +488,7 @@ namespace FitnessTracker.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsPublic = table.Column<bool>(type: "bit", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -641,6 +642,11 @@ namespace FitnessTracker.Migrations
                 column: "EquipmentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EquipmentUsage_ExerciseId",
+                table: "EquipmentUsage",
+                column: "ExerciseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FavoriteExercises_ExerciseId",
                 table: "FavoriteExercises",
                 column: "ExerciseId");
@@ -751,9 +757,19 @@ namespace FitnessTracker.Migrations
                 column: "CreatorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PrimaryMuscleGroups_ExerciseId",
+                table: "PrimaryMuscleGroups",
+                column: "ExerciseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PrimaryMuscleGroups_MuscleGroupId",
                 table: "PrimaryMuscleGroups",
                 column: "MuscleGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PrimaryMuscles_ExerciseId",
+                table: "PrimaryMuscles",
+                column: "ExerciseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PrimaryMuscles_MuscleId",
@@ -766,9 +782,19 @@ namespace FitnessTracker.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SecondaryMuscleGroups_ExerciseId",
+                table: "SecondaryMuscleGroups",
+                column: "ExerciseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SecondaryMuscleGroups_MuscleGroupId",
                 table: "SecondaryMuscleGroups",
                 column: "MuscleGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SecondaryMuscles_ExerciseId",
+                table: "SecondaryMuscles",
+                column: "ExerciseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SecondaryMuscles_MuscleId",
