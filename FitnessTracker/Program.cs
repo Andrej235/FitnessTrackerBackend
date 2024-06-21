@@ -168,6 +168,16 @@ namespace FitnessTracker
             builder.Services.AddScoped<IResponseMapper<Workout, DetailedWorkoutResponseDTO>, DetailedWorkoutResponseMapper>();
             #endregion
 
+            #region Workout like
+            builder.Services.AddScoped<ICreateService<WorkoutLike>, CreateService<WorkoutLike>>();
+            builder.Services.AddScoped<IDeleteService<WorkoutLike>, DeleteService<WorkoutLike>>();
+            #endregion
+
+            #region Workout favorite
+            builder.Services.AddScoped<ICreateService<FavoriteWorkout>, CreateService<FavoriteWorkout>>();
+            builder.Services.AddScoped<IDeleteService<FavoriteWorkout>, DeleteService<FavoriteWorkout>>();
+            #endregion
+
             #region Muscle group
             builder.Services.AddScoped<ICreateService<MuscleGroup>, MuscleGroupCreateService>();
             builder.Services.AddScoped<ICreateRangeService<MuscleGroup>, MuscleGroupCreateService>();

@@ -8,30 +8,13 @@ namespace FitnessTracker.Services.Read
 {
     public abstract class AbstractReadService<T>(DataContext context) : IReadService<T> where T : class
     {
+        protected readonly DataContext context = context;
+
         public virtual async Task<T?> Get(Expression<Func<T, bool>> criteria, string? include = "all")
         {
             IQueryable<T> entitesQueryable = GetIncluded(include);
             T? entity = await entitesQueryable.FirstOrDefaultAsync(criteria);
             return entity;
-        }
-
-        public Task<T?> Get(object id, string? include = "all")
-        {
-            return Task.Run(() =>
-            {
-                IQueryable<T> entitesQueryable = GetIncluded(include);
-                bool CheckPrimaryKey(T e)
-                {
-                    var idProp = e.GetType().GetProperty("Id");
-                    if (idProp == null)
-                        return false;
-
-                    return Convert.ToString(idProp.GetValue(e)) == Convert.ToString(id);
-                }
-
-                T? entity = entitesQueryable.AsEnumerable().FirstOrDefault(CheckPrimaryKey);
-                return entity;
-            });
         }
 
         public virtual Task<List<T>> Get(Expression<Func<T, bool>> criteria, int? offset = 0, int? limit = -1, string? include = "all")
@@ -84,26 +67,6 @@ namespace FitnessTracker.Services.Read
             .Where(x => x.Count == 2)
             .ToList();
 
-        protected IEnumerable<Expression<Func<T, bool>>> DecipherQuery(string query)
-        {
-            var keyValuePairsInSearchQuery = SplitQueryString(query);
-            foreach (var keyValue in keyValuePairsInSearchQuery)
-            {
-                Expression<Func<T, bool>>? current = null;
-                try
-                {
-                    current = TranslateKeyValueToExpression(keyValue[0], keyValue[1]);
-                }
-                catch (Exception ex)
-                {
-                    LogDebugger.LogError(ex);
-                }
-
-                if (current == null)
-                    continue;
-                yield return current;
-            }
-        }
         protected IEnumerable<Expression<Func<T, bool>>> DecipherQuery(List<List<string>> keyValuePairsInSearchQuery)
         {
             foreach (var keyValue in keyValuePairsInSearchQuery)
@@ -115,12 +78,11 @@ namespace FitnessTracker.Services.Read
                 }
                 catch (Exception ex)
                 {
-                    LogDebugger.LogError(ex);
+                    ex.LogError();
                 }
 
-                if (current == null)
-                    continue;
-                yield return current;
+                if (current != null)
+                    yield return current;
             }
         }
 
@@ -157,8 +119,8 @@ namespace FitnessTracker.Services.Read
                 return entitiesIncluding;
 
             ParameterExpression parameter = Expression.Parameter(typeof(T), "x");
-            var navigationProperties = typeof(T).GetProperties().Where(x => 
-                (x.PropertyType.IsClass && x.PropertyType != typeof(string)) 
+            var navigationProperties = typeof(T).GetProperties().Where(x =>
+                (x.PropertyType.IsClass && x.PropertyType != typeof(string))
                 || (x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>)));
 
             if (include.Contains("all"))
@@ -184,11 +146,5 @@ namespace FitnessTracker.Services.Read
 
             return query.Include(lambda);
         }
-
-        //**************************************************************
-        //Less efficient than just doing it in function
-        //protected static bool IsStrictModeEnabledInQuery(string query) => SplitQueryString(query).FirstOrDefault(kvp => kvp[0] == "strict")?[1] == "true";
-        //protected static bool IsStrictModeEnabledInQuery(List<List<string>> keyValuePairsInSearchQuery) => keyValuePairsInSearchQuery.FirstOrDefault(kvp => kvp[0] == "strict")?[1] == "true";
-        //**************************************************************
     }
 }
