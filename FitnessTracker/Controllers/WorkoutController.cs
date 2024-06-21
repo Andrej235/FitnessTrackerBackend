@@ -56,7 +56,7 @@ namespace FitnessTracker.Controllers
         [HttpGet("detailed")]
         public async Task<IActionResult> GetAllDetailed()
         {
-            var workouts = await readService.Get(x => true, 0, 10, "sets,creator,likes,favorites,comments");
+            var workouts = await readService.Get(x => true, 0, 10, "detailed");
             return Ok(workouts.Select(detailedResponseMapper.Map));
         }
 

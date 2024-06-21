@@ -7,6 +7,25 @@ namespace FitnessTracker.Services.Read
 {
     public class WorkoutReadService(DataContext context) : AbstractReadService<Workout>(context)
     {
+        protected override IQueryable<Workout> GetIncluded(string? includeString)
+        {
+            if (includeString is null)
+                return base.GetIncluded(includeString);
+
+            if (includeString.Contains("detailed"))
+            {
+                return context.Workouts
+                    .Include(x => x.Creator)
+                    .Include(x => x.Sets)
+                    .ThenInclude(x => x.Exercise)
+                    .Include(x => x.Likes)
+                    .Include(x => x.Favorites)
+                    .Include(x => x.Comments);
+            }
+
+            return base.GetIncluded(includeString);
+        }
+
         protected override Expression<Func<Workout, bool>> TranslateKeyValueToExpression(string key, string value)
         {
             if (int.TryParse(value, out int valueId))
