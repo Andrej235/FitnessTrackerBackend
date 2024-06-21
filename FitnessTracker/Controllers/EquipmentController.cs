@@ -4,7 +4,7 @@ using FitnessTracker.Models;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
-using FitnessTracker.Services.Read;
+using FitnessTracker.Services.Read.ExpressionBased;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessTracker.Controllers
@@ -12,14 +12,14 @@ namespace FitnessTracker.Controllers
     [ApiController]
     [Route("api/equipment")]
     public class EquipmentController(ICreateService<Equipment> createService,
-                                  ICreateRangeService<Equipment> createRangeService,
-                                  IReadService<Equipment> readService,
-                                  IRequestMapper<CreateEquipmentRequestDTO, Equipment> requestMapper,
-                                  IResponseMapper<Equipment, SimpleEquipmentResponseDTO> responseMapper) : ControllerBase
+                                     ICreateRangeService<Equipment> createRangeService,
+                                     IReadRangeService<Equipment> readRangeService,
+                                     IRequestMapper<CreateEquipmentRequestDTO, Equipment> requestMapper,
+                                     IResponseMapper<Equipment, SimpleEquipmentResponseDTO> responseMapper) : ControllerBase
     {
         private readonly ICreateService<Equipment> createService = createService;
         private readonly ICreateRangeService<Equipment> createRangeService = createRangeService;
-        private readonly IReadService<Equipment> readService = readService;
+        private readonly IReadRangeService<Equipment> readRangeService = readRangeService;
         private readonly IRequestMapper<CreateEquipmentRequestDTO, Equipment> requestMapper = requestMapper;
         private readonly IResponseMapper<Equipment, SimpleEquipmentResponseDTO> responseMapper = responseMapper;
 
@@ -40,7 +40,7 @@ namespace FitnessTracker.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] string? include)
         {
-            var muscleGroups = await readService.Get(x => true, offset, limit, include);
+            var muscleGroups = await readRangeService.Get(x => true, offset, limit, include);
             return Ok(muscleGroups.Select(responseMapper.Map));
         }
     }

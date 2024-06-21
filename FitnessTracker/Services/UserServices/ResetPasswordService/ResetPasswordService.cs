@@ -2,16 +2,17 @@
 using FitnessTracker.Models;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Read;
+using FitnessTracker.Services.Read.ExpressionBased;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Utilities;
 
 namespace FitnessTracker.Services.UserServices.ResetPasswordService
 {
-    public class ResetPasswordService(IReadService<Models.User> userReadService,
+    public class ResetPasswordService(IReadSingleService<User> userReadService,
                                       IUpdateService<Models.User> userUpdateService,
                                       IDeleteRangeService<EmailConfirmation> deleteRangeService) : IResetPasswordService
     {
-        private readonly IReadService<User> userReadService = userReadService;
+        private readonly IReadSingleService<User> userReadService = userReadService;
         private readonly IUpdateService<User> userUpdateService = userUpdateService;
         private readonly IDeleteRangeService<EmailConfirmation> deleteRangeService = deleteRangeService;
 

@@ -7,18 +7,19 @@ using FitnessTracker.Services.Update;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using FitnessTracker.Services.Read.ExpressionBased;
 
 namespace FitnessTracker.Auth
 {
     public class TokenManager(ConfigurationManager configuration,
-                              IReadService<RefreshToken> readService,
+                              IReadSingleService<RefreshToken> readSingleService,
                               ICreateService<RefreshToken> createService,
                               IUpdateService<RefreshToken> updateService,
                               IDeleteService<RefreshToken> deleteService,
                               IDeleteRangeService<RefreshToken> deleteRangeService) : ITokenManager
     {
         private readonly ConfigurationManager configuration = configuration;
-        private readonly IReadService<RefreshToken> readService = readService;
+        private readonly IReadSingleService<RefreshToken> readSingleService = readSingleService;
         private readonly ICreateService<RefreshToken> createService = createService;
         private readonly IUpdateService<RefreshToken> updateService = updateService;
         private readonly IDeleteService<RefreshToken> deleteService = deleteService;
@@ -79,7 +80,7 @@ namespace FitnessTracker.Auth
 
         public async Task<string> RefreshJWT(Guid jwtId, Guid refreshToken, Guid userId)
         {
-            var token = await readService.Get(x => x.Token == refreshToken, "none");
+            var token = await readSingleService.Get(x => x.Token == refreshToken, "none");
             if (token is null || token.JwtId != jwtId || token.UserId != userId)
                 throw new Exception("Invalid token");
 

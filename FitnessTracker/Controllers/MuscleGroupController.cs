@@ -4,7 +4,7 @@ using FitnessTracker.Models;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
-using FitnessTracker.Services.Read;
+using FitnessTracker.Services.Read.ExpressionBased;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessTracker.Controllers
@@ -13,13 +13,13 @@ namespace FitnessTracker.Controllers
     [Route("api/musclegroup")]
     public class MuscleGroupController(ICreateService<MuscleGroup> createService,
                                        ICreateRangeService<MuscleGroup> createRangeService,
-                                       IReadService<MuscleGroup> readService,
+                                       IReadRangeService<MuscleGroup> readRangeService,
                                        IRequestMapper<CreateMuscleGroupRequestDTO, MuscleGroup> requestMapper,
                                        IResponseMapper<MuscleGroup, SimpleMuscleGroupResponseDTO> responseMapper) : ControllerBase
     {
         private readonly ICreateService<MuscleGroup> createService = createService;
         private readonly ICreateRangeService<MuscleGroup> createRangeService = createRangeService;
-        private readonly IReadService<MuscleGroup> readService = readService;
+        private readonly IReadRangeService<MuscleGroup> readRangeService = readRangeService;
         private readonly IRequestMapper<CreateMuscleGroupRequestDTO, MuscleGroup> requestMapper = requestMapper;
         private readonly IResponseMapper<MuscleGroup, SimpleMuscleGroupResponseDTO> responseMapper = responseMapper;
 
@@ -40,7 +40,7 @@ namespace FitnessTracker.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] string? include)
         {
-            var muscleGroups = await readService.Get(x => true, offset, limit, include);
+            var muscleGroups = await readRangeService.Get(x => true, offset, limit, include);
             return Ok(muscleGroups.Select(responseMapper.Map));
         }
     }

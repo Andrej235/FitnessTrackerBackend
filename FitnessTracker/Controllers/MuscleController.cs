@@ -4,7 +4,7 @@ using FitnessTracker.Models;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
-using FitnessTracker.Services.Read;
+using FitnessTracker.Services.Read.ExpressionBased;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessTracker.Controllers
@@ -13,13 +13,13 @@ namespace FitnessTracker.Controllers
     [Route("api/muscle")]
     public class MuscleController(ICreateService<Muscle> createService,
                                   ICreateRangeService<Muscle> createRangeService,
-                                  IReadService<Muscle> readService,
+                                  IReadRangeService<Muscle> readRangeService,
                                   IRequestMapper<CreateMuscleRequestDTO, Muscle> requestMapper,
                                   IResponseMapper<Muscle, SimpleMuscleResponseDTO> responseMapper) : ControllerBase
     {
         private readonly ICreateService<Muscle> createService = createService;
         private readonly ICreateRangeService<Muscle> createRangeService = createRangeService;
-        private readonly IReadService<Muscle> readService = readService;
+        private readonly IReadRangeService<Muscle> readRangeService = readRangeService;
         private readonly IRequestMapper<CreateMuscleRequestDTO, Muscle> requestMapper = requestMapper;
         private readonly IResponseMapper<Muscle, SimpleMuscleResponseDTO> responseMapper = responseMapper;
 
@@ -40,7 +40,7 @@ namespace FitnessTracker.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] string? include)
         {
-            var muscleGroups = await readService.Get(x => true, offset, limit, include);
+            var muscleGroups = await readRangeService.Get(x => true, offset, limit, include);
             return Ok(muscleGroups.Select(responseMapper.Map));
         }
     }

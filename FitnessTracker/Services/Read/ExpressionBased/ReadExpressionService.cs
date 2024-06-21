@@ -6,9 +6,9 @@ using System.Reflection;
 
 namespace FitnessTracker.Services.Read.ExpressionBased
 {
-    public class ExpressionBasedReadService<T>(DataContext context) : IReadSingleService<T>, IReadRangeService<T> where T : class
+    public class ReadExpressionService<T>(DataContext context) : IReadSingleService<T>, IReadRangeService<T> where T : class
     {
-        private readonly DataContext context = context;
+        protected readonly DataContext context = context;
 
         public virtual async Task<T?> Get(Expression<Func<T, bool>> criteria, string? include = "all")
         {

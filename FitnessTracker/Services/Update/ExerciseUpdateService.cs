@@ -1,11 +1,12 @@
 ﻿using FitnessTracker.Data;
 using FitnessTracker.Models;
 using FitnessTracker.Services.Read;
+using FitnessTracker.Services.Read.ExpressionBased;
 using FitnessTracker.Utilities;
 
 namespace FitnessTracker.Services.Update
 {
-    public class ExerciseUpdateService(DataContext context, IReadService<Exercise> readService) : IUpdateService<Exercise>
+    public class ExerciseUpdateService(DataContext context, IReadSingleService<Exercise> readService) : IUpdateService<Exercise>
     {
         public async Task Update(Exercise updatedEntity)
         {

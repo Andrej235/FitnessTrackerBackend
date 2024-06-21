@@ -48,6 +48,8 @@ using FitnessTracker.Services.Mapping.Response.WorkoutMappers;
 using FitnessTracker.DTOs.Responses.Workout;
 using FitnessTracker.DTOs.Responses.Set;
 using FitnessTracker.Services.Mapping.Response.SetMappers;
+using FitnessTracker.Services.Read.ExpressionBased;
+using FitnessTracker.Services.Read.QueryBased;
 
 namespace FitnessTracker
 {
@@ -120,14 +122,17 @@ namespace FitnessTracker
 
             #region Email verification tokens
             builder.Services.AddScoped<ICreateService<EmailConfirmation>, CreateService<EmailConfirmation>>();
-            builder.Services.AddScoped<IReadService<EmailConfirmation>, EmailConfirmationReadService>();
+            builder.Services.AddScoped<IReadSingleService<EmailConfirmation>, ReadExpressionService<EmailConfirmation>>();
+            builder.Services.AddScoped<IReadRangeService<EmailConfirmation>, ReadExpressionService<EmailConfirmation>>();
             builder.Services.AddScoped<IDeleteService<EmailConfirmation>, DeleteService<EmailConfirmation>>();
             builder.Services.AddScoped<IDeleteRangeService<EmailConfirmation>, DeleteRangeService<EmailConfirmation>>();
             #endregion
 
             #region Exercise
-            builder.Services.AddScoped<ICreateService<Exercise>, ExerciseCreateService>();
-            builder.Services.AddScoped<IReadService<Exercise>, ExerciseReadService>();
+            builder.Services.AddScoped<ICreateService<Exercise>, CreateService<Exercise>>();
+            builder.Services.AddScoped<IReadSingleService<Exercise>, ReadExpressionService<Exercise>>();
+            builder.Services.AddScoped<IReadRangeService<Exercise>, ReadExpressionService<Exercise>>();
+            builder.Services.AddScoped<IReadQueryService<Exercise>, ExerciseReadQueryService>();
             builder.Services.AddScoped<IUpdateService<Exercise>, ExerciseUpdateService>();
             builder.Services.AddScoped<IDeleteService<Exercise>, DeleteService<Exercise>>();
             builder.Services.AddScoped<IRequestMapper<CreateExerciseRequestDTO, Exercise>, CreateExerciseRequestMapper>();
@@ -138,7 +143,8 @@ namespace FitnessTracker
 
             #region User
             builder.Services.AddScoped<ICreateService<User>, UserCreateService>();
-            builder.Services.AddScoped<IReadService<User>, UserReadService>();
+            builder.Services.AddScoped<IReadSingleService<User>, ReadExpressionService<User>>();
+            builder.Services.AddScoped<IReadRangeService<User>, ReadExpressionService<User>>();
             builder.Services.AddScoped<IUpdateService<User>, UpdateService<User>>();
             builder.Services.AddScoped<IRequestMapper<RegisterUserRequestDTO, User>, RegisterUserRequestMapper>();
             builder.Services.AddScoped<IResponseMapper<User, SimpleUserResponseDTO>, SimpleUserResponseMapper>();
@@ -151,7 +157,7 @@ namespace FitnessTracker
 
             #region Set
             builder.Services.AddScoped<ICreateService<Set>, CreateService<Set>>();
-            builder.Services.AddScoped<IReadService<Set>, SetReadService>();
+            builder.Services.AddScoped<IReadSingleService<Set>, ReadExpressionService<Set>>();
             builder.Services.AddScoped<IUpdateService<Set>, UpdateService<Set>>();
             builder.Services.AddScoped<IDeleteService<Set>, DeleteService<Set>>();
             builder.Services.AddScoped<IRequestMapper<CreateSetRequestDTO, Set>, CreateSetRequestMapper>();
@@ -159,7 +165,7 @@ namespace FitnessTracker
             #endregion
 
             #region Workouts
-            builder.Services.AddScoped<IReadService<Workout>, WorkoutReadService>();
+            builder.Services.AddScoped<IReadSingleService<Workout>, ReadExpressionService<Workout>>();
             builder.Services.AddScoped<ICreateService<Workout>, CreateService<Workout>>();
             builder.Services.AddScoped<IUpdateService<Workout>, WorkoutUpdateService>();
             builder.Services.AddScoped<IDeleteService<Workout>, DeleteService<Workout>>();
@@ -170,18 +176,20 @@ namespace FitnessTracker
 
             #region Workout like
             builder.Services.AddScoped<ICreateService<WorkoutLike>, CreateService<WorkoutLike>>();
+            builder.Services.AddScoped<IReadSingleService<WorkoutLike>, ReadExpressionService<WorkoutLike>>();
             builder.Services.AddScoped<IDeleteService<WorkoutLike>, DeleteService<WorkoutLike>>();
             #endregion
 
             #region Workout favorite
             builder.Services.AddScoped<ICreateService<FavoriteWorkout>, CreateService<FavoriteWorkout>>();
+            builder.Services.AddScoped<IReadSingleService<FavoriteWorkout>, ReadExpressionService<FavoriteWorkout>>();
             builder.Services.AddScoped<IDeleteService<FavoriteWorkout>, DeleteService<FavoriteWorkout>>();
             #endregion
 
             #region Muscle group
-            builder.Services.AddScoped<ICreateService<MuscleGroup>, MuscleGroupCreateService>();
-            builder.Services.AddScoped<ICreateRangeService<MuscleGroup>, MuscleGroupCreateService>();
-            builder.Services.AddScoped<IReadService<MuscleGroup>, MuscleGroupReadService>();
+            builder.Services.AddScoped<ICreateService<MuscleGroup>, CreateService<MuscleGroup>>();
+            builder.Services.AddScoped<ICreateRangeService<MuscleGroup>, CreateService<MuscleGroup>>();
+            builder.Services.AddScoped<IReadSingleService<MuscleGroup>, ReadExpressionService<MuscleGroup>>();
             builder.Services.AddScoped<IUpdateService<MuscleGroup>, UpdateService<MuscleGroup>>();
             builder.Services.AddScoped<IDeleteService<MuscleGroup>, DeleteService<MuscleGroup>>();
             builder.Services.AddScoped<IRequestMapper<CreateMuscleGroupRequestDTO, MuscleGroup>, CreateMuscleGroupRequestMapper>();
@@ -191,7 +199,7 @@ namespace FitnessTracker
             #region Muscle
             builder.Services.AddScoped<ICreateService<Muscle>, CreateService<Muscle>>();
             builder.Services.AddScoped<ICreateRangeService<Muscle>, CreateService<Muscle>>();
-            builder.Services.AddScoped<IReadService<Muscle>, MuscleReadService>();
+            builder.Services.AddScoped<IReadSingleService<Muscle>, ReadExpressionService<Muscle>>();
             builder.Services.AddScoped<IUpdateService<Muscle>, UpdateService<Muscle>>();
             builder.Services.AddScoped<IDeleteService<Muscle>, DeleteService<Muscle>>();
             builder.Services.AddScoped<IRequestMapper<CreateMuscleRequestDTO, Muscle>, CreateMuscleRequestMapper>();
@@ -201,15 +209,14 @@ namespace FitnessTracker
             #region Equipment exercise usage
             builder.Services.AddScoped<ICreateService<EquipmentUsage>, CreateService<EquipmentUsage>>();
             builder.Services.AddScoped<ICreateRangeService<EquipmentUsage>, CreateService<EquipmentUsage>>();
-            builder.Services.AddScoped<IReadService<EquipmentUsage>, EquipmentExerciseUsageReadService>();
-            builder.Services.AddScoped<IDeleteService<EquipmentUsage>, DeleteService<EquipmentUsage>>();
+            builder.Services.AddScoped<IReadRangeService<EquipmentUsage>, ReadExpressionService<EquipmentUsage>>();
             builder.Services.AddScoped<IDeleteRangeService<EquipmentUsage>, DeleteRangeService<EquipmentUsage>>();
             #endregion
 
             #region Equipment
             builder.Services.AddScoped<ICreateService<Equipment>, CreateService<Equipment>>();
             builder.Services.AddScoped<ICreateRangeService<Equipment>, CreateService<Equipment>>();
-            builder.Services.AddScoped<IReadService<Equipment>, EquipmentReadService>();
+            builder.Services.AddScoped<IReadSingleService<Equipment>, ReadExpressionService<Equipment>>();
             builder.Services.AddScoped<IUpdateService<Equipment>, UpdateService<Equipment>>();
             builder.Services.AddScoped<IDeleteService<Equipment>, DeleteService<Equipment>>();
             builder.Services.AddScoped<IRequestMapper<CreateEquipmentRequestDTO, Equipment>, CreateEquipmentRequestMapper>();
@@ -219,36 +226,33 @@ namespace FitnessTracker
             #region Primary muscle group
             builder.Services.AddScoped<ICreateService<PrimaryMuscleGroupInExercise>, CreateService<PrimaryMuscleGroupInExercise>>();
             builder.Services.AddScoped<ICreateRangeService<PrimaryMuscleGroupInExercise>, CreateService<PrimaryMuscleGroupInExercise>>();
-            builder.Services.AddScoped<IReadService<PrimaryMuscleGroupInExercise>, PrimaryMuscleGroupReadService>();
-            builder.Services.AddScoped<IDeleteService<PrimaryMuscleGroupInExercise>, DeleteService<PrimaryMuscleGroupInExercise>>();
+            builder.Services.AddScoped<IReadRangeService<PrimaryMuscleGroupInExercise>, ReadExpressionService<PrimaryMuscleGroupInExercise>>();
             builder.Services.AddScoped<IDeleteRangeService<PrimaryMuscleGroupInExercise>, DeleteRangeService<PrimaryMuscleGroupInExercise>>();
             #endregion
 
             #region Secondary muscle group
             builder.Services.AddScoped<ICreateService<SecondaryMuscleGroupInExercise>, CreateService<SecondaryMuscleGroupInExercise>>();
             builder.Services.AddScoped<ICreateRangeService<SecondaryMuscleGroupInExercise>, CreateService<SecondaryMuscleGroupInExercise>>();
-            builder.Services.AddScoped<IReadService<SecondaryMuscleGroupInExercise>, SecondaryMuscleGroupReadService>();
-            builder.Services.AddScoped<IDeleteService<SecondaryMuscleGroupInExercise>, DeleteService<SecondaryMuscleGroupInExercise>>();
+            builder.Services.AddScoped<IReadRangeService<SecondaryMuscleGroupInExercise>, ReadExpressionService<SecondaryMuscleGroupInExercise>>();
             builder.Services.AddScoped<IDeleteRangeService<SecondaryMuscleGroupInExercise>, DeleteRangeService<SecondaryMuscleGroupInExercise>>();
             #endregion
 
             #region Primary muscle
             builder.Services.AddScoped<ICreateRangeService<PrimaryMuscleInExercise>, CreateService<PrimaryMuscleInExercise>>();
-            builder.Services.AddScoped<IReadService<PrimaryMuscleInExercise>, PrimaryMuscleReadService>();
-            builder.Services.AddScoped<IDeleteService<PrimaryMuscleInExercise>, DeleteService<PrimaryMuscleInExercise>>();
+            builder.Services.AddScoped<IReadRangeService<PrimaryMuscleInExercise>, ReadExpressionService<PrimaryMuscleInExercise>>();
             builder.Services.AddScoped<IDeleteRangeService<PrimaryMuscleInExercise>, DeleteRangeService<PrimaryMuscleInExercise>>();
             #endregion
 
             #region Secondary muscle
             builder.Services.AddScoped<ICreateRangeService<SecondaryMuscleInExercise>, CreateService<SecondaryMuscleInExercise>>();
-            builder.Services.AddScoped<IReadService<SecondaryMuscleInExercise>, SecondaryMuscleReadService>();
-            builder.Services.AddScoped<IDeleteService<SecondaryMuscleInExercise>, DeleteService<SecondaryMuscleInExercise>>();
+            builder.Services.AddScoped<IReadRangeService<SecondaryMuscleInExercise>, ReadExpressionService<SecondaryMuscleInExercise>>();
             builder.Services.AddScoped<IDeleteRangeService<SecondaryMuscleInExercise>, DeleteRangeService<SecondaryMuscleInExercise>>();
             #endregion
 
-            #region RefreshTokens
+            #region Refresh Tokens
             builder.Services.AddScoped<ICreateService<RefreshToken>, RefreshTokenCreateService>();
-            builder.Services.AddScoped<IReadService<RefreshToken>, RefreshTokenReadService>();
+            builder.Services.AddScoped<IReadSingleService<RefreshToken>, ReadExpressionService<RefreshToken>>();
+            builder.Services.AddScoped<IReadRangeService<RefreshToken>, ReadExpressionService<RefreshToken>>();
             builder.Services.AddScoped<IUpdateService<RefreshToken>, UpdateService<RefreshToken>>();
             builder.Services.AddScoped<IDeleteService<RefreshToken>, DeleteService<RefreshToken>>();
             builder.Services.AddScoped<IDeleteRangeService<RefreshToken>, DeleteRangeService<RefreshToken>>();

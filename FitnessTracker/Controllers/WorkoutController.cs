@@ -7,6 +7,7 @@ using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read;
+using FitnessTracker.Services.Read.ExpressionBased;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +19,8 @@ namespace FitnessTracker.Controllers
     [ApiController]
     [Route("api/workout")]
     public class WorkoutController(ICreateService<Workout> createService,
-                                   IReadService<Workout> readService,
+                                   IReadSingleService<Workout> readSingleService,
+                                   IReadRangeService<Workout> readRangeService,
                                    IUpdateService<Workout> updateService,
                                    IDeleteService<Workout> deleteService,
                                    ICreateService<WorkoutLike> likeCreateService,
@@ -30,7 +32,8 @@ namespace FitnessTracker.Controllers
                                    IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedResponseMapper) : ControllerBase
     {
         private readonly ICreateService<Workout> createService = createService;
-        private readonly IReadService<Workout> readService = readService;
+        private readonly IReadSingleService<Workout> readSingleService = readSingleService;
+        private readonly IReadRangeService<Workout> readRangeService = readRangeService;
         private readonly IUpdateService<Workout> updateService = updateService;
         private readonly IDeleteService<Workout> deleteService = deleteService;
         private readonly ICreateService<WorkoutLike> likeCreateService = likeCreateService;
@@ -50,14 +53,14 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out var userId))
                 return Unauthorized();
 
-            var usersWorkouts = await readService.Get(x => x.CreatorId == userId, 0, 10, "none");
+            var usersWorkouts = await readRangeService.Get(x => x.CreatorId == userId, 0, 10, "none");
             return Ok(usersWorkouts.Select(simpleResponseMapper.Map));
         }
 
         [HttpGet("public/simple")]
         public async Task<IActionResult> GetAllSimplePublic()
         {
-            var workouts = await readService.Get(x => x.IsPublic, 0, 10, "creator");
+            var workouts = await readRangeService.Get(x => x.IsPublic, 0, 10, "creator");
             return Ok(workouts.Select(simpleResponseMapper.Map));
         }
 
@@ -70,7 +73,7 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out var userId))
                 return Unauthorized();
 
-            var workouts = await readService.Get(x => x.CreatorId == userId, 0, 10, "creator");
+            var workouts = await readRangeService.Get(x => x.CreatorId == userId, 0, 10, "creator");
             return Ok(workouts.Select(simpleResponseMapper.Map));
         }
 
@@ -83,7 +86,7 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out var userId))
                 return Unauthorized();
 
-            var workout = await readService.Get(x => x.Id == id, "detailed");
+            var workout = await readSingleService.Get(x => x.Id == id, "detailed");
             if (workout is null)
                 return NotFound();
 

@@ -1,6 +1,7 @@
 ﻿using FitnessTracker.DTOs.Requests.User;
 using FitnessTracker.Models;
 using FitnessTracker.Services.Read;
+using FitnessTracker.Services.Read.ExpressionBased;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
 using FitnessTracker.Services.UserServices.EmailConfirmationService;
@@ -18,7 +19,7 @@ namespace FitnessTracker.Controllers.Admin
     [ApiController]
     public class UNSAFE_UserController(IEmailConfirmationSenderService emailConfirmationSender,
                                        IEmailConfirmationService emailConfirmationService,
-                                       IReadService<User> readService,
+                                       IReadSingleService<User> readSingleService,
                                        IResetPasswordEmailSenderService passwordResetEmailSender,
                                        IResetPasswordService passwordResetEmailService,
                                        IUpdateService<User> updateService) : ControllerBase
@@ -65,7 +66,7 @@ namespace FitnessTracker.Controllers.Admin
                 || !Guid.TryParse(userIdString, out var userId))
                 return Unauthorized();
 
-            var user = await readService.Get(x => x.Id == userId, "none");
+            var user = await readSingleService.Get(x => x.Id == userId, "none");
             if (user is null)
                 return Unauthorized();
 
@@ -111,7 +112,7 @@ namespace FitnessTracker.Controllers.Admin
                     || !Guid.TryParse(userIdString, out var userId))
                     return Unauthorized();
 
-                var user = await readService.Get(x => x.Id == userId, "none");
+                var user = await readSingleService.Get(x => x.Id == userId, "none");
                 if (user is null)
                     return Unauthorized();
 

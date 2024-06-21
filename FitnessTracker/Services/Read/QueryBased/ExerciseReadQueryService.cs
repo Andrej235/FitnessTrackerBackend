@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using FitnessTracker.Data;
+﻿using FitnessTracker.Data;
 using FitnessTracker.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace FitnessTracker.Services.Read
+namespace FitnessTracker.Services.Read.QueryBased
 {
-    public class ExerciseReadService(DataContext context) : AbstractReadService<Exercise>(context)
+    public class ExerciseReadQueryService(DataContext context) : AbstractQueryBasedReadService<Exercise>(context)
     {
         protected override Expression<Func<Exercise, bool>> TranslateKeyValueToExpression(string key, string value)
         {

@@ -13,13 +13,16 @@ using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.DTOs.Requests.Exercise;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.DTOs.Responses.Exercises;
+using FitnessTracker.Services.Read.QueryBased;
+using FitnessTracker.Services.Read.ExpressionBased;
 
 namespace FitnessTracker.Controllers
 {
     [Route("api/exercise")]
     [ApiController]
     public class ExerciseController(ICreateService<Exercise> createService,
-                                    IReadService<Exercise> readService,
+                                    IReadSingleService<Exercise> readSingleService,
+                                    IReadQueryService<Exercise> readQueryService,
                                     IUpdateService<Exercise> updateService,
                                     IDeleteService<Exercise> deleteService,
                                     ICreateRangeService<EquipmentUsage> equipmetUsageCreateRangeService,
@@ -36,7 +39,8 @@ namespace FitnessTracker.Controllers
                                     IResponseMapper<Exercise, DetailedExerciseResponseDTO> detailedResponseMapper) : ControllerBase
     {
         private readonly ICreateService<Exercise> createService = createService;
-        private readonly IReadService<Exercise> readService = readService;
+        private readonly IReadSingleService<Exercise> readSingleService = readSingleService;
+        private readonly IReadQueryService<Exercise> readQueryService = readQueryService;
         private readonly IUpdateService<Exercise> updateService = updateService;
         private readonly IDeleteService<Exercise> deleteService = deleteService;
         private readonly ICreateRangeService<EquipmentUsage> equipmetUsageCreateRangeService = equipmetUsageCreateRangeService;
@@ -55,7 +59,7 @@ namespace FitnessTracker.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] string? q, [FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] string? include)
         {
-            var exercises = await readService.Get(q, offset, limit, include);
+            var exercises = await readQueryService.Get(q, offset, limit, include);
             return Ok(exercises.Select(detailedResponseMapper.Map));
         }
 
@@ -97,7 +101,7 @@ namespace FitnessTracker.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateExerciseRequestDTO request)
         {
-            var exercise = await readService.Get(x => x.Id == request.Id, "none");
+            var exercise = await readSingleService.Get(x => x.Id == request.Id, "none");
             if (exercise is null)
                 return NotFound();
 

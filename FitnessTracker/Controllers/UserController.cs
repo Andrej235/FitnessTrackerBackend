@@ -6,6 +6,7 @@ using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read;
+using FitnessTracker.Services.Read.ExpressionBased;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
 using FitnessTracker.Services.UserServices.EmailConfirmationService;
@@ -25,7 +26,7 @@ namespace FitnessTracker.Controllers
     public partial class UserController(IRequestMapper<RegisterUserRequestDTO, User> registrationMapper,
                                         IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper,
                                         ICreateService<User> createService,
-                                        IReadService<User> readService,
+                                        IReadSingleService<User> readSingleService,
                                         ITokenManager tokenManager,
                                         IEmailConfirmationSenderService emailConfirmationSender,
                                         IEmailConfirmationService emailConfirmationService,
@@ -36,7 +37,7 @@ namespace FitnessTracker.Controllers
         private readonly IRequestMapper<RegisterUserRequestDTO, User> registrationMapper = registrationMapper;
         private readonly IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper = detailedResponseMapper;
         private readonly ICreateService<User> createService = createService;
-        private readonly IReadService<User> readService = readService;
+        private readonly IReadSingleService<User> readSingleService = readSingleService;
         private readonly ITokenManager tokenManager = tokenManager;
         private readonly IEmailConfirmationSenderService emailConfirmationSender = emailConfirmationSender;
         private readonly IEmailConfirmationService emailConfirmationService = emailConfirmationService;
@@ -75,7 +76,7 @@ namespace FitnessTracker.Controllers
             if (!ValidEmailRegex().IsMatch(request.Email) || request.Password.Length < 8)
                 return BadRequest("Incorrect email or password");
 
-            var user = await readService.Get(x => x.Email == request.Email, "none");
+            var user = await readSingleService.Get(x => x.Email == request.Email, "none");
             if (user is null)
                 return BadRequest("Incorrect email or password");
 
@@ -96,7 +97,7 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out var userId))
                 return Unauthorized();
 
-            var user = await readService.Get(x => x.Id == userId, "all");
+            var user = await readSingleService.Get(x => x.Id == userId, "all");
             if (user is null)
                 return Unauthorized();
 
@@ -170,7 +171,7 @@ namespace FitnessTracker.Controllers
                     || !Guid.TryParse(userIdString, out var userId))
                     return Unauthorized();
 
-                var user = await readService.Get(x => x.Id == userId, "none");
+                var user = await readSingleService.Get(x => x.Id == userId, "none");
                 if (user is null)
                     return Unauthorized();
 
@@ -193,7 +194,7 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out var userId))
                 return Unauthorized();
 
-            var user = await readService.Get(x => x.Id == userId, "none");
+            var user = await readSingleService.Get(x => x.Id == userId, "none");
             if (user is null)
                 return Unauthorized();
 
@@ -239,7 +240,7 @@ namespace FitnessTracker.Controllers
                     || !Guid.TryParse(userIdString, out var userId))
                     return Unauthorized();
 
-                var user = await readService.Get(x => x.Id == userId, "none");
+                var user = await readSingleService.Get(x => x.Id == userId, "none");
                 if (user is null)
                     return Unauthorized();
 
