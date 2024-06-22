@@ -1,12 +1,10 @@
-﻿using FitnessTracker.DTOs.Requests.Set;
-using FitnessTracker.DTOs.Requests.Workout;
+﻿using FitnessTracker.DTOs.Requests.Workout;
 using FitnessTracker.DTOs.Responses.Workout;
 using FitnessTracker.Models;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
-using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Read.ExpressionBased;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Utilities;
@@ -19,28 +17,36 @@ namespace FitnessTracker.Controllers
     [ApiController]
     [Route("api/workout")]
     public class WorkoutController(ICreateService<Workout> createService,
+                                   ICreateService<WorkoutComment> commentCreateService,
                                    IReadSingleService<Workout> readSingleService,
                                    IReadRangeService<Workout> readRangeService,
                                    IUpdateService<Workout> updateService,
                                    IDeleteService<Workout> deleteService,
+                                   IDeleteService<WorkoutComment> commentDeleteService,
+                                   IDeleteRangeService<WorkoutComment> commentDeleteRangeService,
                                    ICreateService<WorkoutLike> likeCreateService,
                                    IDeleteService<WorkoutLike> likeDeleteService,
                                    ICreateService<FavoriteWorkout> favoriteCreateService,
                                    IDeleteService<FavoriteWorkout> favoriteDeleteService,
                                    IRequestMapper<CreateWorkoutRequestDTO, Workout> createRequestMapper,
+                                   IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment> createCommentRequestMapper,
                                    IResponseMapper<Workout, SimpleWorkoutResponseDTO> simpleResponseMapper,
                                    IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedResponseMapper) : ControllerBase
     {
         private readonly ICreateService<Workout> createService = createService;
+        private readonly ICreateService<WorkoutComment> commentCreateService = commentCreateService;
         private readonly IReadSingleService<Workout> readSingleService = readSingleService;
         private readonly IReadRangeService<Workout> readRangeService = readRangeService;
         private readonly IUpdateService<Workout> updateService = updateService;
         private readonly IDeleteService<Workout> deleteService = deleteService;
+        private readonly IDeleteService<WorkoutComment> commentDeleteService = commentDeleteService;
+        private readonly IDeleteRangeService<WorkoutComment> commentDeleteRangeService = commentDeleteRangeService;
         private readonly ICreateService<WorkoutLike> likeCreateService = likeCreateService;
         private readonly IDeleteService<WorkoutLike> likeDeleteService = likeDeleteService;
         private readonly ICreateService<FavoriteWorkout> favoriteCreateService = favoriteCreateService;
         private readonly IDeleteService<FavoriteWorkout> favoriteDeleteService = favoriteDeleteService;
         private readonly IRequestMapper<CreateWorkoutRequestDTO, Workout> createRequestMapper = createRequestMapper;
+        private readonly IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment> createCommentRequestMapper = createCommentRequestMapper;
         private readonly IResponseMapper<Workout, SimpleWorkoutResponseDTO> simpleResponseMapper = simpleResponseMapper;
         private readonly IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedResponseMapper = detailedResponseMapper;
 
@@ -53,7 +59,7 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out var userId))
                 return Unauthorized();
 
-            var usersWorkouts = await readRangeService.Get(x => x.CreatorId == userId, 0, 10, "none");
+            var usersWorkouts = await readRangeService.Get(x => x.CreatorId == userId, 0, 10, "creator");
             return Ok(usersWorkouts.Select(simpleResponseMapper.Map));
         }
 
@@ -95,7 +101,7 @@ namespace FitnessTracker.Controllers
                 var mapped = detailedResponseMapper.Map(workout);
                 mapped.IsLiked = workout.Likes.Any(x => x.Id == userId);
                 mapped.IsFavorited = workout.Favorites.Any(x => x.Id == userId);
-                return Ok();
+                return Ok(mapped);
             }
 
             return Unauthorized();
@@ -209,6 +215,85 @@ namespace FitnessTracker.Controllers
             {
                 ex.LogError();
                 return BadRequest("Failed to remove favorite");
+            }
+        }
+
+        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
+        [HttpPost("{workoutId:guid}/comment")]
+        public async Task<IActionResult> CreateComment(Guid workoutId, [FromBody] CreateWorkoutCommentRequestDTO request)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            try
+            {
+                var mapped = createCommentRequestMapper.Map(request);
+                mapped.CreatorId = userId;
+                mapped.WorkoutId = workoutId;
+
+                var newId = await commentCreateService.Add(mapped);
+                if (newId == default)
+                    return BadRequest("Failed to create comment");
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return BadRequest("Failed to create comment");
+            }
+        }
+
+        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
+        [HttpDelete("{workoutId:guid}/comment/{commentId:guid}")]
+        public async Task<IActionResult> DeleteComment(Guid workoutId, Guid commentId)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            try
+            {
+                await commentDeleteService.Delete(x => x.WorkoutId == workoutId && x.CreatorId == userId && x.Id == commentId);
+                await commentDeleteRangeService.Delete(x => x.WorkoutId == workoutId && x.ParentId == commentId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return BadRequest("Failed to delete comment");
+            }
+        }
+
+        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
+        [HttpPost("{workoutId:guid}/comment/{parentId:guid}/reply")]
+        public async Task<IActionResult> CreateComment(Guid workoutId, Guid parentId, [FromBody] CreateWorkoutCommentRequestDTO request)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            try
+            {
+                var mapped = createCommentRequestMapper.Map(request);
+                mapped.CreatorId = userId;
+                mapped.WorkoutId = workoutId;
+                mapped.ParentId = parentId;
+
+                var newId = await commentCreateService.Add(mapped);
+                if (newId == default)
+                    return BadRequest("Failed to create comment");
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return BadRequest("Failed to create comment");
             }
         }
     }

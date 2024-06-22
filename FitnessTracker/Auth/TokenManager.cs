@@ -80,7 +80,7 @@ namespace FitnessTracker.Auth
 
         public async Task<string> RefreshJWT(Guid jwtId, Guid refreshToken, Guid userId)
         {
-            var token = await readSingleService.Get(x => x.Token == refreshToken, "none");
+            var token = await readSingleService.Get(x => x.Token == refreshToken, "user");
             if (token is null || token.JwtId != jwtId || token.UserId != userId)
                 throw new Exception("Invalid token");
 

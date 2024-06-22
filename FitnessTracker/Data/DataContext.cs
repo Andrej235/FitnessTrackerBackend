@@ -239,6 +239,9 @@ namespace FitnessTracker.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PostComment>()
+                .HasIndex(p => p.CreatorId);
+
+            modelBuilder.Entity<PostComment>()
                 .HasMany(p => p.Likes)
                 .WithMany()
                 .UsingEntity<PostCommentLike>(j =>
@@ -336,6 +339,9 @@ namespace FitnessTracker.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<SplitComment>()
+                .HasIndex(x => x.SplitId);
+
+            modelBuilder.Entity<SplitComment>()
                 .HasMany(s => s.Likes)
                 .WithMany()
                 .UsingEntity<SplitCommentLike>(j =>
@@ -424,6 +430,9 @@ namespace FitnessTracker.Data
                 .WithMany()
                 .HasForeignKey(w => w.CreatorId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<WorkoutComment>()
+                .HasIndex(x => x.WorkoutId);
 
             modelBuilder.Entity<WorkoutComment>()
                 .HasMany(w => w.Likes)
