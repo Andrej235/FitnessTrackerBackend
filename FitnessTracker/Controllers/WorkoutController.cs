@@ -20,6 +20,8 @@ namespace FitnessTracker.Controllers
                                    ICreateService<WorkoutComment> commentCreateService,
                                    IReadSingleService<Workout> readSingleService,
                                    IReadRangeService<Workout> readRangeService,
+                                   IReadSingleService<WorkoutComment> commentReadSingleService,
+                                   IReadRangeService<WorkoutComment> commentReadRangeService,
                                    IUpdateService<Workout> updateService,
                                    IDeleteService<Workout> deleteService,
                                    IDeleteService<WorkoutComment> commentDeleteService,
@@ -31,12 +33,15 @@ namespace FitnessTracker.Controllers
                                    IRequestMapper<CreateWorkoutRequestDTO, Workout> createRequestMapper,
                                    IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment> createCommentRequestMapper,
                                    IResponseMapper<Workout, SimpleWorkoutResponseDTO> simpleResponseMapper,
-                                   IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedResponseMapper) : ControllerBase
+                                   IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedResponseMapper,
+                                   IResponseMapper<WorkoutComment, SimpleWorkoutCommentResponseDTO> simpleCommentResponseMapper) : ControllerBase
     {
         private readonly ICreateService<Workout> createService = createService;
         private readonly ICreateService<WorkoutComment> commentCreateService = commentCreateService;
         private readonly IReadSingleService<Workout> readSingleService = readSingleService;
         private readonly IReadRangeService<Workout> readRangeService = readRangeService;
+        private readonly IReadSingleService<WorkoutComment> commentReadSingleService = commentReadSingleService;
+        private readonly IReadRangeService<WorkoutComment> commentReadRangeService = commentReadRangeService;
         private readonly IUpdateService<Workout> updateService = updateService;
         private readonly IDeleteService<Workout> deleteService = deleteService;
         private readonly IDeleteService<WorkoutComment> commentDeleteService = commentDeleteService;
@@ -49,6 +54,7 @@ namespace FitnessTracker.Controllers
         private readonly IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment> createCommentRequestMapper = createCommentRequestMapper;
         private readonly IResponseMapper<Workout, SimpleWorkoutResponseDTO> simpleResponseMapper = simpleResponseMapper;
         private readonly IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedResponseMapper = detailedResponseMapper;
+        private readonly IResponseMapper<WorkoutComment, SimpleWorkoutCommentResponseDTO> simpleCommentResponseMapper = simpleCommentResponseMapper;
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpGet("personal")]
@@ -295,6 +301,22 @@ namespace FitnessTracker.Controllers
                 ex.LogError();
                 return BadRequest("Failed to create comment");
             }
+        }
+
+        [Authorize]
+        [HttpGet("{workoutId:guid}/comment")]
+        public async Task<IActionResult> GetComments(Guid workoutId)
+        {
+            var comments = await commentReadRangeService.Get(x => x.WorkoutId == workoutId && x.ParentId == null, 0, 10, "creator,likes");
+            return Ok(comments.Select(simpleCommentResponseMapper.Map));
+        }
+
+        [Authorize]
+        [HttpGet("{workoutId:guid}/comment/{commentId:guid}/reply")]
+        public async Task<IActionResult> GetReplies(Guid workoutId, Guid commentId)
+        {
+            var comments = await commentReadRangeService.Get(x => x.WorkoutId == workoutId && x.ParentId == commentId, 0, 10, "creator,likes");
+            return Ok(comments.Select(simpleCommentResponseMapper.Map));
         }
     }
 }
