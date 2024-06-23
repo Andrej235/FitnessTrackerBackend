@@ -19,19 +19,19 @@ namespace FitnessTracker.Controllers
     public class WorkoutController(ICreateService<Workout> createService,
                                    ICreateService<WorkoutComment> commentCreateService,
                                    ICreateService<WorkoutCommentLike> commentLikeCreateService,
+                                   ICreateService<WorkoutLike> likeCreateService,
+                                   ICreateService<FavoriteWorkout> favoriteCreateService,
                                    IReadSingleService<Workout> readSingleService,
-                                   IReadRangeService<Workout> readRangeService,
                                    IReadSingleService<WorkoutComment> commentReadSingleService,
+                                   IReadRangeService<Workout> readRangeService,
                                    IReadRangeService<WorkoutComment> commentReadRangeService,
                                    IUpdateService<Workout> updateService,
                                    IDeleteService<Workout> deleteService,
                                    IDeleteService<WorkoutComment> commentDeleteService,
                                    IDeleteService<WorkoutCommentLike> commentLikeDeleteService,
-                                   IDeleteRangeService<WorkoutComment> commentDeleteRangeService,
-                                   ICreateService<WorkoutLike> likeCreateService,
                                    IDeleteService<WorkoutLike> likeDeleteService,
-                                   ICreateService<FavoriteWorkout> favoriteCreateService,
                                    IDeleteService<FavoriteWorkout> favoriteDeleteService,
+                                   IDeleteRangeService<WorkoutComment> commentDeleteRangeService,
                                    IRequestMapper<CreateWorkoutRequestDTO, Workout> createRequestMapper,
                                    IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment> createCommentRequestMapper,
                                    IResponseMapper<Workout, SimpleWorkoutResponseDTO> simpleResponseMapper,
@@ -41,19 +41,19 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<Workout> createService = createService;
         private readonly ICreateService<WorkoutComment> commentCreateService = commentCreateService;
         private readonly ICreateService<WorkoutCommentLike> commentLikeCreateService = commentLikeCreateService;
+        private readonly ICreateService<WorkoutLike> likeCreateService = likeCreateService;
+        private readonly ICreateService<FavoriteWorkout> favoriteCreateService = favoriteCreateService;
         private readonly IReadSingleService<Workout> readSingleService = readSingleService;
-        private readonly IReadRangeService<Workout> readRangeService = readRangeService;
         private readonly IReadSingleService<WorkoutComment> commentReadSingleService = commentReadSingleService;
+        private readonly IReadRangeService<Workout> readRangeService = readRangeService;
         private readonly IReadRangeService<WorkoutComment> commentReadRangeService = commentReadRangeService;
         private readonly IUpdateService<Workout> updateService = updateService;
         private readonly IDeleteService<Workout> deleteService = deleteService;
         private readonly IDeleteService<WorkoutComment> commentDeleteService = commentDeleteService;
         private readonly IDeleteService<WorkoutCommentLike> commentLikeDeleteService = commentLikeDeleteService;
-        private readonly IDeleteRangeService<WorkoutComment> commentDeleteRangeService = commentDeleteRangeService;
-        private readonly ICreateService<WorkoutLike> likeCreateService = likeCreateService;
         private readonly IDeleteService<WorkoutLike> likeDeleteService = likeDeleteService;
-        private readonly ICreateService<FavoriteWorkout> favoriteCreateService = favoriteCreateService;
         private readonly IDeleteService<FavoriteWorkout> favoriteDeleteService = favoriteDeleteService;
+        private readonly IDeleteRangeService<WorkoutComment> commentDeleteRangeService = commentDeleteRangeService;
         private readonly IRequestMapper<CreateWorkoutRequestDTO, Workout> createRequestMapper = createRequestMapper;
         private readonly IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment> createCommentRequestMapper = createCommentRequestMapper;
         private readonly IResponseMapper<Workout, SimpleWorkoutResponseDTO> simpleResponseMapper = simpleResponseMapper;

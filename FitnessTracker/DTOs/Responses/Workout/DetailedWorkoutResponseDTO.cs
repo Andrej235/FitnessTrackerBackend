@@ -2,7 +2,7 @@
 
 namespace FitnessTracker.DTOs.Responses.Workout
 {
-    public class DetailedWorkoutResponseDTO : BaseWorkoutResponseDTO
+    public class DetailedWorkoutResponseDTO : SimpleWorkoutResponseDTO
     {
         public IEnumerable<DetailedSetResponseDTO> Sets { get; set; } = [];
         public string? Description { get; set; }

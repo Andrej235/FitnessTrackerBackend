@@ -49,6 +49,8 @@ using FitnessTracker.DTOs.Responses.Set;
 using FitnessTracker.Services.Mapping.Response.SetMappers;
 using FitnessTracker.Services.Read.ExpressionBased;
 using FitnessTracker.Services.Read.QueryBased;
+using FitnessTracker.Services.Mapping.Response.SplitMappers;
+using FitnessTracker.DTOs.Responses.Split;
 
 namespace FitnessTracker
 {
@@ -340,6 +342,18 @@ namespace FitnessTracker
             builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
             builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
             builder.Services.AddInMemoryRateLimiting();
+            #endregion
+
+            #region Split
+            builder.Services.AddScoped<ICreateService<Split>, CreateService<Split>>();
+            builder.Services.AddScoped<IReadRangeService<Split>, ReadExpressionService<Split>>();
+            builder.Services.AddScoped<IReadSingleService<Split>, ReadExpressionService<Split>>();
+            builder.Services.AddScoped<IResponseMapper<Split, SimpleSplitResponseDTO>, SimpleSplitResponseMapper>();
+            builder.Services.AddScoped<IResponseMapper<Split, DetailedSplitResponseDTO>, DetailedSplitResponseMapper>();
+            #endregion
+
+            #region Split workout
+            builder.Services.AddScoped<IResponseMapper<SplitWorkout, SimpleSplitWorkoutResponseDTO>, SimpleSplitWorkoutResponseMapper>();
             #endregion
 
             var app = builder.Build();

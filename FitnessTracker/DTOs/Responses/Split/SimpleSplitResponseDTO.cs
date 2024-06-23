@@ -1,8 +1,8 @@
 ﻿using FitnessTracker.DTOs.Responses.User;
 
-namespace FitnessTracker.DTOs.Responses.Workout
+namespace FitnessTracker.DTOs.Responses.Split
 {
-    public class BaseWorkoutResponseDTO
+    public class SimpleSplitResponseDTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;

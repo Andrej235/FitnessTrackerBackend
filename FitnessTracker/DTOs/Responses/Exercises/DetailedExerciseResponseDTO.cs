@@ -4,7 +4,7 @@ using FitnessTracker.DTOs.Responses.MuscleGroup;
 
 namespace FitnessTracker.DTOs.Responses.Exercises
 {
-    public class DetailedExerciseResponseDTO : BaseExerciseResponseDTO
+    public class DetailedExerciseResponseDTO : SimpleExerciseResponseDTO
     {
         public string Description { get; set; } = null!;
         public IEnumerable<SimpleMuscleGroupResponseDTO> PrimaryMuscleGroups { get; set; } = [];
