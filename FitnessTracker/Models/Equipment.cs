@@ -5,6 +5,6 @@
         public int Id { get; set; }
         public string Name { get; set; } = null!;
 
-        public IEnumerable<Exercise> UsedInExercises { get; set; } = new HashSet<Exercise>();
+        public ICollection<Exercise> UsedInExercises { get; set; } = [];
     }
 }

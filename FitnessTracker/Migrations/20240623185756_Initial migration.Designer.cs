@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessTracker.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240623130817_Fix workout comment like")]
-    partial class Fixworkoutcommentlike
+    [Migration("20240623185756_Initial migration")]
+    partial class Initialmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,6 +34,9 @@ namespace FitnessTracker.Migrations
                     b.Property<DateTime>("CompletedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("SplitId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -41,6 +44,8 @@ namespace FitnessTracker.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SplitId");
 
                     b.HasIndex("UserId");
 
@@ -62,7 +67,8 @@ namespace FitnessTracker.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id");
+                    b.HasIndex("Id")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -266,9 +272,6 @@ namespace FitnessTracker.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("PostCommentId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier");
 
@@ -280,7 +283,7 @@ namespace FitnessTracker.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.HasIndex("PostCommentId");
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("PostId");
 
@@ -289,24 +292,19 @@ namespace FitnessTracker.Migrations
 
             modelBuilder.Entity("FitnessTracker.Models.PostCommentLike", b =>
                 {
-                    b.Property<Guid>("CommentId")
+                    b.Property<Guid>("PostCommentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PostCommentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("CommentId", "UserId");
-
-                    b.HasIndex("CommentId");
+                    b.HasKey("PostCommentId", "UserId");
 
                     b.HasIndex("PostCommentId");
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("CommentId", "UserId")
+                    b.HasIndex("PostCommentId", "UserId")
                         .IsUnique();
 
                     b.ToTable("PostCommentLike");
@@ -491,9 +489,6 @@ namespace FitnessTracker.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("SplitCommentId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("SplitId")
                         .HasColumnType("uniqueidentifier");
 
@@ -505,7 +500,7 @@ namespace FitnessTracker.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.HasIndex("SplitCommentId");
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("SplitId");
 
@@ -514,24 +509,19 @@ namespace FitnessTracker.Migrations
 
             modelBuilder.Entity("FitnessTracker.Models.SplitCommentLike", b =>
                 {
-                    b.Property<Guid>("CommentId")
+                    b.Property<Guid>("SplitCommentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("SplitCommentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("CommentId", "UserId");
-
-                    b.HasIndex("CommentId");
+                    b.HasKey("SplitCommentId", "UserId");
 
                     b.HasIndex("SplitCommentId");
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("CommentId", "UserId")
+                    b.HasIndex("SplitCommentId", "UserId")
                         .IsUnique();
 
                     b.ToTable("SplitCommentLikes");
@@ -564,6 +554,9 @@ namespace FitnessTracker.Migrations
 
                     b.Property<Guid>("WorkoutId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Day")
+                        .HasColumnType("int");
 
                     b.HasKey("SplitId", "WorkoutId");
 
@@ -664,6 +657,8 @@ namespace FitnessTracker.Migrations
 
                     b.HasIndex("CreatorId");
 
+                    b.HasIndex("IsPublic");
+
                     b.ToTable("Workouts");
                 });
 
@@ -686,9 +681,6 @@ namespace FitnessTracker.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("WorkoutCommentId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("WorkoutId")
                         .HasColumnType("uniqueidentifier");
 
@@ -696,7 +688,7 @@ namespace FitnessTracker.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.HasIndex("WorkoutCommentId");
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("WorkoutId");
 
@@ -745,6 +737,12 @@ namespace FitnessTracker.Migrations
 
             modelBuilder.Entity("FitnessTracker.Models.CompletedWorkout", b =>
                 {
+                    b.HasOne("FitnessTracker.Models.Split", "Split")
+                        .WithMany()
+                        .HasForeignKey("SplitId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("FitnessTracker.Models.User", null)
                         .WithMany("CompletedWorkouts")
                         .HasForeignKey("UserId")
@@ -755,6 +753,8 @@ namespace FitnessTracker.Migrations
                         .WithMany()
                         .HasForeignKey("WorkoutId")
                         .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Split");
 
                     b.Navigation("Workout");
                 });
@@ -860,7 +860,8 @@ namespace FitnessTracker.Migrations
 
                     b.HasOne("FitnessTracker.Models.PostComment", null)
                         .WithMany("Children")
-                        .HasForeignKey("PostCommentId");
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("FitnessTracker.Models.Post", null)
                         .WithMany("Comments")
@@ -875,14 +876,8 @@ namespace FitnessTracker.Migrations
                 {
                     b.HasOne("FitnessTracker.Models.PostComment", null)
                         .WithMany()
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("FitnessTracker.Models.PostComment", null)
-                        .WithMany()
                         .HasForeignKey("PostCommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("FitnessTracker.Models.User", null)
@@ -1016,7 +1011,8 @@ namespace FitnessTracker.Migrations
 
                     b.HasOne("FitnessTracker.Models.SplitComment", null)
                         .WithMany("Children")
-                        .HasForeignKey("SplitCommentId");
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("FitnessTracker.Models.Split", null)
                         .WithMany("Comments")
@@ -1031,14 +1027,8 @@ namespace FitnessTracker.Migrations
                 {
                     b.HasOne("FitnessTracker.Models.SplitComment", null)
                         .WithMany()
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("FitnessTracker.Models.SplitComment", null)
-                        .WithMany()
                         .HasForeignKey("SplitCommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("FitnessTracker.Models.User", null)
@@ -1065,17 +1055,21 @@ namespace FitnessTracker.Migrations
 
             modelBuilder.Entity("FitnessTracker.Models.SplitWorkout", b =>
                 {
-                    b.HasOne("FitnessTracker.Models.Split", null)
-                        .WithMany()
+                    b.HasOne("FitnessTracker.Models.Split", "Split")
+                        .WithMany("Workouts")
                         .HasForeignKey("SplitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FitnessTracker.Models.Workout", null)
+                    b.HasOne("FitnessTracker.Models.Workout", "Workout")
                         .WithMany()
                         .HasForeignKey("WorkoutId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Split");
+
+                    b.Navigation("Workout");
                 });
 
             modelBuilder.Entity("FitnessTracker.Models.User", b =>
@@ -1130,7 +1124,8 @@ namespace FitnessTracker.Migrations
 
                     b.HasOne("FitnessTracker.Models.WorkoutComment", null)
                         .WithMany("Children")
-                        .HasForeignKey("WorkoutCommentId");
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("FitnessTracker.Models.Workout", null)
                         .WithMany("Comments")
@@ -1184,6 +1179,8 @@ namespace FitnessTracker.Migrations
             modelBuilder.Entity("FitnessTracker.Models.Split", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Workouts");
                 });
 
             modelBuilder.Entity("FitnessTracker.Models.SplitComment", b =>

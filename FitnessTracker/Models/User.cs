@@ -11,15 +11,15 @@
 
         public string Role { get; set; } = null!;
 
-        public IEnumerable<Workout> CreatedWorkouts { get; set; } = new HashSet<Workout>();
-        public IEnumerable<CompletedWorkout> CompletedWorkouts { get; set; } = new HashSet<CompletedWorkout>();
-        public IEnumerable<Split> CreatedSplits { get; set; } = new HashSet<Split>();
+        public ICollection<Workout> CreatedWorkouts { get; set; } = [];
+        public ICollection<CompletedWorkout> CompletedWorkouts { get; set; } = [];
+        public ICollection<Split> CreatedSplits { get; set; } = [];
 
         public Guid? SplitId { get; set; }
         public Split? CurrentSplit { get; set; }
 
-        public IEnumerable<User> Following { get; set; } = new HashSet<User>();
-        public IEnumerable<User> Followers { get; set; } = new HashSet<User>();
+        public ICollection<User> Following { get; set; } = [];
+        public ICollection<User> Followers { get; set; } = [];
 
         public bool EmailConfirmed { get; set; }
     }

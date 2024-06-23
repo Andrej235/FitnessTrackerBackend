@@ -9,9 +9,9 @@
         public Guid CreatorId { get; set; }
         public User Creator { get; set; } = null!;
 
-        public IEnumerable<Workout> Workouts { get; set; } = new HashSet<Workout>();
-        public IEnumerable<User> Likes { get; set; } = new HashSet<User>();
-        public IEnumerable<User> Favorites { get; set; } = new HashSet<User>();
-        public IEnumerable<SplitComment> Comments { get; set; } = new HashSet<SplitComment>();
+        public ICollection<SplitWorkout> Workouts { get; set; } = [];
+        public ICollection<User> Likes { get; set; } = [];
+        public ICollection<User> Favorites { get; set; } = [];
+        public ICollection<SplitComment> Comments { get; set; } = [];
     }
 }

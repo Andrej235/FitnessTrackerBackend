@@ -9,7 +9,7 @@
         public Guid CreatorId { get; set; }
         public User Creator { get; set; } = null!;
 
-        public IEnumerable<User> Likes { get; set; } = new HashSet<User>();
-        public IEnumerable<PostComment> Comments { get; set; } = new HashSet<PostComment>();
+        public ICollection<User> Likes { get; set; } = [];
+        public ICollection<PostComment> Comments { get; set; } = [];
     }
 }

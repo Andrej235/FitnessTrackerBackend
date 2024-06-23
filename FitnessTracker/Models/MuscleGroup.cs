@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public string Name { get; set; } = null!;
 
-        public IEnumerable<Exercise> PrimaryInExercises { get; set; } = new HashSet<Exercise>();
-        public IEnumerable<Exercise> SecondaryInExercises { get; set; } = new HashSet<Exercise>();
+        public ICollection<Exercise> PrimaryInExercises { get; set; } = [];
+        public ICollection<Exercise> SecondaryInExercises { get; set; } = [];
     }
 }

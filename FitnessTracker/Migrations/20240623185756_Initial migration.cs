@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FitnessTracker.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Initialmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -197,9 +197,10 @@ namespace FitnessTracker.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CompletedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     WorkoutId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CompletedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    SplitId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -269,15 +270,14 @@ namespace FitnessTracker.Migrations
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    PostCommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PostComment", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PostComment_PostComment_PostCommentId",
-                        column: x => x.PostCommentId,
+                        name: "FK_PostComment_PostComment_ParentId",
+                        column: x => x.ParentId,
                         principalTable: "PostComment",
                         principalColumn: "Id");
                 });
@@ -287,23 +287,16 @@ namespace FitnessTracker.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PostCommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PostCommentLike", x => new { x.CommentId, x.UserId });
-                    table.ForeignKey(
-                        name: "FK_PostCommentLike_PostComment_CommentId",
-                        column: x => x.CommentId,
-                        principalTable: "PostComment",
-                        principalColumn: "Id");
+                    table.PrimaryKey("PK_PostCommentLike", x => new { x.PostCommentId, x.UserId });
                     table.ForeignKey(
                         name: "FK_PostCommentLike_PostComment_PostCommentId",
                         column: x => x.PostCommentId,
                         principalTable: "PostComment",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -373,12 +366,11 @@ namespace FitnessTracker.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SplitCommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SplitCommentLikes", x => new { x.CommentId, x.UserId });
+                    table.PrimaryKey("PK_SplitCommentLikes", x => new { x.SplitCommentId, x.UserId });
                 });
 
             migrationBuilder.CreateTable(
@@ -390,15 +382,14 @@ namespace FitnessTracker.Migrations
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    SplitCommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SplitComments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SplitComments_SplitComments_SplitCommentId",
-                        column: x => x.SplitCommentId,
+                        name: "FK_SplitComments_SplitComments_ParentId",
+                        column: x => x.ParentId,
                         principalTable: "SplitComments",
                         principalColumn: "Id");
                 });
@@ -508,7 +499,8 @@ namespace FitnessTracker.Migrations
                 columns: table => new
                 {
                     WorkoutId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SplitId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    SplitId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Day = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -536,8 +528,7 @@ namespace FitnessTracker.Migrations
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    WorkoutCommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -549,8 +540,8 @@ namespace FitnessTracker.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_WorkoutComments_WorkoutComments_WorkoutCommentId",
-                        column: x => x.WorkoutCommentId,
+                        name: "FK_WorkoutComments_WorkoutComments_ParentId",
+                        column: x => x.ParentId,
                         principalTable: "WorkoutComments",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -587,29 +578,27 @@ namespace FitnessTracker.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     WorkoutCommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WorkoutCommentLikes", x => new { x.CommentId, x.UserId });
+                    table.PrimaryKey("PK_WorkoutCommentLikes", x => new { x.WorkoutCommentId, x.UserId });
                     table.ForeignKey(
                         name: "FK_WorkoutCommentLikes_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_WorkoutCommentLikes_WorkoutComments_CommentId",
-                        column: x => x.CommentId,
-                        principalTable: "WorkoutComments",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_WorkoutCommentLikes_WorkoutComments_WorkoutCommentId",
                         column: x => x.WorkoutCommentId,
                         principalTable: "WorkoutComments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompletedWorkouts_SplitId",
+                table: "CompletedWorkouts",
+                column: "SplitId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CompletedWorkouts_UserId",
@@ -629,7 +618,8 @@ namespace FitnessTracker.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_EmailConfirmations_Id",
                 table: "EmailConfirmations",
-                column: "Id");
+                column: "Id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmailConfirmations_UserId",
@@ -705,9 +695,9 @@ namespace FitnessTracker.Migrations
                 column: "CreatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostComment_PostCommentId",
+                name: "IX_PostComment_ParentId",
                 table: "PostComment",
-                column: "PostCommentId");
+                column: "ParentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PostComment_PostId",
@@ -715,20 +705,15 @@ namespace FitnessTracker.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostCommentLike_CommentId",
-                table: "PostCommentLike",
-                column: "CommentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PostCommentLike_CommentId_UserId",
-                table: "PostCommentLike",
-                columns: new[] { "CommentId", "UserId" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PostCommentLike_PostCommentId",
                 table: "PostCommentLike",
                 column: "PostCommentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PostCommentLike_PostCommentId_UserId",
+                table: "PostCommentLike",
+                columns: new[] { "PostCommentId", "UserId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_PostCommentLike_UserId",
@@ -812,20 +797,15 @@ namespace FitnessTracker.Migrations
                 column: "WorkoutId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SplitCommentLikes_CommentId",
-                table: "SplitCommentLikes",
-                column: "CommentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SplitCommentLikes_CommentId_UserId",
-                table: "SplitCommentLikes",
-                columns: new[] { "CommentId", "UserId" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_SplitCommentLikes_SplitCommentId",
                 table: "SplitCommentLikes",
                 column: "SplitCommentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SplitCommentLikes_SplitCommentId_UserId",
+                table: "SplitCommentLikes",
+                columns: new[] { "SplitCommentId", "UserId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SplitCommentLikes_UserId",
@@ -838,9 +818,9 @@ namespace FitnessTracker.Migrations
                 column: "CreatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SplitComments_SplitCommentId",
+                name: "IX_SplitComments_ParentId",
                 table: "SplitComments",
-                column: "SplitCommentId");
+                column: "ParentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SplitComments_SplitId",
@@ -905,17 +885,6 @@ namespace FitnessTracker.Migrations
                 column: "SplitId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WorkoutCommentLikes_CommentId",
-                table: "WorkoutCommentLikes",
-                column: "CommentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WorkoutCommentLikes_CommentId_UserId",
-                table: "WorkoutCommentLikes",
-                columns: new[] { "CommentId", "UserId" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_WorkoutCommentLikes_UserId",
                 table: "WorkoutCommentLikes",
                 column: "UserId");
@@ -926,14 +895,20 @@ namespace FitnessTracker.Migrations
                 column: "WorkoutCommentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_WorkoutCommentLikes_WorkoutCommentId_UserId",
+                table: "WorkoutCommentLikes",
+                columns: new[] { "WorkoutCommentId", "UserId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_WorkoutComments_CreatorId",
                 table: "WorkoutComments",
                 column: "CreatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WorkoutComments_WorkoutCommentId",
+                name: "IX_WorkoutComments_ParentId",
                 table: "WorkoutComments",
-                column: "WorkoutCommentId");
+                column: "ParentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkoutComments_WorkoutId",
@@ -960,6 +935,18 @@ namespace FitnessTracker.Migrations
                 name: "IX_Workouts_CreatorId",
                 table: "Workouts",
                 column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Workouts_IsPublic",
+                table: "Workouts",
+                column: "IsPublic");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_CompletedWorkouts_Splits_SplitId",
+                table: "CompletedWorkouts",
+                column: "SplitId",
+                principalTable: "Splits",
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_CompletedWorkouts_Users_UserId",
@@ -1084,19 +1071,11 @@ namespace FitnessTracker.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_SplitCommentLikes_SplitComments_CommentId",
-                table: "SplitCommentLikes",
-                column: "CommentId",
-                principalTable: "SplitComments",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
                 name: "FK_SplitCommentLikes_SplitComments_SplitCommentId",
                 table: "SplitCommentLikes",
                 column: "SplitCommentId",
                 principalTable: "SplitComments",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_SplitCommentLikes_Users_UserId",
@@ -1149,8 +1128,8 @@ namespace FitnessTracker.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Splits_Users_CreatorId",
-                table: "Splits");
+                name: "FK_Users_Splits_SplitId",
+                table: "Users");
 
             migrationBuilder.DropTable(
                 name: "CompletedWorkouts");
@@ -1240,10 +1219,10 @@ namespace FitnessTracker.Migrations
                 name: "Workouts");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Splits");
 
             migrationBuilder.DropTable(
-                name: "Splits");
+                name: "Users");
         }
     }
 }

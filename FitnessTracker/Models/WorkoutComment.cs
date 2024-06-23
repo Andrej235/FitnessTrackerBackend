@@ -11,7 +11,7 @@
         public DateTime CreatedAt { get; set; }
 
         public Guid? ParentId { get; set; }
-        public IEnumerable<WorkoutComment> Children { get; set; } = new HashSet<WorkoutComment>();
-        public IEnumerable<User> Likes { get; set; } = new HashSet<User>();
+        public ICollection<WorkoutComment> Children { get; set; } = [];
+        public ICollection<User> Likes { get; set; } = [];
     }
 }
