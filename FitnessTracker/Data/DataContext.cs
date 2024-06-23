@@ -246,11 +246,11 @@ namespace FitnessTracker.Data
                 .WithMany()
                 .UsingEntity<PostCommentLike>(j =>
                 {
-                    j.HasOne<PostComment>().WithMany().HasForeignKey(x => x.CommentId).OnDelete(DeleteBehavior.NoAction);
+                    j.HasOne<PostComment>().WithMany().HasForeignKey(x => x.PostCommentId).OnDelete(DeleteBehavior.NoAction);
                     j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
-                    j.HasKey(x => new { x.CommentId, x.UserId });
-                    j.HasIndex(x => x.CommentId);
-                    j.HasIndex(x => new { x.CommentId, x.UserId }).IsUnique();
+                    j.HasKey(x => new { x.PostCommentId, x.UserId });
+                    j.HasIndex(x => x.PostCommentId);
+                    j.HasIndex(x => new { x.PostCommentId, x.UserId }).IsUnique();
                 });
             #endregion
 
@@ -346,11 +346,11 @@ namespace FitnessTracker.Data
                 .WithMany()
                 .UsingEntity<SplitCommentLike>(j =>
                 {
-                    j.HasOne<SplitComment>().WithMany().HasForeignKey(x => x.CommentId).OnDelete(DeleteBehavior.NoAction);
+                    j.HasOne<SplitComment>().WithMany().HasForeignKey(x => x.SplitCommentId).OnDelete(DeleteBehavior.NoAction);
                     j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
-                    j.HasKey(x => new { x.CommentId, x.UserId });
-                    j.HasIndex(x => x.CommentId);
-                    j.HasIndex(x => new { x.CommentId, x.UserId }).IsUnique();
+                    j.HasKey(x => new { x.SplitCommentId, x.UserId });
+                    j.HasIndex(x => x.SplitCommentId);
+                    j.HasIndex(x => new { x.SplitCommentId, x.UserId }).IsUnique();
                 });
             #endregion
 
@@ -439,11 +439,11 @@ namespace FitnessTracker.Data
                 .WithMany()
                 .UsingEntity<WorkoutCommentLike>(j =>
                 {
-                    j.HasOne<WorkoutComment>().WithMany().HasForeignKey(x => x.CommentId).OnDelete(DeleteBehavior.NoAction);
+                    j.HasOne<WorkoutComment>().WithMany().HasForeignKey(x => x.WorkoutCommentId).OnDelete(DeleteBehavior.NoAction);
                     j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
-                    j.HasKey(x => new { x.CommentId, x.UserId });
-                    j.HasIndex(x => x.CommentId);
-                    j.HasIndex(x => new { x.CommentId, x.UserId }).IsUnique();
+                    j.HasKey(x => new { x.WorkoutCommentId, x.UserId });
+                    j.HasIndex(x => x.WorkoutCommentId);
+                    j.HasIndex(x => new { x.WorkoutCommentId, x.UserId }).IsUnique();
                 });
             #endregion
         }

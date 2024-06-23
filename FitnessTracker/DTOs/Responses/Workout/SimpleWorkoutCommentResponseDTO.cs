@@ -9,5 +9,6 @@ namespace FitnessTracker.DTOs.Responses.Workout
         public SimpleUserResponseDTO Creator { get; set; } = null!;
         public DateTime CreatedAt { get; set; }
         public int LikeCount { get; set; }
+        public bool IsLiked { get; set; }
     }
 }

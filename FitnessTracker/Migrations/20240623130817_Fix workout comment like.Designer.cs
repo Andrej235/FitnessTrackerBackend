@@ -4,6 +4,7 @@ using FitnessTracker.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessTracker.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240623130817_Fix workout comment like")]
+    partial class Fixworkoutcommentlike
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -286,19 +289,24 @@ namespace FitnessTracker.Migrations
 
             modelBuilder.Entity("FitnessTracker.Models.PostCommentLike", b =>
                 {
-                    b.Property<Guid>("PostCommentId")
+                    b.Property<Guid>("CommentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("PostCommentId", "UserId");
+                    b.Property<Guid>("PostCommentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CommentId", "UserId");
+
+                    b.HasIndex("CommentId");
 
                     b.HasIndex("PostCommentId");
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("PostCommentId", "UserId")
+                    b.HasIndex("CommentId", "UserId")
                         .IsUnique();
 
                     b.ToTable("PostCommentLike");
@@ -506,19 +514,24 @@ namespace FitnessTracker.Migrations
 
             modelBuilder.Entity("FitnessTracker.Models.SplitCommentLike", b =>
                 {
-                    b.Property<Guid>("SplitCommentId")
+                    b.Property<Guid>("CommentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("SplitCommentId", "UserId");
+                    b.Property<Guid>("SplitCommentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CommentId", "UserId");
+
+                    b.HasIndex("CommentId");
 
                     b.HasIndex("SplitCommentId");
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("SplitCommentId", "UserId")
+                    b.HasIndex("CommentId", "UserId")
                         .IsUnique();
 
                     b.ToTable("SplitCommentLikes");
@@ -862,8 +875,14 @@ namespace FitnessTracker.Migrations
                 {
                     b.HasOne("FitnessTracker.Models.PostComment", null)
                         .WithMany()
-                        .HasForeignKey("PostCommentId")
+                        .HasForeignKey("CommentId")
                         .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("FitnessTracker.Models.PostComment", null)
+                        .WithMany()
+                        .HasForeignKey("PostCommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FitnessTracker.Models.User", null)
@@ -1012,8 +1031,14 @@ namespace FitnessTracker.Migrations
                 {
                     b.HasOne("FitnessTracker.Models.SplitComment", null)
                         .WithMany()
-                        .HasForeignKey("SplitCommentId")
+                        .HasForeignKey("CommentId")
                         .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("FitnessTracker.Models.SplitComment", null)
+                        .WithMany()
+                        .HasForeignKey("SplitCommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FitnessTracker.Models.User", null)

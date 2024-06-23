@@ -190,6 +190,12 @@ namespace FitnessTracker
             builder.Services.AddScoped<IResponseMapper<WorkoutComment, SimpleWorkoutCommentResponseDTO>, SimpleWorkoutCommentResponseMapper>();
             #endregion
 
+            #region Workout comment like
+            builder.Services.AddScoped<ICreateService<WorkoutCommentLike>, CreateService<WorkoutCommentLike>>();
+            builder.Services.AddScoped<IReadSingleService<WorkoutCommentLike>, ReadExpressionService<WorkoutCommentLike>>();
+            builder.Services.AddScoped<IDeleteService<WorkoutCommentLike>, DeleteService<WorkoutCommentLike>>();
+            #endregion
+
             #region Workout favorite
             builder.Services.AddScoped<ICreateService<FavoriteWorkout>, CreateService<FavoriteWorkout>>();
             builder.Services.AddScoped<IReadSingleService<FavoriteWorkout>, ReadExpressionService<FavoriteWorkout>>();

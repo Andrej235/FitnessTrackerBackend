@@ -18,6 +18,7 @@ namespace FitnessTracker.Controllers
     [Route("api/workout")]
     public class WorkoutController(ICreateService<Workout> createService,
                                    ICreateService<WorkoutComment> commentCreateService,
+                                   ICreateService<WorkoutCommentLike> commentLikeCreateService,
                                    IReadSingleService<Workout> readSingleService,
                                    IReadRangeService<Workout> readRangeService,
                                    IReadSingleService<WorkoutComment> commentReadSingleService,
@@ -25,6 +26,7 @@ namespace FitnessTracker.Controllers
                                    IUpdateService<Workout> updateService,
                                    IDeleteService<Workout> deleteService,
                                    IDeleteService<WorkoutComment> commentDeleteService,
+                                   IDeleteService<WorkoutCommentLike> commentLikeDeleteService,
                                    IDeleteRangeService<WorkoutComment> commentDeleteRangeService,
                                    ICreateService<WorkoutLike> likeCreateService,
                                    IDeleteService<WorkoutLike> likeDeleteService,
@@ -38,6 +40,7 @@ namespace FitnessTracker.Controllers
     {
         private readonly ICreateService<Workout> createService = createService;
         private readonly ICreateService<WorkoutComment> commentCreateService = commentCreateService;
+        private readonly ICreateService<WorkoutCommentLike> commentLikeCreateService = commentLikeCreateService;
         private readonly IReadSingleService<Workout> readSingleService = readSingleService;
         private readonly IReadRangeService<Workout> readRangeService = readRangeService;
         private readonly IReadSingleService<WorkoutComment> commentReadSingleService = commentReadSingleService;
@@ -45,6 +48,7 @@ namespace FitnessTracker.Controllers
         private readonly IUpdateService<Workout> updateService = updateService;
         private readonly IDeleteService<Workout> deleteService = deleteService;
         private readonly IDeleteService<WorkoutComment> commentDeleteService = commentDeleteService;
+        private readonly IDeleteService<WorkoutCommentLike> commentLikeDeleteService = commentLikeDeleteService;
         private readonly IDeleteRangeService<WorkoutComment> commentDeleteRangeService = commentDeleteRangeService;
         private readonly ICreateService<WorkoutLike> likeCreateService = likeCreateService;
         private readonly IDeleteService<WorkoutLike> likeDeleteService = likeDeleteService;
@@ -303,20 +307,88 @@ namespace FitnessTracker.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpGet("{workoutId:guid}/comment")]
         public async Task<IActionResult> GetComments(Guid workoutId)
         {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
             var comments = await commentReadRangeService.Get(x => x.WorkoutId == workoutId && x.ParentId == null, 0, 10, "creator,likes");
-            return Ok(comments.Select(simpleCommentResponseMapper.Map));
+            var mapped = comments.Select(x =>
+            {
+                var mapped = simpleCommentResponseMapper.Map(x);
+                mapped.IsLiked = x.Likes.Any(x => x.Id == userId);
+                return mapped;
+            });
+            return Ok(mapped);
         }
 
-        [Authorize]
+        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpGet("{workoutId:guid}/comment/{commentId:guid}/reply")]
         public async Task<IActionResult> GetReplies(Guid workoutId, Guid commentId)
         {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
             var comments = await commentReadRangeService.Get(x => x.WorkoutId == workoutId && x.ParentId == commentId, 0, 10, "creator,likes");
-            return Ok(comments.Select(simpleCommentResponseMapper.Map));
+            var mapped = comments.Select(x =>
+            {
+                var mapped = simpleCommentResponseMapper.Map(x);
+                mapped.IsLiked = x.Likes.Any(x => x.Id == userId);
+                return mapped;
+            });
+            return Ok(mapped);
+        }
+
+        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
+        [HttpPost("comment/{id:guid}/like")]
+        public async Task<IActionResult> CreateCommentLike(Guid id) 
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            try
+            {
+                await commentLikeCreateService.Add(new WorkoutCommentLike
+                {
+                    UserId = userId,
+                    WorkoutCommentId = id
+                });
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return BadRequest("Failed to like");
+            }
+        }
+
+        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
+        [HttpDelete("comment/{id:guid}/like")]
+        public async Task<IActionResult> DeleteCommentLike(Guid id)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            try
+            {
+                await commentLikeDeleteService.Delete(x => x.UserId == userId && x.WorkoutCommentId == id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return BadRequest("Failed to remove like");
+            }
         }
     }
 }
