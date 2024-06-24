@@ -16,7 +16,7 @@ namespace FitnessTracker.Services.Mapping.Response.WorkoutMappers
                 Text = from.Text,
                 CreatedAt = from.CreatedAt,
                 Creator = userResponseMapper.Map(from.Creator),
-                LikeCount = from.Likes.Count(),
+                LikeCount = from.Likes.Count,
             };
         }
     }

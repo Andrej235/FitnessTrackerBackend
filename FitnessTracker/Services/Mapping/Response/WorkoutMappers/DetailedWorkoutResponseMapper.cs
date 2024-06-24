@@ -20,9 +20,9 @@ namespace FitnessTracker.Services.Mapping.Response.WorkoutMappers
                 Description = from.Description,
                 Creator = userResponseMapper.Map(from.Creator),
                 Sets = from.Sets.Select(setResponseMapper.Map),
-                CommentCount = from.Comments.Count(),
-                FavoriteCount = from.Favorites.Count(),
-                LikeCount = from.Likes.Count(),
+                CommentCount = from.Comments.Count,
+                FavoriteCount = from.Favorites.Count,
+                LikeCount = from.Likes.Count,
             };
         }
     }
