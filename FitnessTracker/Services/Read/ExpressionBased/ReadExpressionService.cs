@@ -38,7 +38,7 @@ namespace FitnessTracker.Services.Read.ExpressionBased
             ParameterExpression parameter = Expression.Parameter(typeof(T), "x");
             var navigationProperties = typeof(T).GetProperties().Where(x =>
                 (x.PropertyType.IsClass && x.PropertyType != typeof(string))
-                || (x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>)));
+                || (x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>)));
 
             if (include.Contains("all"))
             {

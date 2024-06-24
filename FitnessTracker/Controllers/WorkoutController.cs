@@ -22,11 +22,8 @@ namespace FitnessTracker.Controllers
                                    ICreateService<WorkoutLike> likeCreateService,
                                    ICreateService<FavoriteWorkout> favoriteCreateService,
                                    IReadSingleService<Workout> readSingleService,
-                                   IReadSingleService<WorkoutComment> commentReadSingleService,
                                    IReadRangeService<Workout> readRangeService,
                                    IReadRangeService<WorkoutComment> commentReadRangeService,
-                                   IUpdateService<Workout> updateService,
-                                   IDeleteService<Workout> deleteService,
                                    IDeleteService<WorkoutComment> commentDeleteService,
                                    IDeleteService<WorkoutCommentLike> commentLikeDeleteService,
                                    IDeleteService<WorkoutLike> likeDeleteService,
@@ -44,11 +41,8 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<WorkoutLike> likeCreateService = likeCreateService;
         private readonly ICreateService<FavoriteWorkout> favoriteCreateService = favoriteCreateService;
         private readonly IReadSingleService<Workout> readSingleService = readSingleService;
-        private readonly IReadSingleService<WorkoutComment> commentReadSingleService = commentReadSingleService;
         private readonly IReadRangeService<Workout> readRangeService = readRangeService;
         private readonly IReadRangeService<WorkoutComment> commentReadRangeService = commentReadRangeService;
-        private readonly IUpdateService<Workout> updateService = updateService;
-        private readonly IDeleteService<Workout> deleteService = deleteService;
         private readonly IDeleteService<WorkoutComment> commentDeleteService = commentDeleteService;
         private readonly IDeleteService<WorkoutCommentLike> commentLikeDeleteService = commentLikeDeleteService;
         private readonly IDeleteService<WorkoutLike> likeDeleteService = likeDeleteService;
@@ -106,15 +100,13 @@ namespace FitnessTracker.Controllers
             if (workout is null)
                 return NotFound();
 
-            if (workout.IsPublic || workout.CreatorId == userId)
-            {
-                var mapped = detailedResponseMapper.Map(workout);
-                mapped.IsLiked = workout.Likes.Any(x => x.Id == userId);
-                mapped.IsFavorited = workout.Favorites.Any(x => x.Id == userId);
-                return Ok(mapped);
-            }
+            if (!workout.IsPublic && workout.CreatorId != userId)
+                return Unauthorized();
 
-            return Unauthorized();
+            var mapped = detailedResponseMapper.Map(workout);
+            mapped.IsLiked = workout.Likes.Any(x => x.Id == userId);
+            mapped.IsFavorited = workout.Favorites.Any(x => x.Id == userId);
+            return Ok(mapped);
         }
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]

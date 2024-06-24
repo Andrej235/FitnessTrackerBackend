@@ -63,6 +63,7 @@ namespace FitnessTracker.Controllers
             return Ok(exercises.Select(detailedResponseMapper.Map));
         }
 
+        [Authorize(Roles = Role.Admin)]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateExerciseRequestDTO request)
         {
@@ -98,6 +99,7 @@ namespace FitnessTracker.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = Role.Admin)]
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateExerciseRequestDTO request)
         {
@@ -145,6 +147,7 @@ namespace FitnessTracker.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = Role.Admin)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

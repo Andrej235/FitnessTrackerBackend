@@ -5,6 +5,8 @@ using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read.ExpressionBased;
+using FitnessTracker.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessTracker.Controllers
@@ -23,6 +25,7 @@ namespace FitnessTracker.Controllers
         private readonly IRequestMapper<CreateMuscleRequestDTO, Muscle> requestMapper = requestMapper;
         private readonly IResponseMapper<Muscle, SimpleMuscleResponseDTO> responseMapper = responseMapper;
 
+        [Authorize(Roles = Role.Admin)]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateMuscleRequestDTO request)
         {
@@ -30,6 +33,7 @@ namespace FitnessTracker.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = Role.Admin)]
         [HttpPost("range")]
         public async Task<IActionResult> Create([FromBody] IEnumerable<CreateMuscleRequestDTO> request)
         {

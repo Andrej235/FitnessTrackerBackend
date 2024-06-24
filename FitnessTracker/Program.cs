@@ -348,8 +348,8 @@ namespace FitnessTracker
 
             #region Split
             builder.Services.AddScoped<ICreateService<Split>, CreateService<Split>>();
-            builder.Services.AddScoped<IReadRangeService<Split>, ReadExpressionService<Split>>();
-            builder.Services.AddScoped<IReadSingleService<Split>, ReadExpressionService<Split>>();
+            builder.Services.AddScoped<IReadRangeService<Split>, SplitReadExpressionService>();
+            builder.Services.AddScoped<IReadSingleService<Split>, SplitReadExpressionService>();
             builder.Services.AddScoped<IRequestMapper<CreateSplitRequestDTO, Split>, CreateSplitRequestMapper>();
             builder.Services.AddScoped<IResponseMapper<Split, SimpleSplitResponseDTO>, SimpleSplitResponseMapper>();
             builder.Services.AddScoped<IResponseMapper<Split, DetailedSplitResponseDTO>, DetailedSplitResponseMapper>();

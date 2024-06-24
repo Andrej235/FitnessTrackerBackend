@@ -12,6 +12,6 @@
         public ICollection<Muscle> PrimaryMuscles { get; set; } = [];
         public ICollection<Muscle> SecondaryMuscles { get; set; } = [];
         public ICollection<Equipment> Equipment { get; set; } = [];
-        public ICollection<User> Favorites { get; set; } = [];
+        public ICollection<User> Favorites { get; set; } = []; //TODO: Implement this
     }
 }
