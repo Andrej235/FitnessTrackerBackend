@@ -15,7 +15,7 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out var userId))
                 return Unauthorized();
 
-            var user = await readSingleService.Get(x => x.Id == userId, "all");
+            var user = await readSingleService.Get(x => x.Id == userId, "followers,following,completedworkouts");
             if (user is null)
                 return Unauthorized();
 

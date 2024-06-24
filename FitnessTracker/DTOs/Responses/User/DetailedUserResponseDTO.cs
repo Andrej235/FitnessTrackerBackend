@@ -1,6 +1,6 @@
 ﻿namespace FitnessTracker.DTOs.Responses.User
 {
-    public class DetailedUserResponseDTO : SimpleUserResponseDTO
+    public class DetailedUserResponseDTO : BaseUserResponseDTO
     {
         public int Followers { get; set; }
         public int Following { get; set; }

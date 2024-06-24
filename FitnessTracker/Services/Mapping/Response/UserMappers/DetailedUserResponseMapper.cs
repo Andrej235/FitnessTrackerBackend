@@ -13,7 +13,7 @@ namespace FitnessTracker.Services.Mapping.Response.UserMappers
                 Image = from.ProfilePic,
                 Followers = from.Followers.Count,
                 Following = from.Following.Count,
-                CompletedWorkouts = from.CompletedWorkouts.Count
+                CompletedWorkouts = from.CompletedWorkouts.Count,
             };
         }
     }
