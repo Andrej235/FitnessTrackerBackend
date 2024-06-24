@@ -176,7 +176,7 @@ namespace FitnessTracker.Controllers
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPost("{id:guid}/favorite")]
-        public async Task<IActionResult> Createfavorite(Guid id)
+        public async Task<IActionResult> CreateFavorite(Guid id)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
@@ -201,7 +201,7 @@ namespace FitnessTracker.Controllers
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpDelete("{id:guid}/favorite")]
-        public async Task<IActionResult> Deletefavorite(Guid id)
+        public async Task<IActionResult> DeleteFavorite(Guid id)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString

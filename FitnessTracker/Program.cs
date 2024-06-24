@@ -360,6 +360,35 @@ namespace FitnessTracker
             builder.Services.AddScoped<IResponseMapper<SplitWorkout, SimpleSplitWorkoutResponseDTO>, SimpleSplitWorkoutResponseMapper>();
             #endregion
 
+            #region Split like
+            builder.Services.AddScoped<ICreateService<SplitLike>, CreateService<SplitLike>>();
+            builder.Services.AddScoped<IReadSingleService<SplitLike>, ReadExpressionService<SplitLike>>();
+            builder.Services.AddScoped<IDeleteService<SplitLike>, DeleteService<SplitLike>>();
+            #endregion
+
+            #region Split comment
+            builder.Services.AddScoped<ICreateService<SplitComment>, CreateService<SplitComment>>();
+            builder.Services.AddScoped<IReadSingleService<SplitComment>, ReadExpressionService<SplitComment>>();
+            builder.Services.AddScoped<IReadRangeService<SplitComment>, ReadExpressionService<SplitComment>>();
+            builder.Services.AddScoped<IDeleteService<SplitComment>, DeleteService<SplitComment>>();
+            builder.Services.AddScoped<IDeleteRangeService<SplitComment>, DeleteRangeService<SplitComment>>();
+            builder.Services.AddScoped<IRequestMapper<CreateSplitCommentRequestDTO, SplitComment>, CreateSplitCommentRequestMapper>();
+            builder.Services.AddScoped<IResponseMapper<SplitComment, SimpleSplitCommentResponseDTO>, SimpleSplitCommentResponseMapper>();
+            #endregion
+
+            #region Split comment like
+            builder.Services.AddScoped<ICreateService<SplitCommentLike>, CreateService<SplitCommentLike>>();
+            builder.Services.AddScoped<IReadSingleService<SplitCommentLike>, ReadExpressionService<SplitCommentLike>>();
+            builder.Services.AddScoped<IDeleteService<SplitCommentLike>, DeleteService<SplitCommentLike>>();
+            #endregion
+
+            #region Split favorite
+            builder.Services.AddScoped<ICreateService<FavoriteSplit>, CreateService<FavoriteSplit>>();
+            builder.Services.AddScoped<IReadSingleService<FavoriteSplit>, ReadExpressionService<FavoriteSplit>>();
+            builder.Services.AddScoped<IDeleteService<FavoriteSplit>, DeleteService<FavoriteSplit>>();
+            #endregion
+
+
             var app = builder.Build();
 
             #region Middleware

@@ -10,7 +10,7 @@ namespace FitnessTracker.Services.Mapping.Request.WorkoutMappers
             return new()
             {
                 Text = from.Comment,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
             };
         }
     }

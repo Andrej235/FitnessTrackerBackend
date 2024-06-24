@@ -1,7 +1,9 @@
 ﻿using FitnessTracker.DTOs.Requests.Split;
+using FitnessTracker.DTOs.Requests.Workout;
 using FitnessTracker.DTOs.Responses.Split;
 using FitnessTracker.Models;
 using FitnessTracker.Services.Create;
+using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read.ExpressionBased;
@@ -15,18 +17,42 @@ namespace FitnessTracker.Controllers
     [ApiController]
     [Route("api/split")]
     public class SplitController(ICreateService<Split> createService,
+                                 ICreateService<SplitComment> commentCreateService,
+                                 ICreateService<SplitCommentLike> commentLikeCreateService,
+                                 ICreateService<SplitLike> likeCreateService,
+                                 ICreateService<FavoriteSplit> favoriteCreateService,
                                  IReadSingleService<Split> readSingleService,
                                  IReadRangeService<Split> readRangeService,
+                                 IReadRangeService<SplitComment> commentReadRangeService,
+                                 IDeleteService<SplitComment> commentDeleteService,
+                                 IDeleteService<SplitCommentLike> commentLikeDeleteService,
+                                 IDeleteService<SplitLike> likeDeleteService,
+                                 IDeleteService<FavoriteSplit> favoriteDeleteService,
+                                 IDeleteRangeService<SplitComment> commentDeleteRangeService,
                                  IRequestMapper<CreateSplitRequestDTO, Split> createRequestMapper,
+                                 IRequestMapper<CreateSplitCommentRequestDTO, SplitComment> createCommentRequestMapper,
                                  IResponseMapper<Split, SimpleSplitResponseDTO> simpleResponseMapper,
-                                 IResponseMapper<Split, DetailedSplitResponseDTO> detailedResponseMapper) : ControllerBase
+                                 IResponseMapper<Split, DetailedSplitResponseDTO> detailedResponseMapper,
+                                 IResponseMapper<SplitComment, SimpleSplitCommentResponseDTO> simpleCommentResponseMapper) : ControllerBase
     {
         private readonly ICreateService<Split> createService = createService;
+        private readonly ICreateService<SplitComment> commentCreateService = commentCreateService;
+        private readonly ICreateService<SplitCommentLike> commentLikeCreateService = commentLikeCreateService;
+        private readonly ICreateService<SplitLike> likeCreateService = likeCreateService;
+        private readonly ICreateService<FavoriteSplit> favoriteCreateService = favoriteCreateService;
         private readonly IReadSingleService<Split> readSingleService = readSingleService;
         private readonly IReadRangeService<Split> readRangeService = readRangeService;
+        private readonly IReadRangeService<SplitComment> commentReadRangeService = commentReadRangeService;
+        private readonly IDeleteService<SplitComment> commentDeleteService = commentDeleteService;
+        private readonly IDeleteService<SplitCommentLike> commentLikeDeleteService = commentLikeDeleteService;
+        private readonly IDeleteService<SplitLike> likeDeleteService = likeDeleteService;
+        private readonly IDeleteService<FavoriteSplit> favoriteDeleteService = favoriteDeleteService;
+        private readonly IDeleteRangeService<SplitComment> commentDeleteRangeService = commentDeleteRangeService;
         private readonly IRequestMapper<CreateSplitRequestDTO, Split> createRequestMapper = createRequestMapper;
+        private readonly IRequestMapper<CreateSplitCommentRequestDTO, SplitComment> createCommentRequestMapper = createCommentRequestMapper;
         private readonly IResponseMapper<Split, SimpleSplitResponseDTO> simpleResponseMapper = simpleResponseMapper;
         private readonly IResponseMapper<Split, DetailedSplitResponseDTO> detailedResponseMapper = detailedResponseMapper;
+        private readonly IResponseMapper<SplitComment, SimpleSplitCommentResponseDTO> simpleCommentResponseMapper = simpleCommentResponseMapper;
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPost]
@@ -87,5 +113,99 @@ namespace FitnessTracker.Controllers
             mapped.IsFavorited = workout.Favorites.Any(x => x.Id == userId);
             return Ok(mapped);
         }
+
+        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
+        [HttpPost("{id:guid}/like")]
+        public async Task<IActionResult> CreateLike(Guid id)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            try
+            {
+                await likeCreateService.Add(new()
+                {
+                    UserId = userId,
+                    SplitId = id
+                });
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return BadRequest("Failed to like");
+            }
+        }
+
+        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
+        [HttpDelete("{id:guid}/like")]
+        public async Task<IActionResult> DeleteLike(Guid id)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            try
+            {
+                await likeDeleteService.Delete(x => x.UserId == userId && x.SplitId == id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return BadRequest("Failed to remove like");
+            }
+        }
+
+        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
+        [HttpPost("{id:guid}/favorite")]
+        public async Task<IActionResult> CreateFavorite(Guid id)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            try
+            {
+                await favoriteCreateService.Add(new()
+                {
+                    UserId = userId,
+                    SplitId = id
+                });
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return BadRequest("Failed to favorite");
+            }
+        }
+
+        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
+        [HttpDelete("{id:guid}/favorite")]
+        public async Task<IActionResult> DeleteFavorite(Guid id)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            try
+            {
+                await favoriteDeleteService.Delete(x => x.UserId == userId && x.SplitId == id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return BadRequest("Failed to remove favorite");
+            }
+        }
+
     }
 }
