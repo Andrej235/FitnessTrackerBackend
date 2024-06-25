@@ -21,6 +21,7 @@ namespace FitnessTracker.Services.Mapping.Response.SplitMappers
                 CommentCount = from.Comments.Count,
                 Creator = userResponseMapper.Map(from.Creator),
                 Workouts = from.Workouts.Select(workoutResponseMapper.Map),
+                IsPublic = from.IsPublic
             };
         }
     }

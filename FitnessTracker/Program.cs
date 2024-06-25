@@ -146,8 +146,8 @@ namespace FitnessTracker
 
             #region User
             builder.Services.AddScoped<ICreateService<User>, UserCreateService>();
-            builder.Services.AddScoped<IReadSingleService<User>, ReadExpressionService<User>>();
-            builder.Services.AddScoped<IReadRangeService<User>, ReadExpressionService<User>>();
+            builder.Services.AddScoped<IReadSingleService<User>, UserReadExpressionService>();
+            builder.Services.AddScoped<IReadRangeService<User>, UserReadExpressionService>();
             builder.Services.AddScoped<IUpdateService<User>, UpdateService<User>>();
             builder.Services.AddScoped<IRequestMapper<RegisterUserRequestDTO, User>, RegisterUserRequestMapper>();
             builder.Services.AddScoped<IResponseMapper<User, SimpleUserResponseDTO>, SimpleUserResponseMapper>();
@@ -353,6 +353,7 @@ namespace FitnessTracker
             builder.Services.AddScoped<IRequestMapper<CreateSplitRequestDTO, Split>, CreateSplitRequestMapper>();
             builder.Services.AddScoped<IResponseMapper<Split, SimpleSplitResponseDTO>, SimpleSplitResponseMapper>();
             builder.Services.AddScoped<IResponseMapper<Split, DetailedSplitResponseDTO>, DetailedSplitResponseMapper>();
+            builder.Services.AddScoped<IResponseMapper<Split, DetailedUserSplitResponseDTO>, DetailedUserSplitResponseMapper>();
             #endregion
 
             #region Split workout

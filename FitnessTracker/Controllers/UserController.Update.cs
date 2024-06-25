@@ -9,7 +9,7 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
-        [HttpPost("changepassword")]
+        [HttpPatch("changepassword")]
         public async Task<IActionResult> ChangePassword([FromBody] UpdatePasswordUserRequestDTO request)
         {
             try
@@ -39,6 +39,32 @@ namespace FitnessTracker.Controllers
             {
                 ex.LogError();
                 return BadRequest(ex.GetErrorMessage());
+            }
+        }
+
+        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
+        [HttpPatch("split")]
+        public async Task<IActionResult> ChangeSplit([FromBody] UpdateSplitUserRequestDTO request)
+        {
+            try
+            {
+                if (User.Identity is not ClaimsIdentity claimsIdentity
+                    || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                    || !Guid.TryParse(userIdString, out var userId))
+                    return Unauthorized();
+
+                var user = await readSingleService.Get(x => x.Id == userId, "none");
+                if (user is null)
+                    return Unauthorized();
+
+                user.SplitId = request.SplitId;
+                await updateService.Update(user);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return BadRequest("Failed to update split");
             }
         }
     }

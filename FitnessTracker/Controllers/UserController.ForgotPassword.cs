@@ -9,7 +9,7 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
-        [HttpGet("forgotpassword")]
+        [HttpPost("forgotpassword")]
         public async Task<IActionResult> SendForgotPasswordEmail()
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -26,7 +26,7 @@ namespace FitnessTracker.Controllers
         }
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
-        [HttpGet("forgotpassword/{code:guid}")]
+        [HttpPatch("forgotpassword/{code:guid}")]
         public async Task<IActionResult> ConfirmForgotPasswordEmail(Guid code, [FromBody] ResetPasswordUserRequestDTO request)
         {
             try

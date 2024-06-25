@@ -53,7 +53,7 @@ namespace FitnessTracker.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "AllowExpired")]
-        [HttpGet("refresh")]
+        [HttpPost("refresh")]
         public async Task<IActionResult> Refresh()
         {
             try

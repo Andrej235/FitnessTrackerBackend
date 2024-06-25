@@ -33,7 +33,7 @@ namespace FitnessTracker.Controllers
         }
 
         [Authorize(Roles = Role.Unverified)]
-        [HttpPost("confirm/{code:guid}")]
+        [HttpPatch("confirmemail/{code:guid}")]
         public async Task<IActionResult> ConfirmEmail(Guid code)
         {
             try
