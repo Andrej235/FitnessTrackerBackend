@@ -18,27 +18,31 @@ namespace FitnessTracker.Controllers
 {
     [Route("api/user")]
     [ApiController]
-    public partial class UserController(IRequestMapper<RegisterUserRequestDTO, User> registrationMapper,
-                                        IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper,
-                                        ICreateService<User> createService,
+    public partial class UserController(ICreateService<User> createService,
+                                        ICreateService<CompletedWorkout> completedWorkoutcreateService,
                                         IReadSingleService<User> readSingleService,
+                                        IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
+                                        IUpdateService<User> updateService,
                                         ITokenManager tokenManager,
                                         IEmailConfirmationSenderService emailConfirmationSender,
                                         IEmailConfirmationService emailConfirmationService,
                                         IResetPasswordEmailSenderService passwordResetEmailSender,
                                         IResetPasswordService passwordResetEmailService,
-                                        IUpdateService<User> updateService) : ControllerBase
+                                        IRequestMapper<RegisterUserRequestDTO, User> registrationMapper,
+                                        IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper) : ControllerBase
     {
-        private readonly IRequestMapper<RegisterUserRequestDTO, User> registrationMapper = registrationMapper;
-        private readonly IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper = detailedResponseMapper;
         private readonly ICreateService<User> createService = createService;
+        private readonly ICreateService<CompletedWorkout> completedWorkoutcreateService = completedWorkoutcreateService;
         private readonly IReadSingleService<User> readSingleService = readSingleService;
+        private readonly IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService = completedWorkoutReadRangeService;
+        private readonly IUpdateService<User> updateService = updateService;
         private readonly ITokenManager tokenManager = tokenManager;
         private readonly IEmailConfirmationSenderService emailConfirmationSender = emailConfirmationSender;
         private readonly IEmailConfirmationService emailConfirmationService = emailConfirmationService;
         private readonly IResetPasswordEmailSenderService passwordResetEmailSender = passwordResetEmailSender;
         private readonly IResetPasswordService passwordResetEmailService = passwordResetEmailService;
-        private readonly IUpdateService<User> updateService = updateService;
+        private readonly IRequestMapper<RegisterUserRequestDTO, User> registrationMapper = registrationMapper;
+        private readonly IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper = detailedResponseMapper;
 
         [GeneratedRegex(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")]
         private static partial Regex ValidEmailRegex();

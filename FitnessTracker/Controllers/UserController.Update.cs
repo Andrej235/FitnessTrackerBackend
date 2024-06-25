@@ -9,7 +9,7 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
-        [HttpPatch("changepassword")]
+        [HttpPatch("me/changepassword")]
         public async Task<IActionResult> ChangePassword([FromBody] UpdatePasswordUserRequestDTO request)
         {
             try
@@ -43,7 +43,7 @@ namespace FitnessTracker.Controllers
         }
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
-        [HttpPatch("split")]
+        [HttpPatch("me/split")]
         public async Task<IActionResult> ChangeSplit([FromBody] UpdateSplitUserRequestDTO request)
         {
             try

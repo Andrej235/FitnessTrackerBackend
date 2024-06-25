@@ -1,7 +1,6 @@
 ﻿using FitnessTracker.Data;
 using FitnessTracker.Exceptions;
 using FitnessTracker.Models;
-using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Read.ExpressionBased;
 
 namespace FitnessTracker.Services.Create

@@ -326,7 +326,7 @@ namespace FitnessTracker.Data
 
             modelBuilder.Entity<SplitWorkout>(entity =>
             {
-                entity.HasKey(x => new { x.SplitId, x.WorkoutId });
+                entity.HasKey(x => new { x.SplitId, x.Day });
 
                 entity.HasOne(sw => sw.Split)
                     .WithMany(s => s.Workouts)

@@ -22,6 +22,14 @@ namespace FitnessTracker.Services.Read.ExpressionBased
                     .ThenInclude(x => x.Workout);
             }
 
+            if (includeString == "split,splitworkouts")
+            {
+                var today = DateTime.Today.DayOfWeek;
+                return context.Users
+                    .Include(x => x.CurrentSplit!)
+                    .ThenInclude(x => x.Workouts.Where(w => w.Day == today));
+            }
+
             return base.GetIncluded(includeString);
         }
     }

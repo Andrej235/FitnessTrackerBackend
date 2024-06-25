@@ -67,7 +67,7 @@ namespace FitnessTracker
             builder.Services.AddDbContext<DataContext>(x =>
             {
                 x.UseSqlServer(builder.Configuration.GetConnectionString("SQLConnectionString"));
-                //x.EnableSensitiveDataLogging(); //TODO-PROD: remove in production
+                x.EnableSensitiveDataLogging(); //TODO-PROD: remove in production
             });
 
 
@@ -389,6 +389,10 @@ namespace FitnessTracker
             builder.Services.AddScoped<IDeleteService<FavoriteSplit>, DeleteService<FavoriteSplit>>();
             #endregion
 
+            #region Completed workouts
+            builder.Services.AddScoped<ICreateService<CompletedWorkout>, CreateService<CompletedWorkout>>();
+            builder.Services.AddScoped<IReadRangeService<CompletedWorkout>, CompletedWorkoutReadExpressionService>();
+            #endregion
 
             var app = builder.Build();
 

@@ -8,7 +8,7 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [Authorize(Roles = Role.Unverified)]
-        [HttpPost("resendconfirmationemail")]
+        [HttpPost("me/resendconfirmationemail")]
         public async Task<IActionResult> ResendConfirmationEmail()
         {
             try
@@ -33,7 +33,7 @@ namespace FitnessTracker.Controllers
         }
 
         [Authorize(Roles = Role.Unverified)]
-        [HttpPatch("confirmemail/{code:guid}")]
+        [HttpPatch("me/confirmemail/{code:guid}")]
         public async Task<IActionResult> ConfirmEmail(Guid code)
         {
             try
