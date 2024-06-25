@@ -45,7 +45,7 @@ namespace FitnessTracker.Controllers
                 return Unauthorized();
 
             var today = DateTime.UtcNow;
-            var current = GetStartOfWeek(today.AddMonths(-18));
+            var current = today.AddMonths(-18).GetStartOfWeek();
             int weekCount = 0;
             Guid workoutId = Guid.Parse("852da05b-0937-4775-61fe-08dc943d34c0");
             Guid splitId = Guid.Parse("aabe499b-f1a7-496e-2606-08dc9523ddbd");

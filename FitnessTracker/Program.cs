@@ -53,6 +53,8 @@ using FitnessTracker.Services.Mapping.Response.SplitMappers;
 using FitnessTracker.DTOs.Responses.Split;
 using FitnessTracker.DTOs.Requests.Split;
 using FitnessTracker.Services.Mapping.Request.SplitMappers;
+using FitnessTracker.DTOs.Responses.CompletedWorkouts;
+using FitnessTracker.Services.Mapping.Response.CompletedWorkoutMappers;
 
 namespace FitnessTracker
 {
@@ -392,6 +394,8 @@ namespace FitnessTracker
             #region Completed workouts
             builder.Services.AddScoped<ICreateService<CompletedWorkout>, CreateService<CompletedWorkout>>();
             builder.Services.AddScoped<IReadRangeService<CompletedWorkout>, CompletedWorkoutReadExpressionService>();
+            builder.Services.AddScoped<IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO>, SimpleWeekOfCompletedWorkoutsResponseMapper>();
+            builder.Services.AddScoped<IResponseMapper<IEnumerable<CompletedWorkout>, DetailedWeekOfCompletedWorkoutsResponseDTO>, DetailedWeekOfCompletedWorkoutsResponseMapper>();
             #endregion
 
             var app = builder.Build();
