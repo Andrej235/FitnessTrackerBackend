@@ -9,18 +9,22 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpGet("me/completedworkouts")]
-        public async Task<IActionResult> GetCompletedWorkouts()
+        public async Task<IActionResult> GetCompletedWorkouts([FromQuery] int? year)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                 || !Guid.TryParse(userIdString, out var userId))
                 return Unauthorized();
 
-            var completedWorkouts = (await completedWorkoutReadRangeService.Get(x => x.UserId == userId, null, null, "overview"))
-                .GroupBy(x => x.CompletedAt.GetStartOfWeek())
-                .Select(simpleWeekOfCompletedWorkoutsResponseMapper.Map);
+            var groupedCompletedWorkouts = (await completedWorkoutReadRangeService.Get(x => x.UserId == userId, null, null, "overview"))
+                .GroupBy(x => x.CompletedAt.GetStartOfWeek());
 
-            return Ok(completedWorkouts);
+            groupedCompletedWorkouts = year is null
+                ? groupedCompletedWorkouts.TakeLast(53)
+                : groupedCompletedWorkouts.Where(x => x.Key.Year == year.Value);
+
+            var mapped = groupedCompletedWorkouts.Select(simpleWeekOfCompletedWorkoutsResponseMapper.Map);
+            return Ok(mapped);
         }
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
