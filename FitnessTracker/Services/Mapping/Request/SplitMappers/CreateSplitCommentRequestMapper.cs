@@ -1,4 +1,4 @@
-﻿using FitnessTracker.DTOs.Requests.Workout;
+﻿using FitnessTracker.DTOs.Requests.Split;
 using FitnessTracker.Models;
 
 namespace FitnessTracker.Services.Mapping.Request.SplitMappers

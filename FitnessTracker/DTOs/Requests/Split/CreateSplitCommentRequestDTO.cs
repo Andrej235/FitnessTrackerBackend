@@ -1,4 +1,4 @@
-﻿namespace FitnessTracker.DTOs.Requests.Workout
+﻿namespace FitnessTracker.DTOs.Requests.Split
 {
     public class CreateSplitCommentRequestDTO
     {

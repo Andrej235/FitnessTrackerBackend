@@ -5,11 +5,11 @@ using System.Security.Claims;
 
 namespace FitnessTracker.Controllers
 {
-    public partial class WorkoutController
+    public partial class SplitController
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
-        [HttpDelete("{workoutId:guid}/comment/{commentId:guid}")]
-        public async Task<IActionResult> DeleteComment(Guid workoutId, Guid commentId)
+        [HttpDelete("{splitId:guid}/comment/{commentId:guid}")]
+        public async Task<IActionResult> DeleteComment(Guid splitId, Guid commentId)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
@@ -18,8 +18,8 @@ namespace FitnessTracker.Controllers
 
             try
             {
-                await commentDeleteRangeService.Delete(x => x.WorkoutId == workoutId && x.ParentId == commentId);
-                await commentDeleteService.Delete(x => x.WorkoutId == workoutId && x.CreatorId == userId && x.Id == commentId);
+                await commentDeleteRangeService.Delete(x => x.SplitId == splitId && x.ParentId == commentId);
+                await commentDeleteService.Delete(x => x.SplitId == splitId && x.CreatorId == userId && x.Id == commentId);
                 return Ok();
             }
             catch (Exception ex)
