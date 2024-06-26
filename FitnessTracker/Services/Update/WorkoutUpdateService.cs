@@ -1,6 +1,5 @@
 ﻿using FitnessTracker.Data;
 using FitnessTracker.Models;
-using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Read.ExpressionBased;
 
 namespace FitnessTracker.Services.Update

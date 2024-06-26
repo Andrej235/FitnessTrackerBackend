@@ -17,7 +17,16 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out var userId))
                 return Unauthorized();
 
-            //TODO: If the split is public and one or more of the workouts are private, make the split private
+            var selectedWorkoutIds = request.Workouts.Select(x => x.WorkoutId);
+            var selectedWorkouts = await readRangeService.Get(x => selectedWorkoutIds.Contains(x.Id), 0, 10, "none");
+            if (selectedWorkoutIds.Count() != selectedWorkouts.Count())
+                return NotFound("One or more selected workouts could not found");
+
+            if (selectedWorkouts.Any(x => !x.IsPublic && x.CreatorId != userId))
+                return BadRequest("One or more selected workouts are not public and you are not the creator");
+
+            if (request.IsPublic && selectedWorkouts.Any(x => !x.IsPublic))
+                return BadRequest("Attempted to create a public split with one or more private workouts");
 
             var mapped = createRequestMapper.Map(request);
             mapped.CreatorId = userId;
