@@ -71,6 +71,7 @@ namespace FitnessTracker
                 x.UseSqlServer(builder.Configuration.GetConnectionString("SQLConnectionString"));
                 x.EnableSensitiveDataLogging(); //TODO-PROD: remove in production
             });
+            builder.Services.AddSwaggerGen();
 
 
 
@@ -400,8 +401,14 @@ namespace FitnessTracker
             #endregion
 
             var app = builder.Build();
-
+            
             #region Middleware
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
             //app.UseHttpsRedirection();
             app.UseCors();
 

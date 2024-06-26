@@ -18,7 +18,7 @@ namespace FitnessTracker.Controllers
                 return Unauthorized();
 
             var selectedWorkoutIds = request.Workouts.Select(x => x.WorkoutId);
-            var selectedWorkouts = await readRangeService.Get(x => selectedWorkoutIds.Contains(x.Id), 0, 10, "none");
+            var selectedWorkouts = await workoutReadRangeService.Get(x => selectedWorkoutIds.Contains(x.Id), 0, 10, "none");
             if (selectedWorkoutIds.Count() != selectedWorkouts.Count())
                 return NotFound("One or more selected workouts could not found");
 

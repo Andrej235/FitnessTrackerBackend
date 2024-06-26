@@ -41,6 +41,7 @@ namespace FitnessTracker.Controllers
         private readonly IReadSingleService<Split> readSingleService = readSingleService;
         private readonly IReadRangeService<Split> readRangeService = readRangeService;
         private readonly IReadRangeService<SplitComment> commentReadRangeService = commentReadRangeService;
+        private readonly IReadRangeService<Workout> workoutReadRangeService = workoutReadRangeService;
         private readonly IDeleteService<SplitComment> commentDeleteService = commentDeleteService;
         private readonly IDeleteService<SplitCommentLike> commentLikeDeleteService = commentLikeDeleteService;
         private readonly IDeleteService<SplitLike> likeDeleteService = likeDeleteService;
