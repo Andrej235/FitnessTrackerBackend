@@ -1,4 +1,5 @@
-﻿using FitnessTracker.Utilities;
+﻿using FitnessTracker.DTOs.Responses.CompletedWorkouts;
+using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -9,6 +10,8 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpGet("me/completedworkouts")]
+        [ProducesResponseType(typeof(IEnumerable<SimpleWeekOfCompletedWorkoutsResponseDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetCompletedWorkouts([FromQuery] int? year)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -29,6 +32,8 @@ namespace FitnessTracker.Controllers
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpGet("me/completedworkouts/week/{date:datetime}")]
+        [ProducesResponseType(typeof(DetailedWeekOfCompletedWorkoutsResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetCompletedWorkouts(DateTime date)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity

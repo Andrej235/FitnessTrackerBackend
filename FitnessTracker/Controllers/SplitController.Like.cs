@@ -9,6 +9,9 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPost("{id:guid}/like")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> CreateLike(Guid id)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -23,7 +26,7 @@ namespace FitnessTracker.Controllers
                     UserId = userId,
                     SplitId = id
                 });
-                return Ok();
+                return Created();
 
             }
             catch (Exception ex)
@@ -35,6 +38,9 @@ namespace FitnessTracker.Controllers
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpDelete("{id:guid}/like")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> DeleteLike(Guid id)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -45,7 +51,7 @@ namespace FitnessTracker.Controllers
             try
             {
                 await likeDeleteService.Delete(x => x.UserId == userId && x.SplitId == id);
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {

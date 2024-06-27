@@ -1,4 +1,5 @@
-﻿using FitnessTracker.Utilities;
+﻿using FitnessTracker.DTOs.Responses.Split;
+using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -8,6 +9,7 @@ namespace FitnessTracker.Controllers
     public partial class SplitController
     {
         [HttpGet("public/simple")]
+        [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllSimplePublic()
         {
             var workouts = await readRangeService.Get(x => x.IsPublic, 0, 10, "creator");
@@ -16,6 +18,8 @@ namespace FitnessTracker.Controllers
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpGet("personal/simple")]
+        [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAllSimplePersonal()
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -29,6 +33,9 @@ namespace FitnessTracker.Controllers
 
         [Authorize]
         [HttpGet("{id:guid}/detailed")]
+        [ProducesResponseType(typeof(DetailedSplitResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetDetailed(Guid id)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity

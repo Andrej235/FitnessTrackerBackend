@@ -30,6 +30,7 @@ namespace FitnessTracker.Controllers
                                             IDeleteRangeService<SecondaryMuscleGroupInExercise> secondaryMuscleGroupDeleteRangeService,
                                             IDeleteRangeService<SecondaryMuscleInExercise> secondaryMuscleDeleteRangeService,
                                             IRequestMapper<CreateExerciseRequestDTO, Exercise> createRequestMapper,
+                                            IResponseMapper<Exercise, SimpleExerciseResponseDTO> simpleResponseMapper,
                                             IResponseMapper<Exercise, DetailedExerciseResponseDTO> detailedResponseMapper) : ControllerBase
     {
         private readonly ICreateService<Exercise> createService = createService;

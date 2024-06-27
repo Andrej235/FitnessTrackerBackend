@@ -9,6 +9,9 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = Role.Unverified)]
         [HttpPost("me/resendconfirmationemail")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> ResendConfirmationEmail()
         {
             try
@@ -23,7 +26,7 @@ namespace FitnessTracker.Controllers
                     return Unauthorized();
 
                 await emailConfirmationSender.SendEmailConfirmation(user.Email, userId);
-                return Ok();
+                return Created();
             }
             catch (Exception ex)
             {
@@ -34,6 +37,9 @@ namespace FitnessTracker.Controllers
 
         [Authorize(Roles = Role.Unverified)]
         [HttpPatch("me/confirmemail/{code:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> ConfirmEmail(Guid code)
         {
             try
@@ -44,7 +50,7 @@ namespace FitnessTracker.Controllers
                     return Unauthorized();
 
                 var success = await emailConfirmationService.ConfirmEmail(userId, code);
-                return success ? Ok("Email Confirmed") : BadRequest("Invalid code");
+                return success ? NoContent() : BadRequest("Invalid code");
             }
             catch (Exception ex)
             {

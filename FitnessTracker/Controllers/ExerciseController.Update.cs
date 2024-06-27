@@ -10,6 +10,9 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = Role.Admin)]
         [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Update([FromBody] UpdateExerciseRequestDTO request)
         {
             var exercise = await readSingleService.Get(x => x.Id == request.Id, "none");
@@ -53,7 +56,7 @@ namespace FitnessTracker.Controllers
             exercise.Image = request.Image ?? "";
             await updateService.Update(exercise);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

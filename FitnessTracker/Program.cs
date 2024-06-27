@@ -71,7 +71,10 @@ namespace FitnessTracker
                 x.UseSqlServer(builder.Configuration.GetConnectionString("SQLConnectionString"));
                 x.EnableSensitiveDataLogging(); //TODO-PROD: remove in production
             });
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SupportNonNullableReferenceTypes();
+            });
 
 
 
@@ -401,7 +404,7 @@ namespace FitnessTracker
             #endregion
 
             var app = builder.Build();
-            
+
             #region Middleware
             if (app.Environment.IsDevelopment())
             {

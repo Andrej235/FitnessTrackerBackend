@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FitnessTracker.DTOs.Responses.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -8,6 +9,8 @@ namespace FitnessTracker.Controllers
     {
         [Authorize]
         [HttpGet("me/detailed")]
+        [ProducesResponseType(typeof(DetailedUserResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetDetailed()
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity

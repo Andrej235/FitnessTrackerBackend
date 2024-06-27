@@ -11,6 +11,9 @@ namespace FitnessTracker.Controllers
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPost("comment/{id:guid}/like")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> CreateCommentLike(Guid id)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -25,7 +28,7 @@ namespace FitnessTracker.Controllers
                     UserId = userId,
                     SplitCommentId = id
                 });
-                return Ok();
+                return Created();
             }
             catch (Exception ex)
             {
@@ -36,6 +39,9 @@ namespace FitnessTracker.Controllers
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpDelete("comment/{id:guid}/like")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> DeleteCommentLike(Guid id)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -46,7 +52,7 @@ namespace FitnessTracker.Controllers
             try
             {
                 await commentLikeDeleteService.Delete(x => x.UserId == userId && x.SplitCommentId == id);
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {

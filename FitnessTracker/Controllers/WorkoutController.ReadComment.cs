@@ -1,4 +1,6 @@
-﻿using FitnessTracker.Utilities;
+﻿using FitnessTracker.DTOs.Responses.Split;
+using FitnessTracker.DTOs.Responses.Workout;
+using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -9,6 +11,8 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpGet("{workoutId:guid}/comment")]
+        [ProducesResponseType(typeof(IEnumerable<SimpleWorkoutCommentResponseDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetComments(Guid workoutId)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -28,6 +32,8 @@ namespace FitnessTracker.Controllers
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpGet("{workoutId:guid}/comment/{commentId:guid}/reply")]
+        [ProducesResponseType(typeof(IEnumerable<SimpleWorkoutCommentResponseDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetReplies(Guid workoutId, Guid commentId)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity

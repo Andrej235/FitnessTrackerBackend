@@ -9,6 +9,9 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpDelete("{splitId:guid}/comment/{commentId:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> DeleteComment(Guid splitId, Guid commentId)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -20,7 +23,7 @@ namespace FitnessTracker.Controllers
             {
                 await commentDeleteRangeService.Delete(x => x.SplitId == splitId && x.ParentId == commentId);
                 await commentDeleteService.Delete(x => x.SplitId == splitId && x.CreatorId == userId && x.Id == commentId);
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {

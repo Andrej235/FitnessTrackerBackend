@@ -8,10 +8,21 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = Role.Admin)]
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Delete(int id)
         {
-            await deleteService.Delete(x => x.Id == id);
-            return Ok();
+            try
+            {
+                await deleteService.Delete(x => x.Id == id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return NotFound();
+            }
         }
     }
 }

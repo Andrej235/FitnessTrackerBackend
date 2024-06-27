@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.DTOs.Requests.User;
+using FitnessTracker.DTOs.Responses.CompletedWorkouts;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,9 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPatch("me/changepassword")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> ChangePassword([FromBody] UpdatePasswordUserRequestDTO request)
         {
             try
@@ -33,7 +37,7 @@ namespace FitnessTracker.Controllers
                 user.PasswordHash = request.NewPassword.ToHash(user.Salt);
                 await updateService.Update(user);
 
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -44,6 +48,9 @@ namespace FitnessTracker.Controllers
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPatch("me/split")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> ChangeSplit([FromBody] UpdateSplitUserRequestDTO request)
         {
             try
@@ -59,7 +66,7 @@ namespace FitnessTracker.Controllers
 
                 user.SplitId = request.SplitId;
                 await updateService.Update(user);
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {

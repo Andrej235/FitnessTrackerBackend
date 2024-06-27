@@ -10,6 +10,9 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPost("{id:guid}/favorite")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> CreateFavorite(Guid id)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -24,7 +27,7 @@ namespace FitnessTracker.Controllers
                     UserId = userId,
                     WorkoutId = id
                 });
-                return Ok();
+                return Created();
             }
             catch (Exception ex)
             {
@@ -35,6 +38,9 @@ namespace FitnessTracker.Controllers
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpDelete("{id:guid}/favorite")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> DeleteFavorite(Guid id)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -45,7 +51,7 @@ namespace FitnessTracker.Controllers
             try
             {
                 await favoriteDeleteService.Delete(x => x.UserId == userId && x.WorkoutId == id);
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {

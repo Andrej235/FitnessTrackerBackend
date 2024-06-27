@@ -10,6 +10,8 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [HttpPost("register")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequestDTO request)
         {
             try
@@ -25,7 +27,7 @@ namespace FitnessTracker.Controllers
                 var jwt = await tokenManager.GenerateJWTAndRefreshToken(user, Response.Cookies);
                 await emailConfirmationSender.SendEmailConfirmation(user.Email, user.Id);
 
-                return Ok(jwt);
+                return Created($"/user/{newUserId}", jwt);
             }
             catch (Exception ex)
             {
@@ -35,6 +37,8 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login([FromBody] LoginUserRequestDTO request)
         {
             if (!ValidEmailRegex().IsMatch(request.Email) || request.Password.Length < 8)
@@ -49,11 +53,14 @@ namespace FitnessTracker.Controllers
                 return BadRequest("Incorrect email or password");
 
             var jwt = await tokenManager.GenerateJWTAndRefreshToken(user, Response.Cookies);
-            return Ok(jwt);
+            return Created("/api/user/me", jwt);
         }
 
         [Authorize(AuthenticationSchemes = "AllowExpired")]
         [HttpPost("refresh")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Refresh()
         {
             try
@@ -68,7 +75,7 @@ namespace FitnessTracker.Controllers
                     return Unauthorized("Invalid token");
 
                 var newJwt = await tokenManager.RefreshJWT(jwtId, refreshToken, userId);
-                return Ok(newJwt);
+                return Created("/api/user/me", newJwt);
             }
             catch (Exception)
             {
@@ -78,13 +85,15 @@ namespace FitnessTracker.Controllers
 
         [Authorize]
         [HttpDelete("logout")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Logout()
         {
             if (!Request.Cookies.TryGetValue("refreshToken", out var refreshTokenString) || !Guid.TryParse(refreshTokenString, out var refreshToken))
                 return Unauthorized("Invalid token");
 
             await tokenManager.InvalidateRefreshToken(refreshToken);
-            return Ok();
+            return NoContent();
         }
     }
 }

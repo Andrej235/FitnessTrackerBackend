@@ -10,6 +10,9 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPost("{splitId:guid}/comment")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> CreateComment(Guid splitId, [FromBody] CreateSplitCommentRequestDTO request)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -27,7 +30,7 @@ namespace FitnessTracker.Controllers
                 if (newId == default)
                     return BadRequest("Failed to create comment");
 
-                return Ok();
+                return Created();
             }
             catch (Exception ex)
             {
@@ -38,6 +41,9 @@ namespace FitnessTracker.Controllers
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPost("{splitId:guid}/comment/{parentId:guid}/reply")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> CreateComment(Guid splitId, Guid parentId, [FromBody] CreateSplitCommentRequestDTO request)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -56,7 +62,7 @@ namespace FitnessTracker.Controllers
                 if (newId == default)
                     return BadRequest("Failed to create comment");
 
-                return Ok();
+                return Created();
             }
             catch (Exception ex)
             {

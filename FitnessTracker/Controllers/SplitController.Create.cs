@@ -10,6 +10,10 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Create([FromBody] CreateSplitRequestDTO request)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -32,7 +36,7 @@ namespace FitnessTracker.Controllers
             mapped.CreatorId = userId;
 
             await createService.Add(mapped);
-            return Ok();
+            return Created();
         }
     }
 }

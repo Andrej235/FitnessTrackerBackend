@@ -10,6 +10,9 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = Role.Admin)]
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Create([FromBody] CreateExerciseRequestDTO request)
         {
             var newExerciseIdObj = await createService.Add(createRequestMapper.Map(request));
@@ -41,7 +44,7 @@ namespace FitnessTracker.Controllers
                 ExerciseId = newExerciseId,
                 MuscleId = x
             }));
-            return Ok();
+            return Created();
         }
     }
 }
