@@ -14,6 +14,7 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> ChangePassword([FromBody] UpdatePasswordUserRequestDTO request)
         {
             try
@@ -51,6 +52,7 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> ChangeSplit([FromBody] UpdateSplitUserRequestDTO request)
         {
             try

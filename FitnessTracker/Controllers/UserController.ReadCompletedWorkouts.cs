@@ -12,6 +12,7 @@ namespace FitnessTracker.Controllers
         [HttpGet("me/completedworkouts")]
         [ProducesResponseType(typeof(IEnumerable<SimpleWeekOfCompletedWorkoutsResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetCompletedWorkouts([FromQuery] int? year)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -34,6 +35,7 @@ namespace FitnessTracker.Controllers
         [HttpGet("me/completedworkouts/week/{date:datetime}")]
         [ProducesResponseType(typeof(DetailedWeekOfCompletedWorkoutsResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetCompletedWorkouts(DateTime date)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity

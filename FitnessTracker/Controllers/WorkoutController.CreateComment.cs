@@ -13,6 +13,7 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateComment(Guid workoutId, [FromBody] CreateWorkoutCommentRequestDTO request)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -44,6 +45,7 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateComment(Guid workoutId, Guid parentId, [FromBody] CreateWorkoutCommentRequestDTO request)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity

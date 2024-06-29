@@ -12,6 +12,7 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> DeleteComment(Guid splitId, Guid commentId)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity

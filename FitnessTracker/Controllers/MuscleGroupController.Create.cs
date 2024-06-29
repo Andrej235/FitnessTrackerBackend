@@ -11,6 +11,7 @@ namespace FitnessTracker.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Create([FromBody] CreateMuscleGroupRequestDTO request)
         {
             await createService.Add(requestMapper.Map(request));
@@ -21,6 +22,7 @@ namespace FitnessTracker.Controllers
         [HttpPost("range")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Create([FromBody] IEnumerable<CreateMuscleGroupRequestDTO> request)
         {
             await createRangeService.Add(request.Select(requestMapper.Map));

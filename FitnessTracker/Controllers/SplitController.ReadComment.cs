@@ -12,6 +12,7 @@ namespace FitnessTracker.Controllers
         [HttpGet("{splitId:guid}/comment")]
         [ProducesResponseType(typeof(IEnumerable<SimpleSplitCommentResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetComments(Guid splitId)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -33,6 +34,7 @@ namespace FitnessTracker.Controllers
         [HttpGet("{splitId:guid}/comment/{commentId:guid}/reply")]
         [ProducesResponseType(typeof(IEnumerable<SimpleSplitCommentResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetReplies(Guid splitId, Guid commentId)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity

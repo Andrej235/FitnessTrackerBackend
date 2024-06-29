@@ -13,6 +13,7 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Update([FromBody] UpdateExerciseRequestDTO request)
         {
             var exercise = await readSingleService.Get(x => x.Id == request.Id, "none");

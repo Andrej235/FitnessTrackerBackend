@@ -20,6 +20,7 @@ namespace FitnessTracker.Controllers
         [HttpGet("personal/simple")]
         [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetAllSimplePersonal()
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
