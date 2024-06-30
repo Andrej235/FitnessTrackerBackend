@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.DTOs.Requests.User;
+using FitnessTracker.DTOs.Responses.AuthTokens;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +11,8 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [HttpPost("register")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(SimpleJWTResponseDTO), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequestDTO request)
         {
             try
@@ -27,7 +28,7 @@ namespace FitnessTracker.Controllers
                 var jwt = await tokenManager.GenerateJWTAndRefreshToken(user, Response.Cookies);
                 await emailConfirmationSender.SendEmailConfirmation(user.Email, user.Id);
 
-                return Created($"/user/{newUserId}", jwt);
+                return Created($"/user/{newUserId}", jwtResponseMapper.Map(jwt));
             }
             catch (Exception ex)
             {
@@ -37,7 +38,7 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpPost("login")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(SimpleJWTResponseDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login([FromBody] LoginUserRequestDTO request)
         {
@@ -53,12 +54,12 @@ namespace FitnessTracker.Controllers
                 return BadRequest("Incorrect email or password");
 
             var jwt = await tokenManager.GenerateJWTAndRefreshToken(user, Response.Cookies);
-            return Created("/api/user/me", jwt);
+            return Created("/api/user/me", jwtResponseMapper.Map(jwt));
         }
 
         [Authorize(AuthenticationSchemes = "AllowExpired")]
         [HttpPost("refresh")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(SimpleJWTResponseDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -76,7 +77,7 @@ namespace FitnessTracker.Controllers
                     return Unauthorized("Invalid token");
 
                 var newJwt = await tokenManager.RefreshJWT(jwtId, refreshToken, userId);
-                return Created("/api/user/me", newJwt);
+                return Created("/api/user/me", jwtResponseMapper.Map(newJwt));
             }
             catch (Exception)
             {

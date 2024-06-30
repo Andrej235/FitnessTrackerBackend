@@ -1,5 +1,6 @@
 ﻿using FitnessTracker.Auth;
 using FitnessTracker.DTOs.Requests.User;
+using FitnessTracker.DTOs.Responses.AuthTokens;
 using FitnessTracker.DTOs.Responses.CompletedWorkouts;
 using FitnessTracker.DTOs.Responses.User;
 using FitnessTracker.Models;
@@ -32,7 +33,8 @@ namespace FitnessTracker.Controllers
                                         IRequestMapper<RegisterUserRequestDTO, User> registrationMapper,
                                         IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper,
                                         IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO> simpleWeekOfCompletedWorkoutsResponseMapper,
-                                        IResponseMapper<IEnumerable<CompletedWorkout>, DetailedWeekOfCompletedWorkoutsResponseDTO> detailedWeekOfCompletedWorkoutsResponseMapper) : ControllerBase
+                                        IResponseMapper<IEnumerable<CompletedWorkout>, DetailedWeekOfCompletedWorkoutsResponseDTO> detailedWeekOfCompletedWorkoutsResponseMapper,
+                                        IResponseMapper<string, SimpleJWTResponseDTO> jwtResponseMapper) : ControllerBase
     {
         private readonly ICreateService<User> createService = createService;
         private readonly ICreateService<CompletedWorkout> completedWorkoutcreateService = completedWorkoutcreateService;
@@ -48,6 +50,7 @@ namespace FitnessTracker.Controllers
         private readonly IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper = detailedResponseMapper;
         private readonly IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO> simpleWeekOfCompletedWorkoutsResponseMapper = simpleWeekOfCompletedWorkoutsResponseMapper;
         private readonly IResponseMapper<IEnumerable<CompletedWorkout>, DetailedWeekOfCompletedWorkoutsResponseDTO> detailedWeekOfCompletedWorkoutsResponseMapper = detailedWeekOfCompletedWorkoutsResponseMapper;
+        private readonly IResponseMapper<string, SimpleJWTResponseDTO> jwtResponseMapper = jwtResponseMapper;
 
         [GeneratedRegex(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")]
         private static partial Regex ValidEmailRegex();

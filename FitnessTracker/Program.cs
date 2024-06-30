@@ -1,21 +1,21 @@
-using FitnessTracker.Auth;
-using FitnessTracker.Models;
-using FitnessTracker.Services.Create;
+using System.Text;
+using MailKit.Net.Smtp;
+using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
+using FitnessTracker.Auth;
+using FitnessTracker.Models;
+using FitnessTracker.Services.Create;
 using FitnessTracker.Data;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Update;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.DTOs.Requests.User;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.DTOs.Responses.User;
 using FitnessTracker.Emails;
-using MailKit.Net.Smtp;
-using AspNetCoreRateLimit;
 using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
 using FitnessTracker.Services.UserServices.EmailConfirmationService;
 using FitnessTracker.Services.UserServices.ResetPasswordSenderService;
@@ -55,6 +55,8 @@ using FitnessTracker.DTOs.Requests.Split;
 using FitnessTracker.Services.Mapping.Request.SplitMappers;
 using FitnessTracker.DTOs.Responses.CompletedWorkouts;
 using FitnessTracker.Services.Mapping.Response.CompletedWorkoutMappers;
+using FitnessTracker.DTOs.Responses.AuthTokens;
+using FitnessTracker.Services.Mapping.Response.AuthTokens;
 
 namespace FitnessTracker
 {
@@ -278,13 +280,15 @@ namespace FitnessTracker
             builder.Services.AddScoped<IDeleteRangeService<SecondaryMuscleInExercise>, DeleteRangeService<SecondaryMuscleInExercise>>();
             #endregion
 
-            #region Refresh Tokens
+            #region Auth tokens
             builder.Services.AddScoped<ICreateService<RefreshToken>, RefreshTokenCreateService>();
             builder.Services.AddScoped<IReadSingleService<RefreshToken>, ReadExpressionService<RefreshToken>>();
             builder.Services.AddScoped<IReadRangeService<RefreshToken>, ReadExpressionService<RefreshToken>>();
             builder.Services.AddScoped<IUpdateService<RefreshToken>, UpdateService<RefreshToken>>();
             builder.Services.AddScoped<IDeleteService<RefreshToken>, DeleteService<RefreshToken>>();
             builder.Services.AddScoped<IDeleteRangeService<RefreshToken>, DeleteRangeService<RefreshToken>>();
+
+            builder.Services.AddScoped<IResponseMapper<string, SimpleJWTResponseDTO>, SimpleJWTResponseMapper>();
             #endregion
 
             #region Rate limiting

@@ -1,5 +1,4 @@
-﻿using FitnessTracker.DTOs.Responses.Split;
-using FitnessTracker.DTOs.Responses.Workout;
+﻿using FitnessTracker.DTOs.Responses.Workout;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
