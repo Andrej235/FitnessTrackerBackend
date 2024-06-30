@@ -20,6 +20,7 @@ namespace FitnessTracker.Controllers
 {
     [Route("api/user")]
     [ApiController]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
     public partial class UserController(ICreateService<User> createService,
                                         ICreateService<CompletedWorkout> completedWorkoutcreateService,
                                         IReadSingleService<User> readSingleService,

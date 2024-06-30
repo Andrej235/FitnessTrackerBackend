@@ -79,6 +79,65 @@ namespace FitnessTracker
             });
 
 
+            #region Rate limiting
+            builder.Services.AddMemoryCache();
+            builder.Services.Configure<ClientRateLimitOptions>(options =>
+            {
+                options.EnableEndpointRateLimiting = true;
+                options.StackBlockedRequests = false;
+                options.HttpStatusCode = 429;
+                options.RealIpHeader = "X-Real-Ip";
+                options.ClientIdHeader = "X-ClientId";
+                options.GeneralRules = [
+                        new() {
+                            Endpoint = "*",
+                            Limit = 10,
+                            Period = "10s"
+                        },
+                        new() {
+                            Endpoint = "*/login",
+                            Limit = 10,
+                            Period = "30s"
+                        },
+                        new() {
+                            Endpoint = "*/register",
+                            Limit = 5,
+                            Period = "30s"
+                        },
+                        new() {
+                            Endpoint = "*/forgotpassword",
+                            Limit = 1,
+                            Period = "30s"
+                        },
+                        new() {
+                            Endpoint = "*/forgotpassword/*",
+                            Limit = 7,
+                            Period = "7d"
+                        },
+                        new() {
+                            Endpoint = "*/chagepassword",
+                            Limit = 5,
+                            Period = "3d"
+                        },
+                        new() {
+                            Endpoint = "*/confirm",
+                            Limit = 1,
+                            Period = "15s"
+                        },
+                        new() {
+                            Endpoint = "*/resendconfirmationemail",
+                            Limit = 1,
+                            Period = "1m"
+                        }
+                    ];
+            });
+
+            builder.Services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            builder.Services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+            builder.Services.AddInMemoryRateLimiting();
+            #endregion
 
             #region JWT / Auth
             builder.Services.AddAuthentication(x =>
@@ -289,71 +348,6 @@ namespace FitnessTracker
             builder.Services.AddScoped<IDeleteRangeService<RefreshToken>, DeleteRangeService<RefreshToken>>();
 
             builder.Services.AddScoped<IResponseMapper<string, SimpleJWTResponseDTO>, SimpleJWTResponseMapper>();
-            #endregion
-
-            #region Rate limiting
-            builder.Services.AddMemoryCache();
-            builder.Services.Configure<ClientRateLimitOptions>(options =>
-            {
-                options.EnableEndpointRateLimiting = true;
-                options.StackBlockedRequests = false;
-                options.HttpStatusCode = 429;
-                options.RealIpHeader = "X-Real-Ip";
-                options.ClientIdHeader = "X-ClientId";
-                options.GeneralRules = [
-                        new() {
-                            Endpoint = "*",
-                            Limit = 10,
-                            Period = "10s"
-                        },
-                        new() {
-                            Endpoint = "*/login",
-                            Limit = 10,
-                            Period = "30s"
-                        },
-                        new() {
-                            Endpoint = "*/register",
-                            Limit = 5,
-                            Period = "30s"
-                        },
-                        new() {
-                            Endpoint = "*/user/refresh",
-                            Limit = 1,
-                            Period = "30s"
-                        },
-                        new() {
-                            Endpoint = "*/forgotpassword",
-                            Limit = 1,
-                            Period = "30s"
-                        },
-                        new() {
-                            Endpoint = "*/forgotpassword/*",
-                            Limit = 7,
-                            Period = "7d"
-                        },
-                        new() {
-                            Endpoint = "*/chagepassword",
-                            Limit = 5,
-                            Period = "3d"
-                        },
-                        new() {
-                            Endpoint = "*/confirm",
-                            Limit = 1,
-                            Period = "15s"
-                        },
-                        new() {
-                            Endpoint = "*/resendconfirmationemail",
-                            Limit = 1,
-                            Period = "1m"
-                        }
-                    ];
-            });
-
-            builder.Services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
-            builder.Services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
-            builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
-            builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
-            builder.Services.AddInMemoryRateLimiting();
             #endregion
 
             #region Split

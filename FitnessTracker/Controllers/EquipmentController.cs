@@ -11,6 +11,7 @@ namespace FitnessTracker.Controllers
 {
     [ApiController]
     [Route("api/equipment")]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
     public partial class EquipmentController(ICreateService<Equipment> createService,
                                      ICreateRangeService<Equipment> createRangeService,
                                      IReadRangeService<Equipment> readRangeService,

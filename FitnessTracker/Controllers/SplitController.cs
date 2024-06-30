@@ -13,6 +13,7 @@ namespace FitnessTracker.Controllers
 {
     [ApiController]
     [Route("api/split")]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
     public partial class SplitController(ICreateService<Split> createService,
                                          ICreateService<SplitComment> commentCreateService,
                                          ICreateService<SplitCommentLike> commentLikeCreateService,
