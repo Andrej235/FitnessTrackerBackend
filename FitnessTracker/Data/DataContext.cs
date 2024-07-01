@@ -1,5 +1,6 @@
 ﻿using FitnessTracker.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace FitnessTracker.Data
 {
@@ -38,12 +39,6 @@ namespace FitnessTracker.Data
         public DbSet<WorkoutLike> WorkoutLikes { get; set; } //
 
 
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=FitnessTracker;Integrated Security=True"); // TODO-PROD: Remove
-            base.OnConfiguring(optionsBuilder);
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

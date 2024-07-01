@@ -70,7 +70,7 @@ namespace FitnessTracker
             builder.Services.AddControllers();
             builder.Services.AddDbContext<DataContext>(x =>
             {
-                x.UseSqlServer(builder.Configuration.GetConnectionString("SQLConnectionString"));
+                x.UseSqlServer(configuration.GetConnectionString("SQLConnectionString"));
                 x.EnableSensitiveDataLogging(); //TODO-PROD: remove in production
             });
             builder.Services.AddSwaggerGen(options =>
@@ -179,7 +179,7 @@ namespace FitnessTracker
             #endregion
 
             #region Emails
-            var emailConfig = builder.Configuration
+            var emailConfig = configuration
                 .GetSection("EmailConfiguration")
                 .Get<EmailConfiguration>();
 
