@@ -65,7 +65,7 @@ namespace FitnessTracker.Controllers
         public async Task<IActionResult> Refresh()
         {
             try
-            {
+                {
                 if (User.Identity is not ClaimsIdentity claimsIdentity
                     || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                     || claimsIdentity.FindFirst(JwtRegisteredClaimNames.Jti)?.Value is not string jwtIdString
@@ -78,8 +78,9 @@ namespace FitnessTracker.Controllers
                 var newJwt = await tokenManager.RefreshJWT(jwtId, refreshToken, userId);
                 return Created("/api/user/me", jwtResponseMapper.Map(newJwt));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                ex.LogError();
                 return BadRequest("Invalid token");
             }
         }

@@ -16,12 +16,14 @@ namespace FitnessTracker.Controllers
                                                ICreateRangeService<MuscleGroup> createRangeService,
                                                IReadRangeService<MuscleGroup> readRangeService,
                                                IRequestMapper<CreateMuscleGroupRequestDTO, MuscleGroup> requestMapper,
-                                               IResponseMapper<MuscleGroup, SimpleMuscleGroupResponseDTO> responseMapper) : ControllerBase
+                                               IResponseMapper<MuscleGroup, SimpleMuscleGroupResponseDTO> responseMapper,
+                                               IResponseMapper<MuscleGroup, DetailedMuscleGroupResponseDTO> detailedResponseMapper) : ControllerBase
     {
         private readonly ICreateService<MuscleGroup> createService = createService;
         private readonly ICreateRangeService<MuscleGroup> createRangeService = createRangeService;
         private readonly IReadRangeService<MuscleGroup> readRangeService = readRangeService;
         private readonly IRequestMapper<CreateMuscleGroupRequestDTO, MuscleGroup> requestMapper = requestMapper;
         private readonly IResponseMapper<MuscleGroup, SimpleMuscleGroupResponseDTO> responseMapper = responseMapper;
+        private readonly IResponseMapper<MuscleGroup, DetailedMuscleGroupResponseDTO> detailedResponseMapper = detailedResponseMapper;
     }
 }

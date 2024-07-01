@@ -159,7 +159,7 @@ namespace FitnessTracker.Data
                 muscle.HasKey(m => m.Id);
 
                 muscle.HasOne(m => m.MuscleGroup)
-                    .WithMany()
+                    .WithMany(mg => mg.Muscles)
                     .HasForeignKey(m => m.MuscleGroupId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
