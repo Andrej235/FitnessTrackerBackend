@@ -23,7 +23,7 @@ namespace FitnessTracker.Controllers
 
             try
             {
-                var mapped = createCommentRequestMapper.Map(request);
+                var mapped = commentCreateRequestMapper.Map(request);
                 mapped.CreatorId = userId;
                 mapped.WorkoutId = workoutId;
 
@@ -55,7 +55,7 @@ namespace FitnessTracker.Controllers
 
             try
             {
-                var mapped = createCommentRequestMapper.Map(request);
+                var mapped = commentCreateRequestMapper.Map(request);
                 mapped.CreatorId = userId;
                 mapped.WorkoutId = workoutId;
                 mapped.ParentId = parentId;
