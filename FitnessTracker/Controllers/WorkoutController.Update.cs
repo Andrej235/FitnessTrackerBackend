@@ -1,22 +1,20 @@
-﻿using FitnessTracker.DTOs.Requests.Split;
-using FitnessTracker.Models;
+﻿using FitnessTracker.DTOs.Requests.Set;
+using FitnessTracker.DTOs.Requests.Workout;
 using FitnessTracker.Utilities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace FitnessTracker.Controllers
 {
-    public partial class SplitController
+    public partial class WorkoutController
     {
-        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPatch("{id:guid}/baseinfo")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateBasicInformation(Guid id, [FromBody] UpdateSplitBaseInfoRequestDTO request)
+        public async Task<IActionResult> UpdateBasicInformation(Guid id, [FromBody] UpdateWorkoutBaseInfoRequestDTO request)
         {
             try
             {
@@ -25,15 +23,15 @@ namespace FitnessTracker.Controllers
                     || !Guid.TryParse(userIdString, out var userId))
                     return Unauthorized();
 
-                var split = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "workouts");
-                if (split is null)
+                var workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "none");
+                if (workout is null)
                     return NotFound();
 
-                split.Name = request.Name;
-                split.Description = request.Description;
-                split.IsPublic = request.IsPublic && split.Workouts.All(x => x.Workout.IsPublic);
+                workout.Name = request.Name;
+                workout.Description = request.Description;
+                workout.IsPublic = request.IsPublic;
 
-                await updateService.Update(split);
+                await updateService.Update(workout);
                 return NoContent();
 
             }
@@ -44,14 +42,13 @@ namespace FitnessTracker.Controllers
             }
         }
 
-        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
-        [HttpPatch("{id:guid}/workout/{day:int}")]
+        [HttpPatch("{id:guid}/set/{setId:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateSplitWorkout(Guid id, DayOfWeek day, [FromBody] UpdateSplitWorkoutRequestDTO request)
+        public async Task<IActionResult> UpdateSet(Guid id, Guid setId, [FromBody] UpdateSetRequestDTO request)
         {
             try
             {
@@ -60,14 +57,18 @@ namespace FitnessTracker.Controllers
                     || !Guid.TryParse(userIdString, out var userId))
                     return Unauthorized();
 
-                var split = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "workouts");
-                var splitWorkout = split?.Workouts.FirstOrDefault(x => x.Day == day);
+                var workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "sets");
+                var set = workout?.Sets.FirstOrDefault(x => x.Id == setId);
 
-                if (splitWorkout is null)
+                if (set is null)
                     return NotFound();
 
-                splitWorkout.WorkoutId = request.NewWorkoutId;
-                await splitWorkoutUpdateService.Update(splitWorkout);
+                set.ExerciseId = request.ExerciseId;
+                set.TopRepRange = request.TopRepRange;
+                set.BottomRepRange = request.BottomRepRange;
+                set.NumberOfSets = request.NumberOfSets;
+
+                await setUpdateService.Update(set);
                 return NoContent();
 
             }
@@ -75,6 +76,7 @@ namespace FitnessTracker.Controllers
             {
                 ex.LogError();
                 return BadRequest();
-            }        }
+            }
+        }
     }
 }

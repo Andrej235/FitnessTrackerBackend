@@ -6,6 +6,7 @@ using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read.ExpressionBased;
+using FitnessTracker.Services.Update;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessTracker.Controllers
@@ -21,6 +22,8 @@ namespace FitnessTracker.Controllers
                                            IReadSingleService<Workout> readSingleService,
                                            IReadRangeService<Workout> readRangeService,
                                            IReadRangeService<WorkoutComment> commentReadRangeService,
+                                           IUpdateService<Workout> updateService,
+                                           IUpdateService<Set> setUpdateService,
                                            IDeleteService<WorkoutComment> commentDeleteService,
                                            IDeleteService<WorkoutCommentLike> commentLikeDeleteService,
                                            IDeleteService<WorkoutLike> likeDeleteService,
@@ -40,6 +43,8 @@ namespace FitnessTracker.Controllers
         private readonly IReadSingleService<Workout> readSingleService = readSingleService;
         private readonly IReadRangeService<Workout> readRangeService = readRangeService;
         private readonly IReadRangeService<WorkoutComment> commentReadRangeService = commentReadRangeService;
+        private readonly IUpdateService<Workout> updateService = updateService;
+        private readonly IUpdateService<Set> setUpdateService = setUpdateService;
         private readonly IDeleteService<WorkoutComment> commentDeleteService = commentDeleteService;
         private readonly IDeleteService<WorkoutCommentLike> commentLikeDeleteService = commentLikeDeleteService;
         private readonly IDeleteService<WorkoutLike> likeDeleteService = likeDeleteService;
