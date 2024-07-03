@@ -17,6 +17,8 @@ namespace FitnessTracker.Services.Read.ExpressionBased
                     .Include(x => x.Followers)
                     .Include(x => x.Following)
                     .Include(x => x.CompletedWorkouts)
+                    .ThenInclude(x => x.Split)
+                    .ThenInclude(x => x.Workouts)
                     .Include(x => x.CurrentSplit!)
                     .ThenInclude(x => x.Workouts)
                     .ThenInclude(x => x.Workout);

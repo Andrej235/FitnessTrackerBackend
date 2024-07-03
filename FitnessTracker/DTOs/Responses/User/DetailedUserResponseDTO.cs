@@ -1,4 +1,5 @@
-﻿using FitnessTracker.DTOs.Responses.Split;
+﻿using FitnessTracker.DTOs.Responses.CompletedWorkouts;
+using FitnessTracker.DTOs.Responses.Split;
 
 namespace FitnessTracker.DTOs.Responses.User
 {
@@ -8,5 +9,7 @@ namespace FitnessTracker.DTOs.Responses.User
         public int Following { get; set; }
         public int TotalCompletedWorkouts { get; set; }
         public DetailedUserSplitResponseDTO? CurrentSplit { get; set; }
+        public DateTime JoinedAt { get; set; }
+        public IEnumerable<SimpleWeekOfCompletedWorkoutsResponseDTO> Streak { get; set; } = [];
     }
 }
