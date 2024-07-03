@@ -11,7 +11,7 @@ namespace FitnessTracker.Services.Read.ExpressionBased
             if (includeString is null)
                 return base.GetIncluded(includeString);
 
-            if (includeString.Contains("detailed"))
+            if (includeString == "detailed")
             {
                 return context.Splits
                     .Include(x => x.Creator)
@@ -21,6 +21,13 @@ namespace FitnessTracker.Services.Read.ExpressionBased
                     .Include(x => x.Likes)
                     .Include(x => x.Favorites)
                     .Include(x => x.Comments);
+            }
+
+            if (includeString.Contains("workouts"))
+            {
+                return base.GetIncluded(includeString.Replace("workouts", ""))
+                    .Include(x => x.Workouts)
+                    .ThenInclude(x => x.Workout);
             }
 
             return base.GetIncluded(includeString);

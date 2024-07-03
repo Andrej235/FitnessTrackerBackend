@@ -363,6 +363,7 @@ namespace FitnessTracker
             #endregion
 
             #region Split workout
+            builder.Services.AddScoped<IUpdateService<SplitWorkout>, UpdateService<SplitWorkout>>();
             builder.Services.AddScoped<IRequestMapper<CreateSplitWorkoutRequestDTO, SplitWorkout>, CreateSplitWorkoutRequestMapper>();
             builder.Services.AddScoped<IResponseMapper<SplitWorkout, SimpleSplitWorkoutResponseDTO>, SimpleSplitWorkoutResponseMapper>();
             #endregion
