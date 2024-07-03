@@ -20,6 +20,17 @@ namespace FitnessTracker.Controllers
             return Ok(workouts.Select(simpleResponseMapper.Map));
         }
 
+        [HttpGet("public/simple/by/{userId}")]
+        [ProducesResponseType(typeof(IEnumerable<SimpleWorkoutResponseDTO>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllSimplePublic(Guid userId, [FromQuery] string? name)
+        {
+            var workouts = name is null
+                ? await readRangeService.Get(x => x.CreatorId == userId && x.IsPublic, 0, 10, "creator")
+                : await readRangeService.Get(x => x.CreatorId == userId && x.IsPublic && EF.Functions.Like(x.Name, $"%{name}%"), 0, 10, "creator");
+
+            return Ok(workouts.Select(simpleResponseMapper.Map));
+        }
+
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpGet("personal/simple")]
         [ProducesResponseType(typeof(IEnumerable<SimpleWorkoutResponseDTO>), StatusCodes.Status200OK)]

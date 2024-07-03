@@ -219,10 +219,17 @@ namespace FitnessTracker
             builder.Services.AddScoped<IRequestMapper<RegisterUserRequestDTO, User>, RegisterUserRequestMapper>();
             builder.Services.AddScoped<IResponseMapper<User, SimpleUserResponseDTO>, SimpleUserResponseMapper>();
             builder.Services.AddScoped<IResponseMapper<User, DetailedUserResponseDTO>, DetailedUserResponseMapper>();
+            builder.Services.AddScoped<IResponseMapper<User, DetailedPublicUserResponseDTO>, DetailedPublicUserResponseMapper>();
             builder.Services.AddScoped<IEmailConfirmationSenderService, EmailConfirmationSenderService>();
             builder.Services.AddScoped<IEmailConfirmationService, EmailConfirmationService>();
             builder.Services.AddScoped<IResetPasswordEmailSenderService, ResetPasswordEmailSender>();
             builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
+            #endregion
+
+            #region User follows
+            builder.Services.AddScoped<ICreateService<UserFollows>, CreateService<UserFollows>>();
+            builder.Services.AddScoped<IReadSingleService<UserFollows>, ReadExpressionService<UserFollows>>();
+            builder.Services.AddScoped<IDeleteService<UserFollows>, DeleteService<UserFollows>>();
             #endregion
 
             #region Set

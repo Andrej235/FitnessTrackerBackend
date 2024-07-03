@@ -9,11 +9,11 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
-        [HttpGet("me/completedworkouts")]
+        [HttpGet("me/streak")]
         [ProducesResponseType(typeof(IEnumerable<SimpleWeekOfCompletedWorkoutsResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> GetCompletedWorkouts([FromQuery] int? year)
+        public async Task<IActionResult> GetUserStreak([FromQuery] int? year)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
@@ -24,7 +24,7 @@ namespace FitnessTracker.Controllers
                 .GroupBy(x => x.CompletedAt.GetStartOfWeek());
 
             groupedCompletedWorkouts = year is null
-                ? groupedCompletedWorkouts.TakeLast(53)
+                ? groupedCompletedWorkouts.TakeLast(52)
                 : groupedCompletedWorkouts.Where(x => x.Key.Year == year.Value);
 
             var mapped = groupedCompletedWorkouts.Select(simpleWeekOfCompletedWorkoutsResponseMapper.Map);
@@ -32,11 +32,11 @@ namespace FitnessTracker.Controllers
         }
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
-        [HttpGet("me/completedworkouts/week/{date:datetime}")]
+        [HttpGet("me/streak/week/{date:datetime}")]
         [ProducesResponseType(typeof(DetailedWeekOfCompletedWorkoutsResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> GetCompletedWorkouts(DateTime date)
+        public async Task<IActionResult> GetUserStreakOnWeek(DateTime date)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString

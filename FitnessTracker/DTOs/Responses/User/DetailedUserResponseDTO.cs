@@ -6,7 +6,7 @@ namespace FitnessTracker.DTOs.Responses.User
     {
         public int Followers { get; set; }
         public int Following { get; set; }
-        public int CompletedWorkouts { get; set; }
+        public int TotalCompletedWorkouts { get; set; }
         public DetailedUserSplitResponseDTO? CurrentSplit { get; set; }
     }
 }

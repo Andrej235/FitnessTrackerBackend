@@ -16,7 +16,7 @@ namespace FitnessTracker.Services.Mapping.Response.UserMappers
                 Image = from.ProfilePic,
                 Followers = from.Followers.Count,
                 Following = from.Following.Count,
-                CompletedWorkouts = from.CompletedWorkouts.Count,
+                TotalCompletedWorkouts = from.CompletedWorkouts.Count,
                 CurrentSplit = from.CurrentSplit is null ? null : splitResponseMapper.Map(from.CurrentSplit)
             };
         }

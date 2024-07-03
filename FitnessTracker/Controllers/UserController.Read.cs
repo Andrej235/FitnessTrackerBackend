@@ -24,5 +24,23 @@ namespace FitnessTracker.Controllers
 
             return Ok(detailedResponseMapper.Map(user));
         }
+
+        [HttpGet("{id}/detailed")]
+        [ProducesResponseType(typeof(DetailedUserResponseDTO), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetDetailed(Guid id)
+        {
+            var user = await readSingleService.Get(x => x.Id == id, "detailed");
+            if (user is null)
+                return Unauthorized();
+
+            var mapped = publicUserDetailedResponseMapper.Map(user);
+
+            if (User.Identity is ClaimsIdentity claimsIdentity
+                && claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is string userIdString
+                && Guid.TryParse(userIdString, out var userId))
+                mapped.IsFollowing = user.Followers.Any(x => x.Id == userId);
+
+            return Ok(mapped);
+        }
     }
 }
