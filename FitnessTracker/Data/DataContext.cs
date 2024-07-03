@@ -345,65 +345,71 @@ namespace FitnessTracker.Data
                     .HasForeignKey(u => u.SplitId)
                     .OnDelete(DeleteBehavior.SetNull)
                     .IsRequired(false);
+            });
 
-                user.HasMany(u => u.Followers)
-                    .WithMany(u => u.Following)
-                    .UsingEntity<UserFollows>(j =>
-                    {
+            modelBuilder.Entity<UserFollows>(entity =>
+            {
+                entity.HasKey(e => new { e.FollowerId, e.FolloweeId });
 
-                        j.HasOne<User>().WithMany().HasForeignKey(x => x.FollowerId).OnDelete(DeleteBehavior.NoAction);
-                        j.HasOne<User>().WithMany().HasForeignKey(x => x.FolloweeId).OnDelete(DeleteBehavior.NoAction);
-                        j.HasKey(x => new { x.FollowerId, x.FolloweeId });
-                        j.HasIndex(x => x.FollowerId);
-                        j.HasIndex(x => x.FolloweeId);
-                        j.HasIndex(x => new { x.FollowerId, x.FolloweeId }).IsUnique();
-                    });
+                entity.HasOne(e => e.Follower)
+                      .WithMany(u => u.Following)
+                      .HasForeignKey(e => e.FollowerId)
+                      .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(e => e.Followee)
+                      .WithMany(u => u.Followers)
+                      .HasForeignKey(e => e.FolloweeId)
+                      .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasIndex(e => e.FollowerId);
+                entity.HasIndex(e => e.FolloweeId);
+                entity.HasIndex(e => new { e.FollowerId, e.FolloweeId }).IsUnique();
             });
 
             modelBuilder.Entity<Workout>(workout =>
-            {
-                workout.HasKey(w => w.Id);
+                {
+                    workout.HasKey(w => w.Id);
 
-                workout.HasOne(w => w.Creator)
-                    .WithMany(u => u.CreatedWorkouts)
-                    .HasForeignKey(u => u.CreatorId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    workout.HasOne(w => w.Creator)
+                        .WithMany(u => u.CreatedWorkouts)
+                        .HasForeignKey(u => u.CreatorId)
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                workout.HasMany(w => w.Sets)
-                    .WithOne()
-                    .HasForeignKey(s => s.WorkoutId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    workout.HasMany(w => w.Sets)
+                        .WithOne()
+                        .HasForeignKey(s => s.WorkoutId)
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                workout.HasMany(w => w.Likes)
-                    .WithMany()
-                    .UsingEntity<WorkoutLike>(j =>
-                    {
-                        j.HasOne<Workout>().WithMany().HasForeignKey(x => x.WorkoutId).OnDelete(DeleteBehavior.NoAction);
-                        j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
-                        j.HasKey(x => new { x.WorkoutId, x.UserId });
-                        j.HasIndex(x => x.WorkoutId);
-                        j.HasIndex(x => new { x.WorkoutId, x.UserId }).IsUnique();
-                    });
+                    workout.HasMany(w => w.Likes)
+                        .WithMany()
+                        .UsingEntity<WorkoutLike>(j =>
+                        {
+                            j.HasOne<Workout>().WithMany().HasForeignKey(x => x.WorkoutId).OnDelete(DeleteBehavior.NoAction);
+                            j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
+                            j.HasKey(x => new { x.WorkoutId, x.UserId });
+                            j.HasIndex(x => x.WorkoutId);
+                            j.HasIndex(x => new { x.WorkoutId, x.UserId }).IsUnique();
+                        });
 
-                workout.HasMany(w => w.Comments)
-                    .WithOne()
-                    .HasForeignKey(c => c.WorkoutId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    workout.HasMany(w => w.Comments)
+                        .WithOne()
+                        .HasForeignKey(c => c.WorkoutId)
+                        .OnDelete(DeleteBehavior.NoAction);
 
-                workout.HasMany(w => w.Favorites)
-                    .WithMany()
-                    .UsingEntity<FavoriteWorkout>(j =>
-                    {
-                        j.HasOne<Workout>().WithMany().HasForeignKey(x => x.WorkoutId).OnDelete(DeleteBehavior.NoAction);
-                        j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
-                        j.HasKey(x => new { x.WorkoutId, x.UserId });
-                        j.HasIndex(x => x.WorkoutId);
-                        j.HasIndex(x => new { x.WorkoutId, x.UserId }).IsUnique();
-                    });
+                    workout.HasMany(w => w.Favorites)
+                        .WithMany()
+                        .UsingEntity<FavoriteWorkout>(j =>
+                        {
+                            j.HasOne<Workout>().WithMany().HasForeignKey(x => x.WorkoutId).OnDelete(DeleteBehavior.NoAction);
+                            j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
+                            j.HasKey(x => new { x.WorkoutId, x.UserId });
+                            j.HasIndex(x => x.WorkoutId);
+                            j.HasIndex(x => new { x.WorkoutId, x.UserId }).IsUnique();
+                        });
 
-                workout.HasIndex(x => x.CreatorId);
-                workout.HasIndex(x => x.IsPublic);
-            });
+                    workout.HasIndex(x => x.CreatorId);
+                    workout.HasIndex(x => x.IsPublic);
+                });
 
             modelBuilder.Entity<WorkoutComment>(workoutComment =>
             {

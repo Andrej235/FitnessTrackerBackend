@@ -38,7 +38,7 @@ namespace FitnessTracker.Controllers
             if (User.Identity is ClaimsIdentity claimsIdentity
                 && claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is string userIdString
                 && Guid.TryParse(userIdString, out var userId))
-                mapped.IsFollowing = user.Followers.Any(x => x.Id == userId);
+                mapped.IsFollowing = user.Followers.Any(x => x.FollowerId == userId);
 
             return Ok(mapped);
         }

@@ -8,6 +8,7 @@
         public byte[] PasswordHash { get; set; } = null!;
         public byte[] Salt { get; set; } = null!;
         public string? ProfilePic { get; set; }
+        public DateTime JoinedAt { get; set; }
 
         public string Role { get; set; } = null!;
 
@@ -18,8 +19,8 @@
         public Guid? SplitId { get; set; }
         public Split? CurrentSplit { get; set; }
 
-        public ICollection<User> Following { get; set; } = [];
-        public ICollection<User> Followers { get; set; } = [];
+        public ICollection<UserFollows> Following { get; set; } = [];
+        public ICollection<UserFollows> Followers { get; set; } = [];
 
         public bool EmailConfirmed { get; set; }
     }

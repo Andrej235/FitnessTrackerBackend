@@ -4,6 +4,7 @@ using FitnessTracker.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessTracker.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240703182638_Fix follows")]
+    partial class Fixfollows
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -620,11 +623,21 @@ namespace FitnessTracker.Migrations
                     b.Property<Guid>("FolloweeId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("FollowersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FollowingId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("FollowerId", "FolloweeId");
 
                     b.HasIndex("FolloweeId");
 
                     b.HasIndex("FollowerId");
+
+                    b.HasIndex("FollowersId");
+
+                    b.HasIndex("FollowingId");
 
                     b.HasIndex("FollowerId", "FolloweeId")
                         .IsUnique();
@@ -1083,15 +1096,27 @@ namespace FitnessTracker.Migrations
             modelBuilder.Entity("FitnessTracker.Models.UserFollows", b =>
                 {
                     b.HasOne("FitnessTracker.Models.User", "Followee")
-                        .WithMany("Followers")
+                        .WithMany()
                         .HasForeignKey("FolloweeId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("FitnessTracker.Models.User", "Follower")
-                        .WithMany("Following")
+                        .WithMany()
                         .HasForeignKey("FollowerId")
                         .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("FitnessTracker.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("FollowersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FitnessTracker.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("FollowingId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Followee");
@@ -1196,10 +1221,6 @@ namespace FitnessTracker.Migrations
                     b.Navigation("CreatedSplits");
 
                     b.Navigation("CreatedWorkouts");
-
-                    b.Navigation("Followers");
-
-                    b.Navigation("Following");
                 });
 
             modelBuilder.Entity("FitnessTracker.Models.Workout", b =>
