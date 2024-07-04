@@ -1,8 +1,7 @@
 ﻿namespace FitnessTracker.DTOs.Requests.User
 {
-    public class ResetPasswordUserRequestDTO
+    public class SendForgotPasswordEmailRequestDTO
     {
         public string Email { get; set; } = null!;
-        public string NewPassword { get; set; } = null!;
     }
 }

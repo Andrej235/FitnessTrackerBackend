@@ -1,5 +1,6 @@
 ﻿using FitnessTracker.DTOs.Responses.Exercises;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FitnessTracker.Controllers
 {
@@ -7,9 +8,40 @@ namespace FitnessTracker.Controllers
     {
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<SimpleExerciseResponseDTO>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Get([FromQuery] string? q, [FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] string? include)
+        public async Task<IActionResult> Get([FromQuery] int? muscleGroupId, [FromQuery] int? equipmentId, [FromQuery] string? name, [FromQuery] bool? favoriteOnly, [FromQuery] int? limit, [FromQuery] int? offset)
         {
-            var exercises = await readQueryService.Get(q, offset, limit, include);
+            ICollection<string> include = [];
+            string query = "";
+
+            if (name is not null)
+            {
+                query += $"name={name};";
+            }
+
+            if (muscleGroupId is not null)
+            {
+                include.Add("primarymusclegroups,secondarymusclegroups");
+                query += $"usesmusclegroup={muscleGroupId};";
+            }
+
+            if (equipmentId is not null)
+            {
+                include.Add("equipment");
+                query += $"usesequipment={equipmentId};";
+            }
+
+            if (favoriteOnly is not null && favoriteOnly.Value)
+            {
+                if (User.Identity is ClaimsIdentity claimsIdentity
+                    && claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is string userIdString
+                    && Guid.TryParse(userIdString, out var userId))
+                {
+                    include.Add("favorites");
+                    query += $"favoritedby={userId};";
+                }
+            }
+
+            var exercises = await readQueryService.Get(query, offset, limit, string.Join(',', include));
             return Ok(exercises.Select(simpleResponseMapper.Map));
         }
 
