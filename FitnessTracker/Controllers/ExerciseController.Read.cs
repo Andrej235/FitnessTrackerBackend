@@ -11,7 +11,7 @@ namespace FitnessTracker.Controllers
         public async Task<IActionResult> Get([FromQuery] int? muscleGroupId, [FromQuery] int? equipmentId, [FromQuery] string? name, [FromQuery] bool? favoriteOnly, [FromQuery] int? limit, [FromQuery] int? offset)
         {
             ICollection<string> include = [];
-            string query = "";
+            string query = "strict=true;";
 
             if (name is not null)
             {
@@ -50,11 +50,17 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(int id)
         {
-            var exercise = await readSingleService.Get(x => x.Id == id, "primarymusclegroups,secondarymusclegroups,primarymuscles,secondarymuscles,equipment");
+            var exercise = await readSingleService.Get(x => x.Id == id, "primarymusclegroups,secondarymusclegroups,primarymuscles,secondarymuscles,equipment,favorites");
             if (exercise is null)
                 return NotFound();
 
-            return Ok(detailedResponseMapper.Map(exercise));
+            var mapped = detailedResponseMapper.Map(exercise);
+            if (User.Identity is ClaimsIdentity claimsIdentity
+                && claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is string userIdString
+                && Guid.TryParse(userIdString, out var userId))
+                mapped.IsFavorite = exercise.Favorites.Any(x => x.Id == userId);
+
+            return Ok(mapped);
         }
     }
 }

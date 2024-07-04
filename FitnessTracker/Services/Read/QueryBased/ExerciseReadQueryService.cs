@@ -27,7 +27,7 @@ namespace FitnessTracker.Services.Read.QueryBased
                 {
                     return key switch
                     {
-                        "favoriteonly" => e => e.Favorites.Any(f => f.Id == valueGuid),
+                        "favoritedby" => e => e.Favorites.Any(f => f.Id == valueGuid),
                         _ => throw new NotSupportedException($"Invalid key in search query. Entered key: {key}"),
                     };
                 }

@@ -211,6 +211,12 @@ namespace FitnessTracker
             builder.Services.AddScoped<IResponseMapper<Exercise, DetailedExerciseResponseDTO>, DetailedExerciseResponseMapper>();
             #endregion
 
+            #region Favorite exercise
+            builder.Services.AddScoped<ICreateService<FavoriteExercise>, CreateService<FavoriteExercise>>();
+            builder.Services.AddScoped<IReadSingleService<FavoriteExercise>, ReadExpressionService<FavoriteExercise>>();
+            builder.Services.AddScoped<IDeleteService<FavoriteExercise>, DeleteService<FavoriteExercise>>();
+            #endregion
+
             #region User
             builder.Services.AddScoped<ICreateService<User>, UserCreateService>();
             builder.Services.AddScoped<IReadSingleService<User>, UserReadExpressionService>();

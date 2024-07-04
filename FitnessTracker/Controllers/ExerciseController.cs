@@ -20,11 +20,13 @@ namespace FitnessTracker.Controllers
                                             IReadQueryService<Exercise> readQueryService,
                                             IUpdateService<Exercise> updateService,
                                             IDeleteService<Exercise> deleteService,
+                                            ICreateService<FavoriteExercise> favoriteExerciseCreateService,
                                             ICreateRangeService<EquipmentUsage> equipmetUsageCreateRangeService,
                                             ICreateRangeService<PrimaryMuscleGroupInExercise> primaryMuscleGroupCreateRangeService,
                                             ICreateRangeService<PrimaryMuscleInExercise> primaryMuscleCreateRangeService,
                                             ICreateRangeService<SecondaryMuscleGroupInExercise> secondaryMuscleGroupCreateRangeService,
                                             ICreateRangeService<SecondaryMuscleInExercise> secondaryMuscleCreateRangeService,
+                                            IDeleteService<FavoriteExercise> favoriteExerciseDeleteService,
                                             IDeleteRangeService<EquipmentUsage> equipmetUsageDeleteRangeService,
                                             IDeleteRangeService<PrimaryMuscleGroupInExercise> primaryMuscleGroupDeleteRangeService,
                                             IDeleteRangeService<PrimaryMuscleInExercise> primaryMuscleDeleteRangeService,
@@ -39,6 +41,8 @@ namespace FitnessTracker.Controllers
         private readonly IReadQueryService<Exercise> readQueryService = readQueryService;
         private readonly IUpdateService<Exercise> updateService = updateService;
         private readonly IDeleteService<Exercise> deleteService = deleteService;
+        private readonly ICreateService<FavoriteExercise> favoriteExerciseCreateService = favoriteExerciseCreateService;
+        private readonly IDeleteService<FavoriteExercise> favoriteExerciseDeleteService = favoriteExerciseDeleteService;
         private readonly ICreateRangeService<EquipmentUsage> equipmetUsageCreateRangeService = equipmetUsageCreateRangeService;
         private readonly ICreateRangeService<PrimaryMuscleGroupInExercise> primaryMuscleGroupCreateRangeService = primaryMuscleGroupCreateRangeService;
         private readonly ICreateRangeService<PrimaryMuscleInExercise> primaryMuscleCreateRangeService = primaryMuscleCreateRangeService;
