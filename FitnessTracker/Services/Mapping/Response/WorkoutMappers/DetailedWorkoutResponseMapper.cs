@@ -1,4 +1,5 @@
-﻿using FitnessTracker.DTOs.Responses.Set;
+﻿using FitnessTracker.DTOs.Responses.Exercises;
+using FitnessTracker.DTOs.Responses.Set;
 using FitnessTracker.DTOs.Responses.User;
 using FitnessTracker.DTOs.Responses.Workout;
 using FitnessTracker.Models;
@@ -6,10 +7,12 @@ using FitnessTracker.Models;
 namespace FitnessTracker.Services.Mapping.Response.WorkoutMappers
 {
     public class DetailedWorkoutResponseMapper(IResponseMapper<User, SimpleUserResponseDTO> userResponseMapper,
-                                               IResponseMapper<Set, DetailedSetResponseDTO> setResponseMapper) : IResponseMapper<Workout, DetailedWorkoutResponseDTO>
+                                               IResponseMapper<Set, DetailedSetResponseDTO> setResponseMapper,
+                                               IResponseMapper<Exercise, SimpleExerciseResponseDTO> exerciseResponseMapper) : IResponseMapper<Workout, DetailedWorkoutResponseDTO>
     {
         private readonly IResponseMapper<User, SimpleUserResponseDTO> userResponseMapper = userResponseMapper;
         private readonly IResponseMapper<Set, DetailedSetResponseDTO> setResponseMapper = setResponseMapper;
+        private readonly IResponseMapper<Exercise, SimpleExerciseResponseDTO> exerciseResponseMapper = exerciseResponseMapper;
 
         public DetailedWorkoutResponseDTO Map(Workout from)
         {
@@ -21,6 +24,7 @@ namespace FitnessTracker.Services.Mapping.Response.WorkoutMappers
                 IsPublic = from.IsPublic,
                 Creator = userResponseMapper.Map(from.Creator),
                 Sets = from.Sets.Select(setResponseMapper.Map),
+                Exercises = from.Sets.DistinctBy(x => x.ExerciseId).Select(x => exerciseResponseMapper.Map(x.Exercise)),
                 CommentCount = from.Comments.Count,
                 FavoriteCount = from.Favorites.Count,
                 LikeCount = from.Likes.Count,

@@ -1,5 +1,4 @@
-﻿using FitnessTracker.DTOs.Responses.Exercises;
-
+﻿
 namespace FitnessTracker.DTOs.Responses.Set
 {
     public class DetailedSetResponseDTO
@@ -8,6 +7,6 @@ namespace FitnessTracker.DTOs.Responses.Set
         public int TopRepRange { get; set; }
         public int BottomRepRange { get; set; }
         public int NumberOfSets { get; set; }
-        public SimpleExerciseResponseDTO Exercise { get; set; } = null!;
+        public int ExerciseId { get; set; }
     }
 }
