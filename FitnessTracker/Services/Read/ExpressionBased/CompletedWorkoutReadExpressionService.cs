@@ -8,7 +8,7 @@ namespace FitnessTracker.Services.Read.ExpressionBased
     {
         protected override IQueryable<CompletedWorkout> GetIncluded(string? includeString)
         {
-            if(includeString is null)
+            if (includeString is null)
                 return base.GetIncluded(includeString);
 
             if (includeString == "overview")
@@ -27,6 +27,22 @@ namespace FitnessTracker.Services.Read.ExpressionBased
                     .ThenInclude(x => x.Creator)
                     .Include(x => x.Split)
                     .ThenInclude(x => x.Creator);
+            }
+
+            if (includeString == "sets,25")
+            {
+                return context.CompletedWorkouts
+                    .Include(x => x.CompletedSets)
+                    .OrderByDescending(x => x.CompletedAt)
+                    .Take(25);
+            }
+
+            if (includeString == "sets,latest")
+            {
+                return context.CompletedWorkouts
+                    .Include(x => x.CompletedSets)
+                    .OrderByDescending(x => x.CompletedAt)
+                    .Take(1);
             }
 
             return base.GetIncluded(includeString);

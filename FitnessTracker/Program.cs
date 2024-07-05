@@ -57,6 +57,8 @@ using FitnessTracker.DTOs.Responses.CompletedWorkouts;
 using FitnessTracker.Services.Mapping.Response.CompletedWorkoutMappers;
 using FitnessTracker.DTOs.Responses.AuthTokens;
 using FitnessTracker.Services.Mapping.Response.AuthTokens;
+using FitnessTracker.DTOs.Requests.Completed;
+using FitnessTracker.Services.Mapping.Request.CompletedMappers;
 
 namespace FitnessTracker
 {
@@ -409,11 +411,13 @@ namespace FitnessTracker
             builder.Services.AddScoped<IDeleteService<FavoriteSplit>, DeleteService<FavoriteSplit>>();
             #endregion
 
-            #region Completed workouts
+            #region Completed workouts / sets
             builder.Services.AddScoped<ICreateService<CompletedWorkout>, CreateService<CompletedWorkout>>();
             builder.Services.AddScoped<IReadRangeService<CompletedWorkout>, CompletedWorkoutReadExpressionService>();
             builder.Services.AddScoped<IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO>, SimpleWeekOfCompletedWorkoutsResponseMapper>();
             builder.Services.AddScoped<IResponseMapper<IEnumerable<CompletedWorkout>, DetailedWeekOfCompletedWorkoutsResponseDTO>, DetailedWeekOfCompletedWorkoutsResponseMapper>();
+            builder.Services.AddScoped<IRequestMapper<CreteCompletedSetRequestDTO, CompletedSet>, CreateCompletedSetRequestMapper>();
+            builder.Services.AddScoped<IRequestMapper<CreateCompletedWorkoutRequestDTO, CompletedWorkout>, CreateCompletedWorkoutRequestMapper>();
             #endregion
 
             var app = builder.Build();

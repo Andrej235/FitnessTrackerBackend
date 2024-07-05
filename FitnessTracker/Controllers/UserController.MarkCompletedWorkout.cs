@@ -1,4 +1,5 @@
-﻿using FitnessTracker.Utilities;
+﻿using FitnessTracker.DTOs.Requests.Completed;
+using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -9,12 +10,12 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
-        [HttpPost("me/split/today/markascomplete")]
+        [HttpPost("me/split/today/completeworkout")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> MarkCompletedWorkout()
+        public async Task<IActionResult> MarkCompletedWorkout([FromBody] CreateCompletedWorkoutRequestDTO request)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
@@ -28,13 +29,14 @@ namespace FitnessTracker.Controllers
             if (user.CurrentSplit is null)
                 return BadRequest("No current split");
 
-            await completedWorkoutcreateService.Add(new()
-            {
-                UserId = userId,
-                SplitId = user.CurrentSplit.Id,
-                CompletedAt = DateTime.UtcNow,
-                WorkoutId = user.CurrentSplit.Workouts.First().WorkoutId,
-            });
+            var newCompletedWorkout = createCompletedWorkoutRequestMapper.Map(request);
+            newCompletedWorkout.UserId = userId;
+            newCompletedWorkout.SplitId = user.CurrentSplit.Id;
+            newCompletedWorkout.WorkoutId = user.CurrentSplit.Workouts.First().WorkoutId;
+            foreach (var set in newCompletedWorkout.CompletedSets)
+                set.UserId = userId;
+
+            await completedWorkoutCreateService.Add(newCompletedWorkout);
 
             return Created();
         }

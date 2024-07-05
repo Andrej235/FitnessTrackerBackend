@@ -68,28 +68,45 @@ namespace FitnessTracker.Controllers
             return Ok(workouts.Select(simpleResponseMapper.Map));
         }
 
-        [Authorize]
         [HttpGet("{id:guid}/detailed")]
         [ProducesResponseType(typeof(DetailedWorkoutResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetDetailed(Guid id)
         {
-            if (User.Identity is not ClaimsIdentity claimsIdentity
-                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
-                return Unauthorized();
-
             var workout = await readSingleService.Get(x => x.Id == id, "detailed");
             if (workout is null)
                 return NotFound();
 
+            var mapped = detailedResponseMapper.Map(workout);
+
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out var userId))
+                return workout.IsPublic ? Ok(mapped) : Unauthorized();
+
             if (!workout.IsPublic && workout.CreatorId != userId)
                 return Unauthorized();
 
-            var mapped = detailedResponseMapper.Map(workout);
             mapped.IsLiked = workout.Likes.Any(x => x.Id == userId);
             mapped.IsFavorited = workout.Favorites.Any(x => x.Id == userId);
+
+            var completed = (await completedWorkoutReadSingleService.Get(x => x.UserId == userId && x.WorkoutId == id, 0, -1, "sets,latest"));
+            if (!completed.Any())
+                return Ok(mapped);
+
+            var latest = completed.First();
+            mapped.AlreadyAttempted = true;
+            foreach (var set in mapped.Sets)
+            {
+                var completedSet = latest.CompletedSets.FirstOrDefault(x => x.SetId == set.Id);
+                if (completedSet is null)
+                    continue;
+
+                set.WeightUsedLastTime = completedSet.WeightUsed;
+                set.RepsCompletedLastTime = completedSet.RepsCompleted;
+            }
+
             return Ok(mapped);
         }
     }

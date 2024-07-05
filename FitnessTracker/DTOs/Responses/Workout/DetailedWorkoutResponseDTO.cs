@@ -13,5 +13,6 @@ namespace FitnessTracker.DTOs.Responses.Workout
         public int CommentCount { get; set; }
         public bool IsLiked { get; set; }
         public bool IsFavorited { get; set; }
+        public bool AlreadyAttempted { get; set; }
     }
 }

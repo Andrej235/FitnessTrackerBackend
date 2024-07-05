@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.Auth;
+using FitnessTracker.DTOs.Requests.Completed;
 using FitnessTracker.DTOs.Requests.User;
 using FitnessTracker.DTOs.Responses.AuthTokens;
 using FitnessTracker.DTOs.Responses.CompletedWorkouts;
@@ -23,7 +24,7 @@ namespace FitnessTracker.Controllers
     [ApiController]
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
     public partial class UserController(ICreateService<User> createService,
-                                        ICreateService<CompletedWorkout> completedWorkoutcreateService,
+                                        ICreateService<CompletedWorkout> completedWorkoutCreateService,
                                         ICreateService<UserFollows> followCreateService,
                                         IReadSingleService<User> readSingleService,
                                         IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
@@ -35,6 +36,7 @@ namespace FitnessTracker.Controllers
                                         IResetPasswordEmailSenderService passwordResetEmailSender,
                                         IResetPasswordService passwordResetEmailService,
                                         IRequestMapper<RegisterUserRequestDTO, User> registrationMapper,
+                                        IRequestMapper<CreateCompletedWorkoutRequestDTO, CompletedWorkout> createCompletedWorkoutRequestMapper,
                                         IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper,
                                         IResponseMapper<User, DetailedPublicUserResponseDTO> publicUserDetailedResponseMapper,
                                         IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO> simpleWeekOfCompletedWorkoutsResponseMapper,
@@ -42,7 +44,7 @@ namespace FitnessTracker.Controllers
                                         IResponseMapper<string, SimpleJWTResponseDTO> jwtResponseMapper) : ControllerBase
     {
         private readonly ICreateService<User> createService = createService;
-        private readonly ICreateService<CompletedWorkout> completedWorkoutcreateService = completedWorkoutcreateService;
+        private readonly ICreateService<CompletedWorkout> completedWorkoutCreateService = completedWorkoutCreateService;
         private readonly ICreateService<UserFollows> followCreateService = followCreateService;
         private readonly IReadSingleService<User> readSingleService = readSingleService;
         private readonly IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService = completedWorkoutReadRangeService;
@@ -53,6 +55,7 @@ namespace FitnessTracker.Controllers
         private readonly IResetPasswordEmailSenderService passwordResetEmailSender = passwordResetEmailSender;
         private readonly IResetPasswordService passwordResetEmailService = passwordResetEmailService;
         private readonly IRequestMapper<RegisterUserRequestDTO, User> registrationMapper = registrationMapper;
+        private readonly IRequestMapper<CreateCompletedWorkoutRequestDTO, CompletedWorkout> createCompletedWorkoutRequestMapper = createCompletedWorkoutRequestMapper;
         private readonly IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper = detailedResponseMapper;
         private readonly IResponseMapper<User, DetailedPublicUserResponseDTO> publicUserDetailedResponseMapper = publicUserDetailedResponseMapper;
         private readonly IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO> simpleWeekOfCompletedWorkoutsResponseMapper = simpleWeekOfCompletedWorkoutsResponseMapper;
