@@ -86,6 +86,7 @@ namespace FitnessTracker.Data
                     .OnDelete(DeleteBehavior.NoAction);
 
                 completedSet.HasIndex(x => x.UserId);
+                completedSet.HasIndex(x => x.CompletedWorkoutId);
                 completedSet.HasIndex(x => new { x.UserId, x.SetId });
             });
 
