@@ -10,9 +10,9 @@ namespace FitnessTracker.Services.Mapping.Request.SetMappers
             return new Set
             {
                 ExerciseId = from.ExerciseId,
-                NumberOfSets = from.NumberOfSets,
                 BottomRepRange = from.BottomRepRange,
                 TopRepRange = from.TopRepRange,
+                Type = from.Type,
             };
         }
     }

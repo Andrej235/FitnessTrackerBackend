@@ -12,5 +12,7 @@
 
         public Guid SplitId { get; set; }
         public Split Split { get; set; } = null!;
+
+        public ICollection<CompletedSet> CompletedSets { get; set; } = null!;
     }
 }

@@ -69,11 +69,9 @@ namespace FitnessTracker.Controllers
                 set.ExerciseId = request.ExerciseId;
                 set.TopRepRange = request.TopRepRange;
                 set.BottomRepRange = request.BottomRepRange;
-                set.NumberOfSets = request.NumberOfSets;
 
                 await setUpdateService.Update(set);
                 return NoContent();
-
             }
             catch (Exception ex)
             {

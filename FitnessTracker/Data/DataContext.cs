@@ -7,6 +7,7 @@ namespace FitnessTracker.Data
     public class DataContext(DbContextOptions options) : DbContext(options)
     {
         public DbSet<CompletedWorkout> CompletedWorkouts { get; set; } //
+        public DbSet<CompletedSet> CompletedSets { get; set; }
         public DbSet<EmailConfirmation> EmailConfirmations { get; set; } //
         public DbSet<Equipment> Equipment { get; set; } //
         public DbSet<EquipmentUsage> EquipmentUsage { get; set; } //
@@ -63,6 +64,29 @@ namespace FitnessTracker.Data
 
                 completedWorkout.HasIndex(x => x.UserId);
                 completedWorkout.HasIndex(x => new { x.UserId, x.WorkoutId });
+            });
+
+            modelBuilder.Entity<CompletedSet>(completedSet =>
+            {
+                completedSet.HasKey(cs => cs.Id);
+
+                completedSet.HasOne(cs => cs.CompletedWorkout)
+                    .WithMany(cw => cw.CompletedSets)
+                    .HasForeignKey(cs => cs.CompletedWorkoutId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                completedSet.HasOne<User>()
+                    .WithMany(cs => cs.CompletedSets)
+                    .HasForeignKey(cs => cs.UserId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                completedSet.HasOne(cs => cs.Set)
+                    .WithMany()
+                    .HasForeignKey(cs => cs.SetId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                completedSet.HasIndex(x => x.UserId);
+                completedSet.HasIndex(x => new { x.UserId, x.SetId });
             });
 
             modelBuilder.Entity<EmailConfirmation>(emailConformation =>

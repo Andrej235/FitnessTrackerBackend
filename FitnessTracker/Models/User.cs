@@ -14,6 +14,7 @@
 
         public ICollection<Workout> CreatedWorkouts { get; set; } = [];
         public ICollection<CompletedWorkout> CompletedWorkouts { get; set; } = [];
+        public ICollection<CompletedSet> CompletedSets { get; set; } = [];
         public ICollection<Split> CreatedSplits { get; set; } = [];
 
         public Guid? SplitId { get; set; }
