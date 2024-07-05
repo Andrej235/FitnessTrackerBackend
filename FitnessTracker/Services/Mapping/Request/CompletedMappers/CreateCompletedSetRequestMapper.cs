@@ -3,14 +3,15 @@ using FitnessTracker.Models;
 
 namespace FitnessTracker.Services.Mapping.Request.CompletedMappers
 {
-    public class CreateCompletedSetRequestMapper : IRequestMapper<CreteCompletedSetRequestDTO, CompletedSet>
+    public class CreateCompletedSetRequestMapper : IRequestMapper<CreateCompletedSetRequestDTO, CompletedSet>
     {
-        public CompletedSet Map(CreteCompletedSetRequestDTO from)
+        public CompletedSet Map(CreateCompletedSetRequestDTO from)
         {
             return new()
             {
                 WeightUsed = from.WeightUsed,
                 RepsCompleted = from.RepsCompleted,
+                SetId = from.SetId
             };
         }
     }

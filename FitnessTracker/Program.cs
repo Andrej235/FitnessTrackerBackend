@@ -416,7 +416,7 @@ namespace FitnessTracker
             builder.Services.AddScoped<IReadRangeService<CompletedWorkout>, CompletedWorkoutReadExpressionService>();
             builder.Services.AddScoped<IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO>, SimpleWeekOfCompletedWorkoutsResponseMapper>();
             builder.Services.AddScoped<IResponseMapper<IEnumerable<CompletedWorkout>, DetailedWeekOfCompletedWorkoutsResponseDTO>, DetailedWeekOfCompletedWorkoutsResponseMapper>();
-            builder.Services.AddScoped<IRequestMapper<CreteCompletedSetRequestDTO, CompletedSet>, CreateCompletedSetRequestMapper>();
+            builder.Services.AddScoped<IRequestMapper<CreateCompletedSetRequestDTO, CompletedSet>, CreateCompletedSetRequestMapper>();
             builder.Services.AddScoped<IRequestMapper<CreateCompletedWorkoutRequestDTO, CompletedWorkout>, CreateCompletedWorkoutRequestMapper>();
             #endregion
 

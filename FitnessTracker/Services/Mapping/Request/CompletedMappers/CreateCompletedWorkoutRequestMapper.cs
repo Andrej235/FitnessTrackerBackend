@@ -3,7 +3,7 @@ using FitnessTracker.Models;
 
 namespace FitnessTracker.Services.Mapping.Request.CompletedMappers
 {
-    public class CreateCompletedWorkoutRequestMapper(IRequestMapper<CreteCompletedSetRequestDTO, CompletedSet> setRequestMapper) : IRequestMapper<CreateCompletedWorkoutRequestDTO, CompletedWorkout>
+    public class CreateCompletedWorkoutRequestMapper(IRequestMapper<CreateCompletedSetRequestDTO, CompletedSet> setRequestMapper) : IRequestMapper<CreateCompletedWorkoutRequestDTO, CompletedWorkout>
     {
         public CompletedWorkout Map(CreateCompletedWorkoutRequestDTO from)
         {

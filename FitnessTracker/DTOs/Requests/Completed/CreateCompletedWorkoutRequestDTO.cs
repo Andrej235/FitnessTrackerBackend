@@ -2,6 +2,6 @@
 {
     public class CreateCompletedWorkoutRequestDTO
     {
-        public IEnumerable<CreteCompletedSetRequestDTO> CompletedSets { get; set; } = [];
+        public IEnumerable<CreateCompletedSetRequestDTO> CompletedSets { get; set; } = null!;
     }
 }

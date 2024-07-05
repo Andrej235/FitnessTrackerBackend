@@ -97,15 +97,16 @@ namespace FitnessTracker.Controllers
 
             var latest = completed.First();
             mapped.AlreadyAttempted = true;
-            foreach (var set in mapped.Sets)
+            mapped.Sets = mapped.Sets.Select(set =>
             {
                 var completedSet = latest.CompletedSets.FirstOrDefault(x => x.SetId == set.Id);
                 if (completedSet is null)
-                    continue;
+                    return set;
 
                 set.WeightUsedLastTime = completedSet.WeightUsed;
                 set.RepsCompletedLastTime = completedSet.RepsCompleted;
-            }
+                return set;
+            });
 
             return Ok(mapped);
         }
