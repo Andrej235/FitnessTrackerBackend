@@ -28,7 +28,7 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpGet("{id}/detailed")]
-        [ProducesResponseType(typeof(DetailedUserResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DetailedPublicUserResponseDTO), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDetailed(Guid id)
         {
             var user = await readSingleService.Get(x => x.Id == id, "detailed");
@@ -40,13 +40,18 @@ namespace FitnessTracker.Controllers
             if (User.Identity is ClaimsIdentity claimsIdentity
                 && claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is string userIdString
                 && Guid.TryParse(userIdString, out var userId))
-                mapped.IsFollowing = user.Followers.Any(x => x.FollowerId == userId);
+            {
+                if (userId == id)
+                    mapped.IsMe = true;
+                else
+                    mapped.IsFollowing = user.Followers.Any(x => x.FollowerId == userId);
+            }
 
             return Ok(mapped);
         }
 
         [HttpGet("{id}/following")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<SimpleUserResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetFollowing(Guid id, [FromQuery] int? limit, [FromQuery] int? offset)
         {
@@ -63,7 +68,7 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpGet("{id}/followers")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<SimpleUserResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetFollowers(Guid id, [FromQuery] int? limit, [FromQuery] int? offset)
         {
