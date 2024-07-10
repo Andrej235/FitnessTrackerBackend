@@ -15,6 +15,7 @@ namespace FitnessTracker.Services.Mapping.Response.UserMappers
         {
             return new()
             {
+                Id = from.Id,
                 Name = from.Name,
                 Image = from.ProfilePic,
                 Followers = from.Followers.Count,

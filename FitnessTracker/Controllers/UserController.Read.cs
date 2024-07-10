@@ -1,6 +1,8 @@
 ﻿using FitnessTracker.DTOs.Responses.User;
+using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Security.Claims;
 
 namespace FitnessTracker.Controllers
@@ -41,6 +43,40 @@ namespace FitnessTracker.Controllers
                 mapped.IsFollowing = user.Followers.Any(x => x.FollowerId == userId);
 
             return Ok(mapped);
+        }
+
+        [HttpGet("{id}/following")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetFollowing(Guid id, [FromQuery] int? limit, [FromQuery] int? offset)
+        {
+            try
+            {
+                var follows = await followerReadRangeService.Get(x => x.FollowerId == id, offset ?? 0, limit ?? 10, "followee");
+                return Ok(follows.Select(x => simpleResponseMapper.Map(x.Followee)));
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return NotFound();
+            }
+        }
+
+        [HttpGet("{id}/followers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetFollowers(Guid id, [FromQuery] int? limit, [FromQuery] int? offset)
+        {
+            try
+            {
+                var follows = await followerReadRangeService.Get(x => x.FolloweeId == id, offset ?? 0, limit ?? 10, "follower");
+                return Ok(follows.Select(x => simpleResponseMapper.Map(x.Follower)));
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
+                return NotFound();
+            }
         }
     }
 }

@@ -237,6 +237,7 @@ namespace FitnessTracker
             #region User follows
             builder.Services.AddScoped<ICreateService<UserFollows>, CreateService<UserFollows>>();
             builder.Services.AddScoped<IReadSingleService<UserFollows>, ReadExpressionService<UserFollows>>();
+            builder.Services.AddScoped<IReadRangeService<UserFollows>, ReadExpressionService<UserFollows>>();
             builder.Services.AddScoped<IDeleteService<UserFollows>, DeleteService<UserFollows>>();
             #endregion
 
