@@ -257,6 +257,7 @@ namespace FitnessTracker
             builder.Services.AddScoped<IUpdateService<Workout>, WorkoutUpdateService>();
             builder.Services.AddScoped<IDeleteService<Workout>, DeleteService<Workout>>();
             builder.Services.AddScoped<IRequestMapper<CreateWorkoutRequestDTO, Workout>, CreateWorkoutRequestMapper>();
+            builder.Services.AddScoped<IResponseMapper<Workout, NewWorkoutResponseDTO>, NewWorkoutResponseMapper>();
             builder.Services.AddScoped<IResponseMapper<Workout, SimpleWorkoutResponseDTO>, SimpleWorkoutResponseMapper>();
             builder.Services.AddScoped<IResponseMapper<Workout, DetailedWorkoutResponseDTO>, DetailedWorkoutResponseMapper>();
             #endregion

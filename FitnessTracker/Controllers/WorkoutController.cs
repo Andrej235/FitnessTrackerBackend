@@ -34,6 +34,7 @@ namespace FitnessTracker.Controllers
                                            IRequestMapper<CreateWorkoutRequestDTO, Workout> createRequestMapper,
                                            IRequestMapper<CreateSetRequestDTO, Set> setCreateRequestMapper,
                                            IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment> commentCreateRequestMapper,
+                                           IResponseMapper<Workout, NewWorkoutResponseDTO> newWorkoutResponseMapper,
                                            IResponseMapper<Workout, SimpleWorkoutResponseDTO> simpleResponseMapper,
                                            IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedResponseMapper,
                                            IResponseMapper<WorkoutComment, SimpleWorkoutCommentResponseDTO> simpleCommentResponseMapper) : ControllerBase

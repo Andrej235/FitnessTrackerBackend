@@ -10,6 +10,5 @@ namespace FitnessTracker.DTOs.Responses.User
         public int TotalCompletedWorkouts { get; set; }
         public bool IsFollowing { get; set; }
         public DateTime JoinedAt { get; set; }
-        public IEnumerable<SimpleWeekOfCompletedWorkoutsResponseDTO> Streak { get; set; } = [];
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.DTOs.Requests.Workout;
+using FitnessTracker.DTOs.Responses.Workout;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(NewWorkoutResponseDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -27,7 +28,7 @@ namespace FitnessTracker.Controllers
             if (newId == default)
                 return BadRequest("Failed to create workout");
 
-            return Created();
+            return Created($"/workouts/{newId}", newWorkoutResponseMapper.Map(workout));
         }
     }
 }

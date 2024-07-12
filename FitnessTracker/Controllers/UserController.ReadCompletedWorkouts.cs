@@ -8,7 +8,7 @@ namespace FitnessTracker.Controllers
 {
     public partial class UserController
     {
-        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
+        [Authorize]
         [HttpGet("me/streak")]
         [ProducesResponseType(typeof(IEnumerable<SimpleWeekOfCompletedWorkoutsResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -23,9 +23,36 @@ namespace FitnessTracker.Controllers
             var groupedCompletedWorkouts = (await completedWorkoutReadRangeService.Get(x => x.UserId == userId, null, null, "overview"))
                 .GroupBy(x => x.CompletedAt.GetStartOfWeek());
 
-            groupedCompletedWorkouts = year is null
-                ? groupedCompletedWorkouts.TakeLast(52)
-                : groupedCompletedWorkouts.Where(x => x.Key.Year == year.Value);
+            if (year is null)
+            {
+                var startOfWeek = DateTime.Now.GetStartOfWeek();
+                var startOfLastYearsWeek = startOfWeek.AddYears(-1).GetStartOfWeek().AddDays(7);
+                groupedCompletedWorkouts = groupedCompletedWorkouts.Where(x => x.Key > startOfLastYearsWeek && x.Key <= startOfWeek);
+            }
+            else
+                groupedCompletedWorkouts = groupedCompletedWorkouts.Where(x => x.Key.Year == year);
+
+            var mapped = groupedCompletedWorkouts.Select(simpleWeekOfCompletedWorkoutsResponseMapper.Map);
+            return Ok(mapped);
+        }
+
+        [HttpGet("{userId:guid}/streak")]
+        [ProducesResponseType(typeof(IEnumerable<SimpleWeekOfCompletedWorkoutsResponseDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> GetUserStreak(Guid userId, [FromQuery] int? year)
+        {
+            var groupedCompletedWorkouts = (await completedWorkoutReadRangeService.Get(x => x.UserId == userId, null, null, "overview"))
+                .GroupBy(x => x.CompletedAt.GetStartOfWeek());
+
+            if (year is null)
+            {
+                var startOfWeek = DateTime.Now.GetStartOfWeek();
+                var startOfLastYearsWeek = startOfWeek.AddYears(-1).GetStartOfWeek().AddDays(7);
+                groupedCompletedWorkouts = groupedCompletedWorkouts.Where(x => x.Key > startOfLastYearsWeek && x.Key <= startOfWeek);
+            }
+            else
+                groupedCompletedWorkouts = groupedCompletedWorkouts.Where(x => x.Key.Year == year);
 
             var mapped = groupedCompletedWorkouts.Select(simpleWeekOfCompletedWorkoutsResponseMapper.Map);
             return Ok(mapped);
