@@ -18,7 +18,7 @@ namespace FitnessTracker.Services.Read.QueryBased
                     return key switch
                     {
                         "usesmusclegroup" => e => e.PrimaryMuscleGroups.Any(m => m.Id == valueId) || e.SecondaryMuscleGroups.Any(m => m.Id == valueId),
-                        "equipment" => e => e.Equipment.Any(eq => eq.Id == valueId),
+                        "usesequipment" => e => e.Equipment.Any(eq => eq.Id == valueId),
                         _ => throw new NotSupportedException($"Invalid key in search query. Entered key: {key}"),
                     };
                 }
