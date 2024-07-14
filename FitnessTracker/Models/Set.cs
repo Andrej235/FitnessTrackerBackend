@@ -19,6 +19,6 @@
         public int ExerciseId { get; set; }
 
         public Guid WorkoutId { get; set; }
-        public float Intensity { get; set; }
+        public int RiR { get; set; }
     }
 }

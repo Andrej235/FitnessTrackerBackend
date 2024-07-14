@@ -14,6 +14,7 @@ namespace FitnessTracker.Services.Mapping.Response.SetMappers
                 TopRepRange = from.TopRepRange,
                 ExerciseId = from.ExerciseId,
                 Type = from.Type,
+                RiR = from.RiR
             };
         }
     }

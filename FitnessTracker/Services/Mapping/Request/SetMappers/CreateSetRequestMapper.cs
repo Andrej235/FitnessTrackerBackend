@@ -12,7 +12,7 @@ namespace FitnessTracker.Services.Mapping.Request.SetMappers
                 ExerciseId = from.ExerciseId,
                 BottomRepRange = from.BottomRepRange,
                 TopRepRange = from.TopRepRange,
-                Intensity = from.Intensity,
+                RiR = from.RiR,
                 Type = from.Type,
             };
         }
