@@ -5,13 +5,10 @@ namespace FitnessTracker.Services.Mapping.Response.EquipmentMappers
 {
     public class SimpleEquipmentResponseMapper : IResponseMapper<Equipment, SimpleEquipmentResponseDTO>
     {
-        public SimpleEquipmentResponseDTO Map(Equipment from)
+        public SimpleEquipmentResponseDTO Map(Equipment from) => new()
         {
-            return new()
-            {
-                Id = from.Id,
-                Name = from.Name
-            };
-        }
+            Id = from.Id,
+            Name = from.Name
+        };
     }
 }

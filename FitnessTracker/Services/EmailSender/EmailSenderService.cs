@@ -12,14 +12,14 @@ namespace FitnessTracker.Services.EmailSender
 
         public void SendEmail(Message message)
         {
-            var emailMessage = CreateEmailMessage(message);
+            MimeMessage emailMessage = CreateEmailMessage(message);
 
             Send(emailMessage);
         }
 
         private MimeMessage CreateEmailMessage(Message message)
         {
-            var emailMessage = new MimeMessage();
+            MimeMessage emailMessage = new();
             emailMessage.From.Add(new MailboxAddress("Fitness tracker", emailConfig.From));
             emailMessage.To.AddRange(message.To);
             emailMessage.Subject = message.Subject;
@@ -34,9 +34,9 @@ namespace FitnessTracker.Services.EmailSender
             try
             {
                 client.Connect(emailConfig.SmtpServer, emailConfig.Port, true);
-                client.AuthenticationMechanisms.Remove("XOAUTH2");
+                _ = client.AuthenticationMechanisms.Remove("XOAUTH2");
                 client.Authenticate(emailConfig.UserName, emailConfig.Password);
-                client.Send(mailMessage);
+                _ = client.Send(mailMessage);
             }
             catch (Exception ex)
             {

@@ -17,12 +17,12 @@ namespace FitnessTracker.Controllers
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
+                || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
             try
             {
-                await commentDeleteRangeService.Delete(x => x.WorkoutId == workoutId && x.ParentId == commentId);
+                _ = await commentDeleteRangeService.Delete(x => x.WorkoutId == workoutId && x.ParentId == commentId);
                 await commentDeleteService.Delete(x => x.WorkoutId == workoutId && x.CreatorId == userId && x.Id == commentId);
                 return NoContent();
             }

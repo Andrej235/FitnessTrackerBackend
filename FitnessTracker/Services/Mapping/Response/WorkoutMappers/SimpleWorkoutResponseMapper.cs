@@ -8,15 +8,12 @@ namespace FitnessTracker.Services.Mapping.Response.WorkoutMappers
     {
         private readonly IResponseMapper<User, SimpleUserResponseDTO> userResponseMapper = userResponseMapper;
 
-        public SimpleWorkoutResponseDTO Map(Workout from)
+        public SimpleWorkoutResponseDTO Map(Workout from) => new()
         {
-            return new()
-            {
-                Id = from.Id,
-                Name = from.Name,
-                IsPublic = from.IsPublic,
-                Creator = userResponseMapper.Map(from.Creator),
-            };
-        }
+            Id = from.Id,
+            Name = from.Name,
+            IsPublic = from.IsPublic,
+            Creator = userResponseMapper.Map(from.Creator),
+        };
     }
 }

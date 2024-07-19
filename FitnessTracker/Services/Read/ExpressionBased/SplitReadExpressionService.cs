@@ -11,26 +11,20 @@ namespace FitnessTracker.Services.Read.ExpressionBased
             if (includeString is null)
                 return base.GetIncluded(includeString);
 
-            if (includeString == "detailed")
-            {
-                return context.Splits
+            return includeString == "detailed"
+                ? context.Splits
                     .Include(x => x.Creator)
                     .Include(x => x.Workouts)
                     .ThenInclude(x => x.Workout)
                     .ThenInclude(x => x.Creator)
                     .Include(x => x.Likes)
                     .Include(x => x.Favorites)
-                    .Include(x => x.Comments);
-            }
-
-            if (includeString.Contains("workouts"))
-            {
-                return base.GetIncluded(includeString.Replace("workouts", ""))
+                    .Include(x => x.Comments)
+                : includeString.Contains("workouts")
+                ? base.GetIncluded(includeString.Replace("workouts", ""))
                     .Include(x => x.Workouts)
-                    .ThenInclude(x => x.Workout);
-            }
-
-            return base.GetIncluded(includeString);
+                    .ThenInclude(x => x.Workout)
+                : base.GetIncluded(includeString);
         }
     }
 }

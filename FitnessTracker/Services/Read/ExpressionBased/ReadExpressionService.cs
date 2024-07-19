@@ -17,14 +17,11 @@ namespace FitnessTracker.Services.Read.ExpressionBased
             return entity;
         }
 
-        public virtual Task<IEnumerable<T>> Get(Expression<Func<T, bool>> criteria, int? offset = 0, int? limit = -1, string? include = "all")
-        {
-            return Task.Run(() =>
-            {
-                IQueryable<T> entitesQueryable = GetIncluded(include);
-                return entitesQueryable.Where(criteria).ApplyOffsetAndLimit(offset, limit);
-            });
-        }
+        public virtual Task<IEnumerable<T>> Get(Expression<Func<T, bool>> criteria, int? offset = 0, int? limit = -1, string? include = "all") => Task.Run(() =>
+                                                                                                                                                           {
+                                                                                                                                                               IQueryable<T> entitesQueryable = GetIncluded(include);
+                                                                                                                                                               return entitesQueryable.Where(criteria).ApplyOffsetAndLimit(offset, limit);
+                                                                                                                                                           });
 
         protected static IEnumerable<string>? SplitIncludeString(string? include) => include?.ToLower().Replace(" ", "").Split(',').Where(x => !string.IsNullOrWhiteSpace(x));
 
@@ -36,20 +33,20 @@ namespace FitnessTracker.Services.Read.ExpressionBased
                 return entitiesIncluding;
 
             ParameterExpression parameter = Expression.Parameter(typeof(T), "x");
-            var navigationProperties = typeof(T).GetProperties().Where(x =>
+            IEnumerable<PropertyInfo> navigationProperties = typeof(T).GetProperties().Where(x =>
                 (x.PropertyType.IsClass && x.PropertyType != typeof(string))
                 || (x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>)));
 
             if (include.Contains("all"))
             {
-                foreach (var navigationProperty in navigationProperties)
+                foreach (PropertyInfo? navigationProperty in navigationProperties)
                     entitiesIncluding = Include(entitiesIncluding, navigationProperty.Name);
 
                 return entitiesIncluding;
             }
 
             IEnumerable<PropertyInfo> includedNavigationProperties = navigationProperties.Where(navigationProperty => include.Any(includeMember => navigationProperty.Name.Contains(includeMember, StringComparison.CurrentCultureIgnoreCase)));
-            foreach (var navigationProperty in includedNavigationProperties)
+            foreach (PropertyInfo navigationProperty in includedNavigationProperties)
                 entitiesIncluding = Include(entitiesIncluding, navigationProperty.Name);
 
             return entitiesIncluding;
@@ -57,9 +54,9 @@ namespace FitnessTracker.Services.Read.ExpressionBased
 
         protected static IQueryable<TEntity> Include<TEntity>(IQueryable<TEntity> query, string propertyName) where TEntity : class
         {
-            var parameter = Expression.Parameter(typeof(TEntity), "x");
-            var property = Expression.Property(parameter, propertyName);
-            var lambda = Expression.Lambda<Func<TEntity, object>>(property, parameter);
+            ParameterExpression parameter = Expression.Parameter(typeof(TEntity), "x");
+            MemberExpression property = Expression.Property(parameter, propertyName);
+            Expression<Func<TEntity, object>> lambda = Expression.Lambda<Func<TEntity, object>>(property, parameter);
 
             return query.Include(lambda);
         }

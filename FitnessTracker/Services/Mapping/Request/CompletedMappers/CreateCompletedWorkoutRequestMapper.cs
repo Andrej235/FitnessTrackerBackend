@@ -5,13 +5,10 @@ namespace FitnessTracker.Services.Mapping.Request.CompletedMappers
 {
     public class CreateCompletedWorkoutRequestMapper(IRequestMapper<CreateCompletedSetRequestDTO, CompletedSet> setRequestMapper) : IRequestMapper<CreateCompletedWorkoutRequestDTO, CompletedWorkout>
     {
-        public CompletedWorkout Map(CreateCompletedWorkoutRequestDTO from)
+        public CompletedWorkout Map(CreateCompletedWorkoutRequestDTO from) => new()
         {
-            return new()
-            {
-                CompletedSets = from.CompletedSets.Select(setRequestMapper.Map).ToList(),
-                CompletedAt = DateTime.UtcNow
-            };
-        }
+            CompletedSets = from.CompletedSets.Select(setRequestMapper.Map).ToList(),
+            CompletedAt = DateTime.UtcNow
+        };
     }
 }

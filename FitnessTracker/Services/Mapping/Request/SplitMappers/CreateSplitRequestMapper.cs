@@ -7,15 +7,12 @@ namespace FitnessTracker.Services.Mapping.Request.SplitMappers
     {
         private readonly IRequestMapper<CreateSplitWorkoutRequestDTO, SplitWorkout> splitWorkoutRequestMapper = splitWorkoutRequestMapper;
 
-        public Split Map(CreateSplitRequestDTO from)
+        public Split Map(CreateSplitRequestDTO from) => new()
         {
-            return new()
-            {
-                Name = from.Name,
-                Description = from.Description,
-                IsPublic = from.IsPublic,
-                Workouts = from.Workouts.Select(splitWorkoutRequestMapper.Map).ToList()
-            };
-        }
+            Name = from.Name,
+            Description = from.Description,
+            IsPublic = from.IsPublic,
+            Workouts = from.Workouts.Select(splitWorkoutRequestMapper.Map).ToList()
+        };
     }
 }

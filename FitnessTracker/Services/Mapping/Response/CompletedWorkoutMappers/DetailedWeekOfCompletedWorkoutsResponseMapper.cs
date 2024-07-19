@@ -8,13 +8,10 @@ namespace FitnessTracker.Services.Mapping.Response.CompletedWorkoutMappers
     {
         private readonly IResponseMapper<Split, DetailedUserSplitResponseDTO> splitResponseMapper = splitResponseMapper;
 
-        public DetailedWeekOfCompletedWorkoutsResponseDTO Map(IEnumerable<CompletedWorkout> from)
+        public DetailedWeekOfCompletedWorkoutsResponseDTO Map(IEnumerable<CompletedWorkout> from) => new()
         {
-            return new()
-            {
-                Split = splitResponseMapper.Map(from.First().Split),
-                CompletedWorkouts = from.Select(x => x.CompletedAt.DayOfWeek)
-            };
-        }
+            Split = splitResponseMapper.Map(from.First().Split),
+            CompletedWorkouts = from.Select(x => x.CompletedAt.DayOfWeek)
+        };
     }
 }

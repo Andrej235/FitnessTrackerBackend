@@ -8,8 +8,8 @@ namespace FitnessTracker.Services.Mapping.Request.UserMappers
     {
         public User Map(RegisterUserRequestDTO from)
         {
-            var salt = HashingService.GenerateSalt();
-            var hash = from.Password.ToHash(salt);
+            byte[] salt = HashingService.GenerateSalt();
+            byte[] hash = from.Password.ToHash(salt);
 
             return new User
             {

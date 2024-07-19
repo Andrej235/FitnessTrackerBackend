@@ -5,18 +5,15 @@ namespace FitnessTracker.Services.Mapping.Response.UserMappers
 {
     public class DetailedPublicUserResponseMapper : IResponseMapper<User, DetailedPublicUserResponseDTO>
     {
-        public DetailedPublicUserResponseDTO Map(User from)
+        public DetailedPublicUserResponseDTO Map(User from) => new()
         {
-            return new()
-            {
-                Id = from.Id,
-                Name = from.Name,
-                Image = from.ProfilePic,
-                Followers = from.Followers.Count,
-                Following = from.Following.Count,
-                TotalCompletedWorkouts = from.CompletedWorkouts.Count,
-                JoinedAt = from.JoinedAt,
-            };
-        }
+            Id = from.Id,
+            Name = from.Name,
+            Image = from.ProfilePic,
+            Followers = from.Followers.Count,
+            Following = from.Following.Count,
+            TotalCompletedWorkouts = from.CompletedWorkouts.Count,
+            JoinedAt = from.JoinedAt,
+        };
     }
 }

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using FitnessTracker.Utilities;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using FitnessTracker.Utilities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -14,14 +14,14 @@ namespace FitnessTracker.Auth
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            var token = Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last();
+            string? token = Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last();
             if (string.IsNullOrEmpty(token))
                 return Task.FromResult(AuthenticateResult.NoResult());
 
             try
             {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var tokenValidationParameters = new TokenValidationParameters
+                JwtSecurityTokenHandler tokenHandler = new();
+                TokenValidationParameters tokenValidationParameters = new()
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
@@ -33,11 +33,10 @@ namespace FitnessTracker.Auth
                     ClockSkew = TimeSpan.Zero
                 };
 
-                var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
-                if (validatedToken is not JwtSecurityToken jwtToken)
-                    return Task.FromResult(AuthenticateResult.Fail("Invalid token"));
-
-                return Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(principal, Scheme.Name)));
+                System.Security.Claims.ClaimsPrincipal principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
+                return validatedToken is not JwtSecurityToken jwtToken
+                    ? Task.FromResult(AuthenticateResult.Fail("Invalid token"))
+                    : Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(principal, Scheme.Name)));
             }
             catch (Exception ex)
             {

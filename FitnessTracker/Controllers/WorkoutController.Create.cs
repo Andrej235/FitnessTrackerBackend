@@ -19,16 +19,15 @@ namespace FitnessTracker.Controllers
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
+                || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            var workout = createRequestMapper.Map(request);
+            Models.Workout workout = createRequestMapper.Map(request);
             workout.CreatorId = userId;
-            var newId = await createService.Add(workout);
-            if (newId == default)
-                return BadRequest("Failed to create workout");
-
-            return Created($"/workouts/{newId}", newWorkoutResponseMapper.Map(workout));
+            object? newId = await createService.Add(workout);
+            return newId == default
+                ? BadRequest("Failed to create workout")
+                : Created($"/workouts/{newId}", newWorkoutResponseMapper.Map(workout));
         }
     }
 }

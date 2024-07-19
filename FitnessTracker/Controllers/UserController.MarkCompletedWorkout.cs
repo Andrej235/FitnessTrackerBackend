@@ -2,7 +2,6 @@
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Security.Claims;
 
 namespace FitnessTracker.Controllers
@@ -19,24 +18,24 @@ namespace FitnessTracker.Controllers
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
+                || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            var user = await readSingleService.Get(x => x.Id == userId, "split,splitworkouts");
+            Models.User? user = await readSingleService.Get(x => x.Id == userId, "split,splitworkouts");
             if (user is null)
                 return Unauthorized();
 
             if (user.CurrentSplit is null)
                 return BadRequest("No current split");
 
-            var newCompletedWorkout = createCompletedWorkoutRequestMapper.Map(request);
+            Models.CompletedWorkout newCompletedWorkout = createCompletedWorkoutRequestMapper.Map(request);
             newCompletedWorkout.UserId = userId;
             newCompletedWorkout.SplitId = user.CurrentSplit.Id;
             newCompletedWorkout.WorkoutId = user.CurrentSplit.Workouts.First().WorkoutId;
-            foreach (var set in newCompletedWorkout.CompletedSets)
+            foreach (Models.CompletedSet set in newCompletedWorkout.CompletedSets)
                 set.UserId = userId;
 
-            await completedWorkoutCreateService.Add(newCompletedWorkout);
+            _ = await completedWorkoutCreateService.Add(newCompletedWorkout);
 
             return Created();
         }

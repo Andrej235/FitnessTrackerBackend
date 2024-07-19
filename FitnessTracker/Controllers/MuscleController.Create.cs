@@ -14,7 +14,7 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Create([FromBody] CreateMuscleRequestDTO request)
         {
-            await createService.Add(requestMapper.Map(request));
+            _ = await createService.Add(requestMapper.Map(request));
             return Created();
         }
 
@@ -25,7 +25,7 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Create([FromBody] IEnumerable<CreateMuscleRequestDTO> request)
         {
-            await createRangeService.Add(request.Select(requestMapper.Map));
+            _ = await createRangeService.Add(request.Select(requestMapper.Map));
             return Created();
         }
     }

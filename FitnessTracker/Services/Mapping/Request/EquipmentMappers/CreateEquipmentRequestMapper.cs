@@ -5,12 +5,9 @@ namespace FitnessTracker.Services.Mapping.Request.EquipmentMappers
 {
     public class CreateEquipmentRequestMapper : IRequestMapper<CreateEquipmentRequestDTO, Equipment>
     {
-        public Equipment Map(CreateEquipmentRequestDTO from)
+        public Equipment Map(CreateEquipmentRequestDTO from) => new()
         {
-            return new()
-            {
-                Name = from.Name,
-            };
-        }
+            Name = from.Name,
+        };
     }
 }

@@ -3,7 +3,7 @@
 namespace FitnessTracker.Services.Read.ExpressionBased
 {
     public interface IReadRangeService<T> where T : class
-    { 
+    {
         /// <summary>
         /// Finds all entities in the database which fit the provided criteria
         /// </summary>

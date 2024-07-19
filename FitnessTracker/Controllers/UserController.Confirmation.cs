@@ -19,10 +19,10 @@ namespace FitnessTracker.Controllers
             {
                 if (User.Identity is not ClaimsIdentity claimsIdentity
                     || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out var userId))
+                    || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                var user = await readSingleService.Get(x => x.Id == userId, "none");
+                Models.User? user = await readSingleService.Get(x => x.Id == userId, "none");
                 if (user is null)
                     return Unauthorized();
 
@@ -48,10 +48,10 @@ namespace FitnessTracker.Controllers
             {
                 if (User.Identity is not ClaimsIdentity claimsIdentity
                     || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out var userId))
+                    || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                var success = await emailConfirmationService.ConfirmEmail(userId, code);
+                bool success = await emailConfirmationService.ConfirmEmail(userId, code);
                 return success ? NoContent() : BadRequest("Invalid code");
             }
             catch (Exception ex)

@@ -18,12 +18,12 @@ namespace FitnessTracker.Controllers
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
+                || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
             try
             {
-                await likeCreateService.Add(new WorkoutLike
+                _ = await likeCreateService.Add(new WorkoutLike
                 {
                     UserId = userId,
                     WorkoutId = id
@@ -48,7 +48,7 @@ namespace FitnessTracker.Controllers
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
+                || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
             try

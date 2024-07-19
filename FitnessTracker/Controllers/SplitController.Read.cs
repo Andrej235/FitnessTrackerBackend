@@ -13,7 +13,7 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllSimplePublic([FromQuery] string? name)
         {
-            var workouts = name is null
+            IEnumerable<Models.Split> workouts = name is null
                 ? await readRangeService.Get(x => x.IsPublic, 0, 10, "creator")
                 : await readRangeService.Get(x => x.IsPublic && EF.Functions.Like(x.Name, $"%{name}%"), 0, 10, "creator");
 
@@ -24,7 +24,7 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllSimplePublic(Guid userId, [FromQuery] string? name)
         {
-            var workouts = name is null
+            IEnumerable<Models.Split> workouts = name is null
                 ? await readRangeService.Get(x => x.CreatorId == userId && x.IsPublic, 0, 10, "creator")
                 : await readRangeService.Get(x => x.CreatorId == userId && x.IsPublic && EF.Functions.Like(x.Name, $"%{name}%"), 0, 10, "creator");
 
@@ -40,10 +40,10 @@ namespace FitnessTracker.Controllers
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
+                || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            var workouts = name is null
+            IEnumerable<Models.Split> workouts = name is null
                 ? await readRangeService.Get(x => x.CreatorId == userId, 0, 10, "creator")
                 : await readRangeService.Get(x => x.CreatorId == userId && EF.Functions.Like(x.Name, $"%{name}%"), 0, 10, "creator");
 
@@ -59,17 +59,17 @@ namespace FitnessTracker.Controllers
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
+                || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            var workout = await readSingleService.Get(x => x.Id == id, "detailed");
+            Models.Split? workout = await readSingleService.Get(x => x.Id == id, "detailed");
             if (workout is null)
                 return NotFound();
 
             if (!workout.IsPublic && workout.CreatorId != userId)
                 return Unauthorized();
 
-            var mapped = detailedResponseMapper.Map(workout);
+            DetailedSplitResponseDTO mapped = detailedResponseMapper.Map(workout);
             mapped.IsLiked = workout.Likes.Any(x => x.Id == userId);
             mapped.IsFavorited = workout.Favorites.Any(x => x.Id == userId);
             return Ok(mapped);

@@ -5,14 +5,11 @@ namespace FitnessTracker.Services.Mapping.Response.ExerciseMappers
 {
     public class SimpleExerciseResponseMapper : IResponseMapper<Exercise, SimpleExerciseResponseDTO>
     {
-        public SimpleExerciseResponseDTO Map(Exercise from)
+        public SimpleExerciseResponseDTO Map(Exercise from) => new()
         {
-            return new()
-            {
-                Id = from.Id,
-                Name = from.Name,
-                Image = from.Image
-            };
-        }
+            Id = from.Id,
+            Name = from.Name,
+            Image = from.Image
+        };
     }
 }

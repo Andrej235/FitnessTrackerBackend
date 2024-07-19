@@ -5,13 +5,10 @@ namespace FitnessTracker.Services.Mapping.Request.WorkoutMappers
 {
     public class CreateWorkoutCommentRequestMapper : IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment>
     {
-        public WorkoutComment Map(CreateWorkoutCommentRequestDTO from)
+        public WorkoutComment Map(CreateWorkoutCommentRequestDTO from) => new()
         {
-            return new()
-            {
-                Text = from.Comment,
-                CreatedAt = DateTime.Now,
-            };
-        }
+            Text = from.Comment,
+            CreatedAt = DateTime.Now,
+        };
     }
 }

@@ -8,13 +8,10 @@ namespace FitnessTracker.Services.Mapping.Response.SplitMappers
     {
         private readonly IResponseMapper<Workout, SimpleWorkoutResponseDTO> workoutResponseMapper = workoutResponseMapper;
 
-        public SimpleSplitWorkoutResponseDTO Map(SplitWorkout from)
+        public SimpleSplitWorkoutResponseDTO Map(SplitWorkout from) => new()
         {
-            return new()
-            {
-                Workout = workoutResponseMapper.Map(from.Workout),
-                Day = from.Day,
-            };
-        }
+            Workout = workoutResponseMapper.Map(from.Workout),
+            Day = from.Day,
+        };
     }
 }

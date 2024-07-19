@@ -18,7 +18,7 @@ namespace FitnessTracker.Services.UserServices.EmailConfirmationSenderService
                 UserId = userId
             };
 
-            var emailConfirmationId = await createService.Add(emailConfirmation);
+            object? emailConfirmationId = await createService.Add(emailConfirmation);
             if (emailConfirmationId == default || emailConfirmationId is not Guid confirmationCode)
                 throw new Exception("Failed to create email confirmation");
 

@@ -1,8 +1,6 @@
 ﻿using FitnessTracker.DTOs.Requests.User;
 using FitnessTracker.Utilities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace FitnessTracker.Controllers
 {
@@ -16,7 +14,7 @@ namespace FitnessTracker.Controllers
         {
             try
             {
-                var user = await readSingleService.Get(x => x.Email == request.Email, "none");
+                Models.User? user = await readSingleService.Get(x => x.Email == request.Email, "none");
                 if (user is null)
                     return NotFound();
 
@@ -40,11 +38,11 @@ namespace FitnessTracker.Controllers
                 if (request.NewPassword.Length < 8)
                     return BadRequest("Password must be at least 8 characters long");
 
-                var user = await readSingleService.Get(x => x.Email == request.Email, "none");
+                Models.User? user = await readSingleService.Get(x => x.Email == request.Email, "none");
                 if (user is null)
                     return NotFound();
 
-                var success = await passwordResetEmailService.ResetPassword(user.Id, code, request.NewPassword);
+                bool success = await passwordResetEmailService.ResetPassword(user.Id, code, request.NewPassword);
                 return success ? NoContent() : BadRequest("Invalid code");
             }
             catch (Exception ex)

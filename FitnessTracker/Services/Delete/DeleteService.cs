@@ -13,8 +13,8 @@ namespace FitnessTracker.Services.Delete
         {
             T entityToDelete = await readService.Get(criteria, "none") ?? throw new NullReferenceException("Entity not found");
 
-            context.Set<T>().Remove(entityToDelete);
-            await context.SaveChangesAsync();
+            _ = context.Set<T>().Remove(entityToDelete);
+            _ = await context.SaveChangesAsync();
         }
     }
 }

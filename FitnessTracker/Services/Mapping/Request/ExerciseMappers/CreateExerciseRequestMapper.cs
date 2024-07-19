@@ -5,14 +5,11 @@ namespace FitnessTracker.Services.Mapping.Request.ExerciseMappers
 {
     public class CreateExerciseRequestMapper : IRequestMapper<CreateExerciseRequestDTO, Exercise>
     {
-        public Exercise Map(CreateExerciseRequestDTO from)
+        public Exercise Map(CreateExerciseRequestDTO from) => new()
         {
-            return new Exercise
-            {
-                Name = from.Name,
-                Description = from.Description,
-                Image = from.Image ?? "",
-            };
-        }
+            Name = from.Name,
+            Description = from.Description,
+            Image = from.Image ?? "",
+        };
     }
 }

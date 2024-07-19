@@ -11,31 +11,28 @@ namespace FitnessTracker.Services.Read.QueryBased
     {
         protected readonly DataContext context = context;
 
-        public virtual Task<IEnumerable<T>> Get(string? query, int? offset = 0, int? limit = -1, string? include = "all")
-        {
-            return Task.Run(() =>
-            {
-                var entitiesQueryable = GetIncluded(include);
-                if (query is null)
-                    return entitiesQueryable.ApplyOffsetAndLimit(offset, limit);
+        public virtual Task<IEnumerable<T>> Get(string? query, int? offset = 0, int? limit = -1, string? include = "all") => Task.Run(() =>
+                                                                                                                                      {
+                                                                                                                                          IQueryable<T> entitiesQueryable = GetIncluded(include);
+                                                                                                                                          if (query is null)
+                                                                                                                                              return entitiesQueryable.ApplyOffsetAndLimit(offset, limit);
 
-                var keyValuePairsInSearchQuery = SplitQueryString(query);
-                List<string>? strictKeyValuePair = keyValuePairsInSearchQuery.FirstOrDefault(kvp => kvp[0] == "strict");
-                bool isStrictModeEnabled = false;
+                                                                                                                                          List<List<string>> keyValuePairsInSearchQuery = SplitQueryString(query);
+                                                                                                                                          List<string>? strictKeyValuePair = keyValuePairsInSearchQuery.FirstOrDefault(kvp => kvp[0] == "strict");
+                                                                                                                                          bool isStrictModeEnabled = false;
 
-                if (strictKeyValuePair != null)
-                {
-                    isStrictModeEnabled = strictKeyValuePair[1] == "true";
-                    keyValuePairsInSearchQuery.Remove(strictKeyValuePair);
-                }
+                                                                                                                                          if (strictKeyValuePair != null)
+                                                                                                                                          {
+                                                                                                                                              isStrictModeEnabled = strictKeyValuePair[1] == "true";
+                                                                                                                                              _ = keyValuePairsInSearchQuery.Remove(strictKeyValuePair);
+                                                                                                                                          }
 
-                entitiesQueryable = isStrictModeEnabled
-                    ? ApplyStrictCriterias(entitiesQueryable, keyValuePairsInSearchQuery)
-                    : ApplyNonStrictCriterias(entitiesQueryable, keyValuePairsInSearchQuery);
+                                                                                                                                          entitiesQueryable = isStrictModeEnabled
+                                                                                                                                              ? ApplyStrictCriterias(entitiesQueryable, keyValuePairsInSearchQuery)
+                                                                                                                                              : ApplyNonStrictCriterias(entitiesQueryable, keyValuePairsInSearchQuery);
 
-                return entitiesQueryable.ApplyOffsetAndLimit(offset, limit);
-            });
-        }
+                                                                                                                                          return entitiesQueryable.ApplyOffsetAndLimit(offset, limit);
+                                                                                                                                      });
 
         #region Query
         protected abstract Expression<Func<T, bool>> TranslateKeyValueToExpression(string key, string value);
@@ -47,7 +44,7 @@ namespace FitnessTracker.Services.Read.QueryBased
 
         private IEnumerable<Expression<Func<T, bool>>> DecipherQuery(List<List<string>> keyValuePairsInSearchQuery)
         {
-            foreach (var keyValue in keyValuePairsInSearchQuery)
+            foreach (List<string> keyValue in keyValuePairsInSearchQuery)
             {
                 Expression<Func<T, bool>>? current = null;
                 try
@@ -66,21 +63,20 @@ namespace FitnessTracker.Services.Read.QueryBased
 
         protected IQueryable<T> ApplyStrictCriterias(IQueryable<T> entitiesQueryable, List<List<string>> keyValuePairsInSearchQuery)
         {
-            foreach (var criteria in DecipherQuery(keyValuePairsInSearchQuery))
+            foreach (Expression<Func<T, bool>> criteria in DecipherQuery(keyValuePairsInSearchQuery))
                 entitiesQueryable = entitiesQueryable.Where(criteria);
 
             return entitiesQueryable;
         }
 
-        protected IQueryable<T> ApplyNonStrictCriterias(IQueryable<T> entitiesQueryable, List<List<string>> keyValuePairsInSearchQuery) 
+        protected IQueryable<T> ApplyNonStrictCriterias(IQueryable<T> entitiesQueryable, List<List<string>> keyValuePairsInSearchQuery)
         {
-            var criterias = DecipherQuery(keyValuePairsInSearchQuery);
+            IEnumerable<Expression<Func<T, bool>>> criterias = DecipherQuery(keyValuePairsInSearchQuery);
             criterias = criterias.Where(x => x.Body is not ConstantExpression);
 
-            if (!criterias.Any())
-                return entitiesQueryable;
-
-            return criterias
+            return !criterias.Any()
+                ? entitiesQueryable
+                : criterias
                 .SelectMany(x => entitiesQueryable.Where(x))
                 .GroupBy(x => x)
                 .OrderByDescending(g => g.Count())
@@ -100,20 +96,20 @@ namespace FitnessTracker.Services.Read.QueryBased
                 return entitiesIncluding;
 
             ParameterExpression parameter = Expression.Parameter(typeof(T), "x");
-            var navigationProperties = typeof(T).GetProperties().Where(x =>
+            IEnumerable<PropertyInfo> navigationProperties = typeof(T).GetProperties().Where(x =>
                 (x.PropertyType.IsClass && x.PropertyType != typeof(string))
                 || (x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>)));
 
             if (include.Contains("all"))
             {
-                foreach (var navigationProperty in navigationProperties)
+                foreach (PropertyInfo? navigationProperty in navigationProperties)
                     entitiesIncluding = Include(entitiesIncluding, navigationProperty.Name);
 
                 return entitiesIncluding;
             }
 
             IEnumerable<PropertyInfo> includedNavigationProperties = navigationProperties.Where(navigationProperty => include.Any(includeMember => navigationProperty.Name.Contains(includeMember, StringComparison.CurrentCultureIgnoreCase)));
-            foreach (var navigationProperty in includedNavigationProperties)
+            foreach (PropertyInfo navigationProperty in includedNavigationProperties)
                 entitiesIncluding = Include(entitiesIncluding, navigationProperty.Name);
 
             return entitiesIncluding;
@@ -121,9 +117,9 @@ namespace FitnessTracker.Services.Read.QueryBased
 
         protected static IQueryable<TEntity> Include<TEntity>(IQueryable<TEntity> query, string propertyName) where TEntity : class
         {
-            var parameter = Expression.Parameter(typeof(TEntity), "x");
-            var property = Expression.Property(parameter, propertyName);
-            var lambda = Expression.Lambda<Func<TEntity, object>>(property, parameter);
+            ParameterExpression parameter = Expression.Parameter(typeof(TEntity), "x");
+            MemberExpression property = Expression.Property(parameter, propertyName);
+            Expression<Func<TEntity, object>> lambda = Expression.Lambda<Func<TEntity, object>>(property, parameter);
 
             return query.Include(lambda);
         }

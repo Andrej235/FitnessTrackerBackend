@@ -1,5 +1,4 @@
 ﻿using FitnessTracker.DTOs.Requests.Split;
-using FitnessTracker.DTOs.Requests.Workout;
 using FitnessTracker.DTOs.Responses.Split;
 using FitnessTracker.Models;
 using FitnessTracker.Services.Create;

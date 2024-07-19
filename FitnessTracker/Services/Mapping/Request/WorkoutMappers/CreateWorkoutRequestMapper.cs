@@ -8,15 +8,12 @@ namespace FitnessTracker.Services.Mapping.Request.WorkoutMappers
     {
         private readonly IRequestMapper<CreateSetRequestDTO, Set> setRequestMapper = setRequestMapper;
 
-        public Workout Map(CreateWorkoutRequestDTO from)
+        public Workout Map(CreateWorkoutRequestDTO from) => new()
         {
-            return new()
-            {
-                Name = from.Name,
-                Description = from.Description,
-                IsPublic = from.IsPublic,
-                Sets = from.Sets.Select(setRequestMapper.Map).ToList(),
-            };
-        }
+            Name = from.Name,
+            Description = from.Description,
+            IsPublic = from.IsPublic,
+            Sets = from.Sets.Select(setRequestMapper.Map).ToList(),
+        };
     }
 }

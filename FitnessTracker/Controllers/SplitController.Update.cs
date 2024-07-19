@@ -22,10 +22,10 @@ namespace FitnessTracker.Controllers
             {
                 if (User.Identity is not ClaimsIdentity claimsIdentity
                     || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out var userId))
+                    || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                var split = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "workouts");
+                Split? split = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "workouts");
                 if (split is null)
                     return NotFound();
 
@@ -57,11 +57,11 @@ namespace FitnessTracker.Controllers
             {
                 if (User.Identity is not ClaimsIdentity claimsIdentity
                     || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out var userId))
+                    || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                var split = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "workouts");
-                var splitWorkout = split?.Workouts.FirstOrDefault(x => x.Day == day);
+                Split? split = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "workouts");
+                SplitWorkout? splitWorkout = split?.Workouts.FirstOrDefault(x => x.Day == day);
 
                 if (splitWorkout is null)
                     return NotFound();
@@ -75,6 +75,7 @@ namespace FitnessTracker.Controllers
             {
                 ex.LogError();
                 return BadRequest();
-            }        }
+            }
+        }
     }
 }

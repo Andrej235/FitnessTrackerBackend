@@ -5,12 +5,9 @@ namespace FitnessTracker.Services.Mapping.Request.MuscleGroupMappers
 {
     public class CreateMuscleGroupRequestMapper : IRequestMapper<CreateMuscleGroupRequestDTO, MuscleGroup>
     {
-        public MuscleGroup Map(CreateMuscleGroupRequestDTO from)
+        public MuscleGroup Map(CreateMuscleGroupRequestDTO from) => new()
         {
-            return new MuscleGroup()
-            {
-                Name = from.Name,
-            };
-        }
+            Name = from.Name,
+        };
     }
 }

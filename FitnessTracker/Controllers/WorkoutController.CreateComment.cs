@@ -18,20 +18,17 @@ namespace FitnessTracker.Controllers
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
+                || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
             try
             {
-                var mapped = commentCreateRequestMapper.Map(request);
+                Models.WorkoutComment mapped = commentCreateRequestMapper.Map(request);
                 mapped.CreatorId = userId;
                 mapped.WorkoutId = workoutId;
 
-                var newId = await commentCreateService.Add(mapped);
-                if (newId == default)
-                    return BadRequest("Failed to create comment");
-
-                return Created();
+                object? newId = await commentCreateService.Add(mapped);
+                return newId == default ? BadRequest("Failed to create comment") : Created();
             }
             catch (Exception ex)
             {
@@ -50,21 +47,18 @@ namespace FitnessTracker.Controllers
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
+                || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
             try
             {
-                var mapped = commentCreateRequestMapper.Map(request);
+                Models.WorkoutComment mapped = commentCreateRequestMapper.Map(request);
                 mapped.CreatorId = userId;
                 mapped.WorkoutId = workoutId;
                 mapped.ParentId = parentId;
 
-                var newId = await commentCreateService.Add(mapped);
-                if (newId == default)
-                    return BadRequest("Failed to create comment");
-
-                return Created();
+                object? newId = await commentCreateService.Add(mapped);
+                return newId == default ? BadRequest("Failed to create comment") : Created();
             }
             catch (Exception ex)
             {

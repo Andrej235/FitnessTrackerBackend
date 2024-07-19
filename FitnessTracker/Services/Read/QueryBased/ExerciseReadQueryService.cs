@@ -13,26 +13,20 @@ namespace FitnessTracker.Services.Read.QueryBased
                 return e => EF.Functions.Like(e.Name, $"%{value}%");
             else
             {
-                if (int.TryParse(value, out int valueId))
-                {
-                    return key switch
+                return int.TryParse(value, out int valueId)
+                    ? key switch
                     {
                         "usesmusclegroup" => e => e.PrimaryMuscleGroups.Any(m => m.Id == valueId) || e.SecondaryMuscleGroups.Any(m => m.Id == valueId),
                         "usesequipment" => e => e.Equipment.Any(eq => eq.Id == valueId),
                         _ => throw new NotSupportedException($"Invalid key in search query. Entered key: {key}"),
-                    };
-                }
-
-                if (Guid.TryParse(value, out Guid valueGuid))
-                {
-                    return key switch
+                    }
+                    : Guid.TryParse(value, out Guid valueGuid)
+                    ? key switch
                     {
                         "favoritedby" => e => e.Favorites.Any(f => f.Id == valueGuid),
                         _ => throw new NotSupportedException($"Invalid key in search query. Entered key: {key}"),
-                    };
-                }
-
-                throw new NotSupportedException($"Invalid search query value. Entered value: {value}");
+                    }
+                    : throw new NotSupportedException($"Invalid search query value. Entered value: {value}");
             }
         }
     }

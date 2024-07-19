@@ -1,5 +1,4 @@
 ﻿using FitnessTracker.DTOs.Requests.User;
-using FitnessTracker.DTOs.Responses.CompletedWorkouts;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,14 +23,14 @@ namespace FitnessTracker.Controllers
 
                 if (User.Identity is not ClaimsIdentity claimsIdentity
                     || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out var userId))
+                    || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                var user = await readSingleService.Get(x => x.Id == userId, "none");
+                Models.User? user = await readSingleService.Get(x => x.Id == userId, "none");
                 if (user is null)
                     return Unauthorized();
 
-                var hash = request.OldPassword.ToHash(user.Salt);
+                byte[] hash = request.OldPassword.ToHash(user.Salt);
                 if (!user.PasswordHash.SequenceEqual(hash))
                     return Unauthorized();
 
@@ -59,10 +58,10 @@ namespace FitnessTracker.Controllers
             {
                 if (User.Identity is not ClaimsIdentity claimsIdentity
                     || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out var userId))
+                    || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                var user = await readSingleService.Get(x => x.Id == userId, "none");
+                Models.User? user = await readSingleService.Get(x => x.Id == userId, "none");
                 if (user is null)
                     return Unauthorized();
 

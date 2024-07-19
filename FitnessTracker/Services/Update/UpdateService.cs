@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using FitnessTracker.Data;
+﻿using FitnessTracker.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace FitnessTracker.Services.Update
 {
@@ -12,8 +12,8 @@ namespace FitnessTracker.Services.Update
                 if (!await context.Set<T>().ContainsAsync(updatedEntity))
                     throw new NullReferenceException("Entity not found");
 
-                context.Set<T>().Update(updatedEntity);
-                await context.SaveChangesAsync();
+                _ = context.Set<T>().Update(updatedEntity);
+                _ = await context.SaveChangesAsync();
             }
             catch (Exception)
             {

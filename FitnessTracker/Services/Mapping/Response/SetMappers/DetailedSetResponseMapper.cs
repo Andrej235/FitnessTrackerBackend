@@ -5,17 +5,14 @@ namespace FitnessTracker.Services.Mapping.Response.SetMappers
 {
     public class DetailedSetResponseMapper : IResponseMapper<Set, DetailedSetResponseDTO>
     {
-        public DetailedSetResponseDTO Map(Set from)
+        public DetailedSetResponseDTO Map(Set from) => new()
         {
-            return new()
-            {
-                Id = from.Id,
-                BottomRepRange = from.BottomRepRange,
-                TopRepRange = from.TopRepRange,
-                ExerciseId = from.ExerciseId,
-                Type = from.Type,
-                RiR = from.RiR
-            };
-        }
+            Id = from.Id,
+            BottomRepRange = from.BottomRepRange,
+            TopRepRange = from.TopRepRange,
+            ExerciseId = from.ExerciseId,
+            Type = from.Type,
+            RiR = from.RiR
+        };
     }
 }

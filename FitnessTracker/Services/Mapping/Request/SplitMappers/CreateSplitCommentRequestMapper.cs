@@ -5,13 +5,10 @@ namespace FitnessTracker.Services.Mapping.Request.SplitMappers
 {
     public class CreateSplitCommentRequestMapper : IRequestMapper<CreateSplitCommentRequestDTO, SplitComment>
     {
-        public SplitComment Map(CreateSplitCommentRequestDTO from)
+        public SplitComment Map(CreateSplitCommentRequestDTO from) => new()
         {
-            return new()
-            {
-                Text = from.Comment,
-                CreatedAt = DateTime.Now,
-            };
-        }
+            Text = from.Comment,
+            CreatedAt = DateTime.Now,
+        };
     }
 }

@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FitnessTracker.DTOs.Requests.Exercise;
+using FitnessTracker.DTOs.Responses.Exercises;
 using FitnessTracker.Models;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
-using FitnessTracker.Services.Update;
 using FitnessTracker.Services.Mapping.Request;
-using FitnessTracker.DTOs.Requests.Exercise;
 using FitnessTracker.Services.Mapping.Response;
-using FitnessTracker.DTOs.Responses.Exercises;
-using FitnessTracker.Services.Read.QueryBased;
 using FitnessTracker.Services.Read.ExpressionBased;
+using FitnessTracker.Services.Read.QueryBased;
+using FitnessTracker.Services.Update;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessTracker.Controllers
 {

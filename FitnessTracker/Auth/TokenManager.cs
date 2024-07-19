@@ -1,13 +1,12 @@
 ﻿using FitnessTracker.Models;
-using Microsoft.IdentityModel.Tokens;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
-using FitnessTracker.Services.Read;
+using FitnessTracker.Services.Read.ExpressionBased;
 using FitnessTracker.Services.Update;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using FitnessTracker.Services.Read.ExpressionBased;
 
 namespace FitnessTracker.Auth
 {
@@ -27,11 +26,11 @@ namespace FitnessTracker.Auth
 
         private (string jwt, Guid jwtId) CreateJWTAndId(User user)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]!);
-            var jwtId = Guid.NewGuid();
+            JwtSecurityTokenHandler tokenHandler = new();
+            byte[] key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]!);
+            Guid jwtId = Guid.NewGuid();
 
-            var tokenDescriptor = new SecurityTokenDescriptor
+            SecurityTokenDescriptor tokenDescriptor = new()
             {
                 Subject = new ClaimsIdentity(
                     [
@@ -47,15 +46,15 @@ namespace FitnessTracker.Auth
                 Audience = configuration["Jwt:Audience"]
             };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
+            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+            string tokenString = tokenHandler.WriteToken(token);
 
             return (tokenString, jwtId);
         }
 
         public async Task<string> GenerateJWTAndRefreshToken(User user, IResponseCookies cookies)
         {
-            var (jwt, jwtId) = CreateJWTAndId(user);
+            (string jwt, Guid jwtId) = CreateJWTAndId(user);
 
             RefreshToken refresh = new()
             {
@@ -64,9 +63,9 @@ namespace FitnessTracker.Auth
                 ExpiryDate = DateTime.UtcNow.AddDays(7),
             };
 
-            await createService.Add(refresh);
+            _ = await createService.Add(refresh);
 
-            var cookieOptions = new CookieOptions
+            CookieOptions cookieOptions = new()
             {
                 HttpOnly = true,
                 Secure = false, //TODO-PROD: Set to true in production
@@ -80,11 +79,11 @@ namespace FitnessTracker.Auth
 
         public async Task<string> RefreshJWT(Guid jwtId, Guid refreshToken, Guid userId)
         {
-            var token = await readSingleService.Get(x => x.Token == refreshToken, "user");
+            RefreshToken? token = await readSingleService.Get(x => x.Token == refreshToken, "user");
             if (token is null || token.JwtId != jwtId || token.UserId != userId)
                 throw new Exception("Invalid token");
 
-            var (newJwt, newJwtId) = CreateJWTAndId(token.User);
+            (string newJwt, Guid newJwtId) = CreateJWTAndId(token.User);
             token.JwtId = newJwtId;
             await updateService.Update(token);
 

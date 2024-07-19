@@ -8,21 +8,15 @@ namespace FitnessTracker.Migrations
     public partial class RenamesetintensitytoRiR : Migration
     {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.RenameColumn(
+        protected override void Up(MigrationBuilder migrationBuilder) => migrationBuilder.RenameColumn(
                 name: "Intensity",
                 table: "Sets",
                 newName: "RiR");
-        }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.RenameColumn(
+        protected override void Down(MigrationBuilder migrationBuilder) => migrationBuilder.RenameColumn(
                 name: "RiR",
                 table: "Sets",
                 newName: "Intensity");
-        }
     }
 }

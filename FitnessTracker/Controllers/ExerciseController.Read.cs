@@ -34,14 +34,14 @@ namespace FitnessTracker.Controllers
             {
                 if (User.Identity is ClaimsIdentity claimsIdentity
                     && claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is string userIdString
-                    && Guid.TryParse(userIdString, out var userId))
+                    && Guid.TryParse(userIdString, out Guid userId))
                 {
                     include.Add("favorites");
                     query += $"favoritedby={userId};";
                 }
             }
 
-            var exercises = await readQueryService.Get(query, offset, limit, string.Join(',', include));
+            IEnumerable<Models.Exercise> exercises = await readQueryService.Get(query, offset, limit, string.Join(',', include));
             return Ok(exercises.Select(simpleResponseMapper.Map));
         }
 
@@ -50,14 +50,14 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(int id)
         {
-            var exercise = await readSingleService.Get(x => x.Id == id, "primarymusclegroups,secondarymusclegroups,primarymuscles,secondarymuscles,equipment,favorites");
+            Models.Exercise? exercise = await readSingleService.Get(x => x.Id == id, "primarymusclegroups,secondarymusclegroups,primarymuscles,secondarymuscles,equipment,favorites");
             if (exercise is null)
                 return NotFound();
 
-            var mapped = detailedResponseMapper.Map(exercise);
+            DetailedExerciseResponseDTO mapped = detailedResponseMapper.Map(exercise);
             if (User.Identity is ClaimsIdentity claimsIdentity
                 && claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is string userIdString
-                && Guid.TryParse(userIdString, out var userId))
+                && Guid.TryParse(userIdString, out Guid userId))
                 mapped.IsFavorite = exercise.Favorites.Any(x => x.Id == userId);
 
             return Ok(mapped);

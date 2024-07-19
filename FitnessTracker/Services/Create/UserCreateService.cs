@@ -9,12 +9,6 @@ namespace FitnessTracker.Services.Create
     {
         private readonly IReadSingleService<User> readSingleService = readSingleService;
 
-        protected override async Task<Exception?> IsEntityValid(User entity)
-        {
-            if (await readSingleService.Get(eq => eq.Email == entity.Email, "none") != null)
-                return new EntityAlreadyExistsException();
-
-            return null;
-        }
+        protected override async Task<Exception?> IsEntityValid(User entity) => await readSingleService.Get(eq => eq.Email == entity.Email, "none") != null ? new EntityAlreadyExistsException() : (Exception?)null;
     }
 }

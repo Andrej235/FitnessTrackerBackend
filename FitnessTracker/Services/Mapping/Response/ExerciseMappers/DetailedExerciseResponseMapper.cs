@@ -14,21 +14,18 @@ namespace FitnessTracker.Services.Mapping.Response.ExerciseMappers
         private readonly IResponseMapper<MuscleGroup, SimpleMuscleGroupResponseDTO> muscleGroupResponseMapper = muscleGroupResponseMapper;
         private readonly IResponseMapper<Muscle, SimpleMuscleResponseDTO> muscleResponseMapper = muscleResponseMapper;
 
-        public DetailedExerciseResponseDTO Map(Exercise from)
+        public DetailedExerciseResponseDTO Map(Exercise from) => new()
         {
-            return new()
-            {
-                Id = from.Id,
-                Name = from.Name,
-                Description = from.Description,
-                Image = from.Image,
-                Equipment = from.Equipment.Select(equipmentResponseMapper.Map),
-                PrimaryMuscleGroups = from.PrimaryMuscleGroups.Select(muscleGroupResponseMapper.Map),
-                PrimaryMuscles = from.PrimaryMuscles.Select(muscleResponseMapper.Map),
-                SecondaryMuscleGroups = from.SecondaryMuscleGroups.Select(muscleGroupResponseMapper.Map),
-                SecondaryMuscles = from.SecondaryMuscles.Select(muscleResponseMapper.Map),
-                Favorites = from.Favorites.Count,
-            };
-        }
+            Id = from.Id,
+            Name = from.Name,
+            Description = from.Description,
+            Image = from.Image,
+            Equipment = from.Equipment.Select(equipmentResponseMapper.Map),
+            PrimaryMuscleGroups = from.PrimaryMuscleGroups.Select(muscleGroupResponseMapper.Map),
+            PrimaryMuscles = from.PrimaryMuscles.Select(muscleResponseMapper.Map),
+            SecondaryMuscleGroups = from.SecondaryMuscleGroups.Select(muscleGroupResponseMapper.Map),
+            SecondaryMuscles = from.SecondaryMuscles.Select(muscleResponseMapper.Map),
+            Favorites = from.Favorites.Count,
+        };
     }
 }

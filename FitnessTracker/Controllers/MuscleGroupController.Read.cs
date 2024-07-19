@@ -9,7 +9,7 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(IEnumerable<SimpleMuscleGroupResponseDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> Get([FromQuery] int? limit, [FromQuery] int? offset)
         {
-            var muscleGroups = await readRangeService.Get(x => true, offset, limit, "none");
+            IEnumerable<Models.MuscleGroup> muscleGroups = await readRangeService.Get(x => true, offset, limit, "none");
             return Ok(muscleGroups.Select(responseMapper.Map));
         }
 
@@ -17,7 +17,7 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(IEnumerable<DetailedMuscleGroupResponseDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDetailed([FromQuery] int? limit, [FromQuery] int? offset)
         {
-            var muscleGroups = await readRangeService.Get(x => true, offset, limit, "muscles");
+            IEnumerable<Models.MuscleGroup> muscleGroups = await readRangeService.Get(x => true, offset, limit, "muscles");
             return Ok(muscleGroups.Select(detailedResponseMapper.Map));
         }
     }

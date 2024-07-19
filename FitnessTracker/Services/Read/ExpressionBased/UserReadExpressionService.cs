@@ -26,7 +26,7 @@ namespace FitnessTracker.Services.Read.ExpressionBased
 
             if (includeString == "split,splitworkouts")
             {
-                var today = DateTime.Today.DayOfWeek;
+                DayOfWeek today = DateTime.Today.DayOfWeek;
                 return context.Users
                     .Include(x => x.CurrentSplit!)
                     .ThenInclude(x => x.Workouts.Where(w => w.Day == today));

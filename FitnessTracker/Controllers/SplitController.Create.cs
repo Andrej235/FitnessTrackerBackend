@@ -19,11 +19,11 @@ namespace FitnessTracker.Controllers
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
+                || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            var selectedWorkoutIds = request.Workouts.Select(x => x.WorkoutId);
-            var selectedWorkouts = await workoutReadRangeService.Get(x => selectedWorkoutIds.Contains(x.Id), 0, 10, "none");
+            IEnumerable<Guid> selectedWorkoutIds = request.Workouts.Select(x => x.WorkoutId);
+            IEnumerable<Models.Workout> selectedWorkouts = await workoutReadRangeService.Get(x => selectedWorkoutIds.Contains(x.Id), 0, 10, "none");
             if (selectedWorkoutIds.Count() != selectedWorkouts.Count())
                 return NotFound("One or more selected workouts could not found");
 
@@ -33,10 +33,10 @@ namespace FitnessTracker.Controllers
             if (request.IsPublic && selectedWorkouts.Any(x => !x.IsPublic))
                 return BadRequest("Attempted to create a public split with one or more private workouts");
 
-            var mapped = createRequestMapper.Map(request);
+            Models.Split mapped = createRequestMapper.Map(request);
             mapped.CreatorId = userId;
 
-            await createService.Add(mapped);
+            _ = await createService.Add(mapped);
             return Created();
         }
     }

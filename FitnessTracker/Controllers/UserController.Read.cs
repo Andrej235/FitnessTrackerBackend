@@ -17,10 +17,10 @@ namespace FitnessTracker.Controllers
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
+                || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            var user = await readSingleService.Get(x => x.Id == userId, "detailed");
+            Models.User? user = await readSingleService.Get(x => x.Id == userId, "detailed");
             return user is null ? Unauthorized() : Ok(detailedResponseMapper.Map(user));
         }
 
@@ -28,15 +28,15 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(DetailedPublicUserResponseDTO), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDetailed(Guid id)
         {
-            var user = await readSingleService.Get(x => x.Id == id, "detailed");
+            Models.User? user = await readSingleService.Get(x => x.Id == id, "detailed");
             if (user is null)
                 return Unauthorized();
 
-            var mapped = publicUserDetailedResponseMapper.Map(user);
+            DetailedPublicUserResponseDTO mapped = publicUserDetailedResponseMapper.Map(user);
 
             if (User.Identity is ClaimsIdentity claimsIdentity
                 && claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is string userIdString
-                && Guid.TryParse(userIdString, out var userId))
+                && Guid.TryParse(userIdString, out Guid userId))
             {
                 if (userId == id)
                     mapped.IsMe = true;
@@ -54,7 +54,7 @@ namespace FitnessTracker.Controllers
         {
             try
             {
-                var follows = name is null
+                IEnumerable<Models.UserFollows> follows = name is null
                     ? await followerReadRangeService.Get(x => x.FollowerId == id, offset ?? 0, limit ?? 10, "followee")
                     : await followerReadRangeService.Get(x => x.FollowerId == id && EF.Functions.Like(x.Followee.Name, $"{name}%"), offset ?? 0, limit ?? 10, "followee");
 
@@ -74,7 +74,7 @@ namespace FitnessTracker.Controllers
         {
             try
             {
-                var follows = name is null
+                IEnumerable<Models.UserFollows> follows = name is null
                     ? await followerReadRangeService.Get(x => x.FolloweeId == id, offset ?? 0, limit ?? 10, "follower")
                     : await followerReadRangeService.Get(x => x.FolloweeId == id && EF.Functions.Like(x.Follower.Name, $"{name}%"), offset ?? 0, limit ?? 10, "follower");
 
@@ -98,10 +98,10 @@ namespace FitnessTracker.Controllers
             {
                 if (User.Identity is not ClaimsIdentity claimsIdentity
                     || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out var id))
+                    || !Guid.TryParse(userIdString, out Guid id))
                     return Unauthorized();
 
-                var follows = name is null
+                IEnumerable<Models.UserFollows> follows = name is null
                     ? await followerReadRangeService.Get(x => x.FollowerId == id, offset ?? 0, limit ?? 10, "followee")
                     : await followerReadRangeService.Get(x => x.FollowerId == id && EF.Functions.Like(x.Followee.Name, $"{name}%"), offset ?? 0, limit ?? 10, "followee");
 
@@ -125,10 +125,10 @@ namespace FitnessTracker.Controllers
             {
                 if (User.Identity is not ClaimsIdentity claimsIdentity
                     || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out var id))
+                    || !Guid.TryParse(userIdString, out Guid id))
                     return Unauthorized();
 
-                var follows = name is null
+                IEnumerable<Models.UserFollows> follows = name is null
                     ? await followerReadRangeService.Get(x => x.FolloweeId == id, offset ?? 0, limit ?? 10, "follower")
                     : await followerReadRangeService.Get(x => x.FolloweeId == id && EF.Functions.Like(x.Follower.Name, $"{name}%"), offset ?? 0, limit ?? 10, "follower");
 

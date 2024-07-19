@@ -1,6 +1,5 @@
-﻿using FitnessTracker.Models;
-using FitnessTracker.Data;
-using FitnessTracker.Services.Create;
+﻿using FitnessTracker.Data;
+using FitnessTracker.Models;
 
 namespace FitnessTracker.Services.Create
 {
@@ -10,8 +9,8 @@ namespace FitnessTracker.Services.Create
 
         public async Task<object?> Add(RefreshToken toAdd)
         {
-            await context.AddAsync(toAdd);
-            await context.SaveChangesAsync();
+            _ = await context.AddAsync(toAdd);
+            _ = await context.SaveChangesAsync();
             return toAdd.Token;
         }
     }

@@ -1,6 +1,4 @@
-﻿using FitnessTracker.DTOs.Responses.User;
-using FitnessTracker.Models;
-using FitnessTracker.Utilities;
+﻿using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -20,13 +18,13 @@ namespace FitnessTracker.Controllers
             {
                 if (User.Identity is not ClaimsIdentity claimsIdentity
                     || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out var userId))
+                    || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
                 if (userId == id)
                     return BadRequest("Cannot follow yourself");
 
-                await followCreateService.Add(new()
+                _ = await followCreateService.Add(new()
                 {
                     FollowerId = userId,
                     FolloweeId = id
@@ -53,7 +51,7 @@ namespace FitnessTracker.Controllers
             {
                 if (User.Identity is not ClaimsIdentity claimsIdentity
                     || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out var userId))
+                    || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
                 if (userId == id)

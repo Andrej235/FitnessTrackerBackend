@@ -20,12 +20,12 @@ namespace FitnessTracker.Controllers
                 if (request.Name.Length < 3 || !ValidEmailRegex().IsMatch(request.Email.Trim()) || request.Password.Length < 8)
                     return BadRequest("Invalid registration details");
 
-                var user = registrationMapper.Map(request);
-                var newUserId = await createService.Add(user);
+                Models.User user = registrationMapper.Map(request);
+                object? newUserId = await createService.Add(user);
                 if (newUserId == default)
                     return BadRequest("User already exists");
 
-                var jwt = await tokenManager.GenerateJWTAndRefreshToken(user, Response.Cookies);
+                string jwt = await tokenManager.GenerateJWTAndRefreshToken(user, Response.Cookies);
                 await emailConfirmationSender.SendEmailConfirmation(user.Email, user.Id);
 
                 return Created($"/user/{newUserId}", jwtResponseMapper.Map(jwt));
@@ -45,15 +45,15 @@ namespace FitnessTracker.Controllers
             if (!ValidEmailRegex().IsMatch(request.Email) || request.Password.Length < 8)
                 return BadRequest("Incorrect email or password");
 
-            var user = await readSingleService.Get(x => x.Email == request.Email, "none");
+            Models.User? user = await readSingleService.Get(x => x.Email == request.Email, "none");
             if (user is null)
                 return BadRequest("Incorrect email or password");
 
-            var hash = request.Password.ToHash(user.Salt);
+            byte[] hash = request.Password.ToHash(user.Salt);
             if (!user.PasswordHash.SequenceEqual(hash))
                 return BadRequest("Incorrect email or password");
 
-            var jwt = await tokenManager.GenerateJWTAndRefreshToken(user, Response.Cookies);
+            string jwt = await tokenManager.GenerateJWTAndRefreshToken(user, Response.Cookies);
             return Created("/api/user/me", jwtResponseMapper.Map(jwt));
         }
 
@@ -65,17 +65,17 @@ namespace FitnessTracker.Controllers
         public async Task<IActionResult> Refresh()
         {
             try
-                {
+            {
                 if (User.Identity is not ClaimsIdentity claimsIdentity
                     || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                     || claimsIdentity.FindFirst(JwtRegisteredClaimNames.Jti)?.Value is not string jwtIdString
-                    || !Request.Cookies.TryGetValue("refreshToken", out var refreshTokenString)
-                    || !Guid.TryParse(jwtIdString, out var jwtId)
-                    || !Guid.TryParse(userIdString, out var userId)
-                    || !Guid.TryParse(refreshTokenString, out var refreshToken))
+                    || !Request.Cookies.TryGetValue("refreshToken", out string? refreshTokenString)
+                    || !Guid.TryParse(jwtIdString, out Guid jwtId)
+                    || !Guid.TryParse(userIdString, out Guid userId)
+                    || !Guid.TryParse(refreshTokenString, out Guid refreshToken))
                     return Unauthorized("Invalid token");
 
-                var newJwt = await tokenManager.RefreshJWT(jwtId, refreshToken, userId);
+                string newJwt = await tokenManager.RefreshJWT(jwtId, refreshToken, userId);
                 return Created("/api/user/me", jwtResponseMapper.Map(newJwt));
             }
             catch (Exception ex)
@@ -91,7 +91,7 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Logout()
         {
-            if (!Request.Cookies.TryGetValue("refreshToken", out var refreshTokenString) || !Guid.TryParse(refreshTokenString, out var refreshToken))
+            if (!Request.Cookies.TryGetValue("refreshToken", out string? refreshTokenString) || !Guid.TryParse(refreshTokenString, out Guid refreshToken))
                 return Unauthorized("Invalid token");
 
             await tokenManager.InvalidateRefreshToken(refreshToken);

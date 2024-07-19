@@ -10,11 +10,11 @@ namespace FitnessTracker.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropPrimaryKey(
+            _ = migrationBuilder.DropPrimaryKey(
                 name: "PK_SplitWorkouts",
                 table: "SplitWorkouts");
 
-            migrationBuilder.AddPrimaryKey(
+            _ = migrationBuilder.AddPrimaryKey(
                 name: "PK_SplitWorkouts",
                 table: "SplitWorkouts",
                 columns: new[] { "SplitId", "Day" });
@@ -23,11 +23,11 @@ namespace FitnessTracker.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropPrimaryKey(
+            _ = migrationBuilder.DropPrimaryKey(
                 name: "PK_SplitWorkouts",
                 table: "SplitWorkouts");
 
-            migrationBuilder.AddPrimaryKey(
+            _ = migrationBuilder.AddPrimaryKey(
                 name: "PK_SplitWorkouts",
                 table: "SplitWorkouts",
                 columns: new[] { "SplitId", "WorkoutId" });

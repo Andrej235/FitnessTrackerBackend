@@ -17,13 +17,13 @@ namespace FitnessTracker.Controllers
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
+                || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            var comments = await commentReadRangeService.Get(x => x.WorkoutId == workoutId && x.ParentId == null, 0, 10, "creator,likes");
-            var mapped = comments.Select(x =>
+            IEnumerable<Models.WorkoutComment> comments = await commentReadRangeService.Get(x => x.WorkoutId == workoutId && x.ParentId == null, 0, 10, "creator,likes");
+            IEnumerable<SimpleWorkoutCommentResponseDTO> mapped = comments.Select(x =>
             {
-                var mapped = simpleCommentResponseMapper.Map(x);
+                SimpleWorkoutCommentResponseDTO mapped = simpleCommentResponseMapper.Map(x);
                 mapped.IsLiked = x.Likes.Any(x => x.Id == userId);
                 return mapped;
             });
@@ -39,13 +39,13 @@ namespace FitnessTracker.Controllers
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
+                || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            var comments = await commentReadRangeService.Get(x => x.WorkoutId == workoutId && x.ParentId == commentId, 0, 10, "creator,likes");
-            var mapped = comments.Select(x =>
+            IEnumerable<Models.WorkoutComment> comments = await commentReadRangeService.Get(x => x.WorkoutId == workoutId && x.ParentId == commentId, 0, 10, "creator,likes");
+            IEnumerable<SimpleWorkoutCommentResponseDTO> mapped = comments.Select(x =>
             {
-                var mapped = simpleCommentResponseMapper.Map(x);
+                SimpleWorkoutCommentResponseDTO mapped = simpleCommentResponseMapper.Map(x);
                 mapped.IsLiked = x.Likes.Any(x => x.Id == userId);
                 return mapped;
             });

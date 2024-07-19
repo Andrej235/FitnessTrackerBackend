@@ -29,23 +29,17 @@ namespace FitnessTracker.Services.Read.ExpressionBased
                     .ThenInclude(x => x.Creator);
             }
 
-            if (includeString == "sets,25")
-            {
-                return context.CompletedWorkouts
+            return includeString == "sets,25"
+                ? context.CompletedWorkouts
                     .Include(x => x.CompletedSets)
                     .OrderByDescending(x => x.CompletedAt)
-                    .Take(25);
-            }
-
-            if (includeString == "sets,latest")
-            {
-                return context.CompletedWorkouts
+                    .Take(25)
+                : includeString == "sets,latest"
+                ? context.CompletedWorkouts
                     .Include(x => x.CompletedSets)
                     .OrderByDescending(x => x.CompletedAt)
-                    .Take(1);
-            }
-
-            return base.GetIncluded(includeString);
+                    .Take(1)
+                : base.GetIncluded(includeString);
         }
     }
 }

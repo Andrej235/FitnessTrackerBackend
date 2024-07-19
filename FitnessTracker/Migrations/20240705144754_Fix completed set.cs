@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -11,18 +10,18 @@ namespace FitnessTracker.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
+            _ = migrationBuilder.DropColumn(
                 name: "CompletedAt",
                 table: "CompletedSets");
 
-            migrationBuilder.AddColumn<int>(
+            _ = migrationBuilder.AddColumn<int>(
                 name: "RepsCompleted",
                 table: "CompletedSets",
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.AddColumn<float>(
+            _ = migrationBuilder.AddColumn<float>(
                 name: "WeightUsed",
                 table: "CompletedSets",
                 type: "real",
@@ -33,15 +32,15 @@ namespace FitnessTracker.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
+            _ = migrationBuilder.DropColumn(
                 name: "RepsCompleted",
                 table: "CompletedSets");
 
-            migrationBuilder.DropColumn(
+            _ = migrationBuilder.DropColumn(
                 name: "WeightUsed",
                 table: "CompletedSets");
 
-            migrationBuilder.AddColumn<DateTime>(
+            _ = migrationBuilder.AddColumn<DateTime>(
                 name: "CompletedAt",
                 table: "CompletedSets",
                 type: "datetime2",

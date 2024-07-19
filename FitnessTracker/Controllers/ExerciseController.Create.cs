@@ -16,31 +16,31 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Create([FromBody] CreateExerciseRequestDTO request)
         {
-            var newExerciseIdObj = await createService.Add(createRequestMapper.Map(request));
+            object? newExerciseIdObj = await createService.Add(createRequestMapper.Map(request));
             if (newExerciseIdObj is not int newExerciseId)
                 return BadRequest();
 
-            await equipmetUsageCreateRangeService.Add(request.Equipment.Select(x => new EquipmentUsage
+            _ = await equipmetUsageCreateRangeService.Add(request.Equipment.Select(x => new EquipmentUsage
             {
                 ExerciseId = newExerciseId,
                 EquipmentId = x
             }));
-            await primaryMuscleGroupCreateRangeService.Add(request.PrimaryMuscleGroups.Select(x => new PrimaryMuscleGroupInExercise
+            _ = await primaryMuscleGroupCreateRangeService.Add(request.PrimaryMuscleGroups.Select(x => new PrimaryMuscleGroupInExercise
             {
                 ExerciseId = newExerciseId,
                 MuscleGroupId = x
             }));
-            await primaryMuscleCreateRangeService.Add(request.PrimaryMuscles.Select(x => new PrimaryMuscleInExercise
+            _ = await primaryMuscleCreateRangeService.Add(request.PrimaryMuscles.Select(x => new PrimaryMuscleInExercise
             {
                 ExerciseId = newExerciseId,
                 MuscleId = x
             }));
-            await secondaryMuscleGroupCreateRangeService.Add(request.SecondaryMuscleGroups.Select(x => new SecondaryMuscleGroupInExercise
+            _ = await secondaryMuscleGroupCreateRangeService.Add(request.SecondaryMuscleGroups.Select(x => new SecondaryMuscleGroupInExercise
             {
                 ExerciseId = newExerciseId,
                 MuscleGroupId = x
             }));
-            await secondaryMuscleCreateRangeService.Add(request.SecondaryMuscles.Select(x => new SecondaryMuscleInExercise
+            _ = await secondaryMuscleCreateRangeService.Add(request.SecondaryMuscles.Select(x => new SecondaryMuscleInExercise
             {
                 ExerciseId = newExerciseId,
                 MuscleId = x

@@ -6,7 +6,7 @@
         {
             queryable = queryable.Skip(offset ?? 0);
 
-            if (limit != null && limit >= 0)
+            if (limit is not null and >= 0)
                 queryable = queryable.Take(limit ?? 0);
 
             return [.. queryable];

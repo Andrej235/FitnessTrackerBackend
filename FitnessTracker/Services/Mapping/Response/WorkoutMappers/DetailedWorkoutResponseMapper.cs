@@ -14,21 +14,18 @@ namespace FitnessTracker.Services.Mapping.Response.WorkoutMappers
         private readonly IResponseMapper<Set, DetailedSetResponseDTO> setResponseMapper = setResponseMapper;
         private readonly IResponseMapper<Exercise, SimpleExerciseResponseDTO> exerciseResponseMapper = exerciseResponseMapper;
 
-        public DetailedWorkoutResponseDTO Map(Workout from)
+        public DetailedWorkoutResponseDTO Map(Workout from) => new()
         {
-            return new()
-            {
-                Id = from.Id,
-                Name = from.Name,
-                Description = from.Description,
-                IsPublic = from.IsPublic,
-                Creator = userResponseMapper.Map(from.Creator),
-                Sets = from.Sets.Select(setResponseMapper.Map),
-                Exercises = from.Sets.DistinctBy(x => x.ExerciseId).Select(x => exerciseResponseMapper.Map(x.Exercise)),
-                CommentCount = from.Comments.Count,
-                FavoriteCount = from.Favorites.Count,
-                LikeCount = from.Likes.Count,
-            };
-        }
+            Id = from.Id,
+            Name = from.Name,
+            Description = from.Description,
+            IsPublic = from.IsPublic,
+            Creator = userResponseMapper.Map(from.Creator),
+            Sets = from.Sets.Select(setResponseMapper.Map),
+            Exercises = from.Sets.DistinctBy(x => x.ExerciseId).Select(x => exerciseResponseMapper.Map(x.Exercise)),
+            CommentCount = from.Comments.Count,
+            FavoriteCount = from.Favorites.Count,
+            LikeCount = from.Likes.Count,
+        };
     }
 }

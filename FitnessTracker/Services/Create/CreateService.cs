@@ -10,14 +10,14 @@ namespace FitnessTracker.Services.Create
         {
             try
             {
-                var validationError = await IsEntityValid(toAdd);
+                Exception? validationError = await IsEntityValid(toAdd);
                 if (validationError != null)
                     throw validationError;
 
-                await context.Set<T>().AddAsync(toAdd);
-                await context.SaveChangesAsync();
+                _ = await context.Set<T>().AddAsync(toAdd);
+                _ = await context.SaveChangesAsync();
 
-                var id = toAdd.GetType().GetProperty("Id")?.GetValue(toAdd);
+                object? id = toAdd.GetType().GetProperty("Id")?.GetValue(toAdd);
                 return id ?? throw new PropertyNotFoundException("Entity doesn't have an Id property");
             }
             catch (Exception ex)
@@ -31,15 +31,15 @@ namespace FitnessTracker.Services.Create
         {
             try
             {
-                var toAddList = toAdd.ToList();
-                foreach (var item in toAddList)
+                List<T> toAddList = toAdd.ToList();
+                foreach (T? item in toAddList)
                 {
                     if (await IsEntityValid(item) != null)
                         throw new EntityAlreadyExistsException();
                 }
 
                 await context.Set<T>().AddRangeAsync(toAddList);
-                await context.SaveChangesAsync();
+                _ = await context.SaveChangesAsync();
 
                 return true;
             }

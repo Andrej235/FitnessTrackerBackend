@@ -1,6 +1,4 @@
-﻿using FitnessTracker.DTOs.Responses.CompletedWorkouts;
-
-namespace FitnessTracker.DTOs.Responses.User
+﻿namespace FitnessTracker.DTOs.Responses.User
 {
     public class DetailedPublicUserResponseDTO : SimpleUserResponseDTO
     {

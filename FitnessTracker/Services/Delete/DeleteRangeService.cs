@@ -12,14 +12,14 @@ namespace FitnessTracker.Services.Delete
 
         public async Task<bool> Delete(Expression<Func<T, bool>> criteria)
         {
-            var entitiesToDelete = await readService.Get(criteria, 0, -1, "none");
+            IEnumerable<T> entitiesToDelete = await readService.Get(criteria, 0, -1, "none");
 
             if (entitiesToDelete.Any())
             {
                 try
                 {
                     context.Set<T>().RemoveRange(entitiesToDelete);
-                    await context.SaveChangesAsync();
+                    _ = await context.SaveChangesAsync();
                     return true;
                 }
                 catch (Exception ex)

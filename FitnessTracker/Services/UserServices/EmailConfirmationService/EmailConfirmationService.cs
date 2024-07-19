@@ -1,6 +1,5 @@
 ﻿using FitnessTracker.Models;
 using FitnessTracker.Services.Delete;
-using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Read.ExpressionBased;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Utilities;
@@ -23,7 +22,7 @@ namespace FitnessTracker.Services.UserServices.EmailConfirmationService
                 if (!deletedAny)
                     throw new Exception("User does not have any email confirmation codes");
 
-                var user = await userReadService.Get(x => x.Id == userId, "none") ?? throw new Exception("User not found");
+                User user = await userReadService.Get(x => x.Id == userId, "none") ?? throw new Exception("User not found");
                 user.EmailConfirmed = true;
                 user.Role = Role.User;
                 await userUpdateService.Update(user);

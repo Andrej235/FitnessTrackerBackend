@@ -22,10 +22,10 @@ namespace FitnessTracker.Controllers
             {
                 if (User.Identity is not ClaimsIdentity claimsIdentity
                     || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out var userId))
+                    || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                var workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "none");
+                Models.Workout? workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "none");
                 if (workout is null)
                     return NotFound();
 
@@ -57,11 +57,11 @@ namespace FitnessTracker.Controllers
             {
                 if (User.Identity is not ClaimsIdentity claimsIdentity
                     || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out var userId))
+                    || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                var workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "sets");
-                var set = workout?.Sets.FirstOrDefault(x => x.Id == setId);
+                Models.Workout? workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "sets");
+                Models.Set? set = workout?.Sets.FirstOrDefault(x => x.Id == setId);
 
                 if (set is null)
                     return NotFound();
@@ -94,16 +94,16 @@ namespace FitnessTracker.Controllers
             {
                 if (User.Identity is not ClaimsIdentity claimsIdentity
                     || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out var userId))
+                    || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                var workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "sets");
-                var set = workout?.Sets.FirstOrDefault(x => x.Id == setId);
+                Models.Workout? workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "sets");
+                Models.Set? set = workout?.Sets.FirstOrDefault(x => x.Id == setId);
 
                 if (workout is null || set is null)
                     return NotFound();
 
-                workout.Sets.Remove(set);
+                _ = workout.Sets.Remove(set);
                 await updateService.Update(workout);
                 return NoContent();
             }
@@ -127,14 +127,14 @@ namespace FitnessTracker.Controllers
             {
                 if (User.Identity is not ClaimsIdentity claimsIdentity
                     || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out var userId))
+                    || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                var workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "sets");
+                Models.Workout? workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "sets");
                 if (workout is null)
                     return NotFound();
 
-                var set = setCreateRequestMapper.Map(request);
+                Models.Set set = setCreateRequestMapper.Map(request);
                 workout.Sets.Add(set);
                 await updateService.Update(workout);
                 return Created();

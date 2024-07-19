@@ -4,12 +4,9 @@ namespace FitnessTracker.Services.Mapping.Response.AuthTokens
 {
     public class SimpleJWTResponseMapper : IResponseMapper<string, SimpleJWTResponseDTO>
     {
-        public SimpleJWTResponseDTO Map(string from)
+        public SimpleJWTResponseDTO Map(string from) => new()
         {
-            return new()
-            {
-                Token = from
-            };
-        }
+            Token = from
+        };
     }
 }

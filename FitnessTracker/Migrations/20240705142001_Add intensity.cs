@@ -8,22 +8,16 @@ namespace FitnessTracker.Migrations
     public partial class Addintensity : Migration
     {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<float>(
+        protected override void Up(MigrationBuilder migrationBuilder) => migrationBuilder.AddColumn<float>(
                 name: "Intensity",
                 table: "Sets",
                 type: "real",
                 nullable: false,
                 defaultValue: 0f);
-        }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
+        protected override void Down(MigrationBuilder migrationBuilder) => migrationBuilder.DropColumn(
                 name: "Intensity",
                 table: "Sets");
-        }
     }
 }

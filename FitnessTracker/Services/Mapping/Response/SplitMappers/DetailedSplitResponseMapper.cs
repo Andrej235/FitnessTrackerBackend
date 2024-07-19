@@ -9,20 +9,17 @@ namespace FitnessTracker.Services.Mapping.Response.SplitMappers
         private readonly IResponseMapper<User, SimpleUserResponseDTO> userResponseMapper = userResponseMapper;
         private readonly IResponseMapper<SplitWorkout, SimpleSplitWorkoutResponseDTO> workoutResponseMapper = splitWorkoutResponseMapper;
 
-        public DetailedSplitResponseDTO Map(Split from)
+        public DetailedSplitResponseDTO Map(Split from) => new()
         {
-            return new()
-            {
-                Id = from.Id,
-                Name = from.Name,
-                Description = from.Description,
-                LikeCount = from.Likes.Count,
-                FavoriteCount = from.Favorites.Count,
-                CommentCount = from.Comments.Count,
-                Creator = userResponseMapper.Map(from.Creator),
-                Workouts = from.Workouts.Select(workoutResponseMapper.Map),
-                IsPublic = from.IsPublic
-            };
-        }
+            Id = from.Id,
+            Name = from.Name,
+            Description = from.Description,
+            LikeCount = from.Likes.Count,
+            FavoriteCount = from.Favorites.Count,
+            CommentCount = from.Comments.Count,
+            Creator = userResponseMapper.Map(from.Creator),
+            Workouts = from.Workouts.Select(workoutResponseMapper.Map),
+            IsPublic = from.IsPublic
+        };
     }
 }

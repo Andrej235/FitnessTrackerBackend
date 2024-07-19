@@ -5,14 +5,11 @@ namespace FitnessTracker.Services.Mapping.Response.UserMappers
 {
     public class SimpleUserResponseMapper : IResponseMapper<User, SimpleUserResponseDTO>
     {
-        public SimpleUserResponseDTO Map(User from)
+        public SimpleUserResponseDTO Map(User from) => new()
         {
-            return new()
-            {
-                Id = from.Id,
-                Name = from.Name,
-                Image = from.ProfilePic
-            };
-        }
+            Id = from.Id,
+            Name = from.Name,
+            Image = from.ProfilePic
+        };
     }
 }

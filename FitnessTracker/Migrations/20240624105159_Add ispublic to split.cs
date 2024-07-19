@@ -8,22 +8,16 @@ namespace FitnessTracker.Migrations
     public partial class Addispublictosplit : Migration
     {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<bool>(
+        protected override void Up(MigrationBuilder migrationBuilder) => migrationBuilder.AddColumn<bool>(
                 name: "IsPublic",
                 table: "Splits",
                 type: "bit",
                 nullable: false,
                 defaultValue: false);
-        }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
+        protected override void Down(MigrationBuilder migrationBuilder) => migrationBuilder.DropColumn(
                 name: "IsPublic",
                 table: "Splits");
-        }
     }
 }

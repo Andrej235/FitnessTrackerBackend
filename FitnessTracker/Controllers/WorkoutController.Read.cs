@@ -13,7 +13,7 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(IEnumerable<SimpleWorkoutResponseDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllSimplePublic([FromQuery] string? name, [FromQuery] int? limit, [FromQuery] int? offset)
         {
-            var workouts = name is null
+            IEnumerable<Models.Workout> workouts = name is null
                 ? await readRangeService.Get(x => x.IsPublic, offset, limit ?? 10, "creator")
                 : await readRangeService.Get(x => x.IsPublic && EF.Functions.Like(x.Name, $"%{name}%"), offset, limit ?? 10, "creator");
 
@@ -24,7 +24,7 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(IEnumerable<SimpleWorkoutResponseDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllSimplePublic(Guid userId, [FromQuery] string? name, [FromQuery] int? limit, [FromQuery] int? offset)
         {
-            var workouts = name is null
+            IEnumerable<Models.Workout> workouts = name is null
                 ? await readRangeService.Get(x => x.CreatorId == userId && x.IsPublic, offset, limit ?? 10, "creator")
                 : await readRangeService.Get(x => x.CreatorId == userId && x.IsPublic && EF.Functions.Like(x.Name, $"%{name}%"), offset, limit ?? 10, "creator");
 
@@ -40,10 +40,10 @@ namespace FitnessTracker.Controllers
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
+                || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            var workouts = name is null
+            IEnumerable<Models.Workout> workouts = name is null
                 ? await readRangeService.Get(x => x.CreatorId == userId, offset, limit ?? 10, "creator")
                 : await readRangeService.Get(x => x.CreatorId == userId && EF.Functions.Like(x.Name, $"%{name}%"), offset, limit ?? 10, "creator");
 
@@ -58,10 +58,10 @@ namespace FitnessTracker.Controllers
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
+                || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            var workouts = name is null
+            IEnumerable<Models.Workout> workouts = name is null
                 ? await readRangeService.Get(x => (x.IsPublic || x.CreatorId == userId) && x.Favorites.Any(x => x.Id == userId), offset, limit ?? 10, "creator,favorites")
                 : await readRangeService.Get(x => (x.IsPublic || x.CreatorId == userId) && x.Favorites.Any(x => x.Id == userId) && EF.Functions.Like(x.Name, $"%{name}%"), offset, limit ?? 10, "creator,favorites");
 
@@ -74,15 +74,15 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetDetailed(Guid id)
         {
-            var workout = await readSingleService.Get(x => x.Id == id, "detailed");
+            Models.Workout? workout = await readSingleService.Get(x => x.Id == id, "detailed");
             if (workout is null)
                 return NotFound();
 
-            var mapped = detailedResponseMapper.Map(workout);
+            DetailedWorkoutResponseDTO mapped = detailedResponseMapper.Map(workout);
 
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out var userId))
+                || !Guid.TryParse(userIdString, out Guid userId))
                 return workout.IsPublic ? Ok(mapped) : Unauthorized();
 
             if (!workout.IsPublic && workout.CreatorId != userId)
@@ -91,15 +91,15 @@ namespace FitnessTracker.Controllers
             mapped.IsLiked = workout.Likes.Any(x => x.Id == userId);
             mapped.IsFavorited = workout.Favorites.Any(x => x.Id == userId);
 
-            var completed = (await completedWorkoutReadSingleService.Get(x => x.UserId == userId && x.WorkoutId == id, 0, -1, "sets,latest"));
+            IEnumerable<Models.CompletedWorkout> completed = await completedWorkoutReadSingleService.Get(x => x.UserId == userId && x.WorkoutId == id, 0, -1, "sets,latest");
             if (!completed.Any())
                 return Ok(mapped);
 
-            var latest = completed.First();
+            Models.CompletedWorkout latest = completed.First();
             mapped.AlreadyAttempted = true;
             mapped.Sets = mapped.Sets.Select(set =>
             {
-                var completedSet = latest.CompletedSets.FirstOrDefault(x => x.SetId == set.Id);
+                Models.CompletedSet? completedSet = latest.CompletedSets.FirstOrDefault(x => x.SetId == set.Id);
                 if (completedSet is null)
                     return set;
 

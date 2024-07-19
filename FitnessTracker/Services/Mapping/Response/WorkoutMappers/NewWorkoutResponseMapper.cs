@@ -5,14 +5,11 @@ namespace FitnessTracker.Services.Mapping.Response.WorkoutMappers
 {
     public class NewWorkoutResponseMapper : IResponseMapper<Workout, NewWorkoutResponseDTO>
     {
-        public NewWorkoutResponseDTO Map(Workout from)
+        public NewWorkoutResponseDTO Map(Workout from) => new()
         {
-            return new()
-            {
-                Id = from.Id,
-                Name = from.Name,
-                IsPublic = from.IsPublic,
-            };
-        }
+            Id = from.Id,
+            Name = from.Name,
+            IsPublic = from.IsPublic,
+        };
     }
 }

@@ -8,16 +8,13 @@ namespace FitnessTracker.Services.Mapping.Response.SplitMappers
     {
         private readonly IResponseMapper<User, SimpleUserResponseDTO> userResponseMapper = userResponseMapper;
 
-        public SimpleSplitCommentResponseDTO Map(SplitComment from)
+        public SimpleSplitCommentResponseDTO Map(SplitComment from) => new()
         {
-            return new()
-            {
-                Id = from.Id,
-                Text = from.Text,
-                CreatedAt = from.CreatedAt,
-                Creator = userResponseMapper.Map(from.Creator),
-                LikeCount = from.Likes.Count,
-            };
-        }
+            Id = from.Id,
+            Text = from.Text,
+            CreatedAt = from.CreatedAt,
+            Creator = userResponseMapper.Map(from.Creator),
+            LikeCount = from.Likes.Count,
+        };
     }
 }

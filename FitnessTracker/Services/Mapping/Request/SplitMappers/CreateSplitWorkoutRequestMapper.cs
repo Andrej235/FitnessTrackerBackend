@@ -5,13 +5,10 @@ namespace FitnessTracker.Services.Mapping.Request.SplitMappers
 {
     public class CreateSplitWorkoutRequestMapper : IRequestMapper<CreateSplitWorkoutRequestDTO, SplitWorkout>
     {
-        public SplitWorkout Map(CreateSplitWorkoutRequestDTO from)
+        public SplitWorkout Map(CreateSplitWorkoutRequestDTO from) => new()
         {
-            return new()
-            {
-                WorkoutId = from.WorkoutId,
-                Day = from.Day,
-            };
-        }
+            WorkoutId = from.WorkoutId,
+            Day = from.Day,
+        };
     }
 }

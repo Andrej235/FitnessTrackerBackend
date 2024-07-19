@@ -5,16 +5,13 @@ namespace FitnessTracker.Services.Mapping.Request.SetMappers
 {
     public class CreateSetRequestMapper : IRequestMapper<CreateSetRequestDTO, Set>
     {
-        public Set Map(CreateSetRequestDTO from)
+        public Set Map(CreateSetRequestDTO from) => new()
         {
-            return new Set
-            {
-                ExerciseId = from.ExerciseId,
-                BottomRepRange = from.BottomRepRange,
-                TopRepRange = from.TopRepRange,
-                RiR = from.RiR,
-                Type = from.Type,
-            };
-        }
+            ExerciseId = from.ExerciseId,
+            BottomRepRange = from.BottomRepRange,
+            TopRepRange = from.TopRepRange,
+            RiR = from.RiR,
+            Type = from.Type,
+        };
     }
 }
