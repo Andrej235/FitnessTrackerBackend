@@ -231,9 +231,12 @@ namespace FitnessTracker
 
             #region Set
             _ = builder.Services.AddScoped<ICreateService<Set>, CreateService<Set>>();
+            _ = builder.Services.AddScoped<ICreateRangeService<Set>, CreateService<Set>>();
             _ = builder.Services.AddScoped<IReadSingleService<Set>, ReadExpressionService<Set>>();
+            _ = builder.Services.AddScoped<IReadRangeService<Set>, ReadExpressionService<Set>>();
             _ = builder.Services.AddScoped<IUpdateService<Set>, UpdateService<Set>>();
             _ = builder.Services.AddScoped<IDeleteService<Set>, DeleteService<Set>>();
+            _ = builder.Services.AddScoped<IDeleteRangeService<Set>, DeleteRangeService<Set>>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateSetRequestDTO, Set>, CreateSetRequestMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<Set, DetailedSetResponseDTO>, DetailedSetResponseMapper>();
             #endregion
