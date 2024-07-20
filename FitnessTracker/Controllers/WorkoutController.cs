@@ -26,6 +26,7 @@ namespace FitnessTracker.Controllers
                                            IReadRangeService<WorkoutComment> commentReadRangeService,
                                            IUpdateService<Workout> updateService,
                                            IUpdateService<Set> setUpdateService,
+                                           IDeleteService<Workout> deleteService,
                                            IDeleteService<WorkoutComment> commentDeleteService,
                                            IDeleteService<WorkoutCommentLike> commentLikeDeleteService,
                                            IDeleteService<WorkoutLike> likeDeleteService,
@@ -50,6 +51,7 @@ namespace FitnessTracker.Controllers
         private readonly IReadRangeService<WorkoutComment> commentReadRangeService = commentReadRangeService;
         private readonly IUpdateService<Workout> updateService = updateService;
         private readonly IUpdateService<Set> setUpdateService = setUpdateService;
+        private readonly IDeleteService<Workout> deleteService = deleteService;
         private readonly IDeleteService<WorkoutComment> commentDeleteService = commentDeleteService;
         private readonly IDeleteService<WorkoutCommentLike> commentLikeDeleteService = commentLikeDeleteService;
         private readonly IDeleteService<WorkoutLike> likeDeleteService = likeDeleteService;
