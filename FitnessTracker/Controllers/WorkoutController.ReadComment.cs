@@ -13,14 +13,14 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(IEnumerable<SimpleWorkoutCommentResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> GetComments(Guid workoutId)
+        public async Task<IActionResult> GetComments(Guid workoutId, [FromQuery] int? offset, [FromQuery] int? limit)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            IEnumerable<Models.WorkoutComment> comments = await commentReadRangeService.Get(x => x.WorkoutId == workoutId && x.ParentId == null, 0, 10, "creator,likes");
+            IEnumerable<Models.WorkoutComment> comments = await commentReadRangeService.Get(x => x.WorkoutId == workoutId && x.ParentId == null, offset ?? 0, limit ?? 10, "creator,likes");
             IEnumerable<SimpleWorkoutCommentResponseDTO> mapped = comments.Select(x =>
             {
                 SimpleWorkoutCommentResponseDTO mapped = simpleCommentResponseMapper.Map(x);
@@ -35,14 +35,14 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(IEnumerable<SimpleWorkoutCommentResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> GetReplies(Guid workoutId, Guid commentId)
+        public async Task<IActionResult> GetReplies(Guid workoutId, Guid commentId, [FromQuery] int? offset, [FromQuery] int? limit)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            IEnumerable<Models.WorkoutComment> comments = await commentReadRangeService.Get(x => x.WorkoutId == workoutId && x.ParentId == commentId, 0, 10, "creator,likes");
+            IEnumerable<Models.WorkoutComment> comments = await commentReadRangeService.Get(x => x.WorkoutId == workoutId && x.ParentId == commentId, offset ?? 0, limit ?? 10, "creator,likes");
             IEnumerable<SimpleWorkoutCommentResponseDTO> mapped = comments.Select(x =>
             {
                 SimpleWorkoutCommentResponseDTO mapped = simpleCommentResponseMapper.Map(x);
