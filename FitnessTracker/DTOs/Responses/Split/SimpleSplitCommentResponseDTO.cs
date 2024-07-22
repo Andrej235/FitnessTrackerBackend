@@ -10,5 +10,7 @@ namespace FitnessTracker.DTOs.Responses.Split
         public DateTime CreatedAt { get; set; }
         public int LikeCount { get; set; }
         public bool IsLiked { get; set; }
+        public bool IsCreator { get; set; }
+        public int ReplyCount { get; set; }
     }
 }

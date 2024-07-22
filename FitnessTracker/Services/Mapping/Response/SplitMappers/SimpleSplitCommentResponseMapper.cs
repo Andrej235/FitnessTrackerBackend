@@ -15,6 +15,7 @@ namespace FitnessTracker.Services.Mapping.Response.SplitMappers
             CreatedAt = from.CreatedAt,
             Creator = userResponseMapper.Map(from.Creator),
             LikeCount = from.Likes.Count,
+            ReplyCount = from.Children.Count
         };
     }
 }

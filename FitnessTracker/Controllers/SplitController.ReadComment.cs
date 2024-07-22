@@ -25,6 +25,7 @@ namespace FitnessTracker.Controllers
             {
                 SimpleSplitCommentResponseDTO mapped = simpleCommentResponseMapper.Map(x);
                 mapped.IsLiked = x.Likes.Any(x => x.Id == userId);
+                mapped.IsCreator = x.Creator.Id == userId;
                 return mapped;
             });
             return Ok(mapped);
@@ -47,6 +48,7 @@ namespace FitnessTracker.Controllers
             {
                 SimpleSplitCommentResponseDTO mapped = simpleCommentResponseMapper.Map(x);
                 mapped.IsLiked = x.Likes.Any(x => x.Id == userId);
+                mapped.IsCreator = x.Creator.Id == userId;
                 return mapped;
             });
             return Ok(mapped);

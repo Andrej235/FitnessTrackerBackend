@@ -20,11 +20,12 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            IEnumerable<Models.WorkoutComment> comments = await commentReadRangeService.Get(x => x.WorkoutId == workoutId && x.ParentId == null, offset ?? 0, limit ?? 10, "creator,likes");
+            IEnumerable<Models.WorkoutComment> comments = await commentReadRangeService.Get(x => x.WorkoutId == workoutId && x.ParentId == null, offset ?? 0, limit ?? 10, "creator,likes,children");
             IEnumerable<SimpleWorkoutCommentResponseDTO> mapped = comments.Select(x =>
             {
                 SimpleWorkoutCommentResponseDTO mapped = simpleCommentResponseMapper.Map(x);
                 mapped.IsLiked = x.Likes.Any(x => x.Id == userId);
+                mapped.IsCreator = x.Creator.Id == userId;
                 return mapped;
             });
             return Ok(mapped);
@@ -47,6 +48,7 @@ namespace FitnessTracker.Controllers
             {
                 SimpleWorkoutCommentResponseDTO mapped = simpleCommentResponseMapper.Map(x);
                 mapped.IsLiked = x.Likes.Any(x => x.Id == userId);
+                mapped.IsCreator = x.Creator.Id == userId;
                 return mapped;
             });
             return Ok(mapped);
