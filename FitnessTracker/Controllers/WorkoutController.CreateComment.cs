@@ -38,12 +38,12 @@ namespace FitnessTracker.Controllers
         }
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
-        [HttpPost("{workoutId:guid}/comment/{parentId:guid}/reply")]
+        [HttpPost("{workoutId:guid}/comment/{commentId:guid}/reply")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> CreateComment(Guid workoutId, Guid parentId, [FromBody] CreateWorkoutCommentRequestDTO request)
+        public async Task<IActionResult> CreateComment(Guid workoutId, Guid commentId, [FromBody] CreateWorkoutCommentRequestDTO request)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
@@ -55,7 +55,7 @@ namespace FitnessTracker.Controllers
                 Models.WorkoutComment mapped = commentCreateRequestMapper.Map(request);
                 mapped.CreatorId = userId;
                 mapped.WorkoutId = workoutId;
-                mapped.ParentId = parentId;
+                mapped.ParentId = commentId;
 
                 object? newId = await commentCreateService.Add(mapped);
                 return newId == default ? BadRequest("Failed to create comment") : Created();

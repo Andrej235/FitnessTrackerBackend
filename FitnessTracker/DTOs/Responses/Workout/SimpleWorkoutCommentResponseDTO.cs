@@ -12,5 +12,6 @@ namespace FitnessTracker.DTOs.Responses.Workout
         public bool IsLiked { get; set; }
         public bool IsCreator { get; set; }
         public int ReplyCount { get; set; }
+        public Guid WorkoutId { get; set; }
     }
 }
