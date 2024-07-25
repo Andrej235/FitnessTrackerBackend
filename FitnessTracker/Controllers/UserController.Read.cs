@@ -21,7 +21,15 @@ namespace FitnessTracker.Controllers
                 return Unauthorized();
 
             Models.User? user = await readSingleService.Get(x => x.Id == userId, "detailed");
-            return user is null ? Unauthorized() : Ok(detailedResponseMapper.Map(user));
+            if (user is null)
+                return Unauthorized();
+
+            DetailedUserResponseDTO mapped = detailedResponseMapper.Map(user);
+            mapped.Followers = await followerCountService.Count(x => x.FolloweeId == userId);
+            mapped.Following = await followerCountService.Count(x => x.FollowerId == userId);
+            mapped.TotalCompletedWorkouts = await completedWorkoutCountService.Count(x => x.UserId == userId);
+
+            return Ok(mapped);
         }
 
         [HttpGet("{id}/detailed")]
@@ -33,6 +41,9 @@ namespace FitnessTracker.Controllers
                 return Unauthorized();
 
             DetailedPublicUserResponseDTO mapped = publicUserDetailedResponseMapper.Map(user);
+            mapped.Followers = await followerCountService.Count(x => x.FolloweeId == id);
+            mapped.Following = await followerCountService.Count(x => x.FollowerId == id);
+            mapped.TotalCompletedWorkouts = await completedWorkoutCountService.Count(x => x.UserId == id);
 
             if (User.Identity is ClaimsIdentity claimsIdentity
                 && claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is string userIdString
@@ -41,7 +52,7 @@ namespace FitnessTracker.Controllers
                 if (userId == id)
                     mapped.IsMe = true;
                 else
-                    mapped.IsFollowing = user.Followers.Any(x => x.FollowerId == userId);
+                    mapped.IsFollowing = (await followerReadSingleService.Get(x => x.FollowerId == userId && x.FolloweeId == id)) is not null;
             }
 
             return Ok(mapped);

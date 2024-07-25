@@ -9,6 +9,7 @@ using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
+using FitnessTracker.Services.Read.Count;
 using FitnessTracker.Services.Read.ExpressionBased;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
@@ -27,8 +28,11 @@ namespace FitnessTracker.Controllers
                                         ICreateService<CompletedWorkout> completedWorkoutCreateService,
                                         ICreateService<UserFollows> followCreateService,
                                         IReadSingleService<User> readSingleService,
+                                        IReadSingleService<UserFollows> followerReadSingleService,
                                         IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
                                         IReadRangeService<UserFollows> followerReadRangeService,
+                                        ICountService<UserFollows> followerCountService,
+                                        ICountService<CompletedWorkout> completedWorkoutCountService,
                                         IUpdateService<User> updateService,
                                         IDeleteService<UserFollows> followDeleteService,
                                         ITokenManager tokenManager,
@@ -49,9 +53,13 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<CompletedWorkout> completedWorkoutCreateService = completedWorkoutCreateService;
         private readonly ICreateService<UserFollows> followCreateService = followCreateService;
         private readonly IReadSingleService<User> readSingleService = readSingleService;
+        private readonly IReadSingleService<UserFollows> followerReadSingleService = followerReadSingleService;
         private readonly IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService = completedWorkoutReadRangeService;
         private readonly IReadRangeService<UserFollows> followerReadRangeService = followerReadRangeService;
+        private readonly ICountService<UserFollows> followerCountService = followerCountService;
+        private readonly ICountService<CompletedWorkout> completedWorkoutCountService = completedWorkoutCountService;
         private readonly IUpdateService<User> updateService = updateService;
+        private readonly IDeleteService<UserFollows> followDeleteService = followDeleteService;
         private readonly ITokenManager tokenManager = tokenManager;
         private readonly IEmailConfirmationSenderService emailConfirmationSender = emailConfirmationSender;
         private readonly IEmailConfirmationService emailConfirmationService = emailConfirmationService;

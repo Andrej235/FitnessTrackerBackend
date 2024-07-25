@@ -10,9 +10,6 @@ namespace FitnessTracker.Services.Mapping.Response.UserMappers
             Id = from.Id,
             Name = from.Name,
             Image = from.ProfilePic,
-            Followers = from.Followers.Count,
-            Following = from.Following.Count,
-            TotalCompletedWorkouts = from.CompletedWorkouts.Count,
             JoinedAt = from.JoinedAt,
         };
     }

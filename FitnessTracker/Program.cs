@@ -226,6 +226,7 @@ namespace FitnessTracker
             #region User follows
             _ = builder.Services.AddScoped<ICreateService<UserFollows>, CreateService<UserFollows>>();
             _ = builder.Services.AddScoped<IReadSingleService<UserFollows>, ReadExpressionService<UserFollows>>();
+            _ = builder.Services.AddScoped<ICountService<UserFollows>, CountService<UserFollows>>();
             _ = builder.Services.AddScoped<IReadRangeService<UserFollows>, ReadExpressionService<UserFollows>>();
             _ = builder.Services.AddScoped<IDeleteService<UserFollows>, DeleteService<UserFollows>>();
             #endregion
@@ -411,6 +412,7 @@ namespace FitnessTracker
             #region Completed workouts / sets
             _ = builder.Services.AddScoped<ICreateService<CompletedWorkout>, CreateService<CompletedWorkout>>();
             _ = builder.Services.AddScoped<IReadRangeService<CompletedWorkout>, CompletedWorkoutReadExpressionService>();
+            _ = builder.Services.AddScoped<ICountService<CompletedWorkout>, CountService<CompletedWorkout>>();
             _ = builder.Services.AddScoped<IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO>, SimpleWeekOfCompletedWorkoutsResponseMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<IEnumerable<CompletedWorkout>, DetailedWeekOfCompletedWorkoutsResponseDTO>, DetailedWeekOfCompletedWorkoutsResponseMapper>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateCompletedSetRequestDTO, CompletedSet>, CreateCompletedSetRequestMapper>();
