@@ -46,6 +46,7 @@ using FitnessTracker.Services.Mapping.Response.SetMappers;
 using FitnessTracker.Services.Mapping.Response.SplitMappers;
 using FitnessTracker.Services.Mapping.Response.UserMappers;
 using FitnessTracker.Services.Mapping.Response.WorkoutMappers;
+using FitnessTracker.Services.Read.Count;
 using FitnessTracker.Services.Read.ExpressionBased;
 using FitnessTracker.Services.Read.QueryBased;
 using FitnessTracker.Services.Update;
@@ -256,12 +257,14 @@ namespace FitnessTracker
             #region Workout like
             _ = builder.Services.AddScoped<ICreateService<WorkoutLike>, CreateService<WorkoutLike>>();
             _ = builder.Services.AddScoped<IReadSingleService<WorkoutLike>, ReadExpressionService<WorkoutLike>>();
+            _ = builder.Services.AddScoped<ICountService<WorkoutLike>, CountService<WorkoutLike>>();
             _ = builder.Services.AddScoped<IDeleteService<WorkoutLike>, DeleteService<WorkoutLike>>();
             #endregion
 
             #region Workout comment
             _ = builder.Services.AddScoped<ICreateService<WorkoutComment>, CreateService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IReadSingleService<WorkoutComment>, ReadExpressionService<WorkoutComment>>();
+            _ = builder.Services.AddScoped<ICountService<WorkoutComment>, CountService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IReadRangeService<WorkoutComment>, ReadExpressionService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IDeleteService<WorkoutComment>, DeleteService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<WorkoutComment>, DeleteRangeService<WorkoutComment>>();
@@ -278,6 +281,7 @@ namespace FitnessTracker
             #region Workout favorite
             _ = builder.Services.AddScoped<ICreateService<FavoriteWorkout>, CreateService<FavoriteWorkout>>();
             _ = builder.Services.AddScoped<IReadSingleService<FavoriteWorkout>, ReadExpressionService<FavoriteWorkout>>();
+            _ = builder.Services.AddScoped<ICountService<FavoriteWorkout>, CountService<FavoriteWorkout>>();
             _ = builder.Services.AddScoped<IDeleteService<FavoriteWorkout>, DeleteService<FavoriteWorkout>>();
             #endregion
 

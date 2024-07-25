@@ -23,9 +23,6 @@ namespace FitnessTracker.Services.Mapping.Response.WorkoutMappers
             Creator = userResponseMapper.Map(from.Creator),
             Sets = from.Sets.Select(setResponseMapper.Map),
             Exercises = from.Sets.DistinctBy(x => x.ExerciseId).Select(x => exerciseResponseMapper.Map(x.Exercise)),
-            CommentCount = from.Comments.Count,
-            FavoriteCount = from.Favorites.Count,
-            LikeCount = from.Likes.Count,
         };
     }
 }

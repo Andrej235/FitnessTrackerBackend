@@ -13,9 +13,6 @@ namespace FitnessTracker.Services.Read.ExpressionBased
                     .Include(x => x.Creator)
                     .Include(x => x.Sets)
                     .ThenInclude(x => x.Exercise)
-                    .Include(x => x.Likes)
-                    .Include(x => x.Favorites)
-                    .Include(x => x.Comments)
                 : base.GetIncluded(includeString);
     }
 }

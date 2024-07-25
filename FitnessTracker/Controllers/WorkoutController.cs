@@ -6,6 +6,7 @@ using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
+using FitnessTracker.Services.Read.Count;
 using FitnessTracker.Services.Read.ExpressionBased;
 using FitnessTracker.Services.Update;
 using Microsoft.AspNetCore.Mvc;
@@ -21,9 +22,14 @@ namespace FitnessTracker.Controllers
                                            ICreateService<WorkoutLike> likeCreateService,
                                            ICreateService<FavoriteWorkout> favoriteCreateService,
                                            IReadSingleService<Workout> readSingleService,
+                                           IReadSingleService<WorkoutLike> likeReadSingleService,
+                                           IReadSingleService<FavoriteWorkout> favoriteReadSingleService,
                                            IReadRangeService<CompletedWorkout> completedWorkoutReadSingleService,
                                            IReadRangeService<Workout> readRangeService,
                                            IReadRangeService<WorkoutComment> commentReadRangeService,
+                                           ICountService<WorkoutLike> likeCountService,
+                                           ICountService<FavoriteWorkout> favoriteCountService,
+                                           ICountService<WorkoutComment> commentCountService,
                                            IUpdateService<Workout> updateService,
                                            IUpdateService<Set> setUpdateService,
                                            IDeleteService<Workout> deleteService,
@@ -46,9 +52,14 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<WorkoutLike> likeCreateService = likeCreateService;
         private readonly ICreateService<FavoriteWorkout> favoriteCreateService = favoriteCreateService;
         private readonly IReadSingleService<Workout> readSingleService = readSingleService;
+        private readonly IReadSingleService<WorkoutLike> likeReadSingleService = likeReadSingleService;
+        private readonly IReadSingleService<FavoriteWorkout> favoriteReadSingleService = favoriteReadSingleService;
         private readonly IReadRangeService<CompletedWorkout> completedWorkoutReadSingleService = completedWorkoutReadSingleService;
         private readonly IReadRangeService<Workout> readRangeService = readRangeService;
         private readonly IReadRangeService<WorkoutComment> commentReadRangeService = commentReadRangeService;
+        private readonly ICountService<WorkoutLike> likeCountService = likeCountService;
+        private readonly ICountService<FavoriteWorkout> favoriteCountService = favoriteCountService;
+        private readonly ICountService<WorkoutComment> commentCountService = commentCountService;
         private readonly IUpdateService<Workout> updateService = updateService;
         private readonly IUpdateService<Set> setUpdateService = setUpdateService;
         private readonly IDeleteService<Workout> deleteService = deleteService;
