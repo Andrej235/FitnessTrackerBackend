@@ -88,8 +88,8 @@ namespace FitnessTracker.Controllers
             if (!workout.IsPublic && workout.CreatorId != userId)
                 return Unauthorized();
 
-            mapped.IsLiked = (await likeReadSingleService.Get(x => x.UserId == userId)) is not null;
-            mapped.IsFavorited = (await favoriteReadSingleService.Get(x => x.UserId == userId)) is not null;
+            mapped.IsLiked = (await likeReadSingleService.Get(x => x.UserId == userId && x.WorkoutId == id)) is not null;
+            mapped.IsFavorited = (await favoriteReadSingleService.Get(x => x.UserId == userId && x.WorkoutId == id)) is not null;
             mapped.LikeCount = await likeCountService.Count(x => x.WorkoutId == id);
             mapped.FavoriteCount = await favoriteCountService.Count(x => x.WorkoutId == id);
             mapped.CommentCount = await commentCountService.Count(x => x.WorkoutId == id);
