@@ -4,5 +4,6 @@
     {
         public Guid UserId { get; set; }
         public Guid WorkoutCommentId { get; set; }
+        public Guid WorkoutId { get; set; }
     }
 }

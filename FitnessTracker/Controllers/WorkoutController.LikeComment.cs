@@ -9,12 +9,12 @@ namespace FitnessTracker.Controllers
     public partial class WorkoutController
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
-        [HttpPost("comment/{id:guid}/like")]
+        [HttpPost("{workoutId:guid}/comment/{id:guid}/like")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> CreateCommentLike(Guid id)
+        public async Task<IActionResult> CreateCommentLike(Guid id, Guid workoutId)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
@@ -26,7 +26,8 @@ namespace FitnessTracker.Controllers
                 _ = await commentLikeCreateService.Add(new WorkoutCommentLike
                 {
                     UserId = userId,
-                    WorkoutCommentId = id
+                    WorkoutCommentId = id,
+                    WorkoutId = workoutId
                 });
                 return Created();
             }

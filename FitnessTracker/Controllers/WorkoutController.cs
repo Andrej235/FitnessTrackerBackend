@@ -38,6 +38,9 @@ namespace FitnessTracker.Controllers
                                            IDeleteService<WorkoutLike> likeDeleteService,
                                            IDeleteService<FavoriteWorkout> favoriteDeleteService,
                                            IDeleteRangeService<WorkoutComment> commentDeleteRangeService,
+                                           IDeleteRangeService<WorkoutCommentLike> commentLikeDeleteRangeService,
+                                           IDeleteRangeService<WorkoutLike> likeDeleteRangeService,
+                                           IDeleteRangeService<FavoriteWorkout> favoriteDeleteRangeService,
                                            IRequestMapper<CreateWorkoutRequestDTO, Workout> createRequestMapper,
                                            IRequestMapper<CreateSetRequestDTO, Set> setCreateRequestMapper,
                                            IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment> commentCreateRequestMapper,
@@ -68,6 +71,9 @@ namespace FitnessTracker.Controllers
         private readonly IDeleteService<WorkoutLike> likeDeleteService = likeDeleteService;
         private readonly IDeleteService<FavoriteWorkout> favoriteDeleteService = favoriteDeleteService;
         private readonly IDeleteRangeService<WorkoutComment> commentDeleteRangeService = commentDeleteRangeService;
+        private readonly IDeleteRangeService<WorkoutCommentLike> commentLikeDeleteRangeService = commentLikeDeleteRangeService;
+        private readonly IDeleteRangeService<WorkoutLike> likeDeleteRangeService = likeDeleteRangeService;
+        private readonly IDeleteRangeService<FavoriteWorkout> favoriteDeleteRangeService = favoriteDeleteRangeService;
         private readonly IRequestMapper<CreateWorkoutRequestDTO, Workout> createRequestMapper = createRequestMapper;
         private readonly IRequestMapper<CreateSetRequestDTO, Set> setCreateRequestMapper = setCreateRequestMapper;
         private readonly IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment> commentCreateRequestMapper = commentCreateRequestMapper;

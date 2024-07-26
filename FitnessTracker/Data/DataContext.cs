@@ -450,6 +450,7 @@ namespace FitnessTracker.Data
                     {
                         _ = j.HasOne<WorkoutComment>().WithMany().HasForeignKey(x => x.WorkoutCommentId).OnDelete(DeleteBehavior.NoAction);
                         _ = j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
+                        _ = j.HasOne<Workout>().WithMany().HasForeignKey(x => x.WorkoutId).OnDelete(DeleteBehavior.NoAction);
                         _ = j.HasKey(x => new { x.WorkoutCommentId, x.UserId });
                         _ = j.HasIndex(x => x.WorkoutCommentId);
                         _ = j.HasIndex(x => new { x.WorkoutCommentId, x.UserId }).IsUnique();
