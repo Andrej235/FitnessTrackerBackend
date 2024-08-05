@@ -1,10 +1,14 @@
-﻿using FitnessTracker.DTOs.Responses.Workout;
+﻿using FitnessTracker.DTOs.Responses.User;
 
 namespace FitnessTracker.DTOs.Responses.Split
 {
     public class SimpleSplitWorkoutResponseDTO
     {
-        public SimpleWorkoutResponseDTO Workout { get; set; } = null!;
+        public Guid Id { get; set; }
+        public string Name { get; set; } = null!;
+        public string? Description { get; set; }
+        public bool IsPublic { get; set; }
+        public SimpleUserResponseDTO Creator { get; set; } = null!;
         public DayOfWeek Day { get; set; }
     }
 }
