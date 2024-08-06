@@ -15,6 +15,8 @@ namespace FitnessTracker.Services.Read.ExpressionBased
             {
                 return context.Users
                     .Include(x => x.CurrentSplit!)
+                    .ThenInclude(x => x.Creator)
+                    .Include(x => x.CurrentSplit!)
                     .ThenInclude(x => x.Workouts)
                     .ThenInclude(x => x.Workout);
             }

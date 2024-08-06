@@ -6,12 +6,9 @@ namespace FitnessTracker.Services.Read.ExpressionBased
 {
     public class SplitReadExpressionService(DataContext context) : ReadExpressionService<Split>(context)
     {
-        protected override IQueryable<Split> GetIncluded(string? includeString)
-        {
-            if (includeString is null)
-                return base.GetIncluded(includeString);
-
-            return includeString == "detailed"
+        protected override IQueryable<Split> GetIncluded(string? includeString) => includeString is null
+                ? base.GetIncluded(includeString)
+                : includeString == "detailed"
                 ? context.Splits
                     .Include(x => x.Creator)
                     .Include(x => x.Workouts)
@@ -25,6 +22,5 @@ namespace FitnessTracker.Services.Read.ExpressionBased
                     .Include(x => x.Workouts)
                     .ThenInclude(x => x.Workout)
                 : base.GetIncluded(includeString);
-        }
     }
 }
