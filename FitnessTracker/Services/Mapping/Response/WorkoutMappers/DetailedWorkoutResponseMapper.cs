@@ -18,7 +18,7 @@ namespace FitnessTracker.Services.Mapping.Response.WorkoutMappers
         {
             Id = from.Id,
             Name = from.Name,
-            Description = from.Description,
+            Description = from.Description ?? "",
             IsPublic = from.IsPublic,
             Creator = userResponseMapper.Map(from.Creator),
             Sets = from.Sets.Select(setResponseMapper.Map),
