@@ -402,8 +402,8 @@ namespace FitnessTracker.Data
                         .WithMany()
                         .UsingEntity<WorkoutLike>(j =>
                         {
-                            _ = j.HasOne<Workout>().WithMany().HasForeignKey(x => x.WorkoutId).OnDelete(DeleteBehavior.NoAction);
-                            _ = j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
+                            _ = j.HasOne(x => x.Workout).WithMany().HasForeignKey(x => x.WorkoutId).OnDelete(DeleteBehavior.NoAction);
+                            _ = j.HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
                             _ = j.HasKey(x => new { x.WorkoutId, x.UserId });
                             _ = j.HasIndex(x => x.WorkoutId);
                             _ = j.HasIndex(x => new { x.WorkoutId, x.UserId }).IsUnique();
@@ -418,8 +418,8 @@ namespace FitnessTracker.Data
                         .WithMany()
                         .UsingEntity<FavoriteWorkout>(j =>
                         {
-                            _ = j.HasOne<Workout>().WithMany().HasForeignKey(x => x.WorkoutId).OnDelete(DeleteBehavior.NoAction);
-                            _ = j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
+                            _ = j.HasOne(x => x.Workout).WithMany().HasForeignKey(x => x.WorkoutId).OnDelete(DeleteBehavior.NoAction);
+                            _ = j.HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
                             _ = j.HasKey(x => new { x.WorkoutId, x.UserId });
                             _ = j.HasIndex(x => x.WorkoutId);
                             _ = j.HasIndex(x => new { x.WorkoutId, x.UserId }).IsUnique();

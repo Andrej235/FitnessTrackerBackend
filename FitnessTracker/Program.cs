@@ -257,8 +257,8 @@ namespace FitnessTracker
 
             #region Workout like
             _ = builder.Services.AddScoped<ICreateService<WorkoutLike>, CreateService<WorkoutLike>>();
-            _ = builder.Services.AddScoped<IReadSingleService<WorkoutLike>, ReadExpressionService<WorkoutLike>>();
-            _ = builder.Services.AddScoped<IReadRangeService<WorkoutLike>, ReadExpressionService<WorkoutLike>>();
+            _ = builder.Services.AddScoped<IReadSingleService<WorkoutLike>, WorkoutLikeReadExpressionService>();
+            _ = builder.Services.AddScoped<IReadRangeService<WorkoutLike>, WorkoutLikeReadExpressionService>();
             _ = builder.Services.AddScoped<ICountService<WorkoutLike>, CountService<WorkoutLike>>();
             _ = builder.Services.AddScoped<IDeleteService<WorkoutLike>, DeleteService<WorkoutLike>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<WorkoutLike>, DeleteRangeService<WorkoutLike>>();
@@ -285,8 +285,8 @@ namespace FitnessTracker
 
             #region Workout favorite
             _ = builder.Services.AddScoped<ICreateService<FavoriteWorkout>, CreateService<FavoriteWorkout>>();
-            _ = builder.Services.AddScoped<IReadSingleService<FavoriteWorkout>, ReadExpressionService<FavoriteWorkout>>();
-            _ = builder.Services.AddScoped<IReadRangeService<FavoriteWorkout>, ReadExpressionService<FavoriteWorkout>>();
+            _ = builder.Services.AddScoped<IReadSingleService<FavoriteWorkout>, FavoriteWorkoutReadExpressionService>();
+            _ = builder.Services.AddScoped<IReadRangeService<FavoriteWorkout>, FavoriteWorkoutReadExpressionService>();
             _ = builder.Services.AddScoped<ICountService<FavoriteWorkout>, CountService<FavoriteWorkout>>();
             _ = builder.Services.AddScoped<IDeleteService<FavoriteWorkout>, DeleteService<FavoriteWorkout>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<FavoriteWorkout>, DeleteRangeService<FavoriteWorkout>>();

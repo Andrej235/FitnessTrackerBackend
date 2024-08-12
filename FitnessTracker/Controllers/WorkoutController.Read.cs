@@ -50,10 +50,11 @@ namespace FitnessTracker.Controllers
             return Ok(workouts.Select(simpleResponseMapper.Map));
         }
 
-        [Authorize]
+        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpGet("favorite/simple")]
         [ProducesResponseType(typeof(IEnumerable<SimpleWorkoutResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetAllSimpleFavorites([FromQuery] string? name, [FromQuery] int? limit, [FromQuery] int? offset)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -61,12 +62,32 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            IEnumerable<Models.Workout> workouts = name is null
-                ? await readRangeService.Get(x => (x.IsPublic || x.CreatorId == userId) && x.Favorites.Any(x => x.Id == userId), offset, limit ?? 10, "creator,favorites")
-                : await readRangeService.Get(x => (x.IsPublic || x.CreatorId == userId) && x.Favorites.Any(x => x.Id == userId) && EF.Functions.Like(x.Name, $"%{name}%"), offset, limit ?? 10, "creator,favorites");
+            var workouts = name is null
+                ? await favoriteReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId), offset, limit ?? 10, "workout")
+                : await favoriteReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId) && EF.Functions.Like(x.Workout.Name, $"%{name}%"), offset, limit ?? 10, "workout");
 
-            return Ok(workouts.Select(simpleResponseMapper.Map));
+            return Ok(workouts.Select(x => simpleResponseMapper.Map(x.Workout)));
         }
+
+        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
+        [HttpGet("liked/simple")]
+        [ProducesResponseType(typeof(IEnumerable<SimpleWorkoutResponseDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> GetAllSimpleLikes([FromQuery] string? name, [FromQuery] int? limit, [FromQuery] int? offset)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out Guid userId))
+                return Unauthorized();
+
+            var workouts = name is null
+                ? await likeReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId), offset, limit ?? 10, "workout")
+                : await likeReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId) && EF.Functions.Like(x.Workout.Name, $"%{name}%"), offset, limit ?? 10, "workout");
+
+            return Ok(workouts.Select(x => simpleResponseMapper.Map(x.Workout)));
+        }
+
 
         [HttpGet("{id:guid}/detailed")]
         [ProducesResponseType(typeof(DetailedWorkoutResponseDTO), StatusCodes.Status200OK)]
