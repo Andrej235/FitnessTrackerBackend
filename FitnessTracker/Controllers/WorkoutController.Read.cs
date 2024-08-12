@@ -44,8 +44,8 @@ namespace FitnessTracker.Controllers
                 return Unauthorized();
 
             IEnumerable<Models.Workout> workouts = name is null
-                ? await readRangeService.Get(x => x.CreatorId == userId, offset, limit ?? 10, "creator")
-                : await readRangeService.Get(x => x.CreatorId == userId && EF.Functions.Like(x.Name, $"%{name}%"), offset, limit ?? 10, "creator");
+                ? await readRangeService.Get(x => x.CreatorId == userId, offset, limit ?? 10, "sortbynewest,creator")
+                : await readRangeService.Get(x => x.CreatorId == userId && EF.Functions.Like(x.Name, $"%{name}%"), offset, limit ?? 10, "sortbynewest,creator");
 
             return Ok(workouts.Select(simpleResponseMapper.Map));
         }

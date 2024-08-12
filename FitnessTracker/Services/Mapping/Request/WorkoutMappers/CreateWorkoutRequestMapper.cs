@@ -14,6 +14,7 @@ namespace FitnessTracker.Services.Mapping.Request.WorkoutMappers
             Description = from.Description,
             IsPublic = from.IsPublic,
             Sets = from.Sets.Select(setRequestMapper.Map).ToList(),
+            CreatedAt = DateTime.Now
         };
     }
 }
