@@ -26,7 +26,8 @@ namespace FitnessTracker.Controllers
                 _ = await favoriteCreateService.Add(new FavoriteWorkout
                 {
                     UserId = userId,
-                    WorkoutId = id
+                    WorkoutId = id,
+                    FavoritedAt = DateTime.Now
                 });
                 return Created();
             }

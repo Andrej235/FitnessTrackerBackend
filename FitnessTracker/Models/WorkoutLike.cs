@@ -7,5 +7,7 @@
 
         public Guid UserId { get; set; }
         public User User { get; set; } = null!;
+
+        public DateTime LikedAt { get; set; }
     }
 }

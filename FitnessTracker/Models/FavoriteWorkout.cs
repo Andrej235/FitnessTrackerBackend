@@ -7,5 +7,7 @@
 
         public Guid WorkoutId { get; set; }
         public Workout Workout { get; set; } = null!;
+
+        public DateTime FavoritedAt { get; set; }
     }
 }

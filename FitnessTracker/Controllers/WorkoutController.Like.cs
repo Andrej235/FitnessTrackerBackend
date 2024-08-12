@@ -26,7 +26,8 @@ namespace FitnessTracker.Controllers
                 _ = await likeCreateService.Add(new WorkoutLike
                 {
                     UserId = userId,
-                    WorkoutId = id
+                    WorkoutId = id,
+                    LikedAt = DateTime.Now
                 });
                 return Created();
 
