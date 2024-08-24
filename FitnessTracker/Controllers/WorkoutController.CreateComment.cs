@@ -10,7 +10,7 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPost("{workoutId:guid}/comment")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -28,7 +28,7 @@ namespace FitnessTracker.Controllers
                 mapped.WorkoutId = workoutId;
 
                 object? newId = await commentCreateService.Add(mapped);
-                return newId == default ? BadRequest("Failed to create comment") : Created();
+                return newId == default ? BadRequest("Failed to create comment") : Created($"workouts/{workoutId}/comment/{newId}", newId);
             }
             catch (Exception ex)
             {
@@ -39,11 +39,11 @@ namespace FitnessTracker.Controllers
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPost("{workoutId:guid}/comment/{commentId:guid}/reply")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> CreateComment(Guid workoutId, Guid commentId, [FromBody] CreateWorkoutCommentRequestDTO request)
+        public async Task<IActionResult> CreateReply(Guid workoutId, Guid commentId, [FromBody] CreateWorkoutCommentRequestDTO request)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
@@ -58,7 +58,7 @@ namespace FitnessTracker.Controllers
                 mapped.ParentId = commentId;
 
                 object? newId = await commentCreateService.Add(mapped);
-                return newId == default ? BadRequest("Failed to create comment") : Created();
+                return newId == default ? BadRequest("Failed to create comment") : Created($"workouts/{workoutId}/comment/{newId}", newId);
             }
             catch (Exception ex)
             {
