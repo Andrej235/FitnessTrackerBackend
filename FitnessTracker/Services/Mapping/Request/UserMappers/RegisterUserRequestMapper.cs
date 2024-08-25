@@ -13,8 +13,10 @@ namespace FitnessTracker.Services.Mapping.Request.UserMappers
 
             return new User
             {
-                Name = from.Name,
+                Name = from.Username,
+                Username = from.Username,
                 Email = from.Email,
+                Bio = "",
                 Salt = salt,
                 PasswordHash = hash,
                 Role = Role.Unverified,

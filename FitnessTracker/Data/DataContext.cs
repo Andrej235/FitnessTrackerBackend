@@ -304,6 +304,9 @@ namespace FitnessTracker.Data
                     .HasForeignKey(u => u.SplitId)
                     .OnDelete(DeleteBehavior.SetNull)
                     .IsRequired(false);
+
+                _ = user.HasIndex(x => x.Email).IsUnique();
+                _ = user.HasIndex(x => x.Username).IsUnique();
             });
 
             _ = modelBuilder.Entity<UserFollows>(entity =>

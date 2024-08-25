@@ -209,7 +209,7 @@ namespace FitnessTracker
             #endregion
 
             #region User
-            _ = builder.Services.AddScoped<ICreateService<User>, UserCreateService>();
+            _ = builder.Services.AddScoped<ICreateService<User>, CreateService<User>>();
             _ = builder.Services.AddScoped<IReadSingleService<User>, UserReadExpressionService>();
             _ = builder.Services.AddScoped<IReadRangeService<User>, UserReadExpressionService>();
             _ = builder.Services.AddScoped<IUpdateService<User>, UpdateService<User>>();

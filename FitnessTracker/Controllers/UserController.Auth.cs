@@ -17,7 +17,7 @@ namespace FitnessTracker.Controllers
         {
             try
             {
-                if (request.Name.Length < 3 || !ValidEmailRegex().IsMatch(request.Email.Trim()) || request.Password.Length < 8)
+                if (request.Username.Length < 3 || !ValidEmailRegex().IsMatch(request.Email.Trim()) || request.Password.Length < 8)
                     return BadRequest("Invalid registration details");
 
                 Models.User user = registrationMapper.Map(request);
