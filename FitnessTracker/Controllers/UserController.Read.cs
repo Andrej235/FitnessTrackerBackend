@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.DTOs.Responses.User;
+using FitnessTracker.Models;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,42 +33,46 @@ namespace FitnessTracker.Controllers
             return Ok(mapped);
         }
 
-        [HttpGet("{id}/detailed")]
+        [HttpGet("{username}/detailed")]
         [ProducesResponseType(typeof(DetailedPublicUserResponseDTO), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetDetailed(Guid id)
+        public async Task<IActionResult> GetDetailed(string username)
         {
-            Models.User? user = await readSingleService.Get(x => x.Id == id, "detailed");
+            Models.User? user = await readSingleService.Get(x => x.Username == username, "detailed");
             if (user is null)
                 return Unauthorized();
 
             DetailedPublicUserResponseDTO mapped = publicUserDetailedResponseMapper.Map(user);
-            mapped.Followers = await followerCountService.Count(x => x.FolloweeId == id);
-            mapped.Following = await followerCountService.Count(x => x.FollowerId == id);
-            mapped.TotalCompletedWorkouts = await completedWorkoutCountService.Count(x => x.UserId == id);
+            mapped.Followers = await followerCountService.Count(x => x.FolloweeId == user.Id);
+            mapped.Following = await followerCountService.Count(x => x.FollowerId == user.Id);
+            mapped.TotalCompletedWorkouts = await completedWorkoutCountService.Count(x => x.UserId == user.Id);
 
             if (User.Identity is ClaimsIdentity claimsIdentity
                 && claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is string userIdString
                 && Guid.TryParse(userIdString, out Guid userId))
             {
-                if (userId == id)
+                if (userId == user.Id)
                     mapped.IsMe = true;
                 else
-                    mapped.IsFollowing = (await followerReadSingleService.Get(x => x.FollowerId == userId && x.FolloweeId == id)) is not null;
+                    mapped.IsFollowing = (await followerReadSingleService.Get(x => x.FollowerId == userId && x.FolloweeId == user.Id)) is not null;
             }
 
             return Ok(mapped);
         }
 
-        [HttpGet("{id}/following")]
+        [HttpGet("{username}/following")]
         [ProducesResponseType(typeof(IEnumerable<SimpleUserResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetFollowing(Guid id, [FromQuery] string? name, [FromQuery] int? limit, [FromQuery] int? offset)
+        public async Task<IActionResult> GetFollowing(string username, [FromQuery] string? searchTerm, [FromQuery] int? limit, [FromQuery] int? offset)
         {
             try
             {
-                IEnumerable<Models.UserFollows> follows = name is null
-                    ? await followerReadRangeService.Get(x => x.FollowerId == id, offset ?? 0, limit ?? 10, "followee")
-                    : await followerReadRangeService.Get(x => x.FollowerId == id && EF.Functions.Like(x.Followee.Name, $"{name}%"), offset ?? 0, limit ?? 10, "followee");
+                Models.User? user = await readSingleService.Get(x => x.Username == username, "detailed");
+                if (user is null)
+                    return NotFound();
+
+                IEnumerable<Models.UserFollows> follows = searchTerm is null
+                    ? await followerReadRangeService.Get(x => x.FollowerId == user.Id, offset ?? 0, limit ?? 10, "followee")
+                    : await followerReadRangeService.Get(x => x.FollowerId == user.Id && EF.Functions.Like(x.Followee.Name, $"{searchTerm}%"), offset ?? 0, limit ?? 10, "followee");
 
                 return Ok(follows.Select(x => simpleResponseMapper.Map(x.Followee)));
             }
@@ -78,16 +83,20 @@ namespace FitnessTracker.Controllers
             }
         }
 
-        [HttpGet("{id}/followers")]
+        [HttpGet("{username}/followers")]
         [ProducesResponseType(typeof(IEnumerable<SimpleUserResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetFollowers(Guid id, [FromQuery] string? name, [FromQuery] int? limit, [FromQuery] int? offset)
+        public async Task<IActionResult> GetFollowers(string username, [FromQuery] string? searchTerm, [FromQuery] int? limit, [FromQuery] int? offset)
         {
             try
             {
-                IEnumerable<Models.UserFollows> follows = name is null
-                    ? await followerReadRangeService.Get(x => x.FolloweeId == id, offset ?? 0, limit ?? 10, "follower")
-                    : await followerReadRangeService.Get(x => x.FolloweeId == id && EF.Functions.Like(x.Follower.Name, $"{name}%"), offset ?? 0, limit ?? 10, "follower");
+                Models.User? user = await readSingleService.Get(x => x.Username == username, "detailed");
+                if (user is null)
+                    return NotFound();
+
+                IEnumerable<Models.UserFollows> follows = searchTerm is null
+                    ? await followerReadRangeService.Get(x => x.FolloweeId == user.Id, offset ?? 0, limit ?? 10, "follower")
+                    : await followerReadRangeService.Get(x => x.FolloweeId == user.Id && EF.Functions.Like(x.Follower.Name, $"{searchTerm}%"), offset ?? 0, limit ?? 10, "follower");
 
                 return Ok(follows.Select(x => simpleResponseMapper.Map(x.Follower)));
             }

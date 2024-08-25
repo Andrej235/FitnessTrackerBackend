@@ -36,13 +36,17 @@ namespace FitnessTracker.Controllers
             return Ok(mapped);
         }
 
-        [HttpGet("{userId:guid}/streak")]
+        [HttpGet("{username:guid}/streak")]
         [ProducesResponseType(typeof(IEnumerable<SimpleWeekOfCompletedWorkoutsResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> GetUserStreak(Guid userId, [FromQuery] int? year)
+        public async Task<IActionResult> GetUserStreak(string username, [FromQuery] int? year)
         {
-            IEnumerable<IGrouping<DateTime, Models.CompletedWorkout>> groupedCompletedWorkouts = (await completedWorkoutReadRangeService.Get(x => x.UserId == userId, null, null, "overview"))
+            Models.User? user = await readSingleService.Get(x => x.Username == username, "detailed");
+            if (user is null)
+                return NotFound();
+
+            IEnumerable<IGrouping<DateTime, Models.CompletedWorkout>> groupedCompletedWorkouts = (await completedWorkoutReadRangeService.Get(x => x.UserId == user.Id, null, null, "overview"))
                 .GroupBy(x => x.CompletedAt.GetStartOfWeek());
 
             if (year is null)

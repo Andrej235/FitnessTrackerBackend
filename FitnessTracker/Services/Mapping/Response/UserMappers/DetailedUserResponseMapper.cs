@@ -10,8 +10,9 @@ namespace FitnessTracker.Services.Mapping.Response.UserMappers
 
         public DetailedUserResponseDTO Map(User from) => new()
         {
-            Id = from.Id,
             Name = from.Name,
+            Username = from.Username,
+            Bio = from.Bio,
             Image = from.ProfilePic,
             CurrentSplit = from.CurrentSplit is null ? null : splitResponseMapper.Map(from.CurrentSplit),
             JoinedAt = from.JoinedAt,

@@ -7,8 +7,9 @@ namespace FitnessTracker.Services.Mapping.Response.UserMappers
     {
         public DetailedPublicUserResponseDTO Map(User from) => new()
         {
-            Id = from.Id,
             Name = from.Name,
+            Username = from.Username,
+            Bio = from.Bio,
             Image = from.ProfilePic,
             JoinedAt = from.JoinedAt,
         };
