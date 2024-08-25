@@ -16,10 +16,6 @@ namespace FitnessTracker.Data
         public DbSet<FavoriteWorkout> FavoriteWorkouts { get; set; } //
         public DbSet<Muscle> Muscles { get; set; } //
         public DbSet<MuscleGroup> MusclesGroups { get; set; } //
-        public DbSet<Post> Posts { get; set; } //
-        public DbSet<PostComment> PostComments { get; set; } //
-        public DbSet<PostComment> PostCommentLikes { get; set; } //
-        public DbSet<PostLike> PostLikes { get; set; } //
         public DbSet<PrimaryMuscleGroupInExercise> PrimaryMuscleGroups { get; set; } //
         public DbSet<PrimaryMuscleInExercise> PrimaryMuscles { get; set; } //
         public DbSet<RefreshToken> RefreshTokens { get; set; } //
@@ -181,61 +177,6 @@ namespace FitnessTracker.Data
             });
 
             _ = modelBuilder.Entity<MuscleGroup>(muscleGroup => muscleGroup.HasKey(mg => mg.Id));
-
-            _ = modelBuilder.Entity<Post>(post =>
-            {
-                _ = post.HasKey(p => p.Id);
-
-                _ = post.HasOne(p => p.Creator)
-                    .WithMany()
-                    .HasForeignKey(p => p.CreatorId)
-                    .OnDelete(DeleteBehavior.NoAction);
-
-                _ = post.HasMany(p => p.Likes)
-                    .WithMany()
-                    .UsingEntity<PostLike>(j =>
-                    {
-                        _ = j.HasOne<Post>().WithMany().HasForeignKey(x => x.PostId).OnDelete(DeleteBehavior.Cascade);
-                        _ = j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
-                        _ = j.HasKey(x => new { x.PostId, x.UserId });
-                        _ = j.HasIndex(x => x.PostId);
-                        _ = j.HasIndex(x => new { x.PostId, x.UserId }).IsUnique();
-                    });
-
-                _ = post.HasMany(p => p.Comments)
-                    .WithOne()
-                    .HasForeignKey(p => p.PostId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            _ = modelBuilder.Entity<PostComment>(postComment =>
-            {
-                _ = postComment.HasKey(pc => pc.Id);
-
-                _ = postComment.HasOne(pc => pc.Creator)
-                    .WithMany()
-                    .HasForeignKey(pc => pc.CreatorId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                _ = postComment.HasMany(pc => pc.Children)
-                    .WithOne()
-                    .IsRequired(false)
-                    .HasForeignKey(pc => pc.ParentId)
-                    .OnDelete(DeleteBehavior.NoAction);
-
-                _ = postComment.HasMany(pc => pc.Likes)
-                    .WithMany()
-                    .UsingEntity<PostCommentLike>(j =>
-                    {
-                        _ = j.HasOne<PostComment>().WithMany().HasForeignKey(x => x.PostCommentId).OnDelete(DeleteBehavior.NoAction);
-                        _ = j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
-                        _ = j.HasKey(x => new { x.PostCommentId, x.UserId });
-                        _ = j.HasIndex(x => x.PostCommentId);
-                        _ = j.HasIndex(x => new { x.PostCommentId, x.UserId }).IsUnique();
-                    });
-
-                _ = postComment.HasIndex(pc => pc.CreatorId);
-            });
 
             _ = modelBuilder.Entity<RefreshToken>(refreshToken =>
             {
