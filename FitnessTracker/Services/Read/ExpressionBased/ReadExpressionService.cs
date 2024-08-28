@@ -1,6 +1,8 @@
 ﻿using FitnessTracker.Data;
+using FitnessTracker.Models;
 using FitnessTracker.Utilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -18,10 +20,10 @@ namespace FitnessTracker.Services.Read.ExpressionBased
         }
 
         public virtual Task<IEnumerable<T>> Get(Expression<Func<T, bool>> criteria, int? offset = 0, int? limit = -1, string? include = "all") => Task.Run(() =>
-                                                                                                                                                           {
-                                                                                                                                                               IQueryable<T> entitesQueryable = GetIncluded(include);
-                                                                                                                                                               return entitesQueryable.Where(criteria).ApplyOffsetAndLimit(offset, limit);
-                                                                                                                                                           });
+        {
+            IQueryable<T> entitesQueryable = GetIncluded(include);
+            return entitesQueryable.Where(criteria).ApplyOffsetAndLimit(offset, limit);
+        });
 
         protected static IEnumerable<string>? SplitIncludeString(string? include) => include?.ToLower().Replace(" ", "").Split(',').Where(x => !string.IsNullOrWhiteSpace(x));
 
@@ -48,6 +50,9 @@ namespace FitnessTracker.Services.Read.ExpressionBased
             IEnumerable<PropertyInfo> includedNavigationProperties = navigationProperties.Where(navigationProperty => include.Any(includeMember => navigationProperty.Name.Contains(includeMember, StringComparison.CurrentCultureIgnoreCase)));
             foreach (PropertyInfo navigationProperty in includedNavigationProperties)
                 entitiesIncluding = Include(entitiesIncluding, navigationProperty.Name);
+
+            IIncludableQueryable<User, IEnumerable<User>>? a = null;
+            //a.ThenInclude(x => x.)
 
             return entitiesIncluding;
         }
