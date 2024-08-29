@@ -7,13 +7,9 @@ namespace FitnessTracker.Services.Read.Full
 {
     public interface IWrappedQueryable<out TEntity>;
     public interface IWrappedIncludableQueryable<out TEntity, out TProperty> : IWrappedQueryable<TEntity>;
-    public interface ITest<TEntity, TProperty>
-    {
-        IIncludableQueryable<TEntity, TProperty> IncludableSource { get; }
-    }
 
     public record WrappedQueryable<TEntity>(IQueryable<TEntity> Source) : IWrappedQueryable<TEntity>;
-    public record WrappedIncludableQueryable<TEntity, TProperty>(IIncludableQueryable<TEntity, TProperty> IncludableSource) : WrappedQueryable<TEntity>(IncludableSource), ITest<TEntity, TProperty>, IWrappedIncludableQueryable<TEntity, TProperty>;
+    public record WrappedIncludableQueryable<TEntity, TProperty>(IIncludableQueryable<TEntity, TProperty> IncludableSource) : WrappedQueryable<TEntity>(IncludableSource), IWrappedIncludableQueryable<TEntity, TProperty>;
 
     public static class WrappedIncludableQueryableExtensions
     {

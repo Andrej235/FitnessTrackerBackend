@@ -15,8 +15,8 @@ namespace FitnessTracker.Controllers
         public async Task<IActionResult> GetAllSimplePublic([FromQuery] string? name, [FromQuery] int? limit, [FromQuery] int? offset)
         {
             IEnumerable<Models.Workout> workouts = name is null
-                ? await readRangeService.Get(x => x.IsPublic, offset, limit ?? 10, "creator")
-                : await readRangeService.Get(x => x.IsPublic && EF.Functions.Like(x.Name, $"%{name}%"), offset, limit ?? 10, "creator");
+                ? await readRangeService.Get(x => x.IsPublic, offset, limit ?? 10, x => x.Include(x => x.Creator))
+                : await readRangeService.Get(x => x.IsPublic && EF.Functions.Like(x.Name, $"%{name}%"), offset, limit ?? 10, x => x.Include(x => x.Creator));
 
             return Ok(workouts.Select(simpleResponseMapper.Map));
         }
@@ -26,8 +26,8 @@ namespace FitnessTracker.Controllers
         public async Task<IActionResult> GetAllSimplePublic(Guid userId, [FromQuery] string? name, [FromQuery] int? limit, [FromQuery] int? offset)
         {
             IEnumerable<Models.Workout> workouts = name is null
-                ? await readRangeService.Get(x => x.CreatorId == userId && x.IsPublic, offset, limit ?? 10, "creator")
-                : await readRangeService.Get(x => x.CreatorId == userId && x.IsPublic && EF.Functions.Like(x.Name, $"%{name}%"), offset, limit ?? 10, "creator");
+                ? await readRangeService.Get(x => x.CreatorId == userId && x.IsPublic, offset, limit ?? 10, x => x.Include(x => x.Creator))
+                : await readRangeService.Get(x => x.CreatorId == userId && x.IsPublic && EF.Functions.Like(x.Name, $"%{name}%"), offset, limit ?? 10, x => x.Include(x => x.Creator));
 
             return Ok(workouts.Select(simpleResponseMapper.Map));
         }
@@ -45,8 +45,8 @@ namespace FitnessTracker.Controllers
                 return Unauthorized();
 
             IEnumerable<Models.Workout> workouts = name is null
-                ? await readRangeService.Get(x => x.CreatorId == userId, offset, limit ?? 10, "sortbynewest,creator")
-                : await readRangeService.Get(x => x.CreatorId == userId && EF.Functions.Like(x.Name, $"%{name}%"), offset, limit ?? 10, "sortbynewest,creator");
+                ? await readRangeService.Get(x => x.CreatorId == userId, offset, limit ?? 10, x => x.Include(x => x.Creator)) //TODO: Reimplement sorting (by date of creation)
+                : await readRangeService.Get(x => x.CreatorId == userId && EF.Functions.Like(x.Name, $"%{name}%"), offset, limit ?? 10, x => x.Include(x => x.Creator));
 
             return Ok(workouts.Select(simpleResponseMapper.Map));
         }
@@ -96,9 +96,10 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetDetailed(Guid id)
         {
-            Models.Workout? workout = await fullSingleReadService.Get(x => x.Id == id, x => x.Include(x => x.Creator)
-                                                                                            .Include(x => x.Sets)
-                                                                                            .ThenInclude(x => x.Exercise));
+            Models.Workout? workout = await readSingleService.Get(x => x.Id == id, x => x.Include(x => x.Creator)
+                                                                                         .Include(x => x.Sets)
+                                                                                         .ThenInclude(x => x.Exercise));
+
             if (workout is null)
                 return NotFound();
 

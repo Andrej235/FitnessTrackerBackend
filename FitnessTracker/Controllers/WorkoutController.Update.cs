@@ -1,6 +1,7 @@
 ﻿using FitnessTracker.DTOs.Requests.Set;
 using FitnessTracker.DTOs.Requests.Workout;
 using FitnessTracker.Models;
+using FitnessTracker.Services.Read.Full;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,7 @@ namespace FitnessTracker.Controllers
                     || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                Workout? workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "none");
+                Workout? workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id);
                 if (workout is null)
                     return NotFound();
 
@@ -61,7 +62,7 @@ namespace FitnessTracker.Controllers
                     || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                Models.Workout? workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "sets");
+                Models.Workout? workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, x => x.Include(x => x.Sets));
                 Models.Set? set = workout?.Sets.FirstOrDefault(x => x.Id == setId);
 
                 if (set is null)
@@ -98,7 +99,7 @@ namespace FitnessTracker.Controllers
                     || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                Models.Workout? workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "sets");
+                Models.Workout? workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, x => x.Include(x => x.Sets));
                 Models.Set? set = workout?.Sets.FirstOrDefault(x => x.Id == setId);
 
                 if (workout is null || set is null)
@@ -131,7 +132,7 @@ namespace FitnessTracker.Controllers
                     || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                Models.Workout? workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "sets");
+                Models.Workout? workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, x => x.Include(x => x.Sets));
                 if (workout is null)
                     return NotFound();
 
@@ -162,7 +163,7 @@ namespace FitnessTracker.Controllers
                     || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                Workout? workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "all");
+                Workout? workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, x => x.Include(x => x.Sets));
                 if (workout is null)
                     return NotFound();
 
