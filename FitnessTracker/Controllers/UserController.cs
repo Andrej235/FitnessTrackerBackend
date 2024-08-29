@@ -12,6 +12,7 @@ using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read.Count;
 using FitnessTracker.Services.Read.ExpressionBased;
+using FitnessTracker.Services.Read.Full;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
 using FitnessTracker.Services.UserServices.EmailConfirmationService;
@@ -28,7 +29,7 @@ namespace FitnessTracker.Controllers
     public partial class UserController(ICreateService<User> createService,
                                         ICreateService<CompletedWorkout> completedWorkoutCreateService,
                                         ICreateService<UserFollows> followCreateService,
-                                        IReadSingleService<User> readSingleService,
+                                        IFullReadService<User> readSingleService,
                                         IReadSingleService<UserFollows> followerReadSingleService,
                                         IReadSingleService<Split> splitReadSingleService,
                                         IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
@@ -55,7 +56,7 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<User> createService = createService;
         private readonly ICreateService<CompletedWorkout> completedWorkoutCreateService = completedWorkoutCreateService;
         private readonly ICreateService<UserFollows> followCreateService = followCreateService;
-        private readonly IReadSingleService<User> readSingleService = readSingleService;
+        private readonly IFullReadService<User> readSingleService = readSingleService;
         private readonly IReadSingleService<UserFollows> followerReadSingleService = followerReadSingleService;
         private readonly IReadSingleService<Split> splitReadSingleService = splitReadSingleService;
         private readonly IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService = completedWorkoutReadRangeService;

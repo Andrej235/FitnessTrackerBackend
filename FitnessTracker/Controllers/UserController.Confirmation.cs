@@ -22,7 +22,7 @@ namespace FitnessTracker.Controllers
                     || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                Models.User? user = await readSingleService.Get(x => x.Id == userId, "none");
+                Models.User? user = await readSingleService.Get(x => x.Id == userId);
                 if (user is null)
                     return Unauthorized();
 

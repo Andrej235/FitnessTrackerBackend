@@ -212,6 +212,8 @@ namespace FitnessTracker
             #region User
             _ = builder.Services.AddScoped<ICreateService<User>, CreateService<User>>();
             _ = builder.Services.AddScoped<IReadSingleService<User>, UserReadExpressionService>();
+            _ = builder.Services.AddScoped<IFullReadService<User>, FullReadService<User>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<User>, FullReadService<User>>();
             _ = builder.Services.AddScoped<IReadRangeService<User>, UserReadExpressionService>();
             _ = builder.Services.AddScoped<IUpdateService<User>, UpdateService<User>>();
             _ = builder.Services.AddScoped<IRequestMapper<RegisterUserRequestDTO, User>, RegisterUserRequestMapper>();
@@ -377,6 +379,8 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<ICreateService<Split>, CreateService<Split>>();
             _ = builder.Services.AddScoped<IReadRangeService<Split>, SplitReadExpressionService>();
             _ = builder.Services.AddScoped<IReadSingleService<Split>, SplitReadExpressionService>();
+            _ = builder.Services.AddScoped<IFullReadService<Split>, FullReadService<Split>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<Split>, FullReadService<Split>>();
             _ = builder.Services.AddScoped<IUpdateService<Split>, UpdateService<Split>>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateSplitRequestDTO, Split>, CreateSplitRequestMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<Split, SimpleSplitResponseDTO>, SimpleSplitResponseMapper>();

@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.DTOs.Requests.Completed;
+using FitnessTracker.Services.Read.Full;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,11 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            Models.User? user = await readSingleService.Get(x => x.Id == userId, "split,splitworkouts");
+            DayOfWeek today = DateTime.Today.DayOfWeek;
+            Models.User? user = await readSingleService.Get(x => x.Id == userId,
+                x => x.Include(x => x.CurrentSplit!).ThenInclude(x => x.Workouts.Where(w => w.Day == today))
+            );
+
             if (user is null)
                 return Unauthorized();
 

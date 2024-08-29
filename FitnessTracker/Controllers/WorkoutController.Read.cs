@@ -89,7 +89,6 @@ namespace FitnessTracker.Controllers
             return Ok(workouts.Select(x => simpleResponseMapper.Map(x.Workout)));
         }
 
-
         [HttpGet("{id:guid}/detailed")]
         [ProducesResponseType(typeof(DetailedWorkoutResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

@@ -14,7 +14,7 @@ namespace FitnessTracker.Controllers
         {
             try
             {
-                Models.User? user = await readSingleService.Get(x => x.Email == request.Email, "none");
+                Models.User? user = await readSingleService.Get(x => x.Email == request.Email);
                 if (user is null)
                     return NotFound();
 
@@ -38,7 +38,7 @@ namespace FitnessTracker.Controllers
                 if (request.NewPassword.Length < 8)
                     return BadRequest("Password must be at least 8 characters long");
 
-                Models.User? user = await readSingleService.Get(x => x.Email == request.Email, "none");
+                Models.User? user = await readSingleService.Get(x => x.Email == request.Email);
                 if (user is null)
                     return NotFound();
 

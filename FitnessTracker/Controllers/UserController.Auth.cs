@@ -45,7 +45,7 @@ namespace FitnessTracker.Controllers
             if (!ValidEmailRegex().IsMatch(request.Email) || request.Password.Length < 8)
                 return BadRequest("Incorrect email or password");
 
-            Models.User? user = await readSingleService.Get(x => x.Email == request.Email, "none");
+            Models.User? user = await readSingleService.Get(x => x.Email == request.Email);
             if (user is null)
                 return BadRequest("Incorrect email or password");
 

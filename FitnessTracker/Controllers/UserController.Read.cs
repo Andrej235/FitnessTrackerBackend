@@ -1,5 +1,5 @@
 ﻿using FitnessTracker.DTOs.Responses.User;
-using FitnessTracker.Models;
+using FitnessTracker.Services.Read.Full;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +21,14 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            Models.User? user = await readSingleService.Get(x => x.Id == userId, "detailed");
+            Models.User? user = await readSingleService.Get(
+                x => x.Id == userId,
+                x => x.Include(x => x.CurrentSplit!)
+                    .ThenInclude(x => x.Creator)
+                    .Include(x => x.CurrentSplit!)
+                    .ThenInclude(x => x.Workouts)
+                    .ThenInclude(x => x.Workout));
+
             if (user is null)
                 return Unauthorized();
 
@@ -37,7 +44,8 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(DetailedPublicUserResponseDTO), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDetailed(string username)
         {
-            Models.User? user = await readSingleService.Get(x => x.Username == username, "detailed");
+            Models.User? user = await readSingleService.Get(x => x.Username == username);
+
             if (user is null)
                 return Unauthorized();
 
@@ -66,7 +74,14 @@ namespace FitnessTracker.Controllers
         {
             try
             {
-                Models.User? user = await readSingleService.Get(x => x.Username == username, "detailed");
+                Models.User? user = await readSingleService.Get(
+                    x => x.Username == username,
+                    x => x.Include(x => x.CurrentSplit!)
+                    .ThenInclude(x => x.Creator)
+                    .Include(x => x.CurrentSplit!)
+                    .ThenInclude(x => x.Workouts)
+                    .ThenInclude(x => x.Workout));
+
                 if (user is null)
                     return NotFound();
 
@@ -90,7 +105,14 @@ namespace FitnessTracker.Controllers
         {
             try
             {
-                Models.User? user = await readSingleService.Get(x => x.Username == username, "detailed");
+                Models.User? user = await readSingleService.Get(
+                    x => x.Username == username,
+                    x => x.Include(x => x.CurrentSplit!)
+                          .ThenInclude(x => x.Creator)
+                          .Include(x => x.CurrentSplit!)
+                          .ThenInclude(x => x.Workouts)
+                          .ThenInclude(x => x.Workout));
+
                 if (user is null)
                     return NotFound();
 
