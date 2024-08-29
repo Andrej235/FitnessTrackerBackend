@@ -6,6 +6,7 @@ using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read.ExpressionBased;
+using FitnessTracker.Services.Read.Full;
 using FitnessTracker.Services.Update;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,8 +20,8 @@ namespace FitnessTracker.Controllers
                                          ICreateService<SplitCommentLike> commentLikeCreateService,
                                          ICreateService<SplitLike> likeCreateService,
                                          ICreateService<FavoriteSplit> favoriteCreateService,
-                                         IReadSingleService<Split> readSingleService,
-                                         IReadRangeService<Split> readRangeService,
+                                         IFullReadService<Split> readSingleService,
+                                         IFullReadRangeService<Split> readRangeService,
                                          IReadRangeService<SplitComment> commentReadRangeService,
                                          IReadRangeService<Workout> workoutReadRangeService,
                                          IUpdateService<Split> updateService,
@@ -41,8 +42,8 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<SplitCommentLike> commentLikeCreateService = commentLikeCreateService;
         private readonly ICreateService<SplitLike> likeCreateService = likeCreateService;
         private readonly ICreateService<FavoriteSplit> favoriteCreateService = favoriteCreateService;
-        private readonly IReadSingleService<Split> readSingleService = readSingleService;
-        private readonly IReadRangeService<Split> readRangeService = readRangeService;
+        private readonly IFullReadService<Split> readSingleService = readSingleService;
+        private readonly IFullReadRangeService<Split> readRangeService = readRangeService;
         private readonly IReadRangeService<SplitComment> commentReadRangeService = commentReadRangeService;
         private readonly IReadRangeService<Workout> workoutReadRangeService = workoutReadRangeService;
         private readonly IUpdateService<Split> updateService = updateService;

@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.DTOs.Responses.Split;
+using FitnessTracker.Services.Read.Full;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +15,8 @@ namespace FitnessTracker.Controllers
         public async Task<IActionResult> GetAllSimplePublic([FromQuery] string? name)
         {
             IEnumerable<Models.Split> workouts = name is null
-                ? await readRangeService.Get(x => x.IsPublic, 0, 10, "creator")
-                : await readRangeService.Get(x => x.IsPublic && EF.Functions.Like(x.Name, $"%{name}%"), 0, 10, "creator");
+                ? await readRangeService.Get(x => x.IsPublic, 0, 10, x => x.Include(x => x.Creator))
+                : await readRangeService.Get(x => x.IsPublic && EF.Functions.Like(x.Name, $"%{name}%"), 0, 10, x => x.Include(x => x.Creator));
 
             return Ok(workouts.Select(simpleResponseMapper.Map));
         }
@@ -25,8 +26,8 @@ namespace FitnessTracker.Controllers
         public async Task<IActionResult> GetAllSimplePublic(Guid userId, [FromQuery] string? name)
         {
             IEnumerable<Models.Split> workouts = name is null
-                ? await readRangeService.Get(x => x.CreatorId == userId && x.IsPublic, 0, 10, "creator")
-                : await readRangeService.Get(x => x.CreatorId == userId && x.IsPublic && EF.Functions.Like(x.Name, $"%{name}%"), 0, 10, "creator");
+                ? await readRangeService.Get(x => x.CreatorId == userId && x.IsPublic, 0, 10, x => x.Include(x => x.Creator))
+                : await readRangeService.Get(x => x.CreatorId == userId && x.IsPublic && EF.Functions.Like(x.Name, $"%{name}%"), 0, 10, x => x.Include(x => x.Creator));
 
             return Ok(workouts.Select(simpleResponseMapper.Map));
         }
@@ -44,8 +45,8 @@ namespace FitnessTracker.Controllers
                 return Unauthorized();
 
             IEnumerable<Models.Split> workouts = name is null
-                ? await readRangeService.Get(x => x.CreatorId == userId, 0, 10, "creator")
-                : await readRangeService.Get(x => x.CreatorId == userId && EF.Functions.Like(x.Name, $"%{name}%"), 0, 10, "creator");
+                ? await readRangeService.Get(x => x.CreatorId == userId, 0, 10, x => x.Include(x => x.Creator))
+                : await readRangeService.Get(x => x.CreatorId == userId && EF.Functions.Like(x.Name, $"%{name}%"), 0, 10, x => x.Include(x => x.Creator));
 
             return Ok(workouts.Select(simpleResponseMapper.Map));
         }
@@ -62,7 +63,16 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            Models.Split? workout = await readSingleService.Get(x => x.Id == id, "detailed");
+            Models.Split? workout = await readSingleService.Get(
+                x => x.Id == id,
+                x => x.Include(x => x.Creator)
+                      .Include(x => x.Workouts)
+                      .ThenInclude(x => x.Workout)
+                      .ThenInclude(x => x.Creator)
+                      .Include(x => x.Likes)
+                      .Include(x => x.Favorites)
+                      .Include(x => x.Comments));
+
             if (workout is null)
                 return NotFound();
 

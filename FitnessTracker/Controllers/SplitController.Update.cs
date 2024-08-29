@@ -1,5 +1,6 @@
 ﻿using FitnessTracker.DTOs.Requests.Split;
 using FitnessTracker.Models;
+using FitnessTracker.Services.Read.Full;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace FitnessTracker.Controllers
                     || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                Split? split = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "workouts");
+                Split? split = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, x => x.Include(x => x.Workouts).ThenInclude(x => x.Workout));
                 if (split is null)
                     return NotFound();
 
@@ -60,7 +61,7 @@ namespace FitnessTracker.Controllers
                     || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                Split? split = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, "workouts");
+                Split? split = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, x => x.Include(x => x.Workouts).ThenInclude(x => x.Workout));
                 SplitWorkout? splitWorkout = split?.Workouts.FirstOrDefault(x => x.Day == day);
 
                 if (splitWorkout is null)
