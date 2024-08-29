@@ -1,8 +1,6 @@
 ﻿using FitnessTracker.Data;
-using FitnessTracker.Models;
 using FitnessTracker.Utilities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -50,9 +48,6 @@ namespace FitnessTracker.Services.Read.ExpressionBased
             IEnumerable<PropertyInfo> includedNavigationProperties = navigationProperties.Where(navigationProperty => include.Any(includeMember => navigationProperty.Name.Contains(includeMember, StringComparison.CurrentCultureIgnoreCase)));
             foreach (PropertyInfo navigationProperty in includedNavigationProperties)
                 entitiesIncluding = Include(entitiesIncluding, navigationProperty.Name);
-
-            IIncludableQueryable<User, IEnumerable<User>>? a = null;
-            //a.ThenInclude(x => x.)
 
             return entitiesIncluding;
         }

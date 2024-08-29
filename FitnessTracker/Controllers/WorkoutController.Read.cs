@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.DTOs.Responses.Workout;
+using FitnessTracker.Services.Read.Full;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -62,7 +63,7 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            var workouts = name is null
+            IEnumerable<Models.FavoriteWorkout> workouts = name is null
                 ? await favoriteReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId), offset, limit ?? 10, "workout")
                 : await favoriteReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId) && EF.Functions.Like(x.Workout.Name, $"%{name}%"), offset, limit ?? 10, "workout");
 
@@ -81,7 +82,7 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            var workouts = name is null
+            IEnumerable<Models.WorkoutLike> workouts = name is null
                 ? await likeReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId), offset, limit ?? 10, "workout")
                 : await likeReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId) && EF.Functions.Like(x.Workout.Name, $"%{name}%"), offset, limit ?? 10, "workout");
 
@@ -95,7 +96,9 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetDetailed(Guid id)
         {
-            Models.Workout? workout = await readSingleService.Get(x => x.Id == id, "detailed");
+            Models.Workout? workout = await fullSingleReadService.Get(x => x.Id == id, x => x.Include(x => x.Creator)
+                                                                                            .Include(x => x.Sets)
+                                                                                            .ThenInclude(x => x.Exercise));
             if (workout is null)
                 return NotFound();
 

@@ -8,6 +8,7 @@ using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read.Count;
 using FitnessTracker.Services.Read.ExpressionBased;
+using FitnessTracker.Services.Read.Full;
 using FitnessTracker.Services.Update;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,7 @@ namespace FitnessTracker.Controllers
                                            ICreateService<WorkoutLike> likeCreateService,
                                            ICreateService<FavoriteWorkout> favoriteCreateService,
                                            IReadSingleService<Workout> readSingleService,
+                                           IFullReadService<Workout> fullSingleReadService,
                                            IReadSingleService<WorkoutLike> likeReadSingleService,
                                            IReadSingleService<FavoriteWorkout> favoriteReadSingleService,
                                            IReadRangeService<CompletedWorkout> completedWorkoutReadSingleService,
@@ -57,6 +59,7 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<WorkoutLike> likeCreateService = likeCreateService;
         private readonly ICreateService<FavoriteWorkout> favoriteCreateService = favoriteCreateService;
         private readonly IReadSingleService<Workout> readSingleService = readSingleService;
+        private readonly IFullReadService<Workout> fullSingleReadService = fullSingleReadService;
         private readonly IReadSingleService<WorkoutLike> likeReadSingleService = likeReadSingleService;
         private readonly IReadSingleService<FavoriteWorkout> favoriteReadSingleService = favoriteReadSingleService;
         private readonly IReadRangeService<CompletedWorkout> completedWorkoutReadSingleService = completedWorkoutReadSingleService;
