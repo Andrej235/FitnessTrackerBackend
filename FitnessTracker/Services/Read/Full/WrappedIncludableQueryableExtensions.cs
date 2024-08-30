@@ -5,11 +5,17 @@ using System.Linq.Expressions;
 
 namespace FitnessTracker.Services.Read.Full
 {
-    public interface IWrappedQueryable<out TEntity>;
+    public interface IWrappedResult<out TEntity>;
+
+    public interface IWrappedQueryable<out TEntity> : IWrappedResult<TEntity>;
     public interface IWrappedIncludableQueryable<out TEntity, out TProperty> : IWrappedQueryable<TEntity>;
 
     public record WrappedQueryable<TEntity>(IQueryable<TEntity> Source) : IWrappedQueryable<TEntity>;
     public record WrappedIncludableQueryable<TEntity, TProperty>(IIncludableQueryable<TEntity, TProperty> IncludableSource) : WrappedQueryable<TEntity>(IncludableSource), IWrappedIncludableQueryable<TEntity, TProperty>;
+
+    public interface IWrappedOrderedQueryable<out TEntity> : IWrappedResult<TEntity>;
+    public record WrappedOrderedQueryable<TEntity>(IOrderedQueryable<TEntity> Source) : IWrappedOrderedQueryable<TEntity>;
+
 
     public static class WrappedIncludableQueryableExtensions
     {
@@ -48,5 +54,11 @@ namespace FitnessTracker.Services.Read.Full
                     ) ?? throw new InvalidOperationException()
                 ).ThenInclude(navigationPropertyPath)
             );
+
+        public static IWrappedOrderedQueryable<TSource> OrderBy<TSource, TKey>(this IWrappedQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
+            => new WrappedOrderedQueryable<TSource>((source as WrappedQueryable<TSource>)?.Source?.OrderBy(keySelector) ?? throw new InvalidOperationException());
+
+        public static IWrappedOrderedQueryable<TSource> OrderByDescending<TSource, TKey>(this IWrappedQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
+            => new WrappedOrderedQueryable<TSource>((source as WrappedQueryable<TSource>)?.Source?.OrderByDescending(keySelector) ?? throw new InvalidOperationException());
     }
 }
