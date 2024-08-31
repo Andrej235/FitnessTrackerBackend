@@ -48,7 +48,6 @@ using FitnessTracker.Services.Mapping.Response.UserMappers;
 using FitnessTracker.Services.Mapping.Response.WorkoutMappers;
 using FitnessTracker.Services.Read.Count;
 using FitnessTracker.Services.Read.Full;
-using FitnessTracker.Services.Read.QueryBased;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
 using FitnessTracker.Services.UserServices.EmailConfirmationService;
@@ -193,7 +192,6 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<ICreateService<Exercise>, CreateService<Exercise>>();
             _ = builder.Services.AddScoped<IFullReadService<Exercise>, FullReadService<Exercise>>();
             _ = builder.Services.AddScoped<IFullReadRangeService<Exercise>, FullReadService<Exercise>>();
-            _ = builder.Services.AddScoped<IReadQueryService<Exercise>, ExerciseReadQueryService>();
             _ = builder.Services.AddScoped<IUpdateService<Exercise>, UpdateService<Exercise>>();
             _ = builder.Services.AddScoped<IDeleteService<Exercise>, DeleteService<Exercise>>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateExerciseRequestDTO, Exercise>, CreateExerciseRequestMapper>();

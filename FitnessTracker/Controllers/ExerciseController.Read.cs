@@ -1,6 +1,10 @@
 ﻿using FitnessTracker.DTOs.Responses.Exercises;
+using FitnessTracker.Models;
 using FitnessTracker.Services.Read.Full;
+using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace FitnessTracker.Controllers
@@ -9,40 +13,35 @@ namespace FitnessTracker.Controllers
     {
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<SimpleExerciseResponseDTO>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Get([FromQuery] int? muscleGroupId, [FromQuery] int? equipmentId, [FromQuery] string? name, [FromQuery] bool? favoriteOnly, [FromQuery] int? limit, [FromQuery] int? offset)
+        public async Task<IActionResult> Get([FromQuery] int? muscleGroupId, [FromQuery] int? equipmentId, [FromQuery] string? name, [FromQuery] int? limit, [FromQuery] int? offset)
         {
-            ICollection<string> include = [];
-            string query = "strict=true;";
+            List<Expression<Func<Exercise, bool>>> filters = [];
 
             if (name is not null)
-            {
-                query += $"name={name};";
-            }
+                filters.Add(e => EF.Functions.Like(e.Name, $"%{name}%"));
 
             if (muscleGroupId is not null)
-            {
-                include.Add("primarymusclegroups,secondarymusclegroups");
-                query += $"usesmusclegroup={muscleGroupId};";
-            }
+                filters.Add(e => e.PrimaryMuscleGroups.Any(m => m.Id == muscleGroupId) || e.SecondaryMuscleGroups.Any(m => m.Id == muscleGroupId));
 
             if (equipmentId is not null)
-            {
-                include.Add("equipment");
-                query += $"usesequipment={equipmentId};";
-            }
+                filters.Add(e => e.Equipment.Any(eq => eq.Id == equipmentId));
 
-            if (favoriteOnly is not null && favoriteOnly.Value)
-            {
-                if (User.Identity is ClaimsIdentity claimsIdentity
-                    && claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is string userIdString
-                    && Guid.TryParse(userIdString, out Guid userId))
+            IEnumerable<Models.Exercise> exercises = await readRangeService.Get(
+                filters.Combine() ?? (x => true),
+                offset,
+                limit ?? 10,
+                x =>
                 {
-                    include.Add("favorites");
-                    query += $"favoritedby={userId};";
-                }
-            }
+                    if (muscleGroupId is not null)
+                        x = x.Include(x => x.PrimaryMuscleGroups).Include(x => x.SecondaryMuscleGroups);
 
-            IEnumerable<Models.Exercise> exercises = await readQueryService.Get(query, offset, limit, string.Join(',', include));
+                    if (equipmentId is not null)
+                        x = x.Include(x => x.Equipment);
+
+                    return x;
+                });
+
+            //TODO: Sort the results based on how many criteria they match
             return Ok(exercises.Select(simpleResponseMapper.Map));
         }
 
@@ -58,7 +57,6 @@ namespace FitnessTracker.Controllers
                       .Include(x => x.PrimaryMuscles)
                       .Include(x => x.SecondaryMuscles)
                       .Include(x => x.Equipment)
-
                 );
 
             if (exercise is null)
