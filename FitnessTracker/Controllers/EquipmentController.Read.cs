@@ -7,9 +7,9 @@ namespace FitnessTracker.Controllers
     {
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<SimpleMuscleGroupResponseDTO>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Get([FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] string? include)
+        public async Task<IActionResult> Get()
         {
-            IEnumerable<Models.Equipment> muscleGroups = await readRangeService.Get(x => true, offset, limit, include);
+            IEnumerable<Models.Equipment> muscleGroups = await readRangeService.Get(x => true);
             return Ok(muscleGroups.Select(responseMapper.Map));
         }
     }

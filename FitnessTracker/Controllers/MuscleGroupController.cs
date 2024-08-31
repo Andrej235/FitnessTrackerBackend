@@ -5,7 +5,7 @@ using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
-using FitnessTracker.Services.Read.ExpressionBased;
+using FitnessTracker.Services.Read.Full;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessTracker.Controllers
@@ -15,7 +15,7 @@ namespace FitnessTracker.Controllers
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
     public partial class MuscleGroupController(ICreateService<MuscleGroup> createService,
                                                ICreateRangeService<MuscleGroup> createRangeService,
-                                               IReadRangeService<MuscleGroup> readRangeService,
+                                               IFullReadRangeService<MuscleGroup> readRangeService,
                                                IDeleteService<MuscleGroup> deleteService,
                                                IRequestMapper<CreateMuscleGroupRequestDTO, MuscleGroup> requestMapper,
                                                IResponseMapper<MuscleGroup, SimpleMuscleGroupResponseDTO> responseMapper,
@@ -23,7 +23,7 @@ namespace FitnessTracker.Controllers
     {
         private readonly ICreateService<MuscleGroup> createService = createService;
         private readonly ICreateRangeService<MuscleGroup> createRangeService = createRangeService;
-        private readonly IReadRangeService<MuscleGroup> readRangeService = readRangeService;
+        private readonly IFullReadRangeService<MuscleGroup> readRangeService = readRangeService;
         private readonly IDeleteService<MuscleGroup> deleteService = deleteService;
         private readonly IRequestMapper<CreateMuscleGroupRequestDTO, MuscleGroup> requestMapper = requestMapper;
         private readonly IResponseMapper<MuscleGroup, SimpleMuscleGroupResponseDTO> responseMapper = responseMapper;

@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.DTOs.Responses.Workout;
+using FitnessTracker.Services.Read.Full;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,15 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            IEnumerable<Models.WorkoutComment> comments = await commentReadRangeService.Get(x => x.WorkoutId == workoutId && x.ParentId == null, offset ?? 0, limit ?? 10, "creator,likes,children");
+            IEnumerable<Models.WorkoutComment> comments = await commentReadRangeService.Get(
+                x => x.WorkoutId == workoutId && x.ParentId == null,
+                offset ?? 0,
+                limit ?? 10,
+                x => x.Include(x => x.Creator)
+                      .Include(x => x.Likes)
+                      .Include(x => x.Children));
+
+            //TODO: Replace including children and likes with count service or something similar
             IEnumerable<SimpleWorkoutCommentResponseDTO> mapped = comments.Select(x =>
             {
                 SimpleWorkoutCommentResponseDTO mapped = simpleCommentResponseMapper.Map(x);
@@ -43,7 +52,12 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            IEnumerable<Models.WorkoutComment> comments = await commentReadRangeService.Get(x => x.WorkoutId == workoutId && x.ParentId == commentId, offset ?? 0, limit ?? 10, "creator,likes");
+            IEnumerable<Models.WorkoutComment> comments = await commentReadRangeService.Get(
+                x => x.WorkoutId == workoutId && x.ParentId == commentId,
+                offset ?? 0,
+                limit ?? 10,
+                x => x.Include(x => x.Creator).Include(x => x.Likes));
+
             IEnumerable<SimpleWorkoutCommentResponseDTO> mapped = comments.Select(x =>
             {
                 SimpleWorkoutCommentResponseDTO mapped = simpleCommentResponseMapper.Map(x);

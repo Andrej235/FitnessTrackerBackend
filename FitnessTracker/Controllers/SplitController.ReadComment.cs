@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.DTOs.Responses.Split;
+using FitnessTracker.Services.Read.Full;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,14 +14,19 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(IEnumerable<SimpleSplitCommentResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> GetComments(Guid splitId)
+        public async Task<IActionResult> GetComments(Guid splitId, [FromQuery] int? offset, [FromQuery] int? limit)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            IEnumerable<Models.SplitComment> comments = await commentReadRangeService.Get(x => x.SplitId == splitId && x.ParentId == null, 0, 10, "creator,likes");
+            IEnumerable<Models.SplitComment> comments = await commentReadRangeService.Get(
+                x => x.SplitId == splitId && x.ParentId == null,
+                offset,
+                limit ?? 10,
+                x => x.Include(x => x.Creator).Include(x => x.Likes));
+
             IEnumerable<SimpleSplitCommentResponseDTO> mapped = comments.Select(x =>
             {
                 SimpleSplitCommentResponseDTO mapped = simpleCommentResponseMapper.Map(x);
@@ -36,14 +42,19 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(IEnumerable<SimpleSplitCommentResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> GetReplies(Guid splitId, Guid commentId)
+        public async Task<IActionResult> GetReplies(Guid splitId, Guid commentId, [FromQuery] int? offset, [FromQuery] int? limit)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            IEnumerable<Models.SplitComment> comments = await commentReadRangeService.Get(x => x.SplitId == splitId && x.ParentId == commentId, 0, 10, "creator,likes");
+            IEnumerable<Models.SplitComment> comments = await commentReadRangeService.Get(
+                x => x.SplitId == splitId && x.ParentId == commentId,
+                offset,
+                limit ?? 10,
+                x => x.Include(x => x.Creator).Include(x => x.Likes));
+
             IEnumerable<SimpleSplitCommentResponseDTO> mapped = comments.Select(x =>
             {
                 SimpleSplitCommentResponseDTO mapped = simpleCommentResponseMapper.Map(x);

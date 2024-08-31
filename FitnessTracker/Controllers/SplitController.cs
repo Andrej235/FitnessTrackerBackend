@@ -22,8 +22,8 @@ namespace FitnessTracker.Controllers
                                          ICreateService<FavoriteSplit> favoriteCreateService,
                                          IFullReadService<Split> readSingleService,
                                          IFullReadRangeService<Split> readRangeService,
-                                         IReadRangeService<SplitComment> commentReadRangeService,
-                                         IReadRangeService<Workout> workoutReadRangeService,
+                                         IFullReadRangeService<SplitComment> commentReadRangeService,
+                                         IFullReadRangeService<Workout> workoutReadRangeService,
                                          IUpdateService<Split> updateService,
                                          IUpdateService<SplitWorkout> splitWorkoutUpdateService,
                                          IDeleteService<SplitComment> commentDeleteService,
@@ -44,8 +44,8 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<FavoriteSplit> favoriteCreateService = favoriteCreateService;
         private readonly IFullReadService<Split> readSingleService = readSingleService;
         private readonly IFullReadRangeService<Split> readRangeService = readRangeService;
-        private readonly IReadRangeService<SplitComment> commentReadRangeService = commentReadRangeService;
-        private readonly IReadRangeService<Workout> workoutReadRangeService = workoutReadRangeService;
+        private readonly IFullReadRangeService<SplitComment> commentReadRangeService = commentReadRangeService;
+        private readonly IFullReadRangeService<Workout> workoutReadRangeService = workoutReadRangeService;
         private readonly IUpdateService<Split> updateService = updateService;
         private readonly IUpdateService<SplitWorkout> splitWorkoutUpdateService = splitWorkoutUpdateService;
         private readonly IDeleteService<SplitComment> commentDeleteService = commentDeleteService;

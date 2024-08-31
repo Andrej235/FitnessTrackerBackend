@@ -5,7 +5,8 @@ using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
-using FitnessTracker.Services.Read.ExpressionBased;
+using FitnessTracker.Services.Read.Count;
+using FitnessTracker.Services.Read.Full;
 using FitnessTracker.Services.Read.QueryBased;
 using FitnessTracker.Services.Update;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,9 @@ namespace FitnessTracker.Controllers
     [ApiController]
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
     public partial class ExerciseController(ICreateService<Exercise> createService,
-                                            IReadSingleService<Exercise> readSingleService,
+                                            IFullReadService<Exercise> readSingleService,
+                                            IFullReadService<FavoriteExercise> favoriteReadSingleService,
+                                            ICountService<FavoriteExercise> favoriteCountService,
                                             IReadQueryService<Exercise> readQueryService,
                                             IUpdateService<Exercise> updateService,
                                             IDeleteService<Exercise> deleteService,
@@ -37,7 +40,9 @@ namespace FitnessTracker.Controllers
                                             IResponseMapper<Exercise, DetailedExerciseResponseDTO> detailedResponseMapper) : ControllerBase
     {
         private readonly ICreateService<Exercise> createService = createService;
-        private readonly IReadSingleService<Exercise> readSingleService = readSingleService;
+        private readonly IFullReadService<Exercise> readSingleService = readSingleService;
+        private readonly IFullReadService<FavoriteExercise> favoriteReadSingleService = favoriteReadSingleService;
+        private readonly ICountService<FavoriteExercise> favoriteCountService = favoriteCountService;
         private readonly IReadQueryService<Exercise> readQueryService = readQueryService;
         private readonly IUpdateService<Exercise> updateService = updateService;
         private readonly IDeleteService<Exercise> deleteService = deleteService;
@@ -54,6 +59,7 @@ namespace FitnessTracker.Controllers
         private readonly IDeleteRangeService<SecondaryMuscleGroupInExercise> secondaryMuscleGroupDeleteRangeService = secondaryMuscleGroupDeleteRangeService;
         private readonly IDeleteRangeService<SecondaryMuscleInExercise> secondaryMuscleDeleteRangeService = secondaryMuscleDeleteRangeService;
         private readonly IRequestMapper<CreateExerciseRequestDTO, Exercise> createRequestMapper = createRequestMapper;
+        private readonly IResponseMapper<Exercise, SimpleExerciseResponseDTO> simpleResponseMapper = simpleResponseMapper;
         private readonly IResponseMapper<Exercise, DetailedExerciseResponseDTO> detailedResponseMapper = detailedResponseMapper;
     }
 }

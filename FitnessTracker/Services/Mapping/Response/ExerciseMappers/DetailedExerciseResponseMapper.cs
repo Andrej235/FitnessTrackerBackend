@@ -25,7 +25,6 @@ namespace FitnessTracker.Services.Mapping.Response.ExerciseMappers
             PrimaryMuscles = from.PrimaryMuscles.Select(muscleResponseMapper.Map),
             SecondaryMuscleGroups = from.SecondaryMuscleGroups.Select(muscleGroupResponseMapper.Map),
             SecondaryMuscles = from.SecondaryMuscles.Select(muscleResponseMapper.Map),
-            Favorites = from.Favorites.Count,
         };
     }
 }

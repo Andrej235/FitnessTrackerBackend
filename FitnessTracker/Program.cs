@@ -184,16 +184,16 @@ namespace FitnessTracker
 
             #region Email verification tokens
             _ = builder.Services.AddScoped<ICreateService<EmailConfirmation>, CreateService<EmailConfirmation>>();
-            _ = builder.Services.AddScoped<IReadSingleService<EmailConfirmation>, ReadExpressionService<EmailConfirmation>>();
-            _ = builder.Services.AddScoped<IReadRangeService<EmailConfirmation>, ReadExpressionService<EmailConfirmation>>();
+            _ = builder.Services.AddScoped<IFullReadService<EmailConfirmation>, FullReadService<EmailConfirmation>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<EmailConfirmation>, FullReadService<EmailConfirmation>>();
             _ = builder.Services.AddScoped<IDeleteService<EmailConfirmation>, DeleteService<EmailConfirmation>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<EmailConfirmation>, DeleteRangeService<EmailConfirmation>>();
             #endregion
 
             #region Exercise
             _ = builder.Services.AddScoped<ICreateService<Exercise>, CreateService<Exercise>>();
-            _ = builder.Services.AddScoped<IReadSingleService<Exercise>, ReadExpressionService<Exercise>>();
-            _ = builder.Services.AddScoped<IReadRangeService<Exercise>, ReadExpressionService<Exercise>>();
+            _ = builder.Services.AddScoped<IFullReadService<Exercise>, FullReadService<Exercise>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<Exercise>, FullReadService<Exercise>>();
             _ = builder.Services.AddScoped<IReadQueryService<Exercise>, ExerciseReadQueryService>();
             _ = builder.Services.AddScoped<IUpdateService<Exercise>, UpdateService<Exercise>>();
             _ = builder.Services.AddScoped<IDeleteService<Exercise>, DeleteService<Exercise>>();
@@ -205,16 +205,18 @@ namespace FitnessTracker
 
             #region Favorite exercise
             _ = builder.Services.AddScoped<ICreateService<FavoriteExercise>, CreateService<FavoriteExercise>>();
-            _ = builder.Services.AddScoped<IReadSingleService<FavoriteExercise>, ReadExpressionService<FavoriteExercise>>();
+            _ = builder.Services.AddScoped<IFullReadService<FavoriteExercise>, FullReadService<FavoriteExercise>>();
+            _ = builder.Services.AddScoped<ICountService<FavoriteExercise>, CountService<FavoriteExercise>>();
             _ = builder.Services.AddScoped<IDeleteService<FavoriteExercise>, DeleteService<FavoriteExercise>>();
             #endregion
 
             #region User
+            _ = builder.Services.AddScoped<IFullReadService<User>, FullReadService<User>>();
+            _ = builder.Services.AddScoped<IReadRangeService<User>, UserReadExpressionService>();
+
             _ = builder.Services.AddScoped<ICreateService<User>, CreateService<User>>();
-            _ = builder.Services.AddScoped<IReadSingleService<User>, UserReadExpressionService>();
             _ = builder.Services.AddScoped<IFullReadService<User>, FullReadService<User>>();
             _ = builder.Services.AddScoped<IFullReadRangeService<User>, FullReadService<User>>();
-            _ = builder.Services.AddScoped<IReadRangeService<User>, UserReadExpressionService>();
             _ = builder.Services.AddScoped<IUpdateService<User>, UpdateService<User>>();
             _ = builder.Services.AddScoped<IRequestMapper<RegisterUserRequestDTO, User>, RegisterUserRequestMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<User, SimpleUserResponseDTO>, SimpleUserResponseMapper>();
@@ -228,17 +230,17 @@ namespace FitnessTracker
 
             #region User follows
             _ = builder.Services.AddScoped<ICreateService<UserFollows>, CreateService<UserFollows>>();
-            _ = builder.Services.AddScoped<IReadSingleService<UserFollows>, ReadExpressionService<UserFollows>>();
+            _ = builder.Services.AddScoped<IFullReadService<UserFollows>, FullReadService<UserFollows>>();
             _ = builder.Services.AddScoped<ICountService<UserFollows>, CountService<UserFollows>>();
-            _ = builder.Services.AddScoped<IReadRangeService<UserFollows>, ReadExpressionService<UserFollows>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<UserFollows>, FullReadService<UserFollows>>();
             _ = builder.Services.AddScoped<IDeleteService<UserFollows>, DeleteService<UserFollows>>();
             #endregion
 
             #region Set
             _ = builder.Services.AddScoped<ICreateService<Set>, CreateService<Set>>();
             _ = builder.Services.AddScoped<ICreateRangeService<Set>, CreateService<Set>>();
-            _ = builder.Services.AddScoped<IReadSingleService<Set>, ReadExpressionService<Set>>();
-            _ = builder.Services.AddScoped<IReadRangeService<Set>, ReadExpressionService<Set>>();
+            _ = builder.Services.AddScoped<IFullReadService<Set>, FullReadService<Set>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<Set>, FullReadService<Set>>();
             _ = builder.Services.AddScoped<IUpdateService<Set>, UpdateService<Set>>();
             _ = builder.Services.AddScoped<IDeleteService<Set>, DeleteService<Set>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<Set>, DeleteRangeService<Set>>();
@@ -252,7 +254,7 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<IFullReadRangeService<Workout>, FullReadService<Workout>>();
             _ = builder.Services.AddScoped<IReadRangeService<Workout>, WorkoutReadExpressionService>();
             _ = builder.Services.AddScoped<ICreateService<Workout>, CreateService<Workout>>();
-            _ = builder.Services.AddScoped<IUpdateService<Workout>, WorkoutUpdateService>();
+            _ = builder.Services.AddScoped<IUpdateService<Workout>, UpdateService<Workout>>();
             _ = builder.Services.AddScoped<IDeleteService<Workout>, DeleteService<Workout>>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateWorkoutRequestDTO, Workout>, CreateWorkoutRequestMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<Workout, NewWorkoutResponseDTO>, NewWorkoutResponseMapper>();
@@ -264,6 +266,8 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<ICreateService<WorkoutLike>, CreateService<WorkoutLike>>();
             _ = builder.Services.AddScoped<IFullReadService<WorkoutLike>, FullReadService<WorkoutLike>>();
             _ = builder.Services.AddScoped<IFullReadRangeService<WorkoutLike>, FullReadService<WorkoutLike>>();
+            _ = builder.Services.AddScoped<IFullReadService<WorkoutLike>, FullReadService<WorkoutLike>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<WorkoutLike>, FullReadService<WorkoutLike>>();
             _ = builder.Services.AddScoped<ICountService<WorkoutLike>, CountService<WorkoutLike>>();
             _ = builder.Services.AddScoped<IDeleteService<WorkoutLike>, DeleteService<WorkoutLike>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<WorkoutLike>, DeleteRangeService<WorkoutLike>>();
@@ -271,9 +275,9 @@ namespace FitnessTracker
 
             #region Workout comment
             _ = builder.Services.AddScoped<ICreateService<WorkoutComment>, CreateService<WorkoutComment>>();
-            _ = builder.Services.AddScoped<IReadSingleService<WorkoutComment>, ReadExpressionService<WorkoutComment>>();
+            _ = builder.Services.AddScoped<IFullReadService<WorkoutComment>, FullReadService<WorkoutComment>>();
             _ = builder.Services.AddScoped<ICountService<WorkoutComment>, CountService<WorkoutComment>>();
-            _ = builder.Services.AddScoped<IReadRangeService<WorkoutComment>, ReadExpressionService<WorkoutComment>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<WorkoutComment>, FullReadService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IDeleteService<WorkoutComment>, DeleteService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<WorkoutComment>, DeleteRangeService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment>, CreateWorkoutCommentRequestMapper>();
@@ -282,14 +286,18 @@ namespace FitnessTracker
 
             #region Workout comment like
             _ = builder.Services.AddScoped<ICreateService<WorkoutCommentLike>, CreateService<WorkoutCommentLike>>();
-            _ = builder.Services.AddScoped<IReadSingleService<WorkoutCommentLike>, ReadExpressionService<WorkoutCommentLike>>();
-            _ = builder.Services.AddScoped<IReadRangeService<WorkoutCommentLike>, ReadExpressionService<WorkoutCommentLike>>();
+            _ = builder.Services.AddScoped<IFullReadService<WorkoutCommentLike>, FullReadService<WorkoutCommentLike>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<WorkoutCommentLike>, FullReadService<WorkoutCommentLike>>();
             _ = builder.Services.AddScoped<IDeleteService<WorkoutCommentLike>, DeleteService<WorkoutCommentLike>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<WorkoutCommentLike>, DeleteRangeService<WorkoutCommentLike>>();
             #endregion
 
             #region Workout favorite
             _ = builder.Services.AddScoped<ICreateService<FavoriteWorkout>, CreateService<FavoriteWorkout>>();
+            _ = builder.Services.AddScoped<IFullReadService<FavoriteWorkout>, FullReadService<FavoriteWorkout>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<FavoriteWorkout>, FullReadService<FavoriteWorkout>>();
+            _ = builder.Services.AddScoped<IFullReadService<FavoriteWorkout>, FullReadService<FavoriteWorkout>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<FavoriteWorkout>, FullReadService<FavoriteWorkout>>();
             _ = builder.Services.AddScoped<ICountService<FavoriteWorkout>, CountService<FavoriteWorkout>>();
             _ = builder.Services.AddScoped<IDeleteService<FavoriteWorkout>, DeleteService<FavoriteWorkout>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<FavoriteWorkout>, DeleteRangeService<FavoriteWorkout>>();
@@ -298,8 +306,8 @@ namespace FitnessTracker
             #region Muscle group
             _ = builder.Services.AddScoped<ICreateService<MuscleGroup>, CreateService<MuscleGroup>>();
             _ = builder.Services.AddScoped<ICreateRangeService<MuscleGroup>, CreateService<MuscleGroup>>();
-            _ = builder.Services.AddScoped<IReadSingleService<MuscleGroup>, ReadExpressionService<MuscleGroup>>();
-            _ = builder.Services.AddScoped<IReadRangeService<MuscleGroup>, ReadExpressionService<MuscleGroup>>();
+            _ = builder.Services.AddScoped<IFullReadService<MuscleGroup>, FullReadService<MuscleGroup>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<MuscleGroup>, FullReadService<MuscleGroup>>();
             _ = builder.Services.AddScoped<IUpdateService<MuscleGroup>, UpdateService<MuscleGroup>>();
             _ = builder.Services.AddScoped<IDeleteService<MuscleGroup>, DeleteService<MuscleGroup>>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateMuscleGroupRequestDTO, MuscleGroup>, CreateMuscleGroupRequestMapper>();
@@ -310,8 +318,8 @@ namespace FitnessTracker
             #region Muscle
             _ = builder.Services.AddScoped<ICreateService<Muscle>, CreateService<Muscle>>();
             _ = builder.Services.AddScoped<ICreateRangeService<Muscle>, CreateService<Muscle>>();
-            _ = builder.Services.AddScoped<IReadSingleService<Muscle>, ReadExpressionService<Muscle>>();
-            _ = builder.Services.AddScoped<IReadRangeService<Muscle>, ReadExpressionService<Muscle>>();
+            _ = builder.Services.AddScoped<IFullReadService<Muscle>, FullReadService<Muscle>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<Muscle>, FullReadService<Muscle>>();
             _ = builder.Services.AddScoped<IUpdateService<Muscle>, UpdateService<Muscle>>();
             _ = builder.Services.AddScoped<IDeleteService<Muscle>, DeleteService<Muscle>>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateMuscleRequestDTO, Muscle>, CreateMuscleRequestMapper>();
@@ -321,15 +329,15 @@ namespace FitnessTracker
             #region Equipment exercise usage
             _ = builder.Services.AddScoped<ICreateService<EquipmentUsage>, CreateService<EquipmentUsage>>();
             _ = builder.Services.AddScoped<ICreateRangeService<EquipmentUsage>, CreateService<EquipmentUsage>>();
-            _ = builder.Services.AddScoped<IReadRangeService<EquipmentUsage>, ReadExpressionService<EquipmentUsage>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<EquipmentUsage>, FullReadService<EquipmentUsage>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<EquipmentUsage>, DeleteRangeService<EquipmentUsage>>();
             #endregion
 
             #region Equipment
             _ = builder.Services.AddScoped<ICreateService<Equipment>, CreateService<Equipment>>();
             _ = builder.Services.AddScoped<ICreateRangeService<Equipment>, CreateService<Equipment>>();
-            _ = builder.Services.AddScoped<IReadSingleService<Equipment>, ReadExpressionService<Equipment>>();
-            _ = builder.Services.AddScoped<IReadRangeService<Equipment>, ReadExpressionService<Equipment>>();
+            _ = builder.Services.AddScoped<IFullReadService<Equipment>, FullReadService<Equipment>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<Equipment>, FullReadService<Equipment>>();
             _ = builder.Services.AddScoped<IUpdateService<Equipment>, UpdateService<Equipment>>();
             _ = builder.Services.AddScoped<IDeleteService<Equipment>, DeleteService<Equipment>>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateEquipmentRequestDTO, Equipment>, CreateEquipmentRequestMapper>();
@@ -339,33 +347,33 @@ namespace FitnessTracker
             #region Primary muscle group
             _ = builder.Services.AddScoped<ICreateService<PrimaryMuscleGroupInExercise>, CreateService<PrimaryMuscleGroupInExercise>>();
             _ = builder.Services.AddScoped<ICreateRangeService<PrimaryMuscleGroupInExercise>, CreateService<PrimaryMuscleGroupInExercise>>();
-            _ = builder.Services.AddScoped<IReadRangeService<PrimaryMuscleGroupInExercise>, ReadExpressionService<PrimaryMuscleGroupInExercise>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<PrimaryMuscleGroupInExercise>, FullReadService<PrimaryMuscleGroupInExercise>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<PrimaryMuscleGroupInExercise>, DeleteRangeService<PrimaryMuscleGroupInExercise>>();
             #endregion
 
             #region Secondary muscle group
             _ = builder.Services.AddScoped<ICreateService<SecondaryMuscleGroupInExercise>, CreateService<SecondaryMuscleGroupInExercise>>();
             _ = builder.Services.AddScoped<ICreateRangeService<SecondaryMuscleGroupInExercise>, CreateService<SecondaryMuscleGroupInExercise>>();
-            _ = builder.Services.AddScoped<IReadRangeService<SecondaryMuscleGroupInExercise>, ReadExpressionService<SecondaryMuscleGroupInExercise>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<SecondaryMuscleGroupInExercise>, FullReadService<SecondaryMuscleGroupInExercise>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<SecondaryMuscleGroupInExercise>, DeleteRangeService<SecondaryMuscleGroupInExercise>>();
             #endregion
 
             #region Primary muscle
             _ = builder.Services.AddScoped<ICreateRangeService<PrimaryMuscleInExercise>, CreateService<PrimaryMuscleInExercise>>();
-            _ = builder.Services.AddScoped<IReadRangeService<PrimaryMuscleInExercise>, ReadExpressionService<PrimaryMuscleInExercise>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<PrimaryMuscleInExercise>, FullReadService<PrimaryMuscleInExercise>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<PrimaryMuscleInExercise>, DeleteRangeService<PrimaryMuscleInExercise>>();
             #endregion
 
             #region Secondary muscle
             _ = builder.Services.AddScoped<ICreateRangeService<SecondaryMuscleInExercise>, CreateService<SecondaryMuscleInExercise>>();
-            _ = builder.Services.AddScoped<IReadRangeService<SecondaryMuscleInExercise>, ReadExpressionService<SecondaryMuscleInExercise>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<SecondaryMuscleInExercise>, FullReadService<SecondaryMuscleInExercise>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<SecondaryMuscleInExercise>, DeleteRangeService<SecondaryMuscleInExercise>>();
             #endregion
 
             #region Auth tokens
             _ = builder.Services.AddScoped<ICreateService<RefreshToken>, RefreshTokenCreateService>();
-            _ = builder.Services.AddScoped<IReadSingleService<RefreshToken>, ReadExpressionService<RefreshToken>>();
-            _ = builder.Services.AddScoped<IReadRangeService<RefreshToken>, ReadExpressionService<RefreshToken>>();
+            _ = builder.Services.AddScoped<IFullReadService<RefreshToken>, FullReadService<RefreshToken>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<RefreshToken>, FullReadService<RefreshToken>>();
             _ = builder.Services.AddScoped<IUpdateService<RefreshToken>, UpdateService<RefreshToken>>();
             _ = builder.Services.AddScoped<IDeleteService<RefreshToken>, DeleteService<RefreshToken>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<RefreshToken>, DeleteRangeService<RefreshToken>>();
@@ -375,8 +383,6 @@ namespace FitnessTracker
 
             #region Split
             _ = builder.Services.AddScoped<ICreateService<Split>, CreateService<Split>>();
-            _ = builder.Services.AddScoped<IReadRangeService<Split>, SplitReadExpressionService>();
-            _ = builder.Services.AddScoped<IReadSingleService<Split>, SplitReadExpressionService>();
             _ = builder.Services.AddScoped<IFullReadService<Split>, FullReadService<Split>>();
             _ = builder.Services.AddScoped<IFullReadRangeService<Split>, FullReadService<Split>>();
             _ = builder.Services.AddScoped<IUpdateService<Split>, UpdateService<Split>>();
@@ -394,14 +400,14 @@ namespace FitnessTracker
 
             #region Split like
             _ = builder.Services.AddScoped<ICreateService<SplitLike>, CreateService<SplitLike>>();
-            _ = builder.Services.AddScoped<IReadSingleService<SplitLike>, ReadExpressionService<SplitLike>>();
+            _ = builder.Services.AddScoped<IFullReadService<SplitLike>, FullReadService<SplitLike>>();
             _ = builder.Services.AddScoped<IDeleteService<SplitLike>, DeleteService<SplitLike>>();
             #endregion
 
             #region Split comment
             _ = builder.Services.AddScoped<ICreateService<SplitComment>, CreateService<SplitComment>>();
-            _ = builder.Services.AddScoped<IReadSingleService<SplitComment>, ReadExpressionService<SplitComment>>();
-            _ = builder.Services.AddScoped<IReadRangeService<SplitComment>, ReadExpressionService<SplitComment>>();
+            _ = builder.Services.AddScoped<IFullReadService<SplitComment>, FullReadService<SplitComment>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<SplitComment>, FullReadService<SplitComment>>();
             _ = builder.Services.AddScoped<IDeleteService<SplitComment>, DeleteService<SplitComment>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<SplitComment>, DeleteRangeService<SplitComment>>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateSplitCommentRequestDTO, SplitComment>, CreateSplitCommentRequestMapper>();
@@ -410,13 +416,13 @@ namespace FitnessTracker
 
             #region Split comment like
             _ = builder.Services.AddScoped<ICreateService<SplitCommentLike>, CreateService<SplitCommentLike>>();
-            _ = builder.Services.AddScoped<IReadSingleService<SplitCommentLike>, ReadExpressionService<SplitCommentLike>>();
+            _ = builder.Services.AddScoped<IFullReadService<SplitCommentLike>, FullReadService<SplitCommentLike>>();
             _ = builder.Services.AddScoped<IDeleteService<SplitCommentLike>, DeleteService<SplitCommentLike>>();
             #endregion
 
             #region Split favorite
             _ = builder.Services.AddScoped<ICreateService<FavoriteSplit>, CreateService<FavoriteSplit>>();
-            _ = builder.Services.AddScoped<IReadSingleService<FavoriteSplit>, ReadExpressionService<FavoriteSplit>>();
+            _ = builder.Services.AddScoped<IFullReadService<FavoriteSplit>, FullReadService<FavoriteSplit>>();
             _ = builder.Services.AddScoped<IDeleteService<FavoriteSplit>, DeleteService<FavoriteSplit>>();
             #endregion
 

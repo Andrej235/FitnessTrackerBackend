@@ -30,10 +30,9 @@ namespace FitnessTracker.Controllers
                                         ICreateService<CompletedWorkout> completedWorkoutCreateService,
                                         ICreateService<UserFollows> followCreateService,
                                         IFullReadService<User> readSingleService,
-                                        IReadSingleService<UserFollows> followerReadSingleService,
-                                        IReadSingleService<Split> splitReadSingleService,
+                                        IFullReadService<UserFollows> followerReadSingleService,
                                         IFullReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
-                                        IReadRangeService<UserFollows> followerReadRangeService,
+                                        IFullReadRangeService<UserFollows> followerReadRangeService,
                                         ICountService<UserFollows> followerCountService,
                                         ICountService<CompletedWorkout> completedWorkoutCountService,
                                         IUpdateService<User> updateService,
@@ -57,10 +56,9 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<CompletedWorkout> completedWorkoutCreateService = completedWorkoutCreateService;
         private readonly ICreateService<UserFollows> followCreateService = followCreateService;
         private readonly IFullReadService<User> readSingleService = readSingleService;
-        private readonly IReadSingleService<UserFollows> followerReadSingleService = followerReadSingleService;
-        private readonly IReadSingleService<Split> splitReadSingleService = splitReadSingleService;
+        private readonly IFullReadService<UserFollows> followerReadSingleService = followerReadSingleService;
         private readonly IFullReadRangeService<CompletedWorkout> completedWorkoutReadRangeService = completedWorkoutReadRangeService;
-        private readonly IReadRangeService<UserFollows> followerReadRangeService = followerReadRangeService;
+        private readonly IFullReadRangeService<UserFollows> followerReadRangeService = followerReadRangeService;
         private readonly ICountService<UserFollows> followerCountService = followerCountService;
         private readonly ICountService<CompletedWorkout> completedWorkoutCountService = completedWorkoutCountService;
         private readonly IUpdateService<User> updateService = updateService;

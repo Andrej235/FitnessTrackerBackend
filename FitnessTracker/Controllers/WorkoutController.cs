@@ -27,7 +27,7 @@ namespace FitnessTracker.Controllers
                                            IFullReadService<WorkoutLike> likeReadSingleService,
                                            IFullReadService<FavoriteWorkout> favoriteReadSingleService,
                                            IFullReadRangeService<CompletedWorkout> completedWorkoutReadSingleService,
-                                           IReadRangeService<WorkoutComment> commentReadRangeService,
+                                           IFullReadRangeService<WorkoutComment> commentReadRangeService,
                                            IFullReadRangeService<WorkoutLike> likeReadRangeService,
                                            IFullReadRangeService<FavoriteWorkout> favoriteReadRangeService,
                                            ICountService<WorkoutLike> likeCountService,
@@ -61,7 +61,7 @@ namespace FitnessTracker.Controllers
         private readonly IFullReadService<WorkoutLike> likeReadSingleService = likeReadSingleService;
         private readonly IFullReadService<FavoriteWorkout> favoriteReadSingleService = favoriteReadSingleService;
         private readonly IFullReadRangeService<CompletedWorkout> completedWorkoutReadSingleService = completedWorkoutReadSingleService;
-        private readonly IReadRangeService<WorkoutComment> commentReadRangeService = commentReadRangeService;
+        private readonly IFullReadRangeService<WorkoutComment> commentReadRangeService = commentReadRangeService;
         private readonly IFullReadRangeService<WorkoutLike> likeReadRangeService = likeReadRangeService;
         private readonly IFullReadRangeService<FavoriteWorkout> favoriteReadRangeService = favoriteReadRangeService;
         private readonly ICountService<WorkoutLike> likeCountService = likeCountService;

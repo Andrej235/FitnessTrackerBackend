@@ -86,8 +86,8 @@ namespace FitnessTracker.Controllers
                     return NotFound();
 
                 IEnumerable<Models.UserFollows> follows = searchTerm is null
-                    ? await followerReadRangeService.Get(x => x.FollowerId == user.Id, offset ?? 0, limit ?? 10, "followee")
-                    : await followerReadRangeService.Get(x => x.FollowerId == user.Id && EF.Functions.Like(x.Followee.Name, $"{searchTerm}%"), offset ?? 0, limit ?? 10, "followee");
+                    ? await followerReadRangeService.Get(x => x.FollowerId == user.Id, offset ?? 0, limit ?? 10, x => x.Include(x => x.Followee))
+                    : await followerReadRangeService.Get(x => x.FollowerId == user.Id && EF.Functions.Like(x.Followee.Name, $"{searchTerm}%"), offset ?? 0, limit ?? 10, x => x.Include(x => x.Followee));
 
                 return Ok(follows.Select(x => simpleResponseMapper.Map(x.Followee)));
             }
@@ -117,8 +117,8 @@ namespace FitnessTracker.Controllers
                     return NotFound();
 
                 IEnumerable<Models.UserFollows> follows = searchTerm is null
-                    ? await followerReadRangeService.Get(x => x.FolloweeId == user.Id, offset ?? 0, limit ?? 10, "follower")
-                    : await followerReadRangeService.Get(x => x.FolloweeId == user.Id && EF.Functions.Like(x.Follower.Name, $"{searchTerm}%"), offset ?? 0, limit ?? 10, "follower");
+                    ? await followerReadRangeService.Get(x => x.FolloweeId == user.Id, offset ?? 0, limit ?? 10, x => x.Include(x => x.Follower))
+                    : await followerReadRangeService.Get(x => x.FolloweeId == user.Id && EF.Functions.Like(x.Follower.Name, $"{searchTerm}%"), offset ?? 0, limit ?? 10, x => x.Include(x => x.Follower));
 
                 return Ok(follows.Select(x => simpleResponseMapper.Map(x.Follower)));
             }
@@ -144,8 +144,8 @@ namespace FitnessTracker.Controllers
                     return Unauthorized();
 
                 IEnumerable<Models.UserFollows> follows = name is null
-                    ? await followerReadRangeService.Get(x => x.FollowerId == id, offset ?? 0, limit ?? 10, "followee")
-                    : await followerReadRangeService.Get(x => x.FollowerId == id && EF.Functions.Like(x.Followee.Name, $"{name}%"), offset ?? 0, limit ?? 10, "followee");
+                    ? await followerReadRangeService.Get(x => x.FollowerId == id, offset ?? 0, limit ?? 10, x => x.Include(x => x.Followee))
+                    : await followerReadRangeService.Get(x => x.FollowerId == id && EF.Functions.Like(x.Followee.Name, $"{name}%"), offset ?? 0, limit ?? 10, x => x.Include(x => x.Followee));
 
                 return Ok(follows.Select(x => simpleResponseMapper.Map(x.Followee)));
             }
@@ -171,8 +171,8 @@ namespace FitnessTracker.Controllers
                     return Unauthorized();
 
                 IEnumerable<Models.UserFollows> follows = name is null
-                    ? await followerReadRangeService.Get(x => x.FolloweeId == id, offset ?? 0, limit ?? 10, "follower")
-                    : await followerReadRangeService.Get(x => x.FolloweeId == id && EF.Functions.Like(x.Follower.Name, $"{name}%"), offset ?? 0, limit ?? 10, "follower");
+                    ? await followerReadRangeService.Get(x => x.FolloweeId == id, offset ?? 0, limit ?? 10, x => x.Include(x => x.Follower))
+                    : await followerReadRangeService.Get(x => x.FolloweeId == id && EF.Functions.Like(x.Follower.Name, $"{name}%"), offset ?? 0, limit ?? 10, x => x.Include(x => x.Follower));
 
                 return Ok(follows.Select(x => simpleResponseMapper.Map(x.Follower)));
             }

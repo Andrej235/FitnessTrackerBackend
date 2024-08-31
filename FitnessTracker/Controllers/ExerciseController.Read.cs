@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.DTOs.Responses.Exercises;
+using FitnessTracker.Services.Read.Full;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -50,15 +51,26 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(int id)
         {
-            Models.Exercise? exercise = await readSingleService.Get(x => x.Id == id, "primarymusclegroups,secondarymusclegroups,primarymuscles,secondarymuscles,equipment,favorites");
+            Models.Exercise? exercise = await readSingleService.Get(
+                x => x.Id == id,
+                x => x.Include(x => x.PrimaryMuscleGroups)
+                      .Include(x => x.SecondaryMuscleGroups)
+                      .Include(x => x.PrimaryMuscles)
+                      .Include(x => x.SecondaryMuscles)
+                      .Include(x => x.Equipment)
+
+                );
+
             if (exercise is null)
                 return NotFound();
 
             DetailedExerciseResponseDTO mapped = detailedResponseMapper.Map(exercise);
+            mapped.Favorites = await favoriteCountService.Count(x => x.ExerciseId == id);
+
             if (User.Identity is ClaimsIdentity claimsIdentity
                 && claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is string userIdString
                 && Guid.TryParse(userIdString, out Guid userId))
-                mapped.IsFavorite = exercise.Favorites.Any(x => x.Id == userId);
+                mapped.IsFavorite = favoriteReadSingleService.Get(x => x.UserId == userId && x.ExerciseId == id) is not null;
 
             return Ok(mapped);
         }
