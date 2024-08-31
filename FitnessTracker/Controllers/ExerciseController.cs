@@ -1,12 +1,12 @@
 ﻿using FitnessTracker.DTOs.Requests.Exercise;
 using FitnessTracker.DTOs.Responses.Exercises;
 using FitnessTracker.Models;
+using FitnessTracker.Services.Count;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
-using FitnessTracker.Services.Read.Count;
-using FitnessTracker.Services.Read.Full;
+using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +16,9 @@ namespace FitnessTracker.Controllers
     [ApiController]
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
     public partial class ExerciseController(ICreateService<Exercise> createService,
-                                            IFullReadService<Exercise> readSingleService,
-                                            IFullReadRangeService<Exercise> readRangeService,
-                                            IFullReadService<FavoriteExercise> favoriteReadSingleService,
+                                            IReadSingleService<Exercise> readSingleService,
+                                            IReadRangeService<Exercise> readRangeService,
+                                            IReadSingleService<FavoriteExercise> favoriteReadSingleService,
                                             ICountService<FavoriteExercise> favoriteCountService,
                                             IUpdateService<Exercise> updateService,
                                             IDeleteService<Exercise> deleteService,
@@ -39,9 +39,9 @@ namespace FitnessTracker.Controllers
                                             IResponseMapper<Exercise, DetailedExerciseResponseDTO> detailedResponseMapper) : ControllerBase
     {
         private readonly ICreateService<Exercise> createService = createService;
-        private readonly IFullReadService<Exercise> readSingleService = readSingleService;
-        private readonly IFullReadRangeService<Exercise> readRangeService = readRangeService;
-        private readonly IFullReadService<FavoriteExercise> favoriteReadSingleService = favoriteReadSingleService;
+        private readonly IReadSingleService<Exercise> readSingleService = readSingleService;
+        private readonly IReadRangeService<Exercise> readRangeService = readRangeService;
+        private readonly IReadSingleService<FavoriteExercise> favoriteReadSingleService = favoriteReadSingleService;
         private readonly ICountService<FavoriteExercise> favoriteCountService = favoriteCountService;
         private readonly IUpdateService<Exercise> updateService = updateService;
         private readonly IDeleteService<Exercise> deleteService = deleteService;

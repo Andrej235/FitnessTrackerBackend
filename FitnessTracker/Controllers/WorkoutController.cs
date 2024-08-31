@@ -2,12 +2,12 @@
 using FitnessTracker.DTOs.Requests.Workout;
 using FitnessTracker.DTOs.Responses.Workout;
 using FitnessTracker.Models;
+using FitnessTracker.Services.Count;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
-using FitnessTracker.Services.Read.Count;
-using FitnessTracker.Services.Read.Full;
+using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,14 +21,14 @@ namespace FitnessTracker.Controllers
                                            ICreateService<WorkoutCommentLike> commentLikeCreateService,
                                            ICreateService<WorkoutLike> likeCreateService,
                                            ICreateService<FavoriteWorkout> favoriteCreateService,
-                                           IFullReadService<Workout> readSingleService,
-                                           IFullReadRangeService<Workout> readRangeService,
-                                           IFullReadService<WorkoutLike> likeReadSingleService,
-                                           IFullReadService<FavoriteWorkout> favoriteReadSingleService,
-                                           IFullReadRangeService<CompletedWorkout> completedWorkoutReadSingleService,
-                                           IFullReadRangeService<WorkoutComment> commentReadRangeService,
-                                           IFullReadRangeService<WorkoutLike> likeReadRangeService,
-                                           IFullReadRangeService<FavoriteWorkout> favoriteReadRangeService,
+                                           IReadSingleService<Workout> readSingleService,
+                                           IReadRangeService<Workout> readRangeService,
+                                           IReadSingleService<WorkoutLike> likeReadSingleService,
+                                           IReadSingleService<FavoriteWorkout> favoriteReadSingleService,
+                                           IReadRangeService<CompletedWorkout> completedWorkoutReadSingleService,
+                                           IReadRangeService<WorkoutComment> commentReadRangeService,
+                                           IReadRangeService<WorkoutLike> likeReadRangeService,
+                                           IReadRangeService<FavoriteWorkout> favoriteReadRangeService,
                                            ICountService<WorkoutLike> likeCountService,
                                            ICountService<FavoriteWorkout> favoriteCountService,
                                            ICountService<WorkoutComment> commentCountService,
@@ -55,14 +55,14 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<WorkoutCommentLike> commentLikeCreateService = commentLikeCreateService;
         private readonly ICreateService<WorkoutLike> likeCreateService = likeCreateService;
         private readonly ICreateService<FavoriteWorkout> favoriteCreateService = favoriteCreateService;
-        private readonly IFullReadService<Workout> readSingleService = readSingleService;
-        private readonly IFullReadRangeService<Workout> readRangeService = readRangeService;
-        private readonly IFullReadService<WorkoutLike> likeReadSingleService = likeReadSingleService;
-        private readonly IFullReadService<FavoriteWorkout> favoriteReadSingleService = favoriteReadSingleService;
-        private readonly IFullReadRangeService<CompletedWorkout> completedWorkoutReadSingleService = completedWorkoutReadSingleService;
-        private readonly IFullReadRangeService<WorkoutComment> commentReadRangeService = commentReadRangeService;
-        private readonly IFullReadRangeService<WorkoutLike> likeReadRangeService = likeReadRangeService;
-        private readonly IFullReadRangeService<FavoriteWorkout> favoriteReadRangeService = favoriteReadRangeService;
+        private readonly IReadSingleService<Workout> readSingleService = readSingleService;
+        private readonly IReadRangeService<Workout> readRangeService = readRangeService;
+        private readonly IReadSingleService<WorkoutLike> likeReadSingleService = likeReadSingleService;
+        private readonly IReadSingleService<FavoriteWorkout> favoriteReadSingleService = favoriteReadSingleService;
+        private readonly IReadRangeService<CompletedWorkout> completedWorkoutReadSingleService = completedWorkoutReadSingleService;
+        private readonly IReadRangeService<WorkoutComment> commentReadRangeService = commentReadRangeService;
+        private readonly IReadRangeService<WorkoutLike> likeReadRangeService = likeReadRangeService;
+        private readonly IReadRangeService<FavoriteWorkout> favoriteReadRangeService = favoriteReadRangeService;
         private readonly ICountService<WorkoutLike> likeCountService = likeCountService;
         private readonly ICountService<FavoriteWorkout> favoriteCountService = favoriteCountService;
         private readonly ICountService<WorkoutComment> commentCountService = commentCountService;

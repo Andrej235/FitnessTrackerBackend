@@ -1,5 +1,5 @@
 ﻿using FitnessTracker.DTOs.Requests.Completed;
-using FitnessTracker.Services.Read.Full;
+using FitnessTracker.Services.Read;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

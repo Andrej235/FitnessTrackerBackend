@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace FitnessTracker.Services.Read.Count
+namespace FitnessTracker.Services.Count
 {
     public class CountService<T>(DataContext context) : ICountService<T> where T : class
     {

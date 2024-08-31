@@ -1,16 +1,16 @@
 ﻿using FitnessTracker.Models;
 using FitnessTracker.Services.Delete;
-using FitnessTracker.Services.Read.Full;
+using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Utilities;
 
 namespace FitnessTracker.Services.UserServices.EmailConfirmationService
 {
-    public class EmailConfirmationService(IFullReadService<User> userReadService,
+    public class EmailConfirmationService(IReadSingleService<User> userReadService,
                                           IUpdateService<User> userUpdateService,
                                           IDeleteRangeService<EmailConfirmation> deleteRangeService) : IEmailConfirmationService
     {
-        private readonly IFullReadService<User> userReadService = userReadService;
+        private readonly IReadSingleService<User> userReadService = userReadService;
         private readonly IUpdateService<Models.User> userUpdateService = userUpdateService;
         private readonly IDeleteRangeService<EmailConfirmation> deleteRangeService = deleteRangeService;
 

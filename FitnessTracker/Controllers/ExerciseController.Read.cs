@@ -1,6 +1,6 @@
 ﻿using FitnessTracker.DTOs.Responses.Exercises;
 using FitnessTracker.Models;
-using FitnessTracker.Services.Read.Full;
+using FitnessTracker.Services.Read;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +27,7 @@ namespace FitnessTracker.Controllers
                 filters.Add(e => e.Equipment.Any(eq => eq.Id == equipmentId));
 
             IEnumerable<Models.Exercise> exercises = await readRangeService.Get(
-                filters.Combine() ?? (x => true),
+                filters.Combine() ?? (null),
                 offset,
                 limit ?? 10,
                 x =>

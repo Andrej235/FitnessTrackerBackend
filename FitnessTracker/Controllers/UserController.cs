@@ -6,12 +6,12 @@ using FitnessTracker.DTOs.Responses.CompletedWorkouts;
 using FitnessTracker.DTOs.Responses.User;
 using FitnessTracker.DTOs.Responses.Workout;
 using FitnessTracker.Models;
+using FitnessTracker.Services.Count;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
-using FitnessTracker.Services.Read.Count;
-using FitnessTracker.Services.Read.Full;
+using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
 using FitnessTracker.Services.UserServices.EmailConfirmationService;
@@ -28,10 +28,10 @@ namespace FitnessTracker.Controllers
     public partial class UserController(ICreateService<User> createService,
                                         ICreateService<CompletedWorkout> completedWorkoutCreateService,
                                         ICreateService<UserFollows> followCreateService,
-                                        IFullReadService<User> readSingleService,
-                                        IFullReadService<UserFollows> followerReadSingleService,
-                                        IFullReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
-                                        IFullReadRangeService<UserFollows> followerReadRangeService,
+                                        IReadSingleService<User> readSingleService,
+                                        IReadSingleService<UserFollows> followerReadSingleService,
+                                        IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
+                                        IReadRangeService<UserFollows> followerReadRangeService,
                                         ICountService<UserFollows> followerCountService,
                                         ICountService<CompletedWorkout> completedWorkoutCountService,
                                         IUpdateService<User> updateService,
@@ -54,10 +54,10 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<User> createService = createService;
         private readonly ICreateService<CompletedWorkout> completedWorkoutCreateService = completedWorkoutCreateService;
         private readonly ICreateService<UserFollows> followCreateService = followCreateService;
-        private readonly IFullReadService<User> readSingleService = readSingleService;
-        private readonly IFullReadService<UserFollows> followerReadSingleService = followerReadSingleService;
-        private readonly IFullReadRangeService<CompletedWorkout> completedWorkoutReadRangeService = completedWorkoutReadRangeService;
-        private readonly IFullReadRangeService<UserFollows> followerReadRangeService = followerReadRangeService;
+        private readonly IReadSingleService<User> readSingleService = readSingleService;
+        private readonly IReadSingleService<UserFollows> followerReadSingleService = followerReadSingleService;
+        private readonly IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService = completedWorkoutReadRangeService;
+        private readonly IReadRangeService<UserFollows> followerReadRangeService = followerReadRangeService;
         private readonly ICountService<UserFollows> followerCountService = followerCountService;
         private readonly ICountService<CompletedWorkout> completedWorkoutCountService = completedWorkoutCountService;
         private readonly IUpdateService<User> updateService = updateService;

@@ -1,9 +1,9 @@
-﻿using FitnessTracker.Services.Read.Full;
+﻿using FitnessTracker.Services.Read;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
-namespace FitnessTracker.Services.Read.Full
+namespace FitnessTracker.Services.Read
 {
     public interface IWrappedResult<out TEntity>;
 
@@ -17,7 +17,7 @@ namespace FitnessTracker.Services.Read.Full
     public record WrappedOrderedQueryable<TEntity>(IOrderedQueryable<TEntity> Source) : IWrappedOrderedQueryable<TEntity>;
 
 
-    public static class WrappedIncludableQueryableExtensions
+    public static class WrappedQueryableExtensions
     {
         public static IWrappedQueryable<TEntity> Wrap<TEntity>(this IQueryable<TEntity> source) where TEntity : class => new WrappedQueryable<TEntity>(source);
 
@@ -29,12 +29,12 @@ namespace FitnessTracker.Services.Read.Full
         public static IWrappedIncludableQueryable<TEntity, TProperty> Include<TEntity, TProperty>(
             this IWrappedQueryable<TEntity> source,
             Expression<Func<TEntity, TProperty>> navigationPropertyPath)
-            where TEntity : class => new WrappedIncludableQueryable<TEntity, TProperty>(((source as WrappedQueryable<TEntity>) ?? throw new InvalidOperationException()).Source.Include(navigationPropertyPath));
+            where TEntity : class => new WrappedIncludableQueryable<TEntity, TProperty>((source as WrappedQueryable<TEntity> ?? throw new InvalidOperationException()).Source.Include(navigationPropertyPath));
 
         public static IWrappedIncludableQueryable<TEntity, TProperty> Include<TEntity, TProperty, TPreviousProperty>(
             this IWrappedIncludableQueryable<TEntity, TPreviousProperty> source,
             Expression<Func<TEntity, TProperty>> navigationPropertyPath)
-            where TEntity : class => new WrappedIncludableQueryable<TEntity, TProperty>(((source as WrappedIncludableQueryable<TEntity, TPreviousProperty>) ?? throw new InvalidOperationException()).Source.Include(navigationPropertyPath));
+            where TEntity : class => new WrappedIncludableQueryable<TEntity, TProperty>((source as WrappedIncludableQueryable<TEntity, TPreviousProperty> ?? throw new InvalidOperationException()).Source.Include(navigationPropertyPath));
 
         public static IWrappedIncludableQueryable<TEntity, TProperty> ThenInclude<TEntity, TPreviousProperty, TProperty>(
             this IWrappedIncludableQueryable<TEntity, TPreviousProperty> source,

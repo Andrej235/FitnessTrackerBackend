@@ -1,7 +1,7 @@
 ﻿using FitnessTracker.Models;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
-using FitnessTracker.Services.Read.Full;
+using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,14 +11,14 @@ using System.Text;
 namespace FitnessTracker.Auth
 {
     public class TokenManager(ConfigurationManager configuration,
-                              IFullReadService<RefreshToken> readSingleService,
+                              IReadSingleService<RefreshToken> readSingleService,
                               ICreateService<RefreshToken> createService,
                               IUpdateService<RefreshToken> updateService,
                               IDeleteService<RefreshToken> deleteService,
                               IDeleteRangeService<RefreshToken> deleteRangeService) : ITokenManager
     {
         private readonly ConfigurationManager configuration = configuration;
-        private readonly IFullReadService<RefreshToken> readSingleService = readSingleService;
+        private readonly IReadSingleService<RefreshToken> readSingleService = readSingleService;
         private readonly ICreateService<RefreshToken> createService = createService;
         private readonly IUpdateService<RefreshToken> updateService = updateService;
         private readonly IDeleteService<RefreshToken> deleteService = deleteService;

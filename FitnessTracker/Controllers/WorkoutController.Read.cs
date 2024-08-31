@@ -1,5 +1,5 @@
 ﻿using FitnessTracker.DTOs.Responses.Workout;
-using FitnessTracker.Services.Read.Full;
+using FitnessTracker.Services.Read;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -121,7 +121,7 @@ namespace FitnessTracker.Controllers
             IEnumerable<Models.CompletedWorkout> completed = await completedWorkoutReadSingleService.Get(
                 criteria: x => x.UserId == userId && x.WorkoutId == id,
                 limit: 1,
-                include: x => x.Include(x => x.CompletedSets).OrderByDescending(x => x.CompletedAt));
+                queryBuilder: x => x.Include(x => x.CompletedSets).OrderByDescending(x => x.CompletedAt));
 
             if (!completed.Any())
                 return Ok(mapped);

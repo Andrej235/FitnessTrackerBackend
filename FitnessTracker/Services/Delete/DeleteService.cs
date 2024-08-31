@@ -1,13 +1,13 @@
 ﻿using FitnessTracker.Data;
-using FitnessTracker.Services.Read.Full;
+using FitnessTracker.Services.Read;
 using System.Linq.Expressions;
 
 namespace FitnessTracker.Services.Delete
 {
-    public class DeleteService<T>(DataContext context, IFullReadService<T> readService) : IDeleteService<T> where T : class
+    public class DeleteService<T>(DataContext context, IReadSingleService<T> readService) : IDeleteService<T> where T : class
     {
         private readonly DataContext context = context;
-        private readonly IFullReadService<T> readService = readService;
+        private readonly IReadSingleService<T> readService = readService;
 
         public async Task Delete(Expression<Func<T, bool>> criteria)
         {

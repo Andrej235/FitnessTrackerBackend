@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace FitnessTracker.Services.Read.Count
+namespace FitnessTracker.Services.Count
 {
     public interface ICountService<T> where T : class
     {

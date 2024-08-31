@@ -1,6 +1,6 @@
 ﻿using FitnessTracker.DTOs.Requests.Split;
 using FitnessTracker.Models;
-using FitnessTracker.Services.Read.Full;
+using FitnessTracker.Services.Read;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
