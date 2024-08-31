@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.DTOs.Responses.CompletedWorkouts;
+using FitnessTracker.Services.Read.Full;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,9 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            IEnumerable<IGrouping<DateTime, Models.CompletedWorkout>> groupedCompletedWorkouts = (await completedWorkoutReadRangeService.Get(x => x.UserId == userId, null, null, "overview"))
+            IEnumerable<IGrouping<DateTime, Models.CompletedWorkout>> groupedCompletedWorkouts = (await completedWorkoutReadRangeService.Get(
+                criteria: x => x.UserId == userId,
+                include: x => x.Include(x => x.Split).ThenInclude(x => x.Workouts)))
                 .GroupBy(x => x.CompletedAt.GetStartOfWeek());
 
             if (year is null)
@@ -46,7 +49,9 @@ namespace FitnessTracker.Controllers
             if (user is null)
                 return NotFound();
 
-            IEnumerable<IGrouping<DateTime, Models.CompletedWorkout>> groupedCompletedWorkouts = (await completedWorkoutReadRangeService.Get(x => x.UserId == user.Id, null, null, "overview"))
+            IEnumerable<IGrouping<DateTime, Models.CompletedWorkout>> groupedCompletedWorkouts = (await completedWorkoutReadRangeService.Get(
+                criteria: x => x.UserId == user.Id,
+                include: x => x.Include(x => x.Split).ThenInclude(x => x.Workouts)))
                 .GroupBy(x => x.CompletedAt.GetStartOfWeek());
 
             if (year is null)
@@ -76,7 +81,15 @@ namespace FitnessTracker.Controllers
 
             DateTime startOfWeek = date.GetStartOfWeek();
             DateTime endOfWeek = startOfWeek.Date.AddDays(7);
-            IEnumerable<Models.CompletedWorkout> completedWorkout = await completedWorkoutReadRangeService.Get(x => x.UserId == userId && x.CompletedAt >= startOfWeek && x.CompletedAt <= endOfWeek, null, null, "detailed");
+            IEnumerable<Models.CompletedWorkout> completedWorkout = await completedWorkoutReadRangeService.Get(
+                criteria: x => x.UserId == userId && x.CompletedAt >= startOfWeek && x.CompletedAt <= endOfWeek,
+                include: x => x.Include(x => x.Split)
+                    .ThenInclude(x => x.Workouts)
+                    .ThenInclude(x => x.Workout)
+                    .ThenInclude(x => x.Creator)
+                    .Include(x => x.Split)
+                    .ThenInclude(x => x.Creator));
+
             DetailedWeekOfCompletedWorkoutsResponseDTO mapped = detailedWeekOfCompletedWorkoutsResponseMapper.Map(completedWorkout);
             return Ok(mapped);
         }

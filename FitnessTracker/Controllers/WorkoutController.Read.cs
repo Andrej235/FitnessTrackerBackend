@@ -118,7 +118,11 @@ namespace FitnessTracker.Controllers
             mapped.FavoriteCount = await favoriteCountService.Count(x => x.WorkoutId == id);
             mapped.CommentCount = await commentCountService.Count(x => x.WorkoutId == id);
 
-            IEnumerable<Models.CompletedWorkout> completed = await completedWorkoutReadSingleService.Get(x => x.UserId == userId && x.WorkoutId == id, 0, -1, "sets,latest");
+            IEnumerable<Models.CompletedWorkout> completed = await completedWorkoutReadSingleService.Get(
+                criteria: x => x.UserId == userId && x.WorkoutId == id,
+                limit: 1,
+                include: x => x.Include(x => x.CompletedSets).OrderByDescending(x => x.CompletedAt));
+
             if (!completed.Any())
                 return Ok(mapped);
 

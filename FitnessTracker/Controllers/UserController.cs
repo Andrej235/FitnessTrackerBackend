@@ -32,7 +32,7 @@ namespace FitnessTracker.Controllers
                                         IFullReadService<User> readSingleService,
                                         IReadSingleService<UserFollows> followerReadSingleService,
                                         IReadSingleService<Split> splitReadSingleService,
-                                        IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
+                                        IFullReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
                                         IReadRangeService<UserFollows> followerReadRangeService,
                                         ICountService<UserFollows> followerCountService,
                                         ICountService<CompletedWorkout> completedWorkoutCountService,
@@ -59,7 +59,7 @@ namespace FitnessTracker.Controllers
         private readonly IFullReadService<User> readSingleService = readSingleService;
         private readonly IReadSingleService<UserFollows> followerReadSingleService = followerReadSingleService;
         private readonly IReadSingleService<Split> splitReadSingleService = splitReadSingleService;
-        private readonly IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService = completedWorkoutReadRangeService;
+        private readonly IFullReadRangeService<CompletedWorkout> completedWorkoutReadRangeService = completedWorkoutReadRangeService;
         private readonly IReadRangeService<UserFollows> followerReadRangeService = followerReadRangeService;
         private readonly ICountService<UserFollows> followerCountService = followerCountService;
         private readonly ICountService<CompletedWorkout> completedWorkoutCountService = completedWorkoutCountService;

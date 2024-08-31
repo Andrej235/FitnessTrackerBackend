@@ -425,6 +425,7 @@ namespace FitnessTracker
             #region Completed workouts / sets
             _ = builder.Services.AddScoped<ICreateService<CompletedWorkout>, CreateService<CompletedWorkout>>();
             _ = builder.Services.AddScoped<IReadRangeService<CompletedWorkout>, CompletedWorkoutReadExpressionService>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<CompletedWorkout>, FullReadService<CompletedWorkout>>();
             _ = builder.Services.AddScoped<ICountService<CompletedWorkout>, CountService<CompletedWorkout>>();
             _ = builder.Services.AddScoped<IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO>, SimpleWeekOfCompletedWorkoutsResponseMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<IEnumerable<CompletedWorkout>, DetailedWeekOfCompletedWorkoutsResponseDTO>, DetailedWeekOfCompletedWorkoutsResponseMapper>();
