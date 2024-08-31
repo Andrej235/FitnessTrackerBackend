@@ -17,6 +17,7 @@ namespace FitnessTracker.Services.Create
                 _ = await context.Set<T>().AddAsync(toAdd);
                 _ = await context.SaveChangesAsync();
 
+                //TODO: get rid of reflection
                 object? id = toAdd.GetType().GetProperty("Id")?.GetValue(toAdd);
                 return id ?? throw new PropertyNotFoundException("Entity doesn't have an Id property");
             }

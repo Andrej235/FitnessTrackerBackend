@@ -11,7 +11,6 @@ using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read.Count;
-using FitnessTracker.Services.Read.ExpressionBased;
 using FitnessTracker.Services.Read.Full;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;

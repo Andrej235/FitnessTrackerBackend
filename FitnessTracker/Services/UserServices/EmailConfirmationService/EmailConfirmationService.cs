@@ -1,16 +1,16 @@
 ﻿using FitnessTracker.Models;
 using FitnessTracker.Services.Delete;
-using FitnessTracker.Services.Read.ExpressionBased;
+using FitnessTracker.Services.Read.Full;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Utilities;
 
 namespace FitnessTracker.Services.UserServices.EmailConfirmationService
 {
-    public class EmailConfirmationService(IReadSingleService<User> userReadService,
+    public class EmailConfirmationService(IFullReadService<User> userReadService,
                                           IUpdateService<User> userUpdateService,
                                           IDeleteRangeService<EmailConfirmation> deleteRangeService) : IEmailConfirmationService
     {
-        private readonly IReadSingleService<User> userReadService = userReadService;
+        private readonly IFullReadService<User> userReadService = userReadService;
         private readonly IUpdateService<Models.User> userUpdateService = userUpdateService;
         private readonly IDeleteRangeService<EmailConfirmation> deleteRangeService = deleteRangeService;
 
@@ -22,7 +22,7 @@ namespace FitnessTracker.Services.UserServices.EmailConfirmationService
                 if (!deletedAny)
                     throw new Exception("User does not have any email confirmation codes");
 
-                User user = await userReadService.Get(x => x.Id == userId, "none") ?? throw new Exception("User not found");
+                User user = await userReadService.Get(x => x.Id == userId) ?? throw new Exception("User not found");
                 user.EmailConfirmed = true;
                 user.Role = Role.User;
                 await userUpdateService.Update(user);

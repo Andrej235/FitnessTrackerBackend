@@ -47,7 +47,6 @@ using FitnessTracker.Services.Mapping.Response.SplitMappers;
 using FitnessTracker.Services.Mapping.Response.UserMappers;
 using FitnessTracker.Services.Mapping.Response.WorkoutMappers;
 using FitnessTracker.Services.Read.Count;
-using FitnessTracker.Services.Read.ExpressionBased;
 using FitnessTracker.Services.Read.Full;
 using FitnessTracker.Services.Read.QueryBased;
 using FitnessTracker.Services.Update;
@@ -211,9 +210,6 @@ namespace FitnessTracker
             #endregion
 
             #region User
-            _ = builder.Services.AddScoped<IFullReadService<User>, FullReadService<User>>();
-            _ = builder.Services.AddScoped<IReadRangeService<User>, UserReadExpressionService>();
-
             _ = builder.Services.AddScoped<ICreateService<User>, CreateService<User>>();
             _ = builder.Services.AddScoped<IFullReadService<User>, FullReadService<User>>();
             _ = builder.Services.AddScoped<IFullReadRangeService<User>, FullReadService<User>>();
@@ -249,10 +245,8 @@ namespace FitnessTracker
             #endregion
 
             #region Workouts
-            _ = builder.Services.AddScoped<IReadSingleService<Workout>, WorkoutReadExpressionService>();
             _ = builder.Services.AddScoped<IFullReadService<Workout>, FullReadService<Workout>>();
             _ = builder.Services.AddScoped<IFullReadRangeService<Workout>, FullReadService<Workout>>();
-            _ = builder.Services.AddScoped<IReadRangeService<Workout>, WorkoutReadExpressionService>();
             _ = builder.Services.AddScoped<ICreateService<Workout>, CreateService<Workout>>();
             _ = builder.Services.AddScoped<IUpdateService<Workout>, UpdateService<Workout>>();
             _ = builder.Services.AddScoped<IDeleteService<Workout>, DeleteService<Workout>>();

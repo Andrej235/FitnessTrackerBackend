@@ -1,17 +1,17 @@
 ﻿using FitnessTracker.Data;
-using FitnessTracker.Services.Read.ExpressionBased;
+using FitnessTracker.Services.Read.Full;
 using System.Linq.Expressions;
 
 namespace FitnessTracker.Services.Delete
 {
-    public class DeleteService<T>(DataContext context, IReadSingleService<T> readService) : IDeleteService<T> where T : class
+    public class DeleteService<T>(DataContext context, IFullReadService<T> readService) : IDeleteService<T> where T : class
     {
         private readonly DataContext context = context;
-        private readonly IReadSingleService<T> readService = readService;
+        private readonly IFullReadService<T> readService = readService;
 
         public async Task Delete(Expression<Func<T, bool>> criteria)
         {
-            T entityToDelete = await readService.Get(criteria, "none") ?? throw new NullReferenceException("Entity not found");
+            T entityToDelete = await readService.Get(criteria) ?? throw new NullReferenceException("Entity not found");
 
             _ = context.Set<T>().Remove(entityToDelete);
             _ = await context.SaveChangesAsync();

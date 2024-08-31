@@ -3,6 +3,7 @@ using FitnessTracker.Models;
 
 namespace FitnessTracker.Services.Create
 {
+    //Has to exist because RefreshTokens' primary key is not called 'Id'
     public class RefreshTokenCreateService(DataContext context) : ICreateService<RefreshToken>
     {
         private readonly DataContext context = context;
