@@ -64,8 +64,8 @@ namespace FitnessTracker.Controllers
                 return Unauthorized();
 
             IEnumerable<Models.FavoriteWorkout> workouts = name is null
-                ? await favoriteReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId), offset, limit ?? 10, "workout")
-                : await favoriteReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId) && EF.Functions.Like(x.Workout.Name, $"%{name}%"), offset, limit ?? 10, "workout");
+                ? await favoriteReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator))
+                : await favoriteReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId) && EF.Functions.Like(x.Workout.Name, $"%{name}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
 
             return Ok(workouts.Select(x => simpleResponseMapper.Map(x.Workout)));
         }
@@ -83,8 +83,8 @@ namespace FitnessTracker.Controllers
                 return Unauthorized();
 
             IEnumerable<Models.WorkoutLike> workouts = name is null
-                ? await likeReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId), offset, limit ?? 10, "workout")
-                : await likeReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId) && EF.Functions.Like(x.Workout.Name, $"%{name}%"), offset, limit ?? 10, "workout");
+                ? await likeReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator))
+                : await likeReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId) && EF.Functions.Like(x.Workout.Name, $"%{name}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
 
             return Ok(workouts.Select(x => simpleResponseMapper.Map(x.Workout)));
         }

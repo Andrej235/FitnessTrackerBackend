@@ -262,8 +262,8 @@ namespace FitnessTracker
 
             #region Workout like
             _ = builder.Services.AddScoped<ICreateService<WorkoutLike>, CreateService<WorkoutLike>>();
-            _ = builder.Services.AddScoped<IReadSingleService<WorkoutLike>, WorkoutLikeReadExpressionService>();
-            _ = builder.Services.AddScoped<IReadRangeService<WorkoutLike>, WorkoutLikeReadExpressionService>();
+            _ = builder.Services.AddScoped<IFullReadService<WorkoutLike>, FullReadService<WorkoutLike>>();
+            _ = builder.Services.AddScoped<IFullReadRangeService<WorkoutLike>, FullReadService<WorkoutLike>>();
             _ = builder.Services.AddScoped<ICountService<WorkoutLike>, CountService<WorkoutLike>>();
             _ = builder.Services.AddScoped<IDeleteService<WorkoutLike>, DeleteService<WorkoutLike>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<WorkoutLike>, DeleteRangeService<WorkoutLike>>();
@@ -290,8 +290,6 @@ namespace FitnessTracker
 
             #region Workout favorite
             _ = builder.Services.AddScoped<ICreateService<FavoriteWorkout>, CreateService<FavoriteWorkout>>();
-            _ = builder.Services.AddScoped<IReadSingleService<FavoriteWorkout>, FavoriteWorkoutReadExpressionService>();
-            _ = builder.Services.AddScoped<IReadRangeService<FavoriteWorkout>, FavoriteWorkoutReadExpressionService>();
             _ = builder.Services.AddScoped<ICountService<FavoriteWorkout>, CountService<FavoriteWorkout>>();
             _ = builder.Services.AddScoped<IDeleteService<FavoriteWorkout>, DeleteService<FavoriteWorkout>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<FavoriteWorkout>, DeleteRangeService<FavoriteWorkout>>();
@@ -424,7 +422,6 @@ namespace FitnessTracker
 
             #region Completed workouts / sets
             _ = builder.Services.AddScoped<ICreateService<CompletedWorkout>, CreateService<CompletedWorkout>>();
-            _ = builder.Services.AddScoped<IReadRangeService<CompletedWorkout>, CompletedWorkoutReadExpressionService>();
             _ = builder.Services.AddScoped<IFullReadRangeService<CompletedWorkout>, FullReadService<CompletedWorkout>>();
             _ = builder.Services.AddScoped<ICountService<CompletedWorkout>, CountService<CompletedWorkout>>();
             _ = builder.Services.AddScoped<IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO>, SimpleWeekOfCompletedWorkoutsResponseMapper>();

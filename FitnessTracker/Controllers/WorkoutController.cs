@@ -24,17 +24,16 @@ namespace FitnessTracker.Controllers
                                            ICreateService<FavoriteWorkout> favoriteCreateService,
                                            IFullReadService<Workout> readSingleService,
                                            IFullReadRangeService<Workout> readRangeService,
-                                           IReadSingleService<WorkoutLike> likeReadSingleService,
-                                           IReadSingleService<FavoriteWorkout> favoriteReadSingleService,
+                                           IFullReadService<WorkoutLike> likeReadSingleService,
+                                           IFullReadService<FavoriteWorkout> favoriteReadSingleService,
                                            IFullReadRangeService<CompletedWorkout> completedWorkoutReadSingleService,
                                            IReadRangeService<WorkoutComment> commentReadRangeService,
-                                           IReadRangeService<WorkoutLike> likeReadRangeService,
-                                           IReadRangeService<FavoriteWorkout> favoriteReadRangeService,
+                                           IFullReadRangeService<WorkoutLike> likeReadRangeService,
+                                           IFullReadRangeService<FavoriteWorkout> favoriteReadRangeService,
                                            ICountService<WorkoutLike> likeCountService,
                                            ICountService<FavoriteWorkout> favoriteCountService,
                                            ICountService<WorkoutComment> commentCountService,
                                            IUpdateService<Workout> updateService,
-                                           IUpdateService<Set> setUpdateService,
                                            IDeleteService<Workout> deleteService,
                                            IDeleteService<WorkoutComment> commentDeleteService,
                                            IDeleteService<WorkoutCommentLike> commentLikeDeleteService,
@@ -59,17 +58,16 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<FavoriteWorkout> favoriteCreateService = favoriteCreateService;
         private readonly IFullReadService<Workout> readSingleService = readSingleService;
         private readonly IFullReadRangeService<Workout> readRangeService = readRangeService;
-        private readonly IReadSingleService<WorkoutLike> likeReadSingleService = likeReadSingleService;
-        private readonly IReadSingleService<FavoriteWorkout> favoriteReadSingleService = favoriteReadSingleService;
+        private readonly IFullReadService<WorkoutLike> likeReadSingleService = likeReadSingleService;
+        private readonly IFullReadService<FavoriteWorkout> favoriteReadSingleService = favoriteReadSingleService;
         private readonly IFullReadRangeService<CompletedWorkout> completedWorkoutReadSingleService = completedWorkoutReadSingleService;
         private readonly IReadRangeService<WorkoutComment> commentReadRangeService = commentReadRangeService;
-        private readonly IReadRangeService<WorkoutLike> likeReadRangeService = likeReadRangeService;
-        private readonly IReadRangeService<FavoriteWorkout> favoriteReadRangeService = favoriteReadRangeService;
+        private readonly IFullReadRangeService<WorkoutLike> likeReadRangeService = likeReadRangeService;
+        private readonly IFullReadRangeService<FavoriteWorkout> favoriteReadRangeService = favoriteReadRangeService;
         private readonly ICountService<WorkoutLike> likeCountService = likeCountService;
         private readonly ICountService<FavoriteWorkout> favoriteCountService = favoriteCountService;
         private readonly ICountService<WorkoutComment> commentCountService = commentCountService;
         private readonly IUpdateService<Workout> updateService = updateService;
-        private readonly IUpdateService<Set> setUpdateService = setUpdateService;
         private readonly IDeleteService<Workout> deleteService = deleteService;
         private readonly IDeleteService<WorkoutComment> commentDeleteService = commentDeleteService;
         private readonly IDeleteService<WorkoutCommentLike> commentLikeDeleteService = commentLikeDeleteService;
