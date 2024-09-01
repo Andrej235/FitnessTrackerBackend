@@ -40,6 +40,25 @@ namespace FitnessTracker.Controllers
             return Ok(mapped);
         }
 
+        [Authorize]
+        [HttpGet("me/profilepicture")]
+        [ProducesResponseType(typeof(UserProfilePictureResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GetProfilePic()
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out Guid userId))
+                return Unauthorized();
+
+            Models.User? user = await readSingleService.Get(x => x.Id == userId);
+
+            if (user is null)
+                return Unauthorized();
+
+            return Ok(profilePicResponseMapper.Map(user));
+        }
+
         [HttpGet("{username}/detailed")]
         [ProducesResponseType(typeof(DetailedPublicUserResponseDTO), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDetailed(string username)

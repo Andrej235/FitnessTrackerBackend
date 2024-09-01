@@ -217,6 +217,7 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<IResponseMapper<User, SimpleUserResponseDTO>, SimpleUserResponseMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<User, DetailedUserResponseDTO>, DetailedUserResponseMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<User, DetailedPublicUserResponseDTO>, DetailedPublicUserResponseMapper>();
+            _ = builder.Services.AddScoped<IResponseMapper<User, UserProfilePictureResponseDTO>, UserProfilePictureResponseMapper>();
             _ = builder.Services.AddScoped<IEmailConfirmationSenderService, EmailConfirmationSenderService>();
             _ = builder.Services.AddScoped<IEmailConfirmationService, EmailConfirmationService>();
             _ = builder.Services.AddScoped<IResetPasswordEmailSenderService, ResetPasswordEmailSender>();

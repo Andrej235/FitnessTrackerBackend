@@ -45,6 +45,7 @@ namespace FitnessTracker.Controllers
                                         IRequestMapper<CreateCompletedWorkoutRequestDTO, CompletedWorkout> createCompletedWorkoutRequestMapper,
                                         IResponseMapper<User, SimpleUserResponseDTO> simpleResponseMapper,
                                         IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper,
+                                        IResponseMapper<User, UserProfilePictureResponseDTO> profilePicResponseMapper,
                                         IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedWorkoutResponseMapper,
                                         IResponseMapper<User, DetailedPublicUserResponseDTO> publicUserDetailedResponseMapper,
                                         IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO> simpleWeekOfCompletedWorkoutsResponseMapper,
@@ -71,6 +72,7 @@ namespace FitnessTracker.Controllers
         private readonly IRequestMapper<CreateCompletedWorkoutRequestDTO, CompletedWorkout> createCompletedWorkoutRequestMapper = createCompletedWorkoutRequestMapper;
         private readonly IResponseMapper<User, SimpleUserResponseDTO> simpleResponseMapper = simpleResponseMapper;
         private readonly IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper = detailedResponseMapper;
+        private readonly IResponseMapper<User, UserProfilePictureResponseDTO> profilePicResponseMapper = profilePicResponseMapper;
         private readonly IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedWorkoutResponseMapper = detailedWorkoutResponseMapper;
         private readonly IResponseMapper<User, DetailedPublicUserResponseDTO> publicUserDetailedResponseMapper = publicUserDetailedResponseMapper;
         private readonly IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO> simpleWeekOfCompletedWorkoutsResponseMapper = simpleWeekOfCompletedWorkoutsResponseMapper;
