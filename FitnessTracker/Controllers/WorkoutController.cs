@@ -8,6 +8,7 @@ using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read;
+using FitnessTracker.Services.ReadSelected;
 using FitnessTracker.Services.Update;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,6 +28,7 @@ namespace FitnessTracker.Controllers
                                            IReadSingleService<FavoriteWorkout> favoriteReadSingleService,
                                            IReadRangeService<CompletedWorkout> completedWorkoutReadSingleService,
                                            IReadRangeService<WorkoutComment> commentReadRangeService,
+                                           IReadRangeSelectedService<WorkoutComment> commentSelectService,
                                            IReadRangeService<WorkoutLike> likeReadRangeService,
                                            IReadRangeService<FavoriteWorkout> favoriteReadRangeService,
                                            ICountService<WorkoutLike> likeCountService,
@@ -47,8 +49,7 @@ namespace FitnessTracker.Controllers
                                            IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment> commentCreateRequestMapper,
                                            IResponseMapper<Workout, NewWorkoutResponseDTO> newWorkoutResponseMapper,
                                            IResponseMapper<Workout, SimpleWorkoutResponseDTO> simpleResponseMapper,
-                                           IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedResponseMapper,
-                                           IResponseMapper<WorkoutComment, SimpleWorkoutCommentResponseDTO> simpleCommentResponseMapper) : ControllerBase
+                                           IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedResponseMapper) : ControllerBase
     {
         private readonly ICreateService<Workout> createService = createService;
         private readonly ICreateService<WorkoutComment> commentCreateService = commentCreateService;
@@ -61,6 +62,7 @@ namespace FitnessTracker.Controllers
         private readonly IReadSingleService<FavoriteWorkout> favoriteReadSingleService = favoriteReadSingleService;
         private readonly IReadRangeService<CompletedWorkout> completedWorkoutReadSingleService = completedWorkoutReadSingleService;
         private readonly IReadRangeService<WorkoutComment> commentReadRangeService = commentReadRangeService;
+        private readonly IReadRangeSelectedService<WorkoutComment> commentSelectService = commentSelectService;
         private readonly IReadRangeService<WorkoutLike> likeReadRangeService = likeReadRangeService;
         private readonly IReadRangeService<FavoriteWorkout> favoriteReadRangeService = favoriteReadRangeService;
         private readonly ICountService<WorkoutLike> likeCountService = likeCountService;
@@ -82,6 +84,5 @@ namespace FitnessTracker.Controllers
         private readonly IResponseMapper<Workout, NewWorkoutResponseDTO> newWorkoutResponseMapper = newWorkoutResponseMapper;
         private readonly IResponseMapper<Workout, SimpleWorkoutResponseDTO> simpleResponseMapper = simpleResponseMapper;
         private readonly IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedResponseMapper = detailedResponseMapper;
-        private readonly IResponseMapper<WorkoutComment, SimpleWorkoutCommentResponseDTO> simpleCommentResponseMapper = simpleCommentResponseMapper;
     }
 }

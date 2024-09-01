@@ -9,18 +9,18 @@ namespace FitnessTracker.Services.Read
     {
         private readonly DataContext context = context;
 
-        public Task<T?> Get(Expression<Func<T, bool>> criteria, Func<IWrappedQueryable<T>, IWrappedResult<T>>? include = null) => include is null
+        public Task<T?> Get(Expression<Func<T, bool>> criteria, Func<IWrappedQueryable<T>, IWrappedResult<T>>? queryBuilder = null) => queryBuilder is null
                 ? context.Set<T>().FirstOrDefaultAsync(criteria)
-                : Unwrap(include.Invoke(context.Set<T>().Wrap()))?.FirstOrDefaultAsync(criteria) ?? Task.FromResult<T?>(null);
+                : Unwrap(queryBuilder.Invoke(context.Set<T>().Wrap()))?.FirstOrDefaultAsync(criteria) ?? Task.FromResult<T?>(null);
 
-        public Task<IEnumerable<T>> Get(Expression<Func<T, bool>>? criteria, int? offset = 0, int? limit = -1, Func<IWrappedQueryable<T>, IWrappedResult<T>>? include = null) => Task.Run(() =>
+        public Task<IEnumerable<T>> Get(Expression<Func<T, bool>>? criteria, int? offset = 0, int? limit = -1, Func<IWrappedQueryable<T>, IWrappedResult<T>>? queryBuilder = null) => Task.Run(() =>
         {
-            if (include is null)
+            if (queryBuilder is null)
                 return criteria is null
                     ? context.Set<T>().ApplyOffsetAndLimit(offset, limit)
                     : context.Set<T>().Where(criteria).ApplyOffsetAndLimit(offset, limit);
 
-            IWrappedResult<T> includeResult = include.Invoke(context.Set<T>().Wrap());
+            IWrappedResult<T> includeResult = queryBuilder.Invoke(context.Set<T>().Wrap());
             IQueryable<T>? source = Unwrap(includeResult);
 
             if (source is null)
@@ -30,7 +30,6 @@ namespace FitnessTracker.Services.Read
                 ? source.ApplyOffsetAndLimit(offset, limit)
                 : source.Where(criteria).ApplyOffsetAndLimit(offset, limit);
         });
-
 
         private static IQueryable<T>? Unwrap(IWrappedResult<T> source) => (source as WrappedQueryable<T>)?.Source ?? (source as WrappedOrderedQueryable<T>)?.Source ?? null;
     }

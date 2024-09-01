@@ -21,23 +21,30 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            IEnumerable<Models.WorkoutComment> comments = await commentReadRangeService.Get(
+            IEnumerable<object> comments = await commentSelectService.Get(
+                x => new SimpleWorkoutCommentResponseDTO
+                {
+                    Id = x.Id,
+                    Text = x.Text,
+                    Creator = new DTOs.Responses.User.SimpleUserResponseDTO
+                    {
+                        Username = x.Creator.Username,
+                        Name = x.Creator.Name,
+                        Image = x.Creator.ProfilePic,
+                    },
+                    CreatedAt = x.CreatedAt,
+                    LikeCount = x.Likes.Count,
+                    IsLiked = x.Likes.Any(x => x.Id == userId),
+                    IsCreator = x.CreatorId == userId,
+                    ReplyCount = x.Children.Count,
+                    WorkoutId = x.WorkoutId,
+                },
                 x => x.WorkoutId == workoutId && x.ParentId == null,
                 offset ?? 0,
                 limit ?? 10,
-                x => x.Include(x => x.Creator)
-                      .Include(x => x.Likes)
-                      .Include(x => x.Children));
+                x => x.Include(x => x.Creator));
 
-            //TODO: Replace including children and likes with count service or something similar
-            IEnumerable<SimpleWorkoutCommentResponseDTO> mapped = comments.Select(x =>
-            {
-                SimpleWorkoutCommentResponseDTO mapped = simpleCommentResponseMapper.Map(x);
-                mapped.IsLiked = x.Likes.Any(x => x.Id == userId);
-                mapped.IsCreator = x.Creator.Id == userId;
-                return mapped;
-            });
-            return Ok(mapped);
+            return Ok(comments);
         }
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
@@ -52,20 +59,30 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            IEnumerable<Models.WorkoutComment> comments = await commentReadRangeService.Get(
+            IEnumerable<object> comments = await commentSelectService.Get(
+                x => new SimpleWorkoutCommentResponseDTO
+                {
+                    Id = x.Id,
+                    Text = x.Text,
+                    Creator = new DTOs.Responses.User.SimpleUserResponseDTO
+                    {
+                        Username = x.Creator.Username,
+                        Name = x.Creator.Name,
+                        Image = x.Creator.ProfilePic,
+                    },
+                    CreatedAt = x.CreatedAt,
+                    LikeCount = x.Likes.Count,
+                    IsLiked = x.Likes.Any(x => x.Id == userId),
+                    IsCreator = x.CreatorId == userId,
+                    ReplyCount = x.Children.Count,
+                    WorkoutId = x.WorkoutId,
+                },
                 x => x.WorkoutId == workoutId && x.ParentId == commentId,
                 offset ?? 0,
                 limit ?? 10,
-                x => x.Include(x => x.Creator).Include(x => x.Likes));
+                x => x.Include(x => x.Creator));
 
-            IEnumerable<SimpleWorkoutCommentResponseDTO> mapped = comments.Select(x =>
-            {
-                SimpleWorkoutCommentResponseDTO mapped = simpleCommentResponseMapper.Map(x);
-                mapped.IsLiked = x.Likes.Any(x => x.Id == userId);
-                mapped.IsCreator = x.Creator.Id == userId;
-                return mapped;
-            });
-            return Ok(mapped);
+            return Ok(comments);
         }
     }
 }

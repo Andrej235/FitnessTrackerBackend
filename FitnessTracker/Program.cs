@@ -48,6 +48,7 @@ using FitnessTracker.Services.Mapping.Response.SplitMappers;
 using FitnessTracker.Services.Mapping.Response.UserMappers;
 using FitnessTracker.Services.Mapping.Response.WorkoutMappers;
 using FitnessTracker.Services.Read;
+using FitnessTracker.Services.ReadSelected;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
 using FitnessTracker.Services.UserServices.EmailConfirmationService;
@@ -270,10 +271,10 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<IReadSingleService<WorkoutComment>, ReadService<WorkoutComment>>();
             _ = builder.Services.AddScoped<ICountService<WorkoutComment>, CountService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IReadRangeService<WorkoutComment>, ReadService<WorkoutComment>>();
+            _ = builder.Services.AddScoped<IReadRangeSelectedService<WorkoutComment>, ReadSelectedService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IDeleteService<WorkoutComment>, DeleteService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<WorkoutComment>, DeleteRangeService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment>, CreateWorkoutCommentRequestMapper>();
-            _ = builder.Services.AddScoped<IResponseMapper<WorkoutComment, SimpleWorkoutCommentResponseDTO>, SimpleWorkoutCommentResponseMapper>();
             #endregion
 
             #region Workout comment like
