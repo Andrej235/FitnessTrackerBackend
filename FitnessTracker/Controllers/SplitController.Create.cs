@@ -22,22 +22,29 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            IEnumerable<Guid> selectedWorkoutIds = request.Workouts.Select(x => x.WorkoutId);
-            IEnumerable<Models.Workout> selectedWorkouts = await workoutReadRangeService.Get(x => selectedWorkoutIds.Contains(x.Id));
-            if (selectedWorkoutIds.Count() != selectedWorkouts.Count())
-                return NotFound("One or more selected workouts could not found");
+            try
+            {
+                IEnumerable<Guid> selectedWorkoutIds = request.Workouts.Select(x => x.WorkoutId);
+                IEnumerable<Models.Workout> selectedWorkouts = await workoutReadRangeService.Get(x => selectedWorkoutIds.Contains(x.Id));
+                if (selectedWorkoutIds.Count() != selectedWorkouts.Count())
+                    return NotFound("One or more selected workouts could not found");
 
-            if (selectedWorkouts.Any(x => !x.IsPublic && x.CreatorId != userId))
-                return BadRequest("One or more selected workouts are not public and you are not the creator");
+                if (selectedWorkouts.Any(x => !x.IsPublic && x.CreatorId != userId))
+                    return BadRequest("One or more selected workouts are not public and you are not the creator");
 
-            if (request.IsPublic && selectedWorkouts.Any(x => !x.IsPublic))
-                return BadRequest("Attempted to create a public split with one or more private workouts");
+                if (request.IsPublic && selectedWorkouts.Any(x => !x.IsPublic))
+                    return BadRequest("Attempted to create a public split with one or more private workouts");
 
-            Models.Split mapped = createRequestMapper.Map(request);
-            mapped.CreatorId = userId;
+                Models.Split mapped = createRequestMapper.Map(request);
+                mapped.CreatorId = userId;
 
-            _ = await createService.Add(mapped);
-            return Created();
+                _ = await createService.Add(mapped);
+                return Created();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.GetErrorMessage());
+            }
         }
     }
 }

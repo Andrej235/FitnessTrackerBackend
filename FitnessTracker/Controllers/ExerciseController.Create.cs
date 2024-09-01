@@ -16,36 +16,46 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Create([FromBody] CreateExerciseRequestDTO request)
         {
-            object? newExerciseIdObj = await createService.Add(createRequestMapper.Map(request));
-            if (newExerciseIdObj is not int newExerciseId)
-                return BadRequest();
+            try
+            {
+                Exercise newExercise = await createService.Add(createRequestMapper.Map(request));
 
-            _ = await equipmetUsageCreateRangeService.Add(request.Equipment.Select(x => new EquipmentUsage
+                await equipmetUsageCreateRangeService.Add(request.Equipment.Select(x => new EquipmentUsage
+                {
+                    ExerciseId = newExercise.Id,
+                    EquipmentId = x
+                }));
+
+                await primaryMuscleGroupCreateRangeService.Add(request.PrimaryMuscleGroups.Select(x => new PrimaryMuscleGroupInExercise
+                {
+                    ExerciseId = newExercise.Id,
+                    MuscleGroupId = x
+                }));
+
+                await primaryMuscleCreateRangeService.Add(request.PrimaryMuscles.Select(x => new PrimaryMuscleInExercise
+                {
+                    ExerciseId = newExercise.Id,
+                    MuscleId = x
+                }));
+
+                await secondaryMuscleGroupCreateRangeService.Add(request.SecondaryMuscleGroups.Select(x => new SecondaryMuscleGroupInExercise
+                {
+                    ExerciseId = newExercise.Id,
+                    MuscleGroupId = x
+                }));
+
+                await secondaryMuscleCreateRangeService.Add(request.SecondaryMuscles.Select(x => new SecondaryMuscleInExercise
+                {
+                    ExerciseId = newExercise.Id,
+                    MuscleId = x
+                }));
+
+                return Created();
+            }
+            catch (Exception ex)
             {
-                ExerciseId = newExerciseId,
-                EquipmentId = x
-            }));
-            _ = await primaryMuscleGroupCreateRangeService.Add(request.PrimaryMuscleGroups.Select(x => new PrimaryMuscleGroupInExercise
-            {
-                ExerciseId = newExerciseId,
-                MuscleGroupId = x
-            }));
-            _ = await primaryMuscleCreateRangeService.Add(request.PrimaryMuscles.Select(x => new PrimaryMuscleInExercise
-            {
-                ExerciseId = newExerciseId,
-                MuscleId = x
-            }));
-            _ = await secondaryMuscleGroupCreateRangeService.Add(request.SecondaryMuscleGroups.Select(x => new SecondaryMuscleGroupInExercise
-            {
-                ExerciseId = newExerciseId,
-                MuscleGroupId = x
-            }));
-            _ = await secondaryMuscleCreateRangeService.Add(request.SecondaryMuscles.Select(x => new SecondaryMuscleInExercise
-            {
-                ExerciseId = newExerciseId,
-                MuscleId = x
-            }));
-            return Created();
+                return BadRequest(ex.GetErrorMessage());
+            }
         }
     }
 }

@@ -5,8 +5,11 @@
         /// <summary>
         /// Adds entity to database
         /// </summary>
-        /// <returns>Id of added entity</returns>
+        /// <returns>Added entity with its new primary key</returns>
         /// <param name="toAdd">Entity to save in the database</param>
-        Task<object?> Add(TEntity toAdd);
+        /// <exception cref="OperationCanceledException"/>
+        /// <exception cref="Microsoft.EntityFrameworkCore.DbUpdateException"/>
+        /// <exception cref="Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException"/>
+        Task<TEntity> Add(TEntity toAdd);
     }
 }

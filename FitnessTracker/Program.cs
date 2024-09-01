@@ -363,7 +363,7 @@ namespace FitnessTracker
             #endregion
 
             #region Auth tokens
-            _ = builder.Services.AddScoped<ICreateService<RefreshToken>, RefreshTokenCreateService>();
+            _ = builder.Services.AddScoped<ICreateService<RefreshToken>, CreateService<RefreshToken>>();
             _ = builder.Services.AddScoped<IReadSingleService<RefreshToken>, ReadService<RefreshToken>>();
             _ = builder.Services.AddScoped<IReadRangeService<RefreshToken>, ReadService<RefreshToken>>();
             _ = builder.Services.AddScoped<IUpdateService<RefreshToken>, UpdateService<RefreshToken>>();

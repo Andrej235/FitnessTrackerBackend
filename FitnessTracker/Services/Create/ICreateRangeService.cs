@@ -5,8 +5,10 @@
         /// <summary>
         /// Adds entities to database
         /// </summary>
-        /// <returns>True if successful, false if not</returns>
         /// <param name="toAdd">Entities to save in the database</param>
-        Task<bool> Add(IEnumerable<TEntity> toAdd);
+        /// <exception cref="OperationCanceledException"/>
+        /// <exception cref="Microsoft.EntityFrameworkCore.DbUpdateException"/>
+        /// <exception cref="Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException"/>
+        Task Add(IEnumerable<TEntity> toAdd);
     }
 }

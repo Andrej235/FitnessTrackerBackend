@@ -15,16 +15,13 @@ namespace FitnessTracker.Services.UserServices.ResetPasswordSenderService
 
         public async Task SendEmail(string email, Guid userId)
         {
-            EmailConfirmation emailConfirmation = new()
+            EmailConfirmation mapped = new()
             {
                 UserId = userId
             };
 
-            object? emailConfirmationId = await createService.Add(emailConfirmation);
-            if (emailConfirmationId == default || emailConfirmationId is not Guid confirmationCode)
-                throw new Exception("Failed to create email confirmation");
-
-            emailSender.SendEmail(new Message([email], "Email confirmation", $"Reset your password by clicking <a href=\"{WEB_APP_URL}/reset-password/{confirmationCode}\">here</a>"));
+            EmailConfirmation newEmailConfirmationToken = await createService.Add(mapped);
+            emailSender.SendEmail(new Message([email], "Email confirmation", $"Reset your password by clicking <a href=\"{WEB_APP_URL}/reset-password/{newEmailConfirmationToken.Id}\">here</a>"));
             return;
         }
     }

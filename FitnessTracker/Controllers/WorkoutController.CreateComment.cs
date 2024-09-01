@@ -27,13 +27,12 @@ namespace FitnessTracker.Controllers
                 mapped.CreatorId = userId;
                 mapped.WorkoutId = workoutId;
 
-                object? newId = await commentCreateService.Add(mapped);
-                return newId == default ? BadRequest("Failed to create comment") : Created($"workouts/{workoutId}/comment/{newId}", newId);
+                Models.WorkoutComment newComment = await commentCreateService.Add(mapped);
+                return Created($"workouts/{workoutId}/comment/{newComment.Id}", newComment.Id);
             }
             catch (Exception ex)
             {
-                ex.LogError();
-                return BadRequest("Failed to create comment");
+                return BadRequest(ex.GetErrorMessage());
             }
         }
 
@@ -57,13 +56,12 @@ namespace FitnessTracker.Controllers
                 mapped.WorkoutId = workoutId;
                 mapped.ParentId = commentId;
 
-                object? newId = await commentCreateService.Add(mapped);
-                return newId == default ? BadRequest("Failed to create comment") : Created($"workouts/{workoutId}/comment/{newId}", newId);
+                Models.WorkoutComment newComment = await commentCreateService.Add(mapped);
+                return Created($"workouts/{workoutId}/comment/{newComment.Id}", newComment.Id);
             }
             catch (Exception ex)
             {
-                ex.LogError();
-                return BadRequest("Failed to create comment");
+                return BadRequest(ex.GetErrorMessage());
             }
         }
     }

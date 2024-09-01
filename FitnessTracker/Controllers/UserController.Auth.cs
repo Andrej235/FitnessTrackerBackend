@@ -20,15 +20,13 @@ namespace FitnessTracker.Controllers
                 if (request.Username.Length < 3 || !ValidEmailRegex().IsMatch(request.Email.Trim()) || request.Password.Length < 8)
                     return BadRequest("Invalid registration details");
 
-                Models.User user = registrationMapper.Map(request);
-                object? newUserId = await createService.Add(user);
-                if (newUserId == default)
-                    return BadRequest("User already exists");
+                Models.User mapped = registrationMapper.Map(request);
+                Models.User newUser = await createService.Add(mapped);
 
-                string jwt = await tokenManager.GenerateJWTAndRefreshToken(user, Response.Cookies);
-                await emailConfirmationSender.SendEmailConfirmation(user.Email, user.Id);
+                string jwt = await tokenManager.GenerateJWTAndRefreshToken(newUser, Response.Cookies);
+                await emailConfirmationSender.SendEmailConfirmation(newUser.Email, newUser.Id);
 
-                return Created($"/user/{newUserId}", jwtResponseMapper.Map(jwt));
+                return Created($"/user/{newUser.Id}", jwtResponseMapper.Map(jwt));
             }
             catch (Exception ex)
             {

@@ -27,8 +27,8 @@ namespace FitnessTracker.Controllers
                 mapped.CreatorId = userId;
                 mapped.SplitId = splitId;
 
-                object? newId = await commentCreateService.Add(mapped);
-                return newId == default ? BadRequest("Failed to create comment") : Created();
+                _ = await commentCreateService.Add(mapped);
+                return Created();
             }
             catch (Exception ex)
             {
@@ -57,8 +57,8 @@ namespace FitnessTracker.Controllers
                 mapped.SplitId = splitId;
                 mapped.ParentId = commentId;
 
-                object? newId = await commentCreateService.Add(mapped);
-                return newId == default ? BadRequest("Failed to create comment") : Created();
+                _ = await commentCreateService.Add(mapped);
+                return Created();
             }
             catch (Exception ex)
             {

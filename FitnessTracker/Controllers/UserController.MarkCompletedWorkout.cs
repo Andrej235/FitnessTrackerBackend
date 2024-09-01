@@ -22,27 +22,34 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            DayOfWeek today = DateTime.Today.DayOfWeek;
-            Models.User? user = await readSingleService.Get(x => x.Id == userId,
-                x => x.Include(x => x.CurrentSplit!).ThenInclude(x => x.Workouts.Where(w => w.Day == today))
-            );
+            try
+            {
+                DayOfWeek today = DateTime.Today.DayOfWeek;
+                Models.User? user = await readSingleService.Get(
+                    x => x.Id == userId,
+                    x => x.Include(x => x.CurrentSplit!).ThenInclude(x => x.Workouts.Where(w => w.Day == today)));
 
-            if (user is null)
-                return Unauthorized();
+                if (user is null)
+                    return Unauthorized();
 
-            if (user.CurrentSplit is null)
-                return BadRequest("No current split");
+                if (user.CurrentSplit is null)
+                    return BadRequest("No current split");
 
-            Models.CompletedWorkout newCompletedWorkout = createCompletedWorkoutRequestMapper.Map(request);
-            newCompletedWorkout.UserId = userId;
-            newCompletedWorkout.SplitId = user.CurrentSplit.Id;
-            newCompletedWorkout.WorkoutId = user.CurrentSplit.Workouts.First().WorkoutId;
-            foreach (Models.CompletedSet set in newCompletedWorkout.CompletedSets)
-                set.UserId = userId;
+                Models.CompletedWorkout newCompletedWorkout = createCompletedWorkoutRequestMapper.Map(request);
+                newCompletedWorkout.UserId = userId;
+                newCompletedWorkout.SplitId = user.CurrentSplit.Id;
+                newCompletedWorkout.WorkoutId = user.CurrentSplit.Workouts.First().WorkoutId;
+                foreach (Models.CompletedSet set in newCompletedWorkout.CompletedSets)
+                    set.UserId = userId;
 
-            _ = await completedWorkoutCreateService.Add(newCompletedWorkout);
+                _ = await completedWorkoutCreateService.Add(newCompletedWorkout);
 
-            return Created();
+                return Created();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.GetErrorMessage());
+            }
         }
 
         /*        [Authorize(Roles = Role.Admin)]

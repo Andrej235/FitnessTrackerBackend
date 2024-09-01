@@ -13,16 +13,13 @@ namespace FitnessTracker.Services.UserServices.EmailConfirmationSenderService
         private const string WEB_APP_URL = "http://localhost:5173";
         public async Task SendEmailConfirmation(string email, Guid userId)
         {
-            EmailConfirmation emailConfirmation = new()
+            EmailConfirmation mapped = new()
             {
                 UserId = userId
             };
 
-            object? emailConfirmationId = await createService.Add(emailConfirmation);
-            if (emailConfirmationId == default || emailConfirmationId is not Guid confirmationCode)
-                throw new Exception("Failed to create email confirmation");
-
-            emailSender.SendEmail(new Emails.Message([email], "Email confirmation", $"Please confirm your email by clicking <a href=\"{WEB_APP_URL}/email-verification/{confirmationCode}\">here</a>"));
+            EmailConfirmation newEmailConfirmationToken = await createService.Add(mapped);
+            emailSender.SendEmail(new Emails.Message([email], "Email confirmation", $"Please confirm your email by clicking <a href=\"{WEB_APP_URL}/email-verification/{newEmailConfirmationToken.Id}\">here</a>"));
             return;
         }
     }
