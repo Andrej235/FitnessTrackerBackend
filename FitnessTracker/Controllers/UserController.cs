@@ -27,6 +27,7 @@ namespace FitnessTracker.Controllers
     [ApiController]
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
     public partial class UserController(ICreateService<User> createService,
+                                        ICreateService<UserSettings> settingsCreateService,
                                         ICreateService<CompletedWorkout> completedWorkoutCreateService,
                                         ICreateService<UserFollows> followCreateService,
                                         IReadSingleService<User> readSingleService,
@@ -54,6 +55,7 @@ namespace FitnessTracker.Controllers
                                         IResponseMapper<string, SimpleJWTResponseDTO> jwtResponseMapper) : ControllerBase
     {
         private readonly ICreateService<User> createService = createService;
+        private readonly ICreateService<UserSettings> settingsCreateService = settingsCreateService;
         private readonly ICreateService<CompletedWorkout> completedWorkoutCreateService = completedWorkoutCreateService;
         private readonly ICreateService<UserFollows> followCreateService = followCreateService;
         private readonly IReadSingleService<User> readSingleService = readSingleService;

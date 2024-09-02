@@ -23,6 +23,19 @@ namespace FitnessTracker.Controllers
                 Models.User mapped = registrationMapper.Map(request);
                 Models.User newUser = await createService.Add(mapped);
 
+                _ = await settingsCreateService.Add(new Models.UserSettings
+                {
+                    UserId = newUser.Id,
+                    PublicStreak = true,
+                    PublicCompletedWorkouts = true,
+                    PublicCurrentSplit = true,
+                    PublicFollowing = true,
+                    PublicLikedWorkouts = true,
+                    PublicLikedSplits = true,
+                    PublicFavoriteWorkouts = true,
+                    PublicFavoriteSplits = true,
+                });
+
                 string jwt = await tokenManager.GenerateJWTAndRefreshToken(newUser, Response.Cookies);
                 await emailConfirmationSender.SendEmailConfirmation(newUser.Email, newUser.Id);
 
