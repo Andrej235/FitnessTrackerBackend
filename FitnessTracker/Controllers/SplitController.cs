@@ -6,6 +6,7 @@ using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read;
+using FitnessTracker.Services.ReadSelected;
 using FitnessTracker.Services.Update;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,7 @@ namespace FitnessTracker.Controllers
                                          ICreateService<SplitCommentLike> commentLikeCreateService,
                                          ICreateService<SplitLike> likeCreateService,
                                          ICreateService<FavoriteSplit> favoriteCreateService,
+                                         IReadSingleSelectedService<User> userReadSingleService,
                                          IReadSingleService<Split> readSingleService,
                                          IReadRangeService<Split> readRangeService,
                                          IReadRangeService<SplitComment> commentReadRangeService,
@@ -33,6 +35,7 @@ namespace FitnessTracker.Controllers
                                          IRequestMapper<CreateSplitRequestDTO, Split> createRequestMapper,
                                          IRequestMapper<CreateSplitCommentRequestDTO, SplitComment> createCommentRequestMapper,
                                          IResponseMapper<Split, SimpleSplitResponseDTO> simpleResponseMapper,
+                                         IResponseMapper<Split, DetailedUserSplitResponseDTO> detailedUserSplitResponseMapper,
                                          IResponseMapper<Split, DetailedSplitResponseDTO> detailedResponseMapper,
                                          IResponseMapper<SplitComment, SimpleSplitCommentResponseDTO> simpleCommentResponseMapper) : ControllerBase
     {
@@ -41,6 +44,7 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<SplitCommentLike> commentLikeCreateService = commentLikeCreateService;
         private readonly ICreateService<SplitLike> likeCreateService = likeCreateService;
         private readonly ICreateService<FavoriteSplit> favoriteCreateService = favoriteCreateService;
+        private readonly IReadSingleSelectedService<User> userReadSingleService = userReadSingleService;
         private readonly IReadSingleService<Split> readSingleService = readSingleService;
         private readonly IReadRangeService<Split> readRangeService = readRangeService;
         private readonly IReadRangeService<SplitComment> commentReadRangeService = commentReadRangeService;
@@ -55,6 +59,7 @@ namespace FitnessTracker.Controllers
         private readonly IRequestMapper<CreateSplitRequestDTO, Split> createRequestMapper = createRequestMapper;
         private readonly IRequestMapper<CreateSplitCommentRequestDTO, SplitComment> createCommentRequestMapper = createCommentRequestMapper;
         private readonly IResponseMapper<Split, SimpleSplitResponseDTO> simpleResponseMapper = simpleResponseMapper;
+        private readonly IResponseMapper<Split, DetailedUserSplitResponseDTO> detailedUserSplitResponseMapper = detailedUserSplitResponseMapper;
         private readonly IResponseMapper<Split, DetailedSplitResponseDTO> detailedResponseMapper = detailedResponseMapper;
         private readonly IResponseMapper<SplitComment, SimpleSplitCommentResponseDTO> simpleCommentResponseMapper = simpleCommentResponseMapper;
     }

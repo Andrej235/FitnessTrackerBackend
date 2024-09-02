@@ -24,10 +24,10 @@ namespace FitnessTracker.Controllers
             Models.User? user = await readSingleService.Get(
                 x => x.Id == userId,
                 x => x.Include(x => x.CurrentSplit!)
-                    .ThenInclude(x => x.Creator)
-                    .Include(x => x.CurrentSplit!)
-                    .ThenInclude(x => x.Workouts)
-                    .ThenInclude(x => x.Workout));
+                      .ThenInclude(x => x.Creator)
+                      .Include(x => x.CurrentSplit!)
+                      .ThenInclude(x => x.Workouts)
+                      .ThenInclude(x => x.Workout));
 
             if (user is null)
                 return Unauthorized();
@@ -51,12 +51,12 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            object? user = await readSingleSelectedService.Get(
-                x => new UserProfilePictureResponseDTO
-                {
-                    Image = x.ProfilePic
-                },
-                x => x.Id == userId);
+            UserProfilePictureResponseDTO? user = await readSingleSelectedService.Get(
+                 x => new UserProfilePictureResponseDTO
+                 {
+                     Image = x.ProfilePic
+                 },
+                 x => x.Id == userId);
 
             if (user is null)
                 return Unauthorized();

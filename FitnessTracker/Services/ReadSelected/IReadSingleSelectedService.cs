@@ -3,8 +3,8 @@ using System.Linq.Expressions;
 
 namespace FitnessTracker.Services.ReadSelected
 {
-    public interface IReadSingleSelectedService<T> where T : class
+    public interface IReadSingleSelectedService<TEntity> where TEntity : class
     {
-        Task<object?> Get(Expression<Func<T, object>> select, Expression<Func<T, bool>> criteria, Func<IWrappedQueryable<T>, IWrappedResult<T>>? queryBuilder = null);
+        Task<T?> Get<T>(Expression<Func<TEntity, T>> select, Expression<Func<TEntity, bool>> criteria, Func<IWrappedQueryable<TEntity>, IWrappedResult<TEntity>>? queryBuilder = null);
     }
 }

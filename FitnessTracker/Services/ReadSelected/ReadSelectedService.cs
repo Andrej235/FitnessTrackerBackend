@@ -6,19 +6,19 @@ using System.Linq.Expressions;
 
 namespace FitnessTracker.Services.ReadSelected
 {
-    public class ReadSelectedService<T>(DataContext context) : IReadSingleSelectedService<T>, IReadRangeSelectedService<T> where T : class
+    public class ReadSelectedService<TEntity>(DataContext context) : IReadSingleSelectedService<TEntity>, IReadRangeSelectedService<TEntity> where TEntity : class
     {
         private readonly DataContext context = context;
 
-        public Task<IEnumerable<object>> Get(Expression<Func<T, object>> select, Expression<Func<T, bool>>? criteria, int? offset = 0, int? limit = -1, Func<IWrappedQueryable<T>, IWrappedResult<T>>? queryBuilder = null) => Task.Run(() =>
+        public Task<IEnumerable<object>> Get(Expression<Func<TEntity, object>> select, Expression<Func<TEntity, bool>>? criteria, int? offset = 0, int? limit = -1, Func<IWrappedQueryable<TEntity>, IWrappedResult<TEntity>>? queryBuilder = null) => Task.Run(() =>
         {
             if (queryBuilder is null)
                 return criteria is null
-                    ? context.Set<T>().Select(select).ApplyOffsetAndLimit(offset, limit)
-                    : context.Set<T>().Where(criteria).Select(select).ApplyOffsetAndLimit(offset, limit);
+                    ? context.Set<TEntity>().Select(select).ApplyOffsetAndLimit(offset, limit)
+                    : context.Set<TEntity>().Where(criteria).Select(select).ApplyOffsetAndLimit(offset, limit);
 
-            IWrappedResult<T> query = queryBuilder.Invoke(context.Set<T>().Wrap());
-            IQueryable<T>? source = Unwrap(query);
+            IWrappedResult<TEntity> query = queryBuilder.Invoke(context.Set<TEntity>().Wrap());
+            IQueryable<TEntity>? source = Unwrap(query);
 
             if (source is null)
                 return [];
@@ -28,21 +28,21 @@ namespace FitnessTracker.Services.ReadSelected
                 : source.Where(criteria).Select(select).ApplyOffsetAndLimit(offset, limit);
         });
 
-        public async Task<object?> Get(Expression<Func<T, object>> select, Expression<Func<T, bool>> criteria, Func<IWrappedQueryable<T>, IWrappedResult<T>>? queryBuilder = null)
+        public async Task<T?> Get<T>(Expression<Func<TEntity, T>> select, Expression<Func<TEntity, bool>> criteria, Func<IWrappedQueryable<TEntity>, IWrappedResult<TEntity>>? queryBuilder = null)
         {
             if (queryBuilder is null)
-                return await context.Set<T>().Where(criteria).Select(select).FirstOrDefaultAsync();
+                return await context.Set<TEntity>().Where(criteria).Select(select).FirstOrDefaultAsync();
 
-            IWrappedResult<T> query = queryBuilder.Invoke(context.Set<T>().Wrap());
-            IQueryable<T>? source = Unwrap(query);
+            IWrappedResult<TEntity> query = queryBuilder.Invoke(context.Set<TEntity>().Wrap());
+            IQueryable<TEntity>? source = Unwrap(query);
 
             if (source is null)
-                return null;
+                return default;
 
             return await source.Where(criteria).Select(select).FirstOrDefaultAsync();
         }
 
-        private static IQueryable<T>? Unwrap(IWrappedResult<T> source) => (source as WrappedQueryable<T>)?.Source ?? (source as WrappedOrderedQueryable<T>)?.Source ?? null;
+        private static IQueryable<TEntity>? Unwrap(IWrappedResult<TEntity> source) => (source as WrappedQueryable<TEntity>)?.Source ?? (source as WrappedOrderedQueryable<TEntity>)?.Source ?? null;
     }
 }
 

@@ -378,6 +378,7 @@ namespace FitnessTracker
             #region Split
             _ = builder.Services.AddScoped<ICreateService<Split>, CreateService<Split>>();
             _ = builder.Services.AddScoped<IReadSingleService<Split>, ReadService<Split>>();
+            _ = builder.Services.AddScoped<IReadSingleSelectedService<Split>, ReadSelectedService<Split>>();
             _ = builder.Services.AddScoped<IReadRangeService<Split>, ReadService<Split>>();
             _ = builder.Services.AddScoped<IUpdateService<Split>, UpdateService<Split>>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateSplitRequestDTO, Split>, CreateSplitRequestMapper>();
