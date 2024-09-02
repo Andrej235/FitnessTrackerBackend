@@ -309,6 +309,18 @@ namespace FitnessTracker.Data
                 _ = user.HasIndex(x => x.Username).IsUnique();
             });
 
+            _ = modelBuilder.Entity<UserSettings>(userSettings =>
+            {
+                _ = userSettings.HasKey(x => x.UserId);
+
+                _ = userSettings.HasOne(x => x.User)
+                    .WithOne(x => x.Settings)
+                    .HasForeignKey<UserSettings>(x => x.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                _ = userSettings.HasIndex(x => x.UserId);
+            });
+
             _ = modelBuilder.Entity<UserFollows>(entity =>
             {
                 _ = entity.HasKey(e => new { e.FollowerId, e.FolloweeId });

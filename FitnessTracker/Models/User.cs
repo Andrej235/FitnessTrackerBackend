@@ -12,8 +12,6 @@
         public string? ProfilePic { get; set; }
         public DateTime JoinedAt { get; set; }
 
-        public string Role { get; set; } = null!;
-
         public ICollection<Workout> CreatedWorkouts { get; set; } = [];
         public ICollection<CompletedWorkout> CompletedWorkouts { get; set; } = [];
         public ICollection<CompletedSet> CompletedSets { get; set; } = [];
@@ -25,6 +23,9 @@
         public ICollection<UserFollows> Following { get; set; } = [];
         public ICollection<UserFollows> Followers { get; set; } = [];
 
+        public string Role { get; set; } = null!;
         public bool EmailConfirmed { get; set; }
+
+        public UserSettings Settings { get; set; } = null!;
     }
 }
