@@ -22,6 +22,7 @@ namespace FitnessTracker.Controllers
                                          ICreateService<FavoriteSplit> favoriteCreateService,
                                          IReadSingleSelectedService<User> userReadSingleService,
                                          IReadSingleService<Split> readSingleService,
+                                         IReadSingleSelectedService<Split> readSingleSelectedService,
                                          IReadRangeService<Split> readRangeService,
                                          IReadRangeService<SplitComment> commentReadRangeService,
                                          IReadRangeService<Workout> workoutReadRangeService,
@@ -46,6 +47,7 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<FavoriteSplit> favoriteCreateService = favoriteCreateService;
         private readonly IReadSingleSelectedService<User> userReadSingleService = userReadSingleService;
         private readonly IReadSingleService<Split> readSingleService = readSingleService;
+        private readonly IReadSingleSelectedService<Split> readSingleSelectedService = readSingleSelectedService;
         private readonly IReadRangeService<Split> readRangeService = readRangeService;
         private readonly IReadRangeService<SplitComment> commentReadRangeService = commentReadRangeService;
         private readonly IReadRangeService<Workout> workoutReadRangeService = workoutReadRangeService;

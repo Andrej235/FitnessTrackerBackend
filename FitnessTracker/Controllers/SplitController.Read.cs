@@ -63,28 +63,36 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            Models.Split? split = await readSingleService.Get(
+            var data = await readSingleSelectedService.Get(
+                x => new
+                {
+                    likeCount = x.Likes.Count,
+                    favoriteCount = x.Favorites.Count,
+                    commentCount = x.Comments.Count,
+                    isLiked = x.Likes.Any(x => x.Id == userId),
+                    isFavorite = x.Favorites.Any(x => x.Id == userId),
+                    split = x,
+                },
                 x => x.Id == id,
                 x => x.Include(x => x.Creator)
                       .Include(x => x.Workouts)
                       .ThenInclude(x => x.Workout)
-                      .ThenInclude(x => x.Creator)
-                      .Include(x => x.Likes)
-                      .Include(x => x.Favorites)
-                      .Include(x => x.Comments));
+                      .ThenInclude(x => x.Creator));
 
-            if (split is null)
+            if (data is null)
                 return NotFound();
 
-            if (!split.IsPublic && split.CreatorId != userId)
+            if (!data.split.IsPublic && data.split.CreatorId != userId)
                 return Unauthorized();
 
-            DetailedSplitResponseDTO mapped = detailedResponseMapper.Map(split);
-            mapped.IsLiked = split.Likes.Any(x => x.Id == userId);
-            mapped.IsFavorited = split.Favorites.Any(x => x.Id == userId);
+            DetailedSplitResponseDTO mapped = detailedResponseMapper.Map(data.split);
+            mapped.LikeCount = data.likeCount;
+            mapped.FavoriteCount = data.favoriteCount;
+            mapped.CommentCount = data.commentCount;
+            mapped.IsLiked = data.isLiked;
+            mapped.IsFavorited = data.isFavorite;
             return Ok(mapped);
         }
-
 
         [HttpGet("usedby/{username}/detailed")]
         [ProducesResponseType(typeof(DetailedUserSplitResponseDTO), StatusCodes.Status200OK)]
@@ -117,8 +125,8 @@ namespace FitnessTracker.Controllers
             if (split is null)
                 return NotFound();
 
-            if (!split.IsPublic && split.CreatorId != user.Id)
-                return Unauthorized();
+            if (!split.IsPublic)
+                return Forbid();
 
             DetailedUserSplitResponseDTO mapped = detailedUserSplitResponseMapper.Map(split);
             return Ok(mapped);

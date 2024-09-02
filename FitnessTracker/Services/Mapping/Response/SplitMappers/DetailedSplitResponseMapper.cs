@@ -14,12 +14,9 @@ namespace FitnessTracker.Services.Mapping.Response.SplitMappers
             Id = from.Id,
             Name = from.Name,
             Description = from.Description,
-            LikeCount = from.Likes.Count,
-            FavoriteCount = from.Favorites.Count,
-            CommentCount = from.Comments.Count,
             Creator = userResponseMapper.Map(from.Creator),
             Workouts = from.Workouts.Select(workoutResponseMapper.Map),
-            IsPublic = from.IsPublic
+            IsPublic = from.IsPublic,
         };
     }
 }
