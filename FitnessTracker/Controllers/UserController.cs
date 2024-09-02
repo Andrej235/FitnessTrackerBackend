@@ -12,6 +12,7 @@ using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read;
+using FitnessTracker.Services.ReadSelected;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
 using FitnessTracker.Services.UserServices.EmailConfirmationService;
@@ -29,6 +30,7 @@ namespace FitnessTracker.Controllers
                                         ICreateService<CompletedWorkout> completedWorkoutCreateService,
                                         ICreateService<UserFollows> followCreateService,
                                         IReadSingleService<User> readSingleService,
+                                        IReadSingleSelectedService<User> readSingleSelectedService,
                                         IReadSingleService<UserFollows> followerReadSingleService,
                                         IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
                                         IReadRangeService<UserFollows> followerReadRangeService,
@@ -45,7 +47,6 @@ namespace FitnessTracker.Controllers
                                         IRequestMapper<CreateCompletedWorkoutRequestDTO, CompletedWorkout> createCompletedWorkoutRequestMapper,
                                         IResponseMapper<User, SimpleUserResponseDTO> simpleResponseMapper,
                                         IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper,
-                                        IResponseMapper<User, UserProfilePictureResponseDTO> profilePicResponseMapper,
                                         IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedWorkoutResponseMapper,
                                         IResponseMapper<User, DetailedPublicUserResponseDTO> publicUserDetailedResponseMapper,
                                         IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO> simpleWeekOfCompletedWorkoutsResponseMapper,
@@ -56,6 +57,7 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<CompletedWorkout> completedWorkoutCreateService = completedWorkoutCreateService;
         private readonly ICreateService<UserFollows> followCreateService = followCreateService;
         private readonly IReadSingleService<User> readSingleService = readSingleService;
+        private readonly IReadSingleSelectedService<User> readSingleSelectedService = readSingleSelectedService;
         private readonly IReadSingleService<UserFollows> followerReadSingleService = followerReadSingleService;
         private readonly IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService = completedWorkoutReadRangeService;
         private readonly IReadRangeService<UserFollows> followerReadRangeService = followerReadRangeService;
@@ -72,7 +74,6 @@ namespace FitnessTracker.Controllers
         private readonly IRequestMapper<CreateCompletedWorkoutRequestDTO, CompletedWorkout> createCompletedWorkoutRequestMapper = createCompletedWorkoutRequestMapper;
         private readonly IResponseMapper<User, SimpleUserResponseDTO> simpleResponseMapper = simpleResponseMapper;
         private readonly IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper = detailedResponseMapper;
-        private readonly IResponseMapper<User, UserProfilePictureResponseDTO> profilePicResponseMapper = profilePicResponseMapper;
         private readonly IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedWorkoutResponseMapper = detailedWorkoutResponseMapper;
         private readonly IResponseMapper<User, DetailedPublicUserResponseDTO> publicUserDetailedResponseMapper = publicUserDetailedResponseMapper;
         private readonly IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO> simpleWeekOfCompletedWorkoutsResponseMapper = simpleWeekOfCompletedWorkoutsResponseMapper;

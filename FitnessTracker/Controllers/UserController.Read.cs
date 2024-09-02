@@ -51,12 +51,17 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            Models.User? user = await readSingleService.Get(x => x.Id == userId);
+            object? user = await readSingleSelectedService.Get(
+                x => new UserProfilePictureResponseDTO
+                {
+                    Image = x.ProfilePic
+                },
+                x => x.Id == userId);
 
             if (user is null)
                 return Unauthorized();
 
-            return Ok(profilePicResponseMapper.Map(user));
+            return Ok(user);
         }
 
         [HttpGet("{username}/detailed")]

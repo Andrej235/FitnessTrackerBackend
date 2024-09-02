@@ -211,13 +211,13 @@ namespace FitnessTracker
             #region User
             _ = builder.Services.AddScoped<ICreateService<User>, CreateService<User>>();
             _ = builder.Services.AddScoped<IReadSingleService<User>, ReadService<User>>();
+            _ = builder.Services.AddScoped<IReadSingleSelectedService<User>, ReadSelectedService<User>>();
             _ = builder.Services.AddScoped<IReadRangeService<User>, ReadService<User>>();
             _ = builder.Services.AddScoped<IUpdateService<User>, UpdateService<User>>();
             _ = builder.Services.AddScoped<IRequestMapper<RegisterUserRequestDTO, User>, RegisterUserRequestMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<User, SimpleUserResponseDTO>, SimpleUserResponseMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<User, DetailedUserResponseDTO>, DetailedUserResponseMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<User, DetailedPublicUserResponseDTO>, DetailedPublicUserResponseMapper>();
-            _ = builder.Services.AddScoped<IResponseMapper<User, UserProfilePictureResponseDTO>, UserProfilePictureResponseMapper>();
             _ = builder.Services.AddScoped<IEmailConfirmationSenderService, EmailConfirmationSenderService>();
             _ = builder.Services.AddScoped<IEmailConfirmationService, EmailConfirmationService>();
             _ = builder.Services.AddScoped<IResetPasswordEmailSenderService, ResetPasswordEmailSender>();
