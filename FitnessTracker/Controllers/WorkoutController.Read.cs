@@ -95,30 +95,38 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetDetailed(Guid id)
         {
-            Models.Workout? workout = await readSingleService.Get(x => x.Id == id, x => x.Include(x => x.Creator)
-                                                                                         .Include(x => x.Sets)
-                                                                                         .ThenInclude(x => x.Exercise));
+            Guid? userId = User.Identity is ClaimsIdentity claimsIdentity
+                ? claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is string userIdString
+                    ? Guid.TryParse(userIdString, out Guid parsedUserId)
+                        ? parsedUserId
+                        : null
+                    : null
+                : null;
 
-            if (workout is null)
+            var data = await readSingleSelectedService.Get(
+                x => new
+                {
+                    likeCount = x.Likes.Count,
+                    favoriteCount = x.Favorites.Count,
+                    commentCount = x.Comments.Count,
+                    isLiked = userId != null && x.Likes.Any(x => x.Id == userId),
+                    isFavorite = userId != null && x.Favorites.Any(x => x.Id == userId),
+                    workout = x,
+                },
+                x => x.Id == id,
+                x => x.Include(x => x.Creator)
+                      .Include(x => x.Sets)
+                      .ThenInclude(x => x.Exercise));
+
+            if (data is null)
                 return NotFound();
 
-            DetailedWorkoutResponseDTO mapped = detailedResponseMapper.Map(workout);
+            DetailedWorkoutResponseDTO mapped = detailedResponseMapper.Map(data.workout);
 
-            if (User.Identity is not ClaimsIdentity claimsIdentity
-                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out Guid userId))
-                return workout.IsPublic ? Ok(mapped) : Unauthorized();
+            if (!data.workout.IsPublic && data.workout.CreatorId != userId)
+                return Forbid();
 
-            if (!workout.IsPublic && workout.CreatorId != userId)
-                return Unauthorized();
-
-            mapped.IsLiked = (await likeReadSingleService.Get(x => x.UserId == userId && x.WorkoutId == id)) is not null;
-            mapped.IsFavorited = (await favoriteReadSingleService.Get(x => x.UserId == userId && x.WorkoutId == id)) is not null;
-            mapped.LikeCount = await likeCountService.Count(x => x.WorkoutId == id);
-            mapped.FavoriteCount = await favoriteCountService.Count(x => x.WorkoutId == id);
-            mapped.CommentCount = await commentCountService.Count(x => x.WorkoutId == id);
-
-            IEnumerable<Models.CompletedWorkout> completed = await completedWorkoutReadSingleService.Get(
+            IEnumerable<Models.CompletedWorkout> completed = await completedWorkoutReadRangeService.Get(
                 criteria: x => x.UserId == userId && x.WorkoutId == id,
                 limit: 1,
                 queryBuilder: x => x.Include(x => x.CompletedSets).OrderByDescending(x => x.CompletedAt));

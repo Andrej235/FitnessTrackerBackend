@@ -246,6 +246,7 @@ namespace FitnessTracker
 
             #region Workouts
             _ = builder.Services.AddScoped<IReadSingleService<Workout>, ReadService<Workout>>();
+            _ = builder.Services.AddScoped<IReadSingleSelectedService<Workout>, ReadSelectedService<Workout>>();
             _ = builder.Services.AddScoped<IReadRangeService<Workout>, ReadService<Workout>>();
             _ = builder.Services.AddScoped<ICreateService<Workout>, CreateService<Workout>>();
             _ = builder.Services.AddScoped<IUpdateService<Workout>, UpdateService<Workout>>();
