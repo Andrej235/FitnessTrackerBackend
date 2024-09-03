@@ -41,6 +41,8 @@ namespace FitnessTracker.Controllers
                                         ICountService<CompletedWorkout> completedWorkoutCountService,
                                         IUpdateService<User> updateService,
                                         IDeleteService<UserFollows> followDeleteService,
+                                        IDeleteService<WorkoutPin> workoutPinDeleteService,
+                                        IDeleteService<SplitPin> splitPinDeleteService,
                                         ITokenManager tokenManager,
                                         IEmailConfirmationSenderService emailConfirmationSender,
                                         IEmailConfirmationService emailConfirmationService,
@@ -62,6 +64,8 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<UserSettings> settingsCreateService = settingsCreateService;
         private readonly ICreateService<CompletedWorkout> completedWorkoutCreateService = completedWorkoutCreateService;
         private readonly ICreateService<UserFollows> followCreateService = followCreateService;
+        private readonly ICreateService<SplitPin> splitPinCreateService = splitPinCreateService;
+        private readonly ICreateService<WorkoutPin> workoutPinCreateService = workoutPinCreateService;
         private readonly IReadSingleService<User> readSingleService = readSingleService;
         private readonly IReadSingleSelectedService<User> readSingleSelectedService = readSingleSelectedService;
         private readonly IReadSingleService<UserFollows> followerReadSingleService = followerReadSingleService;
@@ -71,6 +75,8 @@ namespace FitnessTracker.Controllers
         private readonly ICountService<CompletedWorkout> completedWorkoutCountService = completedWorkoutCountService;
         private readonly IUpdateService<User> updateService = updateService;
         private readonly IDeleteService<UserFollows> followDeleteService = followDeleteService;
+        private readonly IDeleteService<WorkoutPin> workoutPinDeleteService = workoutPinDeleteService;
+        private readonly IDeleteService<SplitPin> splitPinDeleteService = splitPinDeleteService;
         private readonly ITokenManager tokenManager = tokenManager;
         private readonly IEmailConfirmationSenderService emailConfirmationSender = emailConfirmationSender;
         private readonly IEmailConfirmationService emailConfirmationService = emailConfirmationService;

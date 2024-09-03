@@ -434,7 +434,9 @@ namespace FitnessTracker
 
             #region Pins
             _ = builder.Services.AddScoped<ICreateService<WorkoutPin>, CreateService<WorkoutPin>>();
+            _ = builder.Services.AddScoped<IDeleteService<WorkoutPin>, DeleteService<WorkoutPin>>();
             _ = builder.Services.AddScoped<ICreateService<SplitWorkout>, CreateService<SplitWorkout>>();
+            _ = builder.Services.AddScoped<IDeleteService<SplitWorkout>, DeleteService<SplitWorkout>>();
             _ = builder.Services.AddScoped<IResponseMapper<Workout, SimplePinResponseDTO>, SimpleWorkoutPinResponseMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<Split, SimplePinResponseDTO>, SimpleSplitPinResponseMapper>();
             #endregion

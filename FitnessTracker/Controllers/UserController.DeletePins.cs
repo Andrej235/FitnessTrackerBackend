@@ -8,11 +8,11 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [Authorize]
-        [HttpPost("pin/workout/{id:guid}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [HttpDelete("pins/workout/{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> CreateWorkoutPin(Guid id)
+        public async Task<IActionResult> DeleteWorkoutPin(Guid id)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
@@ -21,26 +21,22 @@ namespace FitnessTracker.Controllers
 
             try
             {
-                _ = await workoutPinCreateService.Add(new()
-                {
-                    UserId = userId,
-                    WorkoutId = id
-                });
+                await workoutPinDeleteService.Delete(x => x.UserId == userId && x.WorkoutId == id);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.GetErrorMessage());
             }
 
-            return Created();
+            return NoContent();
         }
 
         [Authorize]
-        [HttpPost("pin/split/{id:guid}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [HttpDelete("pins/split/{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> CreateSplitPin(Guid id)
+        public async Task<IActionResult> DeleteSplitPin(Guid id)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
@@ -49,18 +45,14 @@ namespace FitnessTracker.Controllers
 
             try
             {
-                _ = await splitPinCreateService.Add(new()
-                {
-                    UserId = userId,
-                    SplitId = id
-                });
+                await splitPinDeleteService.Delete(x => x.UserId == userId && x.SplitId == id);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.GetErrorMessage());
             }
 
-            return Created();
+            return NoContent();
         }
     }
 }
