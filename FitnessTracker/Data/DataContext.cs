@@ -281,24 +281,6 @@ namespace FitnessTracker.Data
                 _ = splitComment.HasIndex(sc => sc.SplitId);
             });
 
-            _ = modelBuilder.Entity<SplitPin>(splitPin =>
-            {
-                _ = splitPin.HasKey(s => new { s.SplitId, s.UserId });
-
-                _ = splitPin.HasOne(s => s.Split)
-                    .WithMany()
-                    .HasForeignKey(s => s.SplitId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                _ = splitPin.HasOne<User>()
-                    .WithMany(u => u.SplitPins)
-                    .HasForeignKey(s => s.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                _ = splitPin.HasIndex(s => new { s.SplitId, s.UserId });
-                _ = splitPin.HasIndex(s => s.UserId);
-            });
-
             _ = modelBuilder.Entity<SplitWorkout>(entity =>
             {
                 _ = entity.HasKey(x => new { x.SplitId, x.Day });
@@ -328,6 +310,28 @@ namespace FitnessTracker.Data
 
                 _ = user.HasIndex(x => x.Email).IsUnique();
                 _ = user.HasIndex(x => x.Username).IsUnique();
+
+                _ = user.HasMany(u => u.SplitPins)
+                    .WithMany()
+                    .UsingEntity<SplitPin>(j =>
+                    {
+                        _ = j.HasKey(x => new { x.UserId, x.SplitId });
+                        _ = j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
+                        _ = j.HasOne<Split>().WithMany().HasForeignKey(x => x.SplitId).OnDelete(DeleteBehavior.NoAction);
+                        _ = j.HasIndex(x => new { x.UserId, x.SplitId }).IsUnique();
+                        _ = j.HasIndex(x => x.SplitId);
+                    });
+
+                _ = user.HasMany(u => u.WorkoutPins)
+                    .WithMany()
+                    .UsingEntity<WorkoutPin>(j =>
+                    {
+                        _ = j.HasKey(x => new { x.UserId, x.WorkoutId });
+                        _ = j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
+                        _ = j.HasOne<Workout>().WithMany().HasForeignKey(x => x.WorkoutId).OnDelete(DeleteBehavior.NoAction);
+                        _ = j.HasIndex(x => new { x.UserId, x.WorkoutId }).IsUnique();
+                        _ = j.HasIndex(x => x.WorkoutId);
+                    });
             });
 
             _ = modelBuilder.Entity<UserSettings>(userSettings =>
@@ -434,24 +438,6 @@ namespace FitnessTracker.Data
                     });
 
                 _ = workoutComment.HasIndex(wc => wc.WorkoutId);
-            });
-
-            _ = modelBuilder.Entity<WorkoutPin>(workoutPin =>
-            {
-                _ = workoutPin.HasKey(w => new { w.WorkoutId, w.UserId });
-
-                _ = workoutPin.HasOne(w => w.Workout)
-                    .WithMany()
-                    .HasForeignKey(w => w.WorkoutId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                _ = workoutPin.HasOne<User>()
-                    .WithMany(u => u.WorkoutPins)
-                    .HasForeignKey(w => w.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                _ = workoutPin.HasIndex(w => new { w.WorkoutId, w.UserId });
-                _ = workoutPin.HasIndex(w => w.UserId);
             });
         }
     }
