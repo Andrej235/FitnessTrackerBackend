@@ -30,6 +30,8 @@ namespace FitnessTracker.Controllers
                                         ICreateService<UserSettings> settingsCreateService,
                                         ICreateService<CompletedWorkout> completedWorkoutCreateService,
                                         ICreateService<UserFollows> followCreateService,
+                                        ICreateService<SplitPin> splitPinCreateService,
+                                        ICreateService<WorkoutPin> workoutPinCreateService,
                                         IReadSingleService<User> readSingleService,
                                         IReadSingleSelectedService<User> readSingleSelectedService,
                                         IReadSingleService<UserFollows> followerReadSingleService,

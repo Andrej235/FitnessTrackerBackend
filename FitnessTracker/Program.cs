@@ -432,6 +432,13 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<IRequestMapper<CreateCompletedWorkoutRequestDTO, CompletedWorkout>, CreateCompletedWorkoutRequestMapper>();
             #endregion
 
+            #region Pins
+            _ = builder.Services.AddScoped<ICreateService<WorkoutPin>, CreateService<WorkoutPin>>();
+            _ = builder.Services.AddScoped<ICreateService<SplitWorkout>, CreateService<SplitWorkout>>();
+            _ = builder.Services.AddScoped<IResponseMapper<Workout, SimplePinResponseDTO>, SimpleWorkoutPinResponseMapper>();
+            _ = builder.Services.AddScoped<IResponseMapper<Split, SimplePinResponseDTO>, SimpleSplitPinResponseMapper>();
+            #endregion
+
             WebApplication app = builder.Build();
 
             #region Middleware
