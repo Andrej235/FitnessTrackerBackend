@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FitnessTracker.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240903195412_Add pins")]
+    [Migration("20240904181407_Add pins")]
     partial class Addpins
     {
         /// <inheritdoc />

@@ -208,7 +208,7 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<IDeleteService<FavoriteExercise>, DeleteService<FavoriteExercise>>();
             #endregion
 
-            #region User
+            #region User 
             _ = builder.Services.AddScoped<ICreateService<User>, CreateService<User>>();
             _ = builder.Services.AddScoped<IReadSingleService<User>, ReadService<User>>();
             _ = builder.Services.AddScoped<IReadSingleSelectedService<User>, ReadSelectedService<User>>();
@@ -222,6 +222,11 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<IEmailConfirmationService, EmailConfirmationService>();
             _ = builder.Services.AddScoped<IResetPasswordEmailSenderService, ResetPasswordEmailSender>();
             _ = builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
+            #endregion
+
+            #region User settings
+            _ = builder.Services.AddScoped<IReadSingleService<UserSettings>, ReadService<UserSettings>>();
+            _ = builder.Services.AddScoped<ICreateService<UserSettings>, CreateService<UserSettings>>();
             #endregion
 
             #region User follows
@@ -434,9 +439,11 @@ namespace FitnessTracker
 
             #region Pins
             _ = builder.Services.AddScoped<ICreateService<WorkoutPin>, CreateService<WorkoutPin>>();
+            _ = builder.Services.AddScoped<IReadSingleService<WorkoutPin>, ReadService<WorkoutPin>>();
             _ = builder.Services.AddScoped<IDeleteService<WorkoutPin>, DeleteService<WorkoutPin>>();
-            _ = builder.Services.AddScoped<ICreateService<SplitWorkout>, CreateService<SplitWorkout>>();
-            _ = builder.Services.AddScoped<IDeleteService<SplitWorkout>, DeleteService<SplitWorkout>>();
+            _ = builder.Services.AddScoped<ICreateService<SplitPin>, CreateService<SplitPin>>();
+            _ = builder.Services.AddScoped<IReadSingleService<SplitPin>, ReadService<SplitPin>>();
+            _ = builder.Services.AddScoped<IDeleteService<SplitPin>, DeleteService<SplitPin>>();
             _ = builder.Services.AddScoped<IResponseMapper<Workout, SimplePinResponseDTO>, SimpleWorkoutPinResponseMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<Split, SimplePinResponseDTO>, SimpleSplitPinResponseMapper>();
             #endregion
