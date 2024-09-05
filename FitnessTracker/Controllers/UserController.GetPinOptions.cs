@@ -23,12 +23,14 @@ namespace FitnessTracker.Controllers
             IEnumerable<SimplePinOptionResponseDTO>? pins = await readSingleSelectedService.Get(x =>
                 x.CreatedWorkouts.Where(x => x.IsPublic).Select(x => new SimplePinOptionResponseDTO
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     LikeCount = x.Likes.Count,
                     Type = SimplePinResponseDTO.PinType.Workout,
                 })
                 .Union(x.CreatedSplits.Where(x => x.IsPublic).Select(x => new SimplePinOptionResponseDTO
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     LikeCount = x.Likes.Count,
                     Type = SimplePinResponseDTO.PinType.Split,
