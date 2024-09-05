@@ -30,8 +30,8 @@ namespace FitnessTracker.Controllers
                                         ICreateService<UserSettings> settingsCreateService,
                                         ICreateService<CompletedWorkout> completedWorkoutCreateService,
                                         ICreateService<UserFollows> followCreateService,
-                                        ICreateService<SplitPin> splitPinCreateService,
-                                        ICreateService<WorkoutPin> workoutPinCreateService,
+                                        ICreateRangeService<SplitPin> splitPinCreateRangeService,
+                                        ICreateRangeService<WorkoutPin> workoutPinCreateRangeService,
                                         IReadSingleService<User> readSingleService,
                                         IReadSingleSelectedService<User> readSingleSelectedService,
                                         IReadSingleService<UserFollows> followerReadSingleService,
@@ -64,8 +64,8 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<UserSettings> settingsCreateService = settingsCreateService;
         private readonly ICreateService<CompletedWorkout> completedWorkoutCreateService = completedWorkoutCreateService;
         private readonly ICreateService<UserFollows> followCreateService = followCreateService;
-        private readonly ICreateService<SplitPin> splitPinCreateService = splitPinCreateService;
-        private readonly ICreateService<WorkoutPin> workoutPinCreateService = workoutPinCreateService;
+        private readonly ICreateRangeService<SplitPin> splitPinCreateRangeService = splitPinCreateRangeService;
+        private readonly ICreateRangeService<WorkoutPin> workoutPinCreateRangeService = workoutPinCreateRangeService;
         private readonly IReadSingleService<User> readSingleService = readSingleService;
         private readonly IReadSingleSelectedService<User> readSingleSelectedService = readSingleSelectedService;
         private readonly IReadSingleService<UserFollows> followerReadSingleService = followerReadSingleService;

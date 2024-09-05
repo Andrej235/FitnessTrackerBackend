@@ -1,4 +1,6 @@
-﻿using FitnessTracker.Utilities;
+﻿using FitnessTracker.DTOs.Requests.User;
+using FitnessTracker.Models;
+using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -8,11 +10,11 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [Authorize]
-        [HttpPost("pins/workout/{id:guid}")]
+        [HttpPost("pins/workout")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> CreateWorkoutPin(Guid id)
+        public async Task<IActionResult> CreateWorkoutPin([FromBody] CreatePinsRequestDTO request)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
@@ -21,11 +23,15 @@ namespace FitnessTracker.Controllers
 
             try
             {
-                _ = await workoutPinCreateService.Add(new()
+                int currentPinCount = await readSingleSelectedService.Get(x => x.WorkoutPins.Count + x.SplitPins.Count, x => x.Id == userId);
+                if (currentPinCount + request.NewPinIds.Count() > 6)
+                    return BadRequest("Cannot have more than 6 pins");
+
+                await workoutPinCreateRangeService.Add(request.NewPinIds.Select(x => new WorkoutPin()
                 {
                     UserId = userId,
-                    WorkoutId = id
-                });
+                    WorkoutId = x
+                }));
             }
             catch (Exception ex)
             {
@@ -36,11 +42,11 @@ namespace FitnessTracker.Controllers
         }
 
         [Authorize]
-        [HttpPost("pins/split/{id:guid}")]
+        [HttpPost("pins/split")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> CreateSplitPin(Guid id)
+        public async Task<IActionResult> CreateSplitPin([FromBody] CreatePinsRequestDTO request)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
@@ -49,11 +55,15 @@ namespace FitnessTracker.Controllers
 
             try
             {
-                _ = await splitPinCreateService.Add(new()
+                int currentPinCount = await readSingleSelectedService.Get(x => x.WorkoutPins.Count + x.SplitPins.Count, x => x.Id == userId);
+                if (currentPinCount + request.NewPinIds.Count() > 6)
+                    return BadRequest("Cannot have more than 6 pins");
+
+                await splitPinCreateRangeService.Add(request.NewPinIds.Select(x => new SplitPin()
                 {
                     UserId = userId,
-                    SplitId = id
-                });
+                    SplitId = x
+                }));
             }
             catch (Exception ex)
             {
