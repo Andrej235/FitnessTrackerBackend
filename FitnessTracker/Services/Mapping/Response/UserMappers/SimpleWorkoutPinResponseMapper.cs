@@ -3,14 +3,15 @@ using FitnessTracker.Models;
 
 namespace FitnessTracker.Services.Mapping.Response.UserMappers
 {
-    public class SimpleWorkoutPinResponseMapper : IResponseMapper<Workout, SimplePinResponseDTO>
+    public class SimpleWorkoutPinResponseMapper : IResponseMapper<WorkoutPin, SimplePinResponseDTO>
     {
-        public SimplePinResponseDTO Map(Workout from) => new()
+        public SimplePinResponseDTO Map(WorkoutPin from) => new()
         {
-            Id = from.Id,
-            Name = from.Name,
-            Description = from.Description ?? "",
+            Id = from.Workout.Id,
+            Name = from.Workout.Name,
+            Description = from.Workout.Description ?? "",
             Type = SimplePinResponseDTO.PinType.Workout,
+            Order = from.Order
         };
     }
 }

@@ -27,10 +27,11 @@ namespace FitnessTracker.Controllers
                 if (currentPinCount + request.NewPinIds.Count() > 6)
                     return BadRequest("Cannot have more than 6 pins");
 
-                await workoutPinCreateRangeService.Add(request.NewPinIds.Select(x => new WorkoutPin()
+                await workoutPinCreateRangeService.Add(request.NewPinIds.Select((x, i) => new WorkoutPin()
                 {
                     UserId = userId,
-                    WorkoutId = x
+                    WorkoutId = x,
+                    Order = currentPinCount + i + 1
                 }));
             }
             catch (Exception ex)
@@ -59,10 +60,11 @@ namespace FitnessTracker.Controllers
                 if (currentPinCount + request.NewPinIds.Count() > 6)
                     return BadRequest("Cannot have more than 6 pins");
 
-                await splitPinCreateRangeService.Add(request.NewPinIds.Select(x => new SplitPin()
+                await splitPinCreateRangeService.Add(request.NewPinIds.Select((x, i) => new SplitPin()
                 {
                     UserId = userId,
-                    SplitId = x
+                    SplitId = x,
+                    Order = currentPinCount + i + 1
                 }));
             }
             catch (Exception ex)

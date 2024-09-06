@@ -446,8 +446,8 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<IReadSingleService<SplitPin>, ReadService<SplitPin>>();
             _ = builder.Services.AddScoped<ICountService<SplitPin>, CountService<SplitPin>>();
             _ = builder.Services.AddScoped<IDeleteService<SplitPin>, DeleteService<SplitPin>>();
-            _ = builder.Services.AddScoped<IResponseMapper<Workout, SimplePinResponseDTO>, SimpleWorkoutPinResponseMapper>();
-            _ = builder.Services.AddScoped<IResponseMapper<Split, SimplePinResponseDTO>, SimpleSplitPinResponseMapper>();
+            _ = builder.Services.AddScoped<IResponseMapper<WorkoutPin, SimplePinResponseDTO>, SimpleWorkoutPinResponseMapper>();
+            _ = builder.Services.AddScoped<IResponseMapper<SplitPin, SimplePinResponseDTO>, SimpleSplitPinResponseMapper>();
             #endregion
 
             WebApplication app = builder.Build();

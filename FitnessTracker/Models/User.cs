@@ -17,8 +17,8 @@
         public ICollection<CompletedSet> CompletedSets { get; set; } = [];
         public ICollection<Split> CreatedSplits { get; set; } = [];
 
-        public ICollection<Split> SplitPins { get; set; } = [];
-        public ICollection<Workout> WorkoutPins { get; set; } = [];
+        public ICollection<SplitPin> SplitPins { get; set; } = [];
+        public ICollection<WorkoutPin> WorkoutPins { get; set; } = [];
 
         public Guid? SplitId { get; set; }
         public Split? CurrentSplit { get; set; }

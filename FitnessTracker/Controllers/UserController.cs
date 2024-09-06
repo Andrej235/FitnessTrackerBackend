@@ -51,8 +51,8 @@ namespace FitnessTracker.Controllers
                                         IRequestMapper<RegisterUserRequestDTO, User> registrationMapper,
                                         IRequestMapper<CreateCompletedWorkoutRequestDTO, CompletedWorkout> createCompletedWorkoutRequestMapper,
                                         IResponseMapper<User, SimpleUserResponseDTO> simpleResponseMapper,
-                                        IResponseMapper<Workout, SimplePinResponseDTO> workoutPinResponseMapper,
-                                        IResponseMapper<Split, SimplePinResponseDTO> splitPinResponseMapper,
+                                        IResponseMapper<WorkoutPin, SimplePinResponseDTO> workoutPinResponseMapper,
+                                        IResponseMapper<SplitPin, SimplePinResponseDTO> splitPinResponseMapper,
                                         IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper,
                                         IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedWorkoutResponseMapper,
                                         IResponseMapper<User, DetailedPublicUserResponseDTO> publicUserDetailedResponseMapper,
@@ -85,8 +85,8 @@ namespace FitnessTracker.Controllers
         private readonly IRequestMapper<RegisterUserRequestDTO, User> registrationMapper = registrationMapper;
         private readonly IRequestMapper<CreateCompletedWorkoutRequestDTO, CompletedWorkout> createCompletedWorkoutRequestMapper = createCompletedWorkoutRequestMapper;
         private readonly IResponseMapper<User, SimpleUserResponseDTO> simpleResponseMapper = simpleResponseMapper;
-        private readonly IResponseMapper<Workout, SimplePinResponseDTO> workoutPinResponseMapper = workoutPinResponseMapper;
-        private readonly IResponseMapper<Split, SimplePinResponseDTO> splitPinResponseMapper = splitPinResponseMapper;
+        private readonly IResponseMapper<WorkoutPin, SimplePinResponseDTO> workoutPinResponseMapper = workoutPinResponseMapper;
+        private readonly IResponseMapper<SplitPin, SimplePinResponseDTO> splitPinResponseMapper = splitPinResponseMapper;
         private readonly IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper = detailedResponseMapper;
         private readonly IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedWorkoutResponseMapper = detailedWorkoutResponseMapper;
         private readonly IResponseMapper<User, DetailedPublicUserResponseDTO> publicUserDetailedResponseMapper = publicUserDetailedResponseMapper;
