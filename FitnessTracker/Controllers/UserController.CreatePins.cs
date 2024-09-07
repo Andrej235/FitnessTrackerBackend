@@ -1,5 +1,5 @@
 ﻿using FitnessTracker.DTOs.Enums;
-using FitnessTracker.DTOs.Requests.User;
+using FitnessTracker.DTOs.Requests.Pins;
 using FitnessTracker.Models;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;

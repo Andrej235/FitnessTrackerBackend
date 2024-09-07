@@ -1,4 +1,4 @@
-﻿namespace FitnessTracker.DTOs.Requests.User
+﻿namespace FitnessTracker.DTOs.Requests.Pins
 {
     public class CreatePinsRequestDTO
     {

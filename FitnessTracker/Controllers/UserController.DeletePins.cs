@@ -1,4 +1,4 @@
-﻿using FitnessTracker.DTOs.Requests.User;
+﻿using FitnessTracker.DTOs.Requests.Pins;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,7 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [Authorize]
-        [HttpDelete("pins/workout")]
+        [HttpDelete("pins")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -22,33 +22,14 @@ namespace FitnessTracker.Controllers
 
             try
             {
-                foreach (Guid id in request.DeletedPinIds)
-                    await workoutPinDeleteService.Delete(x => x.UserId == userId && x.WorkoutId == id);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.GetErrorMessage());
-            }
+                IEnumerable<DeleteSinglePinRequestDTO> deletedWorkouts = request.DeletedPins.Where(x => x.Type == DTOs.Enums.PinType.Workout);
+                IEnumerable<DeleteSinglePinRequestDTO> deletedSplits = request.DeletedPins.Where(x => x.Type == DTOs.Enums.PinType.Split);
 
-            return NoContent();
-        }
+                foreach (DeleteSinglePinRequestDTO? workout in deletedWorkouts)
+                    await workoutPinDeleteService.Delete(x => x.UserId == userId && x.WorkoutId == workout.Id);
 
-        [Authorize]
-        [HttpDelete("pins/split")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> DeleteSplitPin([FromBody] DeletePinsRequestDTO request)
-        {
-            if (User.Identity is not ClaimsIdentity claimsIdentity
-                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out Guid userId))
-                return Unauthorized();
-
-            try
-            {
-                foreach (Guid id in request.DeletedPinIds)
-                    await splitPinDeleteService.Delete(x => x.UserId == userId && x.SplitId == id);
+                foreach (DeleteSinglePinRequestDTO? split in deletedSplits)
+                    await splitPinDeleteService.Delete(x => x.UserId == userId && x.SplitId == split.Id);
             }
             catch (Exception ex)
             {
