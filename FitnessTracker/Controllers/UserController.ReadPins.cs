@@ -1,4 +1,4 @@
-﻿using FitnessTracker.DTOs.Responses.User;
+﻿using FitnessTracker.DTOs.Responses.Pins;
 using FitnessTracker.Services.Read;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +10,7 @@ namespace FitnessTracker.Controllers
     {
         [Authorize]
         [HttpGet("me/pins")]
-        [ProducesResponseType(typeof(IEnumerable<SimplePinResponseDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<PinResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetPins()
@@ -22,8 +22,16 @@ namespace FitnessTracker.Controllers
 
             var pins = await readSingleSelectedService.Get(x => new
             {
-                Workout = x.WorkoutPins,
-                Split = x.SplitPins,
+                WorkoutPins = x.WorkoutPins.Select(x => new
+                {
+                    Pin = x,
+                    LikeCount = x.Workout.Likes.Count,
+                }),
+                SplitPins = x.SplitPins.Select(x => new
+                {
+                    Pin = x,
+                    LikeCount = x.Split.Likes.Count,
+                }),
             },
             x => x.Id == userId,
             x => x.Include(x => x.WorkoutPins)
@@ -34,14 +42,25 @@ namespace FitnessTracker.Controllers
             if (pins is null)
                 return NotFound();
 
-            IEnumerable<SimplePinResponseDTO> mappedWorkoutPins = pins.Workout.Select(workoutPinResponseMapper.Map);
-            IEnumerable<SimplePinResponseDTO> mappedSplitPins = pins.Split.Select(splitPinResponseMapper.Map);
+            IEnumerable<PinResponseDTO> mappedWorkoutPins = pins.WorkoutPins.Select(x =>
+            {
+                PinResponseDTO mapped = workoutPinResponseMapper.Map(x.Pin);
+                mapped.LikeCount = x.LikeCount;
+                return mapped;
+            });
+
+            IEnumerable<PinResponseDTO> mappedSplitPins = pins.SplitPins.Select(x =>
+            {
+                PinResponseDTO mapped = splitPinResponseMapper.Map(x.Pin);
+                mapped.LikeCount = x.LikeCount;
+                return mapped;
+            });
 
             return Ok(mappedWorkoutPins.Union(mappedSplitPins).OrderBy(x => x.Order));
         }
 
         [HttpGet("{username}/pins")]
-        [ProducesResponseType(typeof(IEnumerable<SimplePinResponseDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<PinResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetPins(string username)

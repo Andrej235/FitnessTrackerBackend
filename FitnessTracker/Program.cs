@@ -16,6 +16,7 @@ using FitnessTracker.DTOs.Responses.Equipment;
 using FitnessTracker.DTOs.Responses.Exercises;
 using FitnessTracker.DTOs.Responses.Muscle;
 using FitnessTracker.DTOs.Responses.MuscleGroup;
+using FitnessTracker.DTOs.Responses.Pins;
 using FitnessTracker.DTOs.Responses.Set;
 using FitnessTracker.DTOs.Responses.Split;
 using FitnessTracker.DTOs.Responses.User;
@@ -451,8 +452,8 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<IExecuteUpdateService<SplitPin>, ExecuteUpdateService<SplitPin>>();
             _ = builder.Services.AddScoped<IUpdateRangeService<SplitPin>, UpdateService<SplitPin>>();
             _ = builder.Services.AddScoped<IDeleteService<SplitPin>, DeleteService<SplitPin>>();
-            _ = builder.Services.AddScoped<IResponseMapper<WorkoutPin, SimplePinResponseDTO>, SimpleWorkoutPinResponseMapper>();
-            _ = builder.Services.AddScoped<IResponseMapper<SplitPin, SimplePinResponseDTO>, SimpleSplitPinResponseMapper>();
+            _ = builder.Services.AddScoped<IResponseMapper<WorkoutPin, PinResponseDTO>, SimpleWorkoutPinResponseMapper>();
+            _ = builder.Services.AddScoped<IResponseMapper<SplitPin, PinResponseDTO>, SimpleSplitPinResponseMapper>();
             #endregion
 
             WebApplication app = builder.Build();

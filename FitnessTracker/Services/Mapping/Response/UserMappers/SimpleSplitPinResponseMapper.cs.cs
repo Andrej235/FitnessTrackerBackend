@@ -1,12 +1,12 @@
 ﻿using FitnessTracker.DTOs.Enums;
-using FitnessTracker.DTOs.Responses.User;
+using FitnessTracker.DTOs.Responses.Pins;
 using FitnessTracker.Models;
 
 namespace FitnessTracker.Services.Mapping.Response.UserMappers
 {
-    public class SimpleSplitPinResponseMapper : IResponseMapper<SplitPin, SimplePinResponseDTO>
+    public class SimpleSplitPinResponseMapper : IResponseMapper<SplitPin, PinResponseDTO>
     {
-        public SimplePinResponseDTO Map(SplitPin from) => new()
+        public PinResponseDTO Map(SplitPin from) => new()
         {
             Id = from.Split.Id,
             Name = from.Split.Name,
