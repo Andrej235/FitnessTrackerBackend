@@ -61,6 +61,6 @@ namespace FitnessTracker.Services.Read
         public static IWrappedOrderedQueryable<TSource> OrderByDescending<TSource, TKey>(this IWrappedQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
             => new WrappedOrderedQueryable<TSource>((source as WrappedQueryable<TSource>)?.Source?.OrderByDescending(keySelector) ?? throw new InvalidOperationException());
 
-        //public static IQueryable<TEntity> AsNoTracking<TEntity>(this IWrappedQueryable<TEntity> source) where TEntity : class => (source as WrappedQueryable<TEntity>)?.Source?.AsNoTracking() ?? throw new InvalidOperationException();
+        public static IWrappedQueryable<TEntity> AsNoTracking<TEntity>(this IWrappedQueryable<TEntity> source) where TEntity : class => new WrappedQueryable<TEntity>((source as WrappedQueryable<TEntity>)?.Source?.AsNoTracking() ?? throw new InvalidOperationException());
     }
 }

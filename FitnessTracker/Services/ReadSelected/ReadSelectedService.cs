@@ -24,8 +24,8 @@ namespace FitnessTracker.Services.ReadSelected
                 return [];
 
             return criteria is null
-                ? source.Select(select).AsNoTracking().ApplyOffsetAndLimit(offset, limit)
-                : source.Where(criteria).Select(select).AsNoTracking().ApplyOffsetAndLimit(offset, limit);
+                ? source.Select(select).ApplyOffsetAndLimit(offset, limit)
+                : source.Where(criteria).Select(select).ApplyOffsetAndLimit(offset, limit);
         });
 
         public async Task<T?> Get<T>(Expression<Func<TEntity, T>> select, Expression<Func<TEntity, bool>> criteria, Func<IWrappedQueryable<TEntity>, IWrappedResult<TEntity>>? queryBuilder = null)
@@ -39,7 +39,7 @@ namespace FitnessTracker.Services.ReadSelected
             if (source is null)
                 return default;
 
-            return await source.Where(criteria).AsNoTracking().Select(select).FirstOrDefaultAsync();
+            return await source.Where(criteria).Select(select).FirstOrDefaultAsync();
         }
 
         private static IQueryable<TEntity>? Unwrap(IWrappedResult<TEntity> source) => (source as WrappedQueryable<TEntity>)?.Source ?? (source as WrappedOrderedQueryable<TEntity>)?.Source ?? null;

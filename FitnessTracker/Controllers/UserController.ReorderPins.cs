@@ -28,7 +28,7 @@ namespace FitnessTracker.Controllers
                 x.SplitPins
             },
             x => x.Id == userId,
-            x => x.Include(x => x.WorkoutPins).Include(x => x.SplitPins));
+            x => x.Include(x => x.WorkoutPins).Include(x => x.SplitPins).AsNoTracking());
 
             if (pins is null)
                 return Unauthorized();

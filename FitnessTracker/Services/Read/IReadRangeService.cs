@@ -20,7 +20,7 @@ namespace FitnessTracker.Services.Read
         /// </param>
         /// <param name="queryBuilder">
         /// Used to further modify the query
-        /// It allows 4 methods: Include, ThenInclude, OrderBy and OrderByDescending
+        /// It allows 5 methods: Include, ThenInclude, OrderBy, OrderByDescending and AsNoTracking
         /// </param>
         /// <returns>Return a list of entities that fit the provided criteria, if no such entity exists an empty list will be returned</returns>
         Task<IEnumerable<T>> Get(Expression<Func<T, bool>>? criteria, int? offset = 0, int? limit = -1, Func<IWrappedQueryable<T>, IWrappedResult<T>>? queryBuilder = null);
