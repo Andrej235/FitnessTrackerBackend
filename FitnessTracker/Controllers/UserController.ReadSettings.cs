@@ -1,4 +1,5 @@
-﻿using FitnessTracker.Services.Read;
+﻿using FitnessTracker.DTOs.Responses.User;
+using FitnessTracker.Services.Read;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -9,7 +10,7 @@ namespace FitnessTracker.Controllers
     {
         [Authorize]
         [HttpGet("me/settings")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(UserSettingsResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetSettings()
         {
