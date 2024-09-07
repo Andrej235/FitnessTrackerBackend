@@ -37,6 +37,7 @@ namespace FitnessTracker.Controllers
                                         IReadSingleService<User> readSingleService,
                                         IReadSingleSelectedService<User> readSingleSelectedService,
                                         IReadSingleService<UserFollows> followerReadSingleService,
+                                        IReadSingleService<UserSettings> settingsReadSingleService,
                                         IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
                                         IReadRangeService<UserFollows> followerReadRangeService,
                                         ICountService<UserFollows> followerCountService,
@@ -62,6 +63,7 @@ namespace FitnessTracker.Controllers
                                         IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper,
                                         IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedWorkoutResponseMapper,
                                         IResponseMapper<User, DetailedPublicUserResponseDTO> publicUserDetailedResponseMapper,
+                                        IResponseMapper<UserSettings, UserSettingsResponseDTO> settingsResponseMapper,
                                         IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO> simpleWeekOfCompletedWorkoutsResponseMapper,
                                         IResponseMapper<IEnumerable<CompletedWorkout>, DetailedWeekOfCompletedWorkoutsResponseDTO> detailedWeekOfCompletedWorkoutsResponseMapper,
                                         IResponseMapper<string, SimpleJWTResponseDTO> jwtResponseMapper) : ControllerBase
@@ -75,6 +77,7 @@ namespace FitnessTracker.Controllers
         private readonly IReadSingleService<User> readSingleService = readSingleService;
         private readonly IReadSingleSelectedService<User> readSingleSelectedService = readSingleSelectedService;
         private readonly IReadSingleService<UserFollows> followerReadSingleService = followerReadSingleService;
+        private readonly IReadSingleService<UserSettings> settingsReadSingleService = settingsReadSingleService;
         private readonly IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService = completedWorkoutReadRangeService;
         private readonly IReadRangeService<UserFollows> followerReadRangeService = followerReadRangeService;
         private readonly ICountService<UserFollows> followerCountService = followerCountService;
@@ -100,6 +103,7 @@ namespace FitnessTracker.Controllers
         private readonly IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper = detailedResponseMapper;
         private readonly IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedWorkoutResponseMapper = detailedWorkoutResponseMapper;
         private readonly IResponseMapper<User, DetailedPublicUserResponseDTO> publicUserDetailedResponseMapper = publicUserDetailedResponseMapper;
+        private readonly IResponseMapper<UserSettings, UserSettingsResponseDTO> settingsResponseMapper = settingsResponseMapper;
         private readonly IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO> simpleWeekOfCompletedWorkoutsResponseMapper = simpleWeekOfCompletedWorkoutsResponseMapper;
         private readonly IResponseMapper<IEnumerable<CompletedWorkout>, DetailedWeekOfCompletedWorkoutsResponseDTO> detailedWeekOfCompletedWorkoutsResponseMapper = detailedWeekOfCompletedWorkoutsResponseMapper;
         private readonly IResponseMapper<string, SimpleJWTResponseDTO> jwtResponseMapper = jwtResponseMapper;

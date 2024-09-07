@@ -227,8 +227,10 @@ namespace FitnessTracker
             #endregion
 
             #region User settings
-            _ = builder.Services.AddScoped<IReadSingleService<UserSettings>, ReadService<UserSettings>>();
             _ = builder.Services.AddScoped<ICreateService<UserSettings>, CreateService<UserSettings>>();
+            _ = builder.Services.AddScoped<IReadSingleService<UserSettings>, ReadService<UserSettings>>();
+            _ = builder.Services.AddScoped<IUpdateService<UserSettings>, UpdateService<UserSettings>>();
+            _ = builder.Services.AddScoped<IResponseMapper<UserSettings, UserSettingsResponseDTO>, UserSettingsResponseMapper>();
             #endregion
 
             #region User follows
