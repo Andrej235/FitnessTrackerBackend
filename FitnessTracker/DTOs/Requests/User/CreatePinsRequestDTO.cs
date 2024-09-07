@@ -2,6 +2,6 @@
 {
     public class CreatePinsRequestDTO
     {
-        public IEnumerable<Guid> NewPinIds { get; set; } = null!;
+        public IEnumerable<CreateSinglePinRequestDTO> NewPins { get; set; } = null!;
     }
 }

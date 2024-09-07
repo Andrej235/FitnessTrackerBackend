@@ -1,4 +1,5 @@
-﻿using FitnessTracker.DTOs.Responses.User;
+﻿using FitnessTracker.DTOs.Enums;
+using FitnessTracker.DTOs.Responses.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -26,14 +27,14 @@ namespace FitnessTracker.Controllers
                     Id = x.Id,
                     Name = x.Name,
                     LikeCount = x.Likes.Count,
-                    Type = SimplePinResponseDTO.PinType.Workout,
+                    Type = PinType.Workout,
                 })
                 .Union(x.CreatedSplits.Where(x => x.IsPublic).Select(x => new SimplePinOptionResponseDTO
                 {
                     Id = x.Id,
                     Name = x.Name,
                     LikeCount = x.Likes.Count,
-                    Type = SimplePinResponseDTO.PinType.Split,
+                    Type = PinType.Split,
                 }))
                 .OrderByDescending(x => x.LikeCount)
                 .ToList()

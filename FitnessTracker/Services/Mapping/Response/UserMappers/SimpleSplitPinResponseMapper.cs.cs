@@ -1,4 +1,5 @@
-﻿using FitnessTracker.DTOs.Responses.User;
+﻿using FitnessTracker.DTOs.Enums;
+using FitnessTracker.DTOs.Responses.User;
 using FitnessTracker.Models;
 
 namespace FitnessTracker.Services.Mapping.Response.UserMappers
@@ -10,7 +11,7 @@ namespace FitnessTracker.Services.Mapping.Response.UserMappers
             Id = from.Split.Id,
             Name = from.Split.Name,
             Description = from.Split.Description,
-            Type = SimplePinResponseDTO.PinType.Split,
+            Type = PinType.Split,
             Order = from.Order,
         };
     }

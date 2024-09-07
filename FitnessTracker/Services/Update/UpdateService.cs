@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FitnessTracker.Services.Update
 {
-    public class UpdateService<T>(DataContext context) : IUpdateService<T> where T : class
+    public class UpdateService<T>(DataContext context) : IUpdateService<T>, IUpdateRangeService<T> where T : class
     {
         public async Task Update(T updatedEntity)
         {
@@ -13,6 +13,19 @@ namespace FitnessTracker.Services.Update
                     throw new NullReferenceException("Entity not found");
 
                 _ = context.Set<T>().Update(updatedEntity);
+                _ = await context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task Update(IEnumerable<T> updatedEntities)
+        {
+            try
+            {
+                context.Set<T>().UpdateRange(updatedEntities);
                 _ = await context.SaveChangesAsync();
             }
             catch (Exception)

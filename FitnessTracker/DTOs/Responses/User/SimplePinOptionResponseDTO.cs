@@ -1,4 +1,4 @@
-﻿using static FitnessTracker.DTOs.Responses.User.SimplePinResponseDTO;
+﻿using FitnessTracker.DTOs.Enums;
 
 namespace FitnessTracker.DTOs.Responses.User
 {
