@@ -12,7 +12,6 @@ namespace FitnessTracker.Controllers
         [HttpGet("me/pins")]
         [ProducesResponseType(typeof(IEnumerable<PinResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetPins()
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -40,7 +39,7 @@ namespace FitnessTracker.Controllers
                 .ThenInclude(x => x.Split));
 
             if (pins is null)
-                return NotFound();
+                return Unauthorized();
 
             IEnumerable<PinResponseDTO> mappedWorkoutPins = pins.WorkoutPins.Select(x =>
             {
@@ -61,7 +60,6 @@ namespace FitnessTracker.Controllers
 
         [HttpGet("{username}/pins")]
         [ProducesResponseType(typeof(IEnumerable<PinResponseDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetPins(string username)
         {

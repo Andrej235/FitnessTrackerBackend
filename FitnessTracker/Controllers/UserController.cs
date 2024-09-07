@@ -42,6 +42,8 @@ namespace FitnessTracker.Controllers
                                         ICountService<UserFollows> followerCountService,
                                         ICountService<CompletedWorkout> completedWorkoutCountService,
                                         IUpdateService<User> updateService,
+                                        IUpdateRangeService<WorkoutPin> workoutPinUpdateRangeService,
+                                        IUpdateRangeService<SplitPin> splitPinUpdateRangeService,
                                         IExecuteUpdateService<WorkoutPin> workoutPinExecuteUpdateService,
                                         IExecuteUpdateService<SplitPin> splitPinExecuteUpdateService,
                                         IDeleteService<UserFollows> followDeleteService,
@@ -78,6 +80,8 @@ namespace FitnessTracker.Controllers
         private readonly ICountService<UserFollows> followerCountService = followerCountService;
         private readonly ICountService<CompletedWorkout> completedWorkoutCountService = completedWorkoutCountService;
         private readonly IUpdateService<User> updateService = updateService;
+        private readonly IUpdateRangeService<WorkoutPin> workoutPinUpdateRangeService = workoutPinUpdateRangeService;
+        private readonly IUpdateRangeService<SplitPin> splitPinUpdateRangeService = splitPinUpdateRangeService;
         private readonly IExecuteUpdateService<WorkoutPin> workoutPinExecuteUpdateService = workoutPinExecuteUpdateService;
         private readonly IExecuteUpdateService<SplitPin> splitPinExecuteUpdateService = splitPinExecuteUpdateService;
         private readonly IDeleteService<UserFollows> followDeleteService = followDeleteService;
