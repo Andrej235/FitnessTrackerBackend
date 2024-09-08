@@ -10,5 +10,6 @@ namespace FitnessTracker.DTOs.Responses.User
         public int TotalCompletedWorkouts { get; set; }
         public DetailedUserSplitResponseDTO? CurrentSplit { get; set; }
         public DateTime JoinedAt { get; set; }
+        public Models.Gender Gender { get; set; }
     }
 }

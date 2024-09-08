@@ -16,6 +16,7 @@ namespace FitnessTracker.Services.Mapping.Response.UserMappers
             Image = from.ProfilePic,
             CurrentSplit = from.CurrentSplit is null ? null : splitResponseMapper.Map(from.CurrentSplit),
             JoinedAt = from.JoinedAt,
+            Gender = from.Gender,
         };
     }
 }
