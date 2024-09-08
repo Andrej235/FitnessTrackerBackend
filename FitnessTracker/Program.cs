@@ -216,6 +216,7 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<IReadSingleSelectedService<User>, ReadSelectedService<User>>();
             _ = builder.Services.AddScoped<IReadRangeService<User>, ReadService<User>>();
             _ = builder.Services.AddScoped<IUpdateService<User>, UpdateService<User>>();
+            _ = builder.Services.AddScoped<IExecuteUpdateService<User>, ExecuteUpdateService<User>>();
             _ = builder.Services.AddScoped<IRequestMapper<RegisterUserRequestDTO, User>, RegisterUserRequestMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<User, SimpleUserResponseDTO>, SimpleUserResponseMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<User, DetailedUserResponseDTO>, DetailedUserResponseMapper>();

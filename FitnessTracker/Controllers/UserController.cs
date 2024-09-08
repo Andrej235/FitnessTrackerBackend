@@ -10,6 +10,7 @@ using FitnessTracker.Models;
 using FitnessTracker.Services.Count;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
+using FitnessTracker.Services.ExecuteUpdate;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read;
@@ -42,6 +43,7 @@ namespace FitnessTracker.Controllers
                                         ICountService<UserFollows> followerCountService,
                                         ICountService<CompletedWorkout> completedWorkoutCountService,
                                         IUpdateService<User> updateService,
+                                        IExecuteUpdateService<User> executeUpdateService,
                                         IUpdateService<UserSettings> settingsUpdateService,
                                         IUpdateRangeService<WorkoutPin> workoutPinUpdateRangeService,
                                         IUpdateRangeService<SplitPin> splitPinUpdateRangeService,
@@ -81,6 +83,7 @@ namespace FitnessTracker.Controllers
         private readonly ICountService<UserFollows> followerCountService = followerCountService;
         private readonly ICountService<CompletedWorkout> completedWorkoutCountService = completedWorkoutCountService;
         private readonly IUpdateService<User> updateService = updateService;
+        private readonly IExecuteUpdateService<User> executeUpdateService = executeUpdateService;
         private readonly IUpdateService<UserSettings> settingsUpdateService = settingsUpdateService;
         private readonly IUpdateRangeService<WorkoutPin> workoutPinUpdateRangeService = workoutPinUpdateRangeService;
         private readonly IUpdateRangeService<SplitPin> splitPinUpdateRangeService = splitPinUpdateRangeService;
