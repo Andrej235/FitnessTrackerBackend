@@ -26,10 +26,10 @@ namespace FitnessTracker.Controllers
                 IEnumerable<DeleteSinglePinRequestDTO> deletedSplits = request.DeletedPins.Where(x => x.Type == DTOs.Enums.PinType.Split);
 
                 foreach (DeleteSinglePinRequestDTO? workout in deletedWorkouts)
-                    await workoutPinDeleteService.Delete(x => x.UserId == userId && x.WorkoutId == workout.Id); //TODO: Replace with a real deleterange
+                    await workoutPinDeleteService.Delete(x => x.UserId == userId && x.WorkoutId == workout.Id);
 
                 foreach (DeleteSinglePinRequestDTO? split in deletedSplits)
-                    await splitPinDeleteService.Delete(x => x.UserId == userId && x.SplitId == split.Id); //TODO: Replace with a real deleterange
+                    await splitPinDeleteService.Delete(x => x.UserId == userId && x.SplitId == split.Id);
             }
             catch (Exception ex)
             {
