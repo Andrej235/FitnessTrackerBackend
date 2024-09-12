@@ -2,7 +2,7 @@
 
 namespace FitnessTracker.Services.Delete
 {
-    public interface IExecuteDeleteService<T> where T : class
+    public interface IDeleteService<T> where T : class
     {
         Task Delete(Expression<Func<T, bool>> deleteCriteria);
     }

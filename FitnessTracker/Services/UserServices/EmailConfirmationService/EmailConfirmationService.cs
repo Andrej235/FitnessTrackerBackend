@@ -9,12 +9,12 @@ namespace FitnessTracker.Services.UserServices.EmailConfirmationService
     public class EmailConfirmationService(IReadSingleService<User> userReadService,
                                           IUpdateService<User> userUpdateService,
                                           IReadSingleService<EmailConfirmation> tokenReadService,
-                                          IExecuteDeleteService<EmailConfirmation> executeDeleteService) : IEmailConfirmationService
+                                          IDeleteService<EmailConfirmation> executeDeleteService) : IEmailConfirmationService
     {
         private readonly IReadSingleService<User> userReadService = userReadService;
         private readonly IReadSingleService<EmailConfirmation> tokenReadService = tokenReadService;
         private readonly IUpdateService<User> userUpdateService = userUpdateService;
-        private readonly IExecuteDeleteService<EmailConfirmation> executeDeleteService = executeDeleteService;
+        private readonly IDeleteService<EmailConfirmation> executeDeleteService = executeDeleteService;
 
         public async Task<bool> ConfirmEmail(Guid userId, Guid confirmationCode)
         {

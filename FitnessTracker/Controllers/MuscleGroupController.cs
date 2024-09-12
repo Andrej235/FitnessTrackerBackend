@@ -16,7 +16,7 @@ namespace FitnessTracker.Controllers
     public partial class MuscleGroupController(ICreateService<MuscleGroup> createService,
                                                ICreateRangeService<MuscleGroup> createRangeService,
                                                IReadRangeService<MuscleGroup> readRangeService,
-                                               IExecuteDeleteService<MuscleGroup> deleteService,
+                                               IDeleteService<MuscleGroup> deleteService,
                                                IRequestMapper<CreateMuscleGroupRequestDTO, MuscleGroup> requestMapper,
                                                IResponseMapper<MuscleGroup, SimpleMuscleGroupResponseDTO> responseMapper,
                                                IResponseMapper<MuscleGroup, DetailedMuscleGroupResponseDTO> detailedResponseMapper) : ControllerBase
@@ -24,7 +24,7 @@ namespace FitnessTracker.Controllers
         private readonly ICreateService<MuscleGroup> createService = createService;
         private readonly ICreateRangeService<MuscleGroup> createRangeService = createRangeService;
         private readonly IReadRangeService<MuscleGroup> readRangeService = readRangeService;
-        private readonly IExecuteDeleteService<MuscleGroup> deleteService = deleteService;
+        private readonly IDeleteService<MuscleGroup> deleteService = deleteService;
         private readonly IRequestMapper<CreateMuscleGroupRequestDTO, MuscleGroup> requestMapper = requestMapper;
         private readonly IResponseMapper<MuscleGroup, SimpleMuscleGroupResponseDTO> responseMapper = responseMapper;
         private readonly IResponseMapper<MuscleGroup, DetailedMuscleGroupResponseDTO> detailedResponseMapper = detailedResponseMapper;

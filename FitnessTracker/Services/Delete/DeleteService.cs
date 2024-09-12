@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace FitnessTracker.Services.Delete
 {
-    public class ExecuteDeleteService<T>(DataContext context) : IExecuteDeleteService<T> where T : class
+    public class DeleteService<T>(DataContext context) : IDeleteService<T> where T : class
     {
         private readonly DataContext context = context;
 

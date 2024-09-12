@@ -21,19 +21,19 @@ namespace FitnessTracker.Controllers
                                             IReadSingleService<FavoriteExercise> favoriteReadSingleService,
                                             ICountService<FavoriteExercise> favoriteCountService,
                                             IUpdateService<Exercise> updateService,
-                                            IExecuteDeleteService<Exercise> deleteService,
+                                            IDeleteService<Exercise> deleteService,
                                             ICreateService<FavoriteExercise> favoriteExerciseCreateService,
                                             ICreateRangeService<EquipmentUsage> equipmetUsageCreateRangeService,
                                             ICreateRangeService<PrimaryMuscleGroupInExercise> primaryMuscleGroupCreateRangeService,
                                             ICreateRangeService<PrimaryMuscleInExercise> primaryMuscleCreateRangeService,
                                             ICreateRangeService<SecondaryMuscleGroupInExercise> secondaryMuscleGroupCreateRangeService,
                                             ICreateRangeService<SecondaryMuscleInExercise> secondaryMuscleCreateRangeService,
-                                            IExecuteDeleteService<FavoriteExercise> favoriteExerciseDeleteService,
-                                            IExecuteDeleteService<EquipmentUsage> equipmetUsageExecuteDeleteService,
-                                            IExecuteDeleteService<PrimaryMuscleGroupInExercise> primaryMuscleGroupExecuteDeleteService,
-                                            IExecuteDeleteService<PrimaryMuscleInExercise> primaryMuscleExecuteDeleteService,
-                                            IExecuteDeleteService<SecondaryMuscleGroupInExercise> secondaryMuscleGroupExecuteDeleteService,
-                                            IExecuteDeleteService<SecondaryMuscleInExercise> secondaryMuscleExecuteDeleteService,
+                                            IDeleteService<FavoriteExercise> favoriteExerciseDeleteService,
+                                            IDeleteService<EquipmentUsage> equipmetUsageExecuteDeleteService,
+                                            IDeleteService<PrimaryMuscleGroupInExercise> primaryMuscleGroupExecuteDeleteService,
+                                            IDeleteService<PrimaryMuscleInExercise> primaryMuscleExecuteDeleteService,
+                                            IDeleteService<SecondaryMuscleGroupInExercise> secondaryMuscleGroupExecuteDeleteService,
+                                            IDeleteService<SecondaryMuscleInExercise> secondaryMuscleExecuteDeleteService,
                                             IRequestMapper<CreateExerciseRequestDTO, Exercise> createRequestMapper,
                                             IResponseMapper<Exercise, SimpleExerciseResponseDTO> simpleResponseMapper,
                                             IResponseMapper<Exercise, DetailedExerciseResponseDTO> detailedResponseMapper) : ControllerBase
@@ -44,14 +44,14 @@ namespace FitnessTracker.Controllers
         private readonly IReadSingleService<FavoriteExercise> favoriteReadSingleService = favoriteReadSingleService;
         private readonly ICountService<FavoriteExercise> favoriteCountService = favoriteCountService;
         private readonly IUpdateService<Exercise> updateService = updateService;
-        private readonly IExecuteDeleteService<Exercise> deleteService = deleteService;
+        private readonly IDeleteService<Exercise> deleteService = deleteService;
         private readonly ICreateService<FavoriteExercise> favoriteExerciseCreateService = favoriteExerciseCreateService;
-        private readonly IExecuteDeleteService<FavoriteExercise> favoriteExerciseDeleteService = favoriteExerciseDeleteService;
-        private readonly IExecuteDeleteService<EquipmentUsage> equipmetUsageExecuteDeleteService = equipmetUsageExecuteDeleteService;
-        private readonly IExecuteDeleteService<PrimaryMuscleGroupInExercise> primaryMuscleGroupExecuteDeleteService = primaryMuscleGroupExecuteDeleteService;
-        private readonly IExecuteDeleteService<PrimaryMuscleInExercise> primaryMuscleExecuteDeleteService = primaryMuscleExecuteDeleteService;
-        private readonly IExecuteDeleteService<SecondaryMuscleGroupInExercise> secondaryMuscleGroupExecuteDeleteService = secondaryMuscleGroupExecuteDeleteService;
-        private readonly IExecuteDeleteService<SecondaryMuscleInExercise> secondaryMuscleExecuteDeleteService = secondaryMuscleExecuteDeleteService;
+        private readonly IDeleteService<FavoriteExercise> favoriteExerciseDeleteService = favoriteExerciseDeleteService;
+        private readonly IDeleteService<EquipmentUsage> equipmetUsageExecuteDeleteService = equipmetUsageExecuteDeleteService;
+        private readonly IDeleteService<PrimaryMuscleGroupInExercise> primaryMuscleGroupExecuteDeleteService = primaryMuscleGroupExecuteDeleteService;
+        private readonly IDeleteService<PrimaryMuscleInExercise> primaryMuscleExecuteDeleteService = primaryMuscleExecuteDeleteService;
+        private readonly IDeleteService<SecondaryMuscleGroupInExercise> secondaryMuscleGroupExecuteDeleteService = secondaryMuscleGroupExecuteDeleteService;
+        private readonly IDeleteService<SecondaryMuscleInExercise> secondaryMuscleExecuteDeleteService = secondaryMuscleExecuteDeleteService;
         private readonly ICreateRangeService<EquipmentUsage> equipmetUsageCreateRangeService = equipmetUsageCreateRangeService;
         private readonly ICreateRangeService<PrimaryMuscleGroupInExercise> primaryMuscleGroupCreateRangeService = primaryMuscleGroupCreateRangeService;
         private readonly ICreateRangeService<PrimaryMuscleInExercise> primaryMuscleCreateRangeService = primaryMuscleCreateRangeService;

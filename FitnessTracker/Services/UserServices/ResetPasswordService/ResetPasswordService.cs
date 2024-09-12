@@ -10,12 +10,12 @@ namespace FitnessTracker.Services.UserServices.ResetPasswordService
     public class ResetPasswordService(IReadSingleService<User> userReadService,
                                       IUpdateService<Models.User> userUpdateService,
                                       IReadSingleService<EmailConfirmation> tokenReadService,
-                                      IExecuteDeleteService<EmailConfirmation> executeDeleteService) : IResetPasswordService
+                                      IDeleteService<EmailConfirmation> executeDeleteService) : IResetPasswordService
     {
         private readonly IReadSingleService<User> userReadService = userReadService;
         private readonly IUpdateService<User> userUpdateService = userUpdateService;
         private readonly IReadSingleService<EmailConfirmation> tokenReadService = tokenReadService;
-        private readonly IExecuteDeleteService<EmailConfirmation> executeDeleteService = executeDeleteService;
+        private readonly IDeleteService<EmailConfirmation> executeDeleteService = executeDeleteService;
 
         public async Task<bool> ResetPassword(Guid userId, Guid confirmationCode, string newPassword)
         {

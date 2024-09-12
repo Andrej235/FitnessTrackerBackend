@@ -28,15 +28,15 @@ namespace FitnessTracker.Controllers
                                            IReadRangeService<WorkoutLike> likeReadRangeService,
                                            IReadRangeService<FavoriteWorkout> favoriteReadRangeService,
                                            IUpdateService<Workout> updateService,
-                                           IExecuteDeleteService<Workout> deleteService,
-                                           IExecuteDeleteService<WorkoutComment> commentDeleteService,
-                                           IExecuteDeleteService<WorkoutCommentLike> commentLikeDeleteService,
-                                           IExecuteDeleteService<WorkoutLike> likeDeleteService,
-                                           IExecuteDeleteService<FavoriteWorkout> favoriteDeleteService,
-                                           IExecuteDeleteService<WorkoutComment> commentExecuteDeleteService,
-                                           IExecuteDeleteService<WorkoutCommentLike> commentLikeExecuteDeleteService,
-                                           IExecuteDeleteService<WorkoutLike> likeExecuteDeleteService,
-                                           IExecuteDeleteService<FavoriteWorkout> favoriteExecuteDeleteService,
+                                           IDeleteService<Workout> deleteService,
+                                           IDeleteService<WorkoutComment> commentDeleteService,
+                                           IDeleteService<WorkoutCommentLike> commentLikeDeleteService,
+                                           IDeleteService<WorkoutLike> likeDeleteService,
+                                           IDeleteService<FavoriteWorkout> favoriteDeleteService,
+                                           IDeleteService<WorkoutComment> commentExecuteDeleteService,
+                                           IDeleteService<WorkoutCommentLike> commentLikeExecuteDeleteService,
+                                           IDeleteService<WorkoutLike> likeExecuteDeleteService,
+                                           IDeleteService<FavoriteWorkout> favoriteExecuteDeleteService,
                                            IRequestMapper<CreateWorkoutRequestDTO, Workout> createRequestMapper,
                                            IRequestMapper<CreateSetRequestDTO, Set> setCreateRequestMapper,
                                            IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment> commentCreateRequestMapper,
@@ -57,15 +57,15 @@ namespace FitnessTracker.Controllers
         private readonly IReadRangeService<WorkoutLike> likeReadRangeService = likeReadRangeService;
         private readonly IReadRangeService<FavoriteWorkout> favoriteReadRangeService = favoriteReadRangeService;
         private readonly IUpdateService<Workout> updateService = updateService;
-        private readonly IExecuteDeleteService<Workout> deleteService = deleteService;
-        private readonly IExecuteDeleteService<WorkoutComment> commentDeleteService = commentDeleteService;
-        private readonly IExecuteDeleteService<WorkoutCommentLike> commentLikeDeleteService = commentLikeDeleteService;
-        private readonly IExecuteDeleteService<WorkoutLike> likeDeleteService = likeDeleteService;
-        private readonly IExecuteDeleteService<FavoriteWorkout> favoriteDeleteService = favoriteDeleteService;
-        private readonly IExecuteDeleteService<WorkoutComment> commentExecuteDeleteService = commentExecuteDeleteService;
-        private readonly IExecuteDeleteService<WorkoutCommentLike> commentLikeExecuteDeleteService = commentLikeExecuteDeleteService;
-        private readonly IExecuteDeleteService<WorkoutLike> likeExecuteDeleteService = likeExecuteDeleteService;
-        private readonly IExecuteDeleteService<FavoriteWorkout> favoriteExecuteDeleteService = favoriteExecuteDeleteService;
+        private readonly IDeleteService<Workout> deleteService = deleteService;
+        private readonly IDeleteService<WorkoutComment> commentDeleteService = commentDeleteService;
+        private readonly IDeleteService<WorkoutCommentLike> commentLikeDeleteService = commentLikeDeleteService;
+        private readonly IDeleteService<WorkoutLike> likeDeleteService = likeDeleteService;
+        private readonly IDeleteService<FavoriteWorkout> favoriteDeleteService = favoriteDeleteService;
+        private readonly IDeleteService<WorkoutComment> commentExecuteDeleteService = commentExecuteDeleteService;
+        private readonly IDeleteService<WorkoutCommentLike> commentLikeExecuteDeleteService = commentLikeExecuteDeleteService;
+        private readonly IDeleteService<WorkoutLike> likeExecuteDeleteService = likeExecuteDeleteService;
+        private readonly IDeleteService<FavoriteWorkout> favoriteExecuteDeleteService = favoriteExecuteDeleteService;
         private readonly IRequestMapper<CreateWorkoutRequestDTO, Workout> createRequestMapper = createRequestMapper;
         private readonly IRequestMapper<CreateSetRequestDTO, Set> setCreateRequestMapper = setCreateRequestMapper;
         private readonly IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment> commentCreateRequestMapper = commentCreateRequestMapper;
