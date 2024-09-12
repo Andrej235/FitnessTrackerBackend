@@ -21,19 +21,19 @@ namespace FitnessTracker.Controllers
                                             IReadSingleService<FavoriteExercise> favoriteReadSingleService,
                                             ICountService<FavoriteExercise> favoriteCountService,
                                             IUpdateService<Exercise> updateService,
-                                            IDeleteService<Exercise> deleteService,
                                             ICreateService<FavoriteExercise> favoriteExerciseCreateService,
                                             ICreateRangeService<EquipmentUsage> equipmetUsageCreateRangeService,
                                             ICreateRangeService<PrimaryMuscleGroupInExercise> primaryMuscleGroupCreateRangeService,
                                             ICreateRangeService<PrimaryMuscleInExercise> primaryMuscleCreateRangeService,
                                             ICreateRangeService<SecondaryMuscleGroupInExercise> secondaryMuscleGroupCreateRangeService,
                                             ICreateRangeService<SecondaryMuscleInExercise> secondaryMuscleCreateRangeService,
+                                            IDeleteService<Exercise> deleteService,
                                             IDeleteService<FavoriteExercise> favoriteExerciseDeleteService,
-                                            IDeleteService<EquipmentUsage> equipmetUsageExecuteDeleteService,
-                                            IDeleteService<PrimaryMuscleGroupInExercise> primaryMuscleGroupExecuteDeleteService,
-                                            IDeleteService<PrimaryMuscleInExercise> primaryMuscleExecuteDeleteService,
-                                            IDeleteService<SecondaryMuscleGroupInExercise> secondaryMuscleGroupExecuteDeleteService,
-                                            IDeleteService<SecondaryMuscleInExercise> secondaryMuscleExecuteDeleteService,
+                                            IDeleteService<EquipmentUsage> equipmetUsageDeleteService,
+                                            IDeleteService<PrimaryMuscleGroupInExercise> primaryMuscleGroupDeleteService,
+                                            IDeleteService<PrimaryMuscleInExercise> primaryMuscleDeleteService,
+                                            IDeleteService<SecondaryMuscleGroupInExercise> secondaryMuscleGroupDeleteService,
+                                            IDeleteService<SecondaryMuscleInExercise> secondaryMuscleDeleteService,
                                             IRequestMapper<CreateExerciseRequestDTO, Exercise> createRequestMapper,
                                             IResponseMapper<Exercise, SimpleExerciseResponseDTO> simpleResponseMapper,
                                             IResponseMapper<Exercise, DetailedExerciseResponseDTO> detailedResponseMapper) : ControllerBase
@@ -44,19 +44,19 @@ namespace FitnessTracker.Controllers
         private readonly IReadSingleService<FavoriteExercise> favoriteReadSingleService = favoriteReadSingleService;
         private readonly ICountService<FavoriteExercise> favoriteCountService = favoriteCountService;
         private readonly IUpdateService<Exercise> updateService = updateService;
-        private readonly IDeleteService<Exercise> deleteService = deleteService;
         private readonly ICreateService<FavoriteExercise> favoriteExerciseCreateService = favoriteExerciseCreateService;
-        private readonly IDeleteService<FavoriteExercise> favoriteExerciseDeleteService = favoriteExerciseDeleteService;
-        private readonly IDeleteService<EquipmentUsage> equipmetUsageExecuteDeleteService = equipmetUsageExecuteDeleteService;
-        private readonly IDeleteService<PrimaryMuscleGroupInExercise> primaryMuscleGroupExecuteDeleteService = primaryMuscleGroupExecuteDeleteService;
-        private readonly IDeleteService<PrimaryMuscleInExercise> primaryMuscleExecuteDeleteService = primaryMuscleExecuteDeleteService;
-        private readonly IDeleteService<SecondaryMuscleGroupInExercise> secondaryMuscleGroupExecuteDeleteService = secondaryMuscleGroupExecuteDeleteService;
-        private readonly IDeleteService<SecondaryMuscleInExercise> secondaryMuscleExecuteDeleteService = secondaryMuscleExecuteDeleteService;
         private readonly ICreateRangeService<EquipmentUsage> equipmetUsageCreateRangeService = equipmetUsageCreateRangeService;
         private readonly ICreateRangeService<PrimaryMuscleGroupInExercise> primaryMuscleGroupCreateRangeService = primaryMuscleGroupCreateRangeService;
         private readonly ICreateRangeService<PrimaryMuscleInExercise> primaryMuscleCreateRangeService = primaryMuscleCreateRangeService;
         private readonly ICreateRangeService<SecondaryMuscleGroupInExercise> secondaryMuscleGroupCreateRangeService = secondaryMuscleGroupCreateRangeService;
         private readonly ICreateRangeService<SecondaryMuscleInExercise> secondaryMuscleCreateRangeService = secondaryMuscleCreateRangeService;
+        private readonly IDeleteService<Exercise> deleteService = deleteService;
+        private readonly IDeleteService<FavoriteExercise> favoriteExerciseDeleteService = favoriteExerciseDeleteService;
+        private readonly IDeleteService<EquipmentUsage> equipmetUsageDeleteService = equipmetUsageDeleteService;
+        private readonly IDeleteService<PrimaryMuscleGroupInExercise> primaryMuscleGroupDeleteService = primaryMuscleGroupDeleteService;
+        private readonly IDeleteService<PrimaryMuscleInExercise> primaryMuscleDeleteService = primaryMuscleDeleteService;
+        private readonly IDeleteService<SecondaryMuscleGroupInExercise> secondaryMuscleGroupDeleteService = secondaryMuscleGroupDeleteService;
+        private readonly IDeleteService<SecondaryMuscleInExercise> secondaryMuscleDeleteService = secondaryMuscleDeleteService;
         private readonly IRequestMapper<CreateExerciseRequestDTO, Exercise> createRequestMapper = createRequestMapper;
         private readonly IResponseMapper<Exercise, SimpleExerciseResponseDTO> simpleResponseMapper = simpleResponseMapper;
         private readonly IResponseMapper<Exercise, DetailedExerciseResponseDTO> detailedResponseMapper = detailedResponseMapper;

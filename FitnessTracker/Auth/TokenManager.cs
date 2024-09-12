@@ -14,13 +14,13 @@ namespace FitnessTracker.Auth
                               IReadSingleService<RefreshToken> readSingleService,
                               ICreateService<RefreshToken> createService,
                               IUpdateService<RefreshToken> updateService,
-                              IDeleteService<RefreshToken> executeDeleteService) : ITokenManager
+                              IDeleteService<RefreshToken> deleteService) : ITokenManager
     {
         private readonly ConfigurationManager configuration = configuration;
         private readonly IReadSingleService<RefreshToken> readSingleService = readSingleService;
         private readonly ICreateService<RefreshToken> createService = createService;
         private readonly IUpdateService<RefreshToken> updateService = updateService;
-        private readonly IDeleteService<RefreshToken> executeDeleteService = executeDeleteService;
+        private readonly IDeleteService<RefreshToken> deleteService = deleteService;
 
         private (string jwt, Guid jwtId) CreateJWTAndId(User user)
         {
@@ -88,8 +88,8 @@ namespace FitnessTracker.Auth
             return newJwt;
         }
 
-        public Task InvalidateAllTokensForUser(Guid userId) => executeDeleteService.Delete(x => x.UserId == userId);
+        public Task InvalidateAllTokensForUser(Guid userId) => deleteService.Delete(x => x.UserId == userId);
 
-        public Task InvalidateRefreshToken(Guid refreshToken) => executeDeleteService.Delete(x => x.Token == refreshToken);
+        public Task InvalidateRefreshToken(Guid refreshToken) => deleteService.Delete(x => x.Token == refreshToken);
     }
 }

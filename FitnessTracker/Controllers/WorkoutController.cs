@@ -33,10 +33,6 @@ namespace FitnessTracker.Controllers
                                            IDeleteService<WorkoutCommentLike> commentLikeDeleteService,
                                            IDeleteService<WorkoutLike> likeDeleteService,
                                            IDeleteService<FavoriteWorkout> favoriteDeleteService,
-                                           IDeleteService<WorkoutComment> commentExecuteDeleteService,
-                                           IDeleteService<WorkoutCommentLike> commentLikeExecuteDeleteService,
-                                           IDeleteService<WorkoutLike> likeExecuteDeleteService,
-                                           IDeleteService<FavoriteWorkout> favoriteExecuteDeleteService,
                                            IRequestMapper<CreateWorkoutRequestDTO, Workout> createRequestMapper,
                                            IRequestMapper<CreateSetRequestDTO, Set> setCreateRequestMapper,
                                            IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment> commentCreateRequestMapper,
@@ -62,10 +58,6 @@ namespace FitnessTracker.Controllers
         private readonly IDeleteService<WorkoutCommentLike> commentLikeDeleteService = commentLikeDeleteService;
         private readonly IDeleteService<WorkoutLike> likeDeleteService = likeDeleteService;
         private readonly IDeleteService<FavoriteWorkout> favoriteDeleteService = favoriteDeleteService;
-        private readonly IDeleteService<WorkoutComment> commentExecuteDeleteService = commentExecuteDeleteService;
-        private readonly IDeleteService<WorkoutCommentLike> commentLikeExecuteDeleteService = commentLikeExecuteDeleteService;
-        private readonly IDeleteService<WorkoutLike> likeExecuteDeleteService = likeExecuteDeleteService;
-        private readonly IDeleteService<FavoriteWorkout> favoriteExecuteDeleteService = favoriteExecuteDeleteService;
         private readonly IRequestMapper<CreateWorkoutRequestDTO, Workout> createRequestMapper = createRequestMapper;
         private readonly IRequestMapper<CreateSetRequestDTO, Set> setCreateRequestMapper = setCreateRequestMapper;
         private readonly IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment> commentCreateRequestMapper = commentCreateRequestMapper;

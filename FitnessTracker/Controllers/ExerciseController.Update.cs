@@ -22,11 +22,11 @@ namespace FitnessTracker.Controllers
                 if (exercise is null)
                     return NotFound();
 
-                await equipmetUsageExecuteDeleteService.Delete(x => x.ExerciseId == request.Id);
-                await primaryMuscleGroupExecuteDeleteService.Delete(x => x.ExerciseId == request.Id);
-                await primaryMuscleExecuteDeleteService.Delete(x => x.ExerciseId == request.Id);
-                await secondaryMuscleGroupExecuteDeleteService.Delete(x => x.ExerciseId == request.Id);
-                await secondaryMuscleExecuteDeleteService.Delete(x => x.ExerciseId == request.Id);
+                await equipmetUsageDeleteService.Delete(x => x.ExerciseId == request.Id);
+                await primaryMuscleGroupDeleteService.Delete(x => x.ExerciseId == request.Id);
+                await primaryMuscleDeleteService.Delete(x => x.ExerciseId == request.Id);
+                await secondaryMuscleGroupDeleteService.Delete(x => x.ExerciseId == request.Id);
+                await secondaryMuscleDeleteService.Delete(x => x.ExerciseId == request.Id);
 
                 await equipmetUsageCreateRangeService.Add(request.Equipment.Select(x => new EquipmentUsage
                 {
