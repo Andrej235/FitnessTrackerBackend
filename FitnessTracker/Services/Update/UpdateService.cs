@@ -1,9 +1,11 @@
 ﻿using FitnessTracker.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 
 namespace FitnessTracker.Services.Update
 {
-    public class UpdateService<T>(DataContext context) : IUpdateService<T>, IUpdateRangeService<T> where T : class
+    public class UpdateService<T>(DataContext context) : IUpdateService<T>, IUpdateRangeService<T>, IExecuteUpdateService<T> where T : class
     {
         public async Task Update(T updatedEntity)
         {
@@ -33,5 +35,8 @@ namespace FitnessTracker.Services.Update
                 throw;
             }
         }
+
+        public async Task Execute(Expression<Func<T, bool>> updateCriteria, Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> setPropertyCalls) =>
+            await context.Set<T>().Where(updateCriteria).ExecuteUpdateAsync(setPropertyCalls);
     }
 }

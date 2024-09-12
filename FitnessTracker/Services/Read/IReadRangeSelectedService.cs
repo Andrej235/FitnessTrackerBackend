@@ -1,7 +1,6 @@
-﻿using FitnessTracker.Services.Read;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
-namespace FitnessTracker.Services.ReadSelected
+namespace FitnessTracker.Services.Read
 {
     public interface IReadRangeSelectedService<T> where T : class
     {

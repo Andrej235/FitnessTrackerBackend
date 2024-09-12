@@ -27,7 +27,6 @@ using FitnessTracker.Services.Count;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.EmailSender;
-using FitnessTracker.Services.ExecuteUpdate;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Request.CompletedMappers;
 using FitnessTracker.Services.Mapping.Request.EquipmentMappers;
@@ -50,7 +49,6 @@ using FitnessTracker.Services.Mapping.Response.SplitMappers;
 using FitnessTracker.Services.Mapping.Response.UserMappers;
 using FitnessTracker.Services.Mapping.Response.WorkoutMappers;
 using FitnessTracker.Services.Read;
-using FitnessTracker.Services.ReadSelected;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
 using FitnessTracker.Services.UserServices.EmailConfirmationService;
@@ -213,10 +211,10 @@ namespace FitnessTracker
             #region User 
             _ = builder.Services.AddScoped<ICreateService<User>, CreateService<User>>();
             _ = builder.Services.AddScoped<IReadSingleService<User>, ReadService<User>>();
-            _ = builder.Services.AddScoped<IReadSingleSelectedService<User>, ReadSelectedService<User>>();
+            _ = builder.Services.AddScoped<IReadSingleSelectedService<User>, ReadService<User>>();
             _ = builder.Services.AddScoped<IReadRangeService<User>, ReadService<User>>();
             _ = builder.Services.AddScoped<IUpdateService<User>, UpdateService<User>>();
-            _ = builder.Services.AddScoped<IExecuteUpdateService<User>, ExecuteUpdateService<User>>();
+            _ = builder.Services.AddScoped<IExecuteUpdateService<User>, UpdateService<User>>();
             _ = builder.Services.AddScoped<IRequestMapper<RegisterUserRequestDTO, User>, RegisterUserRequestMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<User, SimpleUserResponseDTO>, SimpleUserResponseMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<User, DetailedUserResponseDTO>, DetailedUserResponseMapper>();
@@ -256,7 +254,7 @@ namespace FitnessTracker
 
             #region Workouts
             _ = builder.Services.AddScoped<IReadSingleService<Workout>, ReadService<Workout>>();
-            _ = builder.Services.AddScoped<IReadSingleSelectedService<Workout>, ReadSelectedService<Workout>>();
+            _ = builder.Services.AddScoped<IReadSingleSelectedService<Workout>, ReadService<Workout>>();
             _ = builder.Services.AddScoped<IReadRangeService<Workout>, ReadService<Workout>>();
             _ = builder.Services.AddScoped<ICreateService<Workout>, CreateService<Workout>>();
             _ = builder.Services.AddScoped<IUpdateService<Workout>, UpdateService<Workout>>();
@@ -283,7 +281,7 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<IReadSingleService<WorkoutComment>, ReadService<WorkoutComment>>();
             _ = builder.Services.AddScoped<ICountService<WorkoutComment>, CountService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IReadRangeService<WorkoutComment>, ReadService<WorkoutComment>>();
-            _ = builder.Services.AddScoped<IReadRangeSelectedService<WorkoutComment>, ReadSelectedService<WorkoutComment>>();
+            _ = builder.Services.AddScoped<IReadRangeSelectedService<WorkoutComment>, ReadService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IDeleteService<WorkoutComment>, DeleteService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IDeleteRangeService<WorkoutComment>, DeleteRangeService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment>, CreateWorkoutCommentRequestMapper>();
@@ -389,7 +387,7 @@ namespace FitnessTracker
             #region Split
             _ = builder.Services.AddScoped<ICreateService<Split>, CreateService<Split>>();
             _ = builder.Services.AddScoped<IReadSingleService<Split>, ReadService<Split>>();
-            _ = builder.Services.AddScoped<IReadSingleSelectedService<Split>, ReadSelectedService<Split>>();
+            _ = builder.Services.AddScoped<IReadSingleSelectedService<Split>, ReadService<Split>>();
             _ = builder.Services.AddScoped<IReadRangeService<Split>, ReadService<Split>>();
             _ = builder.Services.AddScoped<IUpdateService<Split>, UpdateService<Split>>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateSplitRequestDTO, Split>, CreateSplitRequestMapper>();
@@ -446,13 +444,11 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<ICreateRangeService<WorkoutPin>, CreateService<WorkoutPin>>();
             _ = builder.Services.AddScoped<IReadSingleService<WorkoutPin>, ReadService<WorkoutPin>>();
             _ = builder.Services.AddScoped<ICountService<WorkoutPin>, CountService<WorkoutPin>>();
-            _ = builder.Services.AddScoped<IExecuteUpdateService<WorkoutPin>, ExecuteUpdateService<WorkoutPin>>();
             _ = builder.Services.AddScoped<IUpdateRangeService<WorkoutPin>, UpdateService<WorkoutPin>>();
             _ = builder.Services.AddScoped<IDeleteService<WorkoutPin>, DeleteService<WorkoutPin>>();
             _ = builder.Services.AddScoped<ICreateRangeService<SplitPin>, CreateService<SplitPin>>();
             _ = builder.Services.AddScoped<IReadSingleService<SplitPin>, ReadService<SplitPin>>();
             _ = builder.Services.AddScoped<ICountService<SplitPin>, CountService<SplitPin>>();
-            _ = builder.Services.AddScoped<IExecuteUpdateService<SplitPin>, ExecuteUpdateService<SplitPin>>();
             _ = builder.Services.AddScoped<IUpdateRangeService<SplitPin>, UpdateService<SplitPin>>();
             _ = builder.Services.AddScoped<IDeleteService<SplitPin>, DeleteService<SplitPin>>();
             _ = builder.Services.AddScoped<IResponseMapper<WorkoutPin, PinResponseDTO>, SimpleWorkoutPinResponseMapper>();

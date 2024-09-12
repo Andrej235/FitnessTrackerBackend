@@ -6,7 +6,6 @@ using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read;
-using FitnessTracker.Services.ReadSelected;
 using FitnessTracker.Services.Update;
 using Microsoft.AspNetCore.Mvc;
 
