@@ -22,10 +22,10 @@ namespace FitnessTracker.Controllers
 
             try
             {
-                _ = await likeDeleteRangeService.Delete(x => x.WorkoutId == id);
-                _ = await favoriteDeleteRangeService.Delete(x => x.WorkoutId == id);
-                _ = await commentLikeDeleteRangeService.Delete(x => x.WorkoutId == id);
-                _ = await commentDeleteRangeService.Delete(x => x.WorkoutId == id);
+                await likeExecuteDeleteService.Delete(x => x.WorkoutId == id);
+                await favoriteExecuteDeleteService.Delete(x => x.WorkoutId == id);
+                await commentLikeExecuteDeleteService.Delete(x => x.WorkoutId == id);
+                await commentExecuteDeleteService.Delete(x => x.WorkoutId == id);
                 await deleteService.Delete(x => x.CreatorId == userId && x.Id == id);
                 return NoContent();
             }

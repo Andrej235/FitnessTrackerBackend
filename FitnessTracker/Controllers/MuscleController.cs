@@ -16,14 +16,14 @@ namespace FitnessTracker.Controllers
     public partial class MuscleController(ICreateService<Muscle> createService,
                                           ICreateRangeService<Muscle> createRangeService,
                                           IReadRangeService<Muscle> readRangeService,
-                                          IDeleteService<Muscle> deleteService,
+                                          IExecuteDeleteService<Muscle> deleteService,
                                           IRequestMapper<CreateMuscleRequestDTO, Muscle> requestMapper,
                                           IResponseMapper<Muscle, SimpleMuscleResponseDTO> responseMapper) : ControllerBase
     {
         private readonly ICreateService<Muscle> createService = createService;
         private readonly ICreateRangeService<Muscle> createRangeService = createRangeService;
         private readonly IReadRangeService<Muscle> readRangeService = readRangeService;
-        private readonly IDeleteService<Muscle> deleteService = deleteService;
+        private readonly IExecuteDeleteService<Muscle> deleteService = deleteService;
         private readonly IRequestMapper<CreateMuscleRequestDTO, Muscle> requestMapper = requestMapper;
         private readonly IResponseMapper<Muscle, SimpleMuscleResponseDTO> responseMapper = responseMapper;
     }

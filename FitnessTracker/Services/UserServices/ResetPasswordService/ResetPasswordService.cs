@@ -9,19 +9,20 @@ namespace FitnessTracker.Services.UserServices.ResetPasswordService
 {
     public class ResetPasswordService(IReadSingleService<User> userReadService,
                                       IUpdateService<Models.User> userUpdateService,
-                                      IDeleteRangeService<EmailConfirmation> deleteRangeService) : IResetPasswordService
+                                      IReadSingleService<EmailConfirmation> tokenReadService,
+                                      IExecuteDeleteService<EmailConfirmation> executeDeleteService) : IResetPasswordService
     {
         private readonly IReadSingleService<User> userReadService = userReadService;
         private readonly IUpdateService<User> userUpdateService = userUpdateService;
-        private readonly IDeleteRangeService<EmailConfirmation> deleteRangeService = deleteRangeService;
+        private readonly IReadSingleService<EmailConfirmation> tokenReadService = tokenReadService;
+        private readonly IExecuteDeleteService<EmailConfirmation> executeDeleteService = executeDeleteService;
 
         public async Task<bool> ResetPassword(Guid userId, Guid confirmationCode, string newPassword)
         {
             try
             {
-                bool deletedAny = await deleteRangeService.Delete(x => x.UserId == userId);
-                if (!deletedAny)
-                    throw new Exception("User does not have any email confirmation codes");
+                _ = await tokenReadService.Get(x => x.UserId == userId && x.Id == confirmationCode) ?? throw new Exception("Token not found");
+                await executeDeleteService.Delete(x => x.UserId == userId);
 
                 User user = await userReadService.Get(x => x.Id == userId) ?? throw new Exception("User not found");
                 user.PasswordHash = newPassword.ToHash(user.Salt);

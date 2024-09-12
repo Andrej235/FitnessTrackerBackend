@@ -2,7 +2,7 @@
 
 namespace FitnessTracker.Services.Delete
 {
-    public interface IDeleteService<T> where T : class
+    public interface IDeleteSingleService<T> where T : class
     {
         /// <summary>
         /// Deletes the first entity from the database which fits the provided criteria

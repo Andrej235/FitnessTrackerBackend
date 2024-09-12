@@ -22,8 +22,8 @@ namespace FitnessTracker.Controllers
 
             try
             {
-                _ = await commentDeleteRangeService.Delete(x => x.SplitId == splitId && x.ParentId == commentId);
-                await commentDeleteService.Delete(x => x.SplitId == splitId && x.CreatorId == userId && x.Id == commentId);
+                await commentExecuteDeleteService.Delete(x => x.SplitId == splitId && x.ParentId == commentId);
+                await commentExecuteDeleteService.Delete(x => x.SplitId == splitId && x.CreatorId == userId && x.Id == commentId);
                 return NoContent();
             }
             catch (Exception ex)

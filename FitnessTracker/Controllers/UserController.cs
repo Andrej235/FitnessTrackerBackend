@@ -45,9 +45,9 @@ namespace FitnessTracker.Controllers
                                         IUpdateService<UserSettings> settingsUpdateService,
                                         IUpdateRangeService<WorkoutPin> workoutPinUpdateRangeService,
                                         IUpdateRangeService<SplitPin> splitPinUpdateRangeService,
-                                        IDeleteService<UserFollows> followDeleteService,
-                                        IDeleteService<WorkoutPin> workoutPinDeleteService,
-                                        IDeleteService<SplitPin> splitPinDeleteService,
+                                        IExecuteDeleteService<UserFollows> followDeleteService,
+                                        IExecuteDeleteService<WorkoutPin> workoutPinDeleteService,
+                                        IExecuteDeleteService<SplitPin> splitPinDeleteService,
                                         ITokenManager tokenManager,
                                         IEmailConfirmationSenderService emailConfirmationSender,
                                         IEmailConfirmationService emailConfirmationService,
@@ -85,9 +85,9 @@ namespace FitnessTracker.Controllers
         private readonly IUpdateService<UserSettings> settingsUpdateService = settingsUpdateService;
         private readonly IUpdateRangeService<WorkoutPin> workoutPinUpdateRangeService = workoutPinUpdateRangeService;
         private readonly IUpdateRangeService<SplitPin> splitPinUpdateRangeService = splitPinUpdateRangeService;
-        private readonly IDeleteService<UserFollows> followDeleteService = followDeleteService;
-        private readonly IDeleteService<WorkoutPin> workoutPinDeleteService = workoutPinDeleteService;
-        private readonly IDeleteService<SplitPin> splitPinDeleteService = splitPinDeleteService;
+        private readonly IExecuteDeleteService<UserFollows> followDeleteService = followDeleteService;
+        private readonly IExecuteDeleteService<WorkoutPin> workoutPinDeleteService = workoutPinDeleteService;
+        private readonly IExecuteDeleteService<SplitPin> splitPinDeleteService = splitPinDeleteService;
         private readonly ITokenManager tokenManager = tokenManager;
         private readonly IEmailConfirmationSenderService emailConfirmationSender = emailConfirmationSender;
         private readonly IEmailConfirmationService emailConfirmationService = emailConfirmationService;

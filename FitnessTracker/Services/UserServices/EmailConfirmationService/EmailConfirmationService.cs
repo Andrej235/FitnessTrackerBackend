@@ -8,19 +8,20 @@ namespace FitnessTracker.Services.UserServices.EmailConfirmationService
 {
     public class EmailConfirmationService(IReadSingleService<User> userReadService,
                                           IUpdateService<User> userUpdateService,
-                                          IDeleteRangeService<EmailConfirmation> deleteRangeService) : IEmailConfirmationService
+                                          IReadSingleService<EmailConfirmation> tokenReadService,
+                                          IExecuteDeleteService<EmailConfirmation> executeDeleteService) : IEmailConfirmationService
     {
         private readonly IReadSingleService<User> userReadService = userReadService;
-        private readonly IUpdateService<Models.User> userUpdateService = userUpdateService;
-        private readonly IDeleteRangeService<EmailConfirmation> deleteRangeService = deleteRangeService;
+        private readonly IReadSingleService<EmailConfirmation> tokenReadService = tokenReadService;
+        private readonly IUpdateService<User> userUpdateService = userUpdateService;
+        private readonly IExecuteDeleteService<EmailConfirmation> executeDeleteService = executeDeleteService;
 
         public async Task<bool> ConfirmEmail(Guid userId, Guid confirmationCode)
         {
             try
             {
-                bool deletedAny = await deleteRangeService.Delete(x => x.UserId == userId);
-                if (!deletedAny)
-                    throw new Exception("User does not have any email confirmation codes");
+                _ = await tokenReadService.Get(x => x.UserId == userId && x.Id == confirmationCode) ?? throw new Exception("Token not found");
+                await executeDeleteService.Delete(x => x.UserId == userId);
 
                 User user = await userReadService.Get(x => x.Id == userId) ?? throw new Exception("User not found");
                 user.EmailConfirmed = true;

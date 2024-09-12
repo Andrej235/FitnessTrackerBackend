@@ -22,7 +22,7 @@ namespace FitnessTracker.Controllers
 
             try
             {
-                _ = await commentDeleteRangeService.Delete(x => x.WorkoutId == workoutId && x.ParentId == commentId);
+                await commentExecuteDeleteService.Delete(x => x.WorkoutId == workoutId && x.ParentId == commentId);
                 await commentDeleteService.Delete(x => x.WorkoutId == workoutId && x.CreatorId == userId && x.Id == commentId);
                 return NoContent();
             }

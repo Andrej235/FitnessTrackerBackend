@@ -27,11 +27,10 @@ namespace FitnessTracker.Controllers
                                          IReadRangeService<Workout> workoutReadRangeService,
                                          IUpdateService<Split> updateService,
                                          IUpdateService<SplitWorkout> splitWorkoutUpdateService,
-                                         IDeleteService<SplitComment> commentDeleteService,
-                                         IDeleteService<SplitCommentLike> commentLikeDeleteService,
-                                         IDeleteService<SplitLike> likeDeleteService,
-                                         IDeleteService<FavoriteSplit> favoriteDeleteService,
-                                         IDeleteRangeService<SplitComment> commentDeleteRangeService,
+                                         IExecuteDeleteService<SplitComment> commentDeleteService,
+                                         IExecuteDeleteService<SplitCommentLike> commentLikeDeleteService,
+                                         IExecuteDeleteService<SplitLike> likeDeleteService,
+                                         IExecuteDeleteService<FavoriteSplit> favoriteDeleteService,
                                          IRequestMapper<CreateSplitRequestDTO, Split> createRequestMapper,
                                          IRequestMapper<CreateSplitCommentRequestDTO, SplitComment> createCommentRequestMapper,
                                          IResponseMapper<Split, SimpleSplitResponseDTO> simpleResponseMapper,
@@ -52,11 +51,10 @@ namespace FitnessTracker.Controllers
         private readonly IReadRangeService<Workout> workoutReadRangeService = workoutReadRangeService;
         private readonly IUpdateService<Split> updateService = updateService;
         private readonly IUpdateService<SplitWorkout> splitWorkoutUpdateService = splitWorkoutUpdateService;
-        private readonly IDeleteService<SplitComment> commentDeleteService = commentDeleteService;
-        private readonly IDeleteService<SplitCommentLike> commentLikeDeleteService = commentLikeDeleteService;
-        private readonly IDeleteService<SplitLike> likeDeleteService = likeDeleteService;
-        private readonly IDeleteService<FavoriteSplit> favoriteDeleteService = favoriteDeleteService;
-        private readonly IDeleteRangeService<SplitComment> commentDeleteRangeService = commentDeleteRangeService;
+        private readonly IExecuteDeleteService<SplitComment> commentExecuteDeleteService = commentDeleteService;
+        private readonly IExecuteDeleteService<SplitCommentLike> commentLikeDeleteService = commentLikeDeleteService;
+        private readonly IExecuteDeleteService<SplitLike> likeDeleteService = likeDeleteService;
+        private readonly IExecuteDeleteService<FavoriteSplit> favoriteDeleteService = favoriteDeleteService;
         private readonly IRequestMapper<CreateSplitRequestDTO, Split> createRequestMapper = createRequestMapper;
         private readonly IRequestMapper<CreateSplitCommentRequestDTO, SplitComment> createCommentRequestMapper = createCommentRequestMapper;
         private readonly IResponseMapper<Split, SimpleSplitResponseDTO> simpleResponseMapper = simpleResponseMapper;
