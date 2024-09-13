@@ -9,7 +9,7 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
 {
     public partial class ExerciseService
     {
-        public async Task<IEnumerable<SimpleExerciseResponseDTO>> GetAll(int? muscleGroupId, int? equipmentId, string? name, int? limit, int? offset)
+        public async Task<IEnumerable<SimpleExerciseResponseDTO>> GetAll(int? muscleGroupId, int? equipmentId, string? name, int? offset, int? limit)
         {
             List<Expression<Func<Exercise, bool>>> filters = [];
 
@@ -56,7 +56,7 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
             mapped.Favorites = await favoriteCountService.Count(x => x.ExerciseId == exerciseId);
 
             if (userId is not null)
-                mapped.IsFavorite = favoriteReadSingleService.Get(x => x.UserId == userId && x.ExerciseId == exerciseId) is not null;
+                mapped.IsFavorite = await favoriteReadSingleService.Get(x => x.UserId == userId && x.ExerciseId == exerciseId) is not null;
 
             return mapped;
         }
