@@ -1,5 +1,4 @@
-﻿using FitnessTracker.Models;
-using FitnessTracker.Utilities;
+﻿using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -22,11 +21,7 @@ namespace FitnessTracker.Controllers
                     || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                _ = await favoriteExerciseCreateService.Add(new FavoriteExercise
-                {
-                    UserId = userId,
-                    ExerciseId = id
-                });
+                await exerciseService.CreateFavorite(id, userId);
                 return Created();
             }
             catch (Exception ex)
@@ -50,7 +45,7 @@ namespace FitnessTracker.Controllers
                     || !Guid.TryParse(userIdString, out Guid userId))
                     return Unauthorized();
 
-                await favoriteExerciseDeleteService.Delete(x => x.UserId == userId && x.ExerciseId == id);
+                await exerciseService.DeleteFavorite(id, userId);
                 return NoContent();
             }
             catch (Exception ex)

@@ -8,7 +8,7 @@ using FitnessTracker.Utilities;
 namespace FitnessTracker.Services.UserServices.ResetPasswordService
 {
     public class ResetPasswordService(IReadSingleService<User> userReadService,
-                                      IUpdateService<Models.User> userUpdateService,
+                                      IUpdateService<User> userUpdateService,
                                       IReadSingleService<EmailConfirmation> tokenReadService,
                                       IDeleteService<EmailConfirmation> deleteService) : IResetPasswordService
     {

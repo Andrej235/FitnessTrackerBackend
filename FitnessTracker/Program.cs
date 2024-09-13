@@ -48,6 +48,7 @@ using FitnessTracker.Services.Mapping.Response.SetMappers;
 using FitnessTracker.Services.Mapping.Response.SplitMappers;
 using FitnessTracker.Services.Mapping.Response.UserMappers;
 using FitnessTracker.Services.Mapping.Response.WorkoutMappers;
+using FitnessTracker.Services.ModelServices.ExerciseService;
 using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
@@ -190,6 +191,7 @@ namespace FitnessTracker
             #endregion
 
             #region Exercise
+            _ = builder.Services.AddScoped<IExerciseService, ExerciseService>();
             _ = builder.Services.AddScoped<ICreateService<Exercise>, CreateService<Exercise>>();
             _ = builder.Services.AddScoped<IReadSingleService<Exercise>, ReadService<Exercise>>();
             _ = builder.Services.AddScoped<IReadRangeService<Exercise>, ReadService<Exercise>>();

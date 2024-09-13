@@ -1,5 +1,4 @@
 ﻿using FitnessTracker.DTOs.Requests.Exercise;
-using FitnessTracker.Models;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,38 +17,7 @@ namespace FitnessTracker.Controllers
         {
             try
             {
-                Exercise newExercise = await createService.Add(createRequestMapper.Map(request));
-
-                await equipmetUsageCreateRangeService.Add(request.Equipment.Select(x => new EquipmentUsage
-                {
-                    ExerciseId = newExercise.Id,
-                    EquipmentId = x
-                }));
-
-                await primaryMuscleGroupCreateRangeService.Add(request.PrimaryMuscleGroups.Select(x => new PrimaryMuscleGroupInExercise
-                {
-                    ExerciseId = newExercise.Id,
-                    MuscleGroupId = x
-                }));
-
-                await primaryMuscleCreateRangeService.Add(request.PrimaryMuscles.Select(x => new PrimaryMuscleInExercise
-                {
-                    ExerciseId = newExercise.Id,
-                    MuscleId = x
-                }));
-
-                await secondaryMuscleGroupCreateRangeService.Add(request.SecondaryMuscleGroups.Select(x => new SecondaryMuscleGroupInExercise
-                {
-                    ExerciseId = newExercise.Id,
-                    MuscleGroupId = x
-                }));
-
-                await secondaryMuscleCreateRangeService.Add(request.SecondaryMuscles.Select(x => new SecondaryMuscleInExercise
-                {
-                    ExerciseId = newExercise.Id,
-                    MuscleId = x
-                }));
-
+                await exerciseService.Create(request);
                 return Created();
             }
             catch (Exception ex)

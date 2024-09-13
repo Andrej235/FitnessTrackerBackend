@@ -16,7 +16,7 @@ namespace FitnessTracker.Controllers
         {
             try
             {
-                await deleteService.Delete(x => x.Id == id);
+                await exerciseService.Delete(id);
                 return Ok();
             }
             catch (Exception ex)
