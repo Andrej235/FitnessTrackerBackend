@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.DTOs.Requests.Exercise;
+using FitnessTracker.Exceptions;
 using FitnessTracker.Models;
 
 namespace FitnessTracker.Services.ModelServices.ExerciseService
@@ -7,7 +8,13 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
     {
         public async Task Update(UpdateExerciseRequestDTO updatedExercise)
         {
-            Exercise? exercise = await readSingleService.Get(x => x.Id == updatedExercise.Id) ?? throw new Exception("Exercise not found"); //TODO: throw custom exception
+            if (updatedExercise.Id <= 0)
+                throw new BadRequestException("Exercise id must be greater than 0");
+
+            if (string.IsNullOrWhiteSpace(updatedExercise.Name))
+                throw new BadRequestException("Exercise name is required");
+
+            Exercise? exercise = await readSingleService.Get(x => x.Id == updatedExercise.Id) ?? throw new NotFoundException($"Exercise with id {updatedExercise.Id} was not found");
 
             await equipmetUsageDeleteService.Delete(x => x.ExerciseId == updatedExercise.Id);
             await primaryMuscleGroupDeleteService.Delete(x => x.ExerciseId == updatedExercise.Id);

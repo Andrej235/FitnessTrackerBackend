@@ -1,5 +1,4 @@
 ﻿using FitnessTracker.DTOs.Responses.Exercises;
-using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -17,21 +16,13 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(int id)
         {
-            try
-            {
-                Guid userId = default;
-                if (User.Identity is ClaimsIdentity claimsIdentity
-                    && claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is string userIdString)
-                    _ = Guid.TryParse(userIdString, out userId);
+            Guid userId = default;
+            if (User.Identity is ClaimsIdentity claimsIdentity
+                && claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is string userIdString)
+                _ = Guid.TryParse(userIdString, out userId);
 
-                DetailedExerciseResponseDTO exercise = await exerciseService.GetDetailed(id, userId);
-                return Ok(exercise);
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return NotFound();
-            }
+            DetailedExerciseResponseDTO exercise = await exerciseService.GetDetailed(id, userId);
+            return Ok(exercise);
         }
     }
 }

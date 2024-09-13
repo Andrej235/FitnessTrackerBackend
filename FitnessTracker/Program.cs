@@ -22,6 +22,7 @@ using FitnessTracker.DTOs.Responses.Split;
 using FitnessTracker.DTOs.Responses.User;
 using FitnessTracker.DTOs.Responses.Workout;
 using FitnessTracker.Emails;
+using FitnessTracker.Exceptions;
 using FitnessTracker.Models;
 using FitnessTracker.Services.Count;
 using FitnessTracker.Services.Create;
@@ -78,7 +79,8 @@ namespace FitnessTracker
                 _ = x.EnableSensitiveDataLogging(); //TODO-PROD: remove in production
             });
             _ = builder.Services.AddSwaggerGen(options => options.SupportNonNullableReferenceTypes());
-
+            _ = builder.Services.AddExceptionHandler<ExceptionHandlerMiddleware>();
+            _ = builder.Services.AddProblemDetails();
 
             #region Rate limiting
             _ = builder.Services.AddMemoryCache();
@@ -460,6 +462,8 @@ namespace FitnessTracker
             WebApplication app = builder.Build();
 
             #region Middleware
+            app.UseExceptionHandler();
+
             if (app.Environment.IsDevelopment())
             {
                 _ = app.UseSwagger();

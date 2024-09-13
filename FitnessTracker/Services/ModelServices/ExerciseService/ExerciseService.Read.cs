@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.DTOs.Responses.Exercises;
+using FitnessTracker.Exceptions;
 using FitnessTracker.Models;
 using FitnessTracker.Services.Read;
 using FitnessTracker.Utilities;
@@ -50,7 +51,7 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
                       .Include(x => x.PrimaryMuscles)
                       .Include(x => x.SecondaryMuscles)
                       .Include(x => x.Equipment)
-                ) ?? throw new Exception("Exercise not found"); //TODO: throw custom exception
+                ) ?? throw new NotFoundException($"Exercise with id {exerciseId} was not found");
 
             DetailedExerciseResponseDTO mapped = detailedResponseMapper.Map(exercise);
             mapped.Favorites = await favoriteCountService.Count(x => x.ExerciseId == exerciseId);
