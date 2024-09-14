@@ -2,6 +2,6 @@
 {
     public partial class ExerciseService
     {
-        public async Task Delete(int id) => await deleteService.Delete(x => x.Id == id);
+        public Task Delete(int id) => deleteService.Delete(x => x.Id == id);
     }
 }
