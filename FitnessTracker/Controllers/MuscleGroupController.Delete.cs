@@ -14,16 +14,8 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await deleteService.Delete(x => x.Id == id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return NotFound();
-            }
+            await muscleGroupService.Delete(id);
+            return NoContent();
         }
     }
 }

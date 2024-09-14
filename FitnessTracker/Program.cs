@@ -51,6 +51,7 @@ using FitnessTracker.Services.Mapping.Response.UserMappers;
 using FitnessTracker.Services.Mapping.Response.WorkoutMappers;
 using FitnessTracker.Services.ModelServices.EquipmentService;
 using FitnessTracker.Services.ModelServices.ExerciseService;
+using FitnessTracker.Services.ModelServices.MuscleGroupService;
 using FitnessTracker.Services.ModelServices.MuscleService;
 using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
@@ -313,6 +314,7 @@ namespace FitnessTracker
             #endregion
 
             #region Muscle group
+            _ = builder.Services.AddScoped<IMuscleGroupService, MuscleGroupService>();
             _ = builder.Services.AddScoped<ICreateService<MuscleGroup>, CreateService<MuscleGroup>>();
             _ = builder.Services.AddScoped<ICreateRangeService<MuscleGroup>, CreateService<MuscleGroup>>();
             _ = builder.Services.AddScoped<IReadSingleService<MuscleGroup>, ReadService<MuscleGroup>>();
