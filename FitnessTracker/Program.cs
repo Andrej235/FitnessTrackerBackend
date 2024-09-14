@@ -49,6 +49,7 @@ using FitnessTracker.Services.Mapping.Response.SetMappers;
 using FitnessTracker.Services.Mapping.Response.SplitMappers;
 using FitnessTracker.Services.Mapping.Response.UserMappers;
 using FitnessTracker.Services.Mapping.Response.WorkoutMappers;
+using FitnessTracker.Services.ModelServices.EquipmentService;
 using FitnessTracker.Services.ModelServices.ExerciseService;
 using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
@@ -341,6 +342,7 @@ namespace FitnessTracker
             #endregion
 
             #region Equipment
+            _ = builder.Services.AddScoped<IEquipmentService, EquipmentService>();
             _ = builder.Services.AddScoped<ICreateService<Equipment>, CreateService<Equipment>>();
             _ = builder.Services.AddScoped<ICreateRangeService<Equipment>, CreateService<Equipment>>();
             _ = builder.Services.AddScoped<IReadSingleService<Equipment>, ReadService<Equipment>>();
