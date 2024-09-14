@@ -2,6 +2,6 @@
 {
     public interface IEmailConfirmationService
     {
-        Task<bool> ConfirmEmail(Guid userId, Guid confirmationCode);
+        Task ConfirmEmail(Guid userId, Guid confirmationCode);
     }
 }

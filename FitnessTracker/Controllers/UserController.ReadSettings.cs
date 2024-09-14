@@ -1,5 +1,4 @@
 ﻿using FitnessTracker.DTOs.Responses.User;
-using FitnessTracker.Services.Read;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -19,12 +18,7 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            Models.UserSettings? settings = await settingsReadSingleService.Get(x => x.UserId == userId, x => x.AsNoTracking());
-
-            if (settings is null)
-                return Unauthorized();
-
-            return Ok(settingsResponseMapper.Map(settings));
+            return Ok(await userService.GetSettings(userId));
         }
     }
 }

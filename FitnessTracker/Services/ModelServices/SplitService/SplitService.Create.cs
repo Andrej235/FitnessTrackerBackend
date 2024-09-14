@@ -14,7 +14,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 throw new NotFoundException("One or more selected workouts could not found");
 
             if (selectedWorkouts.Any(x => !x.IsPublic && x.CreatorId != userId))
-                throw new UnauthorizedAccessException("One or more selected workouts are not public and you are not the creator");
+                throw new AccessDeniedException("One or more selected workouts are not public and you are not the creator");
 
             if (request.IsPublic && selectedWorkouts.Any(x => !x.IsPublic))
                 throw new BadRequestException("Attempted to create a public split with one or more private workouts");

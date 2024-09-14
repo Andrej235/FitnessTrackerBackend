@@ -13,60 +13,12 @@ namespace FitnessTracker.Controllers
         [HttpPost("register")]
         [ProducesResponseType(typeof(SimpleJWTResponseDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Register([FromBody] RegisterUserRequestDTO request)
-        {
-            try
-            {
-                if (request.Username.Length < 3 || !ValidEmailRegex().IsMatch(request.Email.Trim()) || request.Password.Length < 8)
-                    return BadRequest("Invalid registration details");
-
-                Models.User mapped = registrationMapper.Map(request);
-                Models.User newUser = await createService.Add(mapped);
-
-                _ = await settingsCreateService.Add(new Models.UserSettings
-                {
-                    UserId = newUser.Id,
-                    PublicStreak = true,
-                    PublicCompletedWorkouts = true,
-                    PublicCurrentSplit = true,
-                    PublicFollowing = true,
-                    PublicLikedWorkouts = true,
-                    PublicLikedSplits = true,
-                    PublicFavoriteWorkouts = true,
-                    PublicFavoriteSplits = true,
-                });
-
-                string jwt = await tokenManager.GenerateJWTAndRefreshToken(newUser, Response.Cookies);
-                await emailConfirmationSender.SendEmailConfirmation(newUser.Email, newUser.Id);
-
-                return Created($"/user/{newUser.Id}", jwtResponseMapper.Map(jwt));
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest(ex.GetErrorMessage());
-            }
-        }
+        public async Task<IActionResult> Register([FromBody] RegisterUserRequestDTO request) => Created((string?)null, await userService.Register(request, Response.Cookies));
 
         [HttpPost("login")]
         [ProducesResponseType(typeof(SimpleJWTResponseDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Login([FromBody] LoginUserRequestDTO request)
-        {
-            if (!ValidEmailRegex().IsMatch(request.Email) || request.Password.Length < 8)
-                return BadRequest("Incorrect email or password");
-
-            Models.User? user = await readSingleService.Get(x => x.Email == request.Email);
-            if (user is null)
-                return BadRequest("Incorrect email or password");
-
-            byte[] hash = request.Password.ToHash(user.Salt);
-            if (!user.PasswordHash.SequenceEqual(hash))
-                return BadRequest("Incorrect email or password");
-
-            string jwt = await tokenManager.GenerateJWTAndRefreshToken(user, Response.Cookies);
-            return Created("/api/user/me", jwtResponseMapper.Map(jwt));
-        }
+        public async Task<IActionResult> Login([FromBody] LoginUserRequestDTO request) => Created((string?)null, await userService.Login(request, Response.Cookies));
 
         [Authorize(AuthenticationSchemes = "AllowExpired")]
         [HttpPost("refresh")]
@@ -86,8 +38,7 @@ namespace FitnessTracker.Controllers
                     || !Guid.TryParse(refreshTokenString, out Guid refreshToken))
                     return Unauthorized("Invalid token");
 
-                string newJwt = await tokenManager.RefreshJWT(jwtId, refreshToken, userId);
-                return Created("/api/user/me", jwtResponseMapper.Map(newJwt));
+                return Created((string?)null, await userService.Refresh(jwtId, userId, refreshToken));
             }
             catch (Exception ex)
             {
@@ -105,7 +56,7 @@ namespace FitnessTracker.Controllers
             if (!Request.Cookies.TryGetValue("refreshToken", out string? refreshTokenString) || !Guid.TryParse(refreshTokenString, out Guid refreshToken))
                 return Unauthorized("Invalid token");
 
-            await tokenManager.InvalidateRefreshToken(refreshToken);
+            await userService.Logout(refreshToken);
             return NoContent();
         }
     }

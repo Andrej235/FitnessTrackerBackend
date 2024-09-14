@@ -1,4 +1,5 @@
-﻿using FitnessTracker.Models;
+﻿using FitnessTracker.Exceptions;
+using FitnessTracker.Models;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
@@ -16,23 +17,22 @@ namespace FitnessTracker.Services.UserServices.EmailConfirmationService
         private readonly IUpdateService<User> userUpdateService = userUpdateService;
         private readonly IDeleteService<EmailConfirmation> deleteService = deleteService;
 
-        public async Task<bool> ConfirmEmail(Guid userId, Guid confirmationCode)
+        public async Task ConfirmEmail(Guid userId, Guid confirmationCode)
         {
             try
             {
-                _ = await tokenReadService.Get(x => x.UserId == userId && x.Id == confirmationCode) ?? throw new Exception("Token not found");
+                _ = await tokenReadService.Get(x => x.UserId == userId && x.Id == confirmationCode) ?? throw new NotFoundException("Confirmation code not found");
                 await deleteService.Delete(x => x.UserId == userId);
 
-                User user = await userReadService.Get(x => x.Id == userId) ?? throw new Exception("User not found");
+                User user = await userReadService.Get(x => x.Id == userId) ?? throw new NotFoundException("User not found");
                 user.EmailConfirmed = true;
                 user.Role = Role.User;
                 await userUpdateService.Update(user);
-                return true;
             }
             catch (Exception ex)
             {
                 ex.LogError();
-                return false;
+                throw new BadRequestException("Failed to confirm email", ex);
             }
         }
     }

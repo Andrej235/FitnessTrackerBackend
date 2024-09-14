@@ -12,7 +12,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
         {
             Split split = await readSingleService.Get(x => x.Id == splitId, x => x.Include(x => x.Workouts).ThenInclude(x => x.Workout)) ?? throw new NotFoundException($"Split with id {splitId} not found.");
             if (split.CreatorId != userId)
-                throw new UnauthorizedAccessException("You can only update splits that you created.");
+                throw new AccessDeniedException("You can only update splits that you created.");
 
             split.Name = request.Name;
             split.Description = request.Description;
@@ -25,7 +25,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
         {
             Split? split = await readSingleService.Get(x => x.Id == splitId, x => x.Include(x => x.Workouts).ThenInclude(x => x.Workout)) ?? throw new NotFoundException($"Split with id {splitId} not found.");
             if (split.CreatorId != userId)
-                throw new UnauthorizedAccessException("You can only update splits that you created.");
+                throw new AccessDeniedException("You can only update splits that you created.");
 
             SplitWorkout splitWorkout = split.Workouts.FirstOrDefault(x => x.Day == day) ?? throw new NotFoundException($"Split workout for day {day} not found.");
             splitWorkout.WorkoutId = request.NewWorkoutId; //TODO: Check if workout is public

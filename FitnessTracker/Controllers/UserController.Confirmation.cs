@@ -15,25 +15,13 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> ResendConfirmationEmail()
         {
-            try
-            {
-                if (User.Identity is not ClaimsIdentity claimsIdentity
-                    || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out Guid userId))
-                    return Unauthorized();
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out Guid userId))
+                return Unauthorized();
 
-                Models.User? user = await readSingleService.Get(x => x.Id == userId);
-                if (user is null)
-                    return Unauthorized();
-
-                await emailConfirmationSender.SendEmailConfirmation(user.Email, userId);
-                return Created();
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest(ex.GetErrorMessage());
-            }
+            await userService.ResendConfirmationEmail(userId);
+            return Created();
         }
 
         [Authorize(Roles = Role.Unverified)]
@@ -44,21 +32,13 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> ConfirmEmail(Guid code)
         {
-            try
-            {
-                if (User.Identity is not ClaimsIdentity claimsIdentity
-                    || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out Guid userId))
-                    return Unauthorized();
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out Guid userId))
+                return Unauthorized();
 
-                bool success = await emailConfirmationService.ConfirmEmail(userId, code);
-                return success ? NoContent() : BadRequest("Invalid code");
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest(ex.GetErrorMessage());
-            }
+            await userService.ConfirmEmail(userId, code);
+            return NoContent();
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using FitnessTracker.DTOs.Requests.Pins;
-using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -20,22 +19,7 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            try
-            {
-                IEnumerable<DeleteSinglePinRequestDTO> deletedWorkouts = request.DeletedPins.Where(x => x.Type == DTOs.Enums.PinType.Workout);
-                IEnumerable<DeleteSinglePinRequestDTO> deletedSplits = request.DeletedPins.Where(x => x.Type == DTOs.Enums.PinType.Split);
-
-                foreach (DeleteSinglePinRequestDTO? workout in deletedWorkouts)
-                    await workoutPinDeleteService.Delete(x => x.UserId == userId && x.WorkoutId == workout.Id);
-
-                foreach (DeleteSinglePinRequestDTO? split in deletedSplits)
-                    await splitPinDeleteService.Delete(x => x.UserId == userId && x.SplitId == split.Id);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.GetErrorMessage());
-            }
-
+            await userService.DeletePins(userId, request);
             return NoContent();
         }
     }

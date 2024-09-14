@@ -54,6 +54,7 @@ using FitnessTracker.Services.ModelServices.ExerciseService;
 using FitnessTracker.Services.ModelServices.MuscleGroupService;
 using FitnessTracker.Services.ModelServices.MuscleService;
 using FitnessTracker.Services.ModelServices.SplitService;
+using FitnessTracker.Services.ModelServices.UserService;
 using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
@@ -217,6 +218,7 @@ namespace FitnessTracker
             #endregion
 
             #region User 
+            _ = builder.Services.AddScoped<IUserService, UserService>();
             _ = builder.Services.AddScoped<ICreateService<User>, CreateService<User>>();
             _ = builder.Services.AddScoped<IReadSingleService<User>, ReadService<User>>();
             _ = builder.Services.AddScoped<IReadSingleSelectedService<User>, ReadService<User>>();
@@ -471,7 +473,7 @@ namespace FitnessTracker
             WebApplication app = builder.Build();
 
             #region Middleware
-            app.UseExceptionHandler();
+            _ = app.UseExceptionHandler();
 
             if (app.Environment.IsDevelopment())
             {

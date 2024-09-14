@@ -66,7 +66,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 ?? throw new NotFoundException();
 
             if (!data.split.IsPublic && data.split.CreatorId != userId)
-                throw new UnauthorizedAccessException();
+                throw new AccessDeniedException();
 
             DetailedSplitResponseDTO mapped = detailedResponseMapper.Map(data.split);
             mapped.LikeCount = data.likeCount;
@@ -94,7 +94,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 ?? throw new NotFoundException();
 
             if (!user.PublicStreak)
-                throw new UnauthorizedAccessException();
+                throw new AccessDeniedException();
 
             Split? split = await readSingleService.Get(
                 x => x.Id == user.SplitId,
@@ -104,7 +104,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 ?? throw new NotFoundException();
 
             if (!split.IsPublic)
-                throw new UnauthorizedAccessException();
+                throw new AccessDeniedException();
 
             DetailedUserSplitResponseDTO mapped = detailedUserSplitResponseMapper.Map(split);
             return mapped;

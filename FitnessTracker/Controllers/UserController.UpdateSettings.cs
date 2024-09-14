@@ -1,5 +1,4 @@
 ﻿using FitnessTracker.DTOs.Requests.User;
-using FitnessTracker.Services.Read;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -19,21 +18,7 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            Models.UserSettings? settings = await settingsReadSingleService.Get(x => x.UserId == userId, x => x.AsNoTracking());
-
-            if (settings is null)
-                return Unauthorized();
-
-            settings.PublicFollowing = request.PublicFollowing;
-            settings.PublicCompletedWorkouts = request.PublicCompletedWorkouts;
-            settings.PublicStreak = request.PublicStreak;
-            settings.PublicCurrentSplit = request.PublicCurrentSplit;
-            settings.PublicLikedWorkouts = request.PublicLikedWorkouts;
-            settings.PublicFavoriteWorkouts = request.PublicFavoriteWorkouts;
-            settings.PublicLikedSplits = request.PublicLikedSplits;
-            settings.PublicFavoriteSplits = request.PublicFavoriteSplits;
-            await settingsUpdateService.Update(settings);
-
+            await userService.UpdateSettings(userId, request);
             return NoContent();
         }
     }

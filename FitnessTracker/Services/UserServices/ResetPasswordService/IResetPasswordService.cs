@@ -2,6 +2,6 @@
 {
     public interface IResetPasswordService
     {
-        Task<bool> ResetPassword(Guid userId, Guid confirmationCode, string newPassword);
+        Task ResetPassword(Guid userId, Guid confirmationCode, string newPassword);
     }
 }

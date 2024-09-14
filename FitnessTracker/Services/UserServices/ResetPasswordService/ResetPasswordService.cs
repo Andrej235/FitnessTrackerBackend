@@ -1,4 +1,5 @@
 ﻿
+using FitnessTracker.Exceptions;
 using FitnessTracker.Models;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Read;
@@ -17,22 +18,21 @@ namespace FitnessTracker.Services.UserServices.ResetPasswordService
         private readonly IReadSingleService<EmailConfirmation> tokenReadService = tokenReadService;
         private readonly IDeleteService<EmailConfirmation> deleteService = deleteService;
 
-        public async Task<bool> ResetPassword(Guid userId, Guid confirmationCode, string newPassword)
+        public async Task ResetPassword(Guid userId, Guid confirmationCode, string newPassword)
         {
             try
             {
-                _ = await tokenReadService.Get(x => x.UserId == userId && x.Id == confirmationCode) ?? throw new Exception("Token not found");
+                _ = await tokenReadService.Get(x => x.UserId == userId && x.Id == confirmationCode) ?? throw new NotFoundException("Token not found");
                 await deleteService.Delete(x => x.UserId == userId);
 
-                User user = await userReadService.Get(x => x.Id == userId) ?? throw new Exception("User not found");
+                User user = await userReadService.Get(x => x.Id == userId) ?? throw new NotFoundException("User not found");
                 user.PasswordHash = newPassword.ToHash(user.Salt);
                 await userUpdateService.Update(user);
-                return true;
             }
             catch (Exception ex)
             {
                 ex.LogError();
-                return false;
+                throw new BadRequestException("Failed to reset password", ex);
             }
         }
     }

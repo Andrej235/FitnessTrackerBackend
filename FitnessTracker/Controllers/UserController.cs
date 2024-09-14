@@ -12,6 +12,7 @@ using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
+using FitnessTracker.Services.ModelServices.UserService;
 using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
@@ -26,7 +27,8 @@ namespace FitnessTracker.Controllers
     [Route("api/user")]
     [ApiController]
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
-    public partial class UserController(ICreateService<User> createService,
+    public partial class UserController(IUserService userService,
+                                        ICreateService<User> createService,
                                         ICreateService<UserSettings> settingsCreateService,
                                         ICreateService<CompletedWorkout> completedWorkoutCreateService,
                                         ICreateService<UserFollows> followCreateService,
@@ -66,6 +68,7 @@ namespace FitnessTracker.Controllers
                                         IResponseMapper<IEnumerable<CompletedWorkout>, DetailedWeekOfCompletedWorkoutsResponseDTO> detailedWeekOfCompletedWorkoutsResponseMapper,
                                         IResponseMapper<string, SimpleJWTResponseDTO> jwtResponseMapper) : ControllerBase
     {
+        private readonly IUserService userService = userService;
         private readonly ICreateService<User> createService = createService;
         private readonly ICreateService<UserSettings> settingsCreateService = settingsCreateService;
         private readonly ICreateService<CompletedWorkout> completedWorkoutCreateService = completedWorkoutCreateService;
