@@ -2,6 +2,10 @@
 {
     public partial class SplitService
     {
-        public Task DeleteComment(Guid splitId, Guid commentId, Guid userId) => throw new NotImplementedException();
+        public async Task DeleteComment(Guid splitId, Guid commentId, Guid userId)
+        {
+            await commentDeleteService.Delete(x => x.SplitId == splitId && x.ParentId == commentId);
+            await commentDeleteService.Delete(x => x.SplitId == splitId && x.CreatorId == userId && x.Id == commentId);
+        }
     }
 }

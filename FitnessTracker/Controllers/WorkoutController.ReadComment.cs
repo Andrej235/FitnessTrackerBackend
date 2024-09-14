@@ -21,7 +21,7 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            IEnumerable<object> comments = await commentSelectService.Get(
+            IEnumerable<SimpleWorkoutCommentResponseDTO> comments = await commentSelectService.Get(
                 x => new SimpleWorkoutCommentResponseDTO
                 {
                     Id = x.Id,
@@ -59,7 +59,7 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            IEnumerable<object> comments = await commentSelectService.Get(
+            IEnumerable<SimpleWorkoutCommentResponseDTO> comments = await commentSelectService.Get(
                 x => new SimpleWorkoutCommentResponseDTO
                 {
                     Id = x.Id,

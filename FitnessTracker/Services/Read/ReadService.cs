@@ -31,7 +31,7 @@ namespace FitnessTracker.Services.Read
                 : source.Where(criteria).ApplyOffsetAndLimit(offset, limit);
         });
 
-        public Task<IEnumerable<object>> Get(Expression<Func<TEntity, object>> select, Expression<Func<TEntity, bool>>? criteria, int? offset = 0, int? limit = -1, Func<IWrappedQueryable<TEntity>, IWrappedResult<TEntity>>? queryBuilder = null) => Task.Run(() =>
+        public Task<IEnumerable<T>> Get<T>(Expression<Func<TEntity, T>> select, Expression<Func<TEntity, bool>>? criteria, int? offset = 0, int? limit = -1, Func<IWrappedQueryable<TEntity>, IWrappedResult<TEntity>>? queryBuilder = null) => Task.Run(() =>
         {
             if (queryBuilder is null)
                 return criteria is null

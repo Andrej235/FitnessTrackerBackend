@@ -53,6 +53,7 @@ using FitnessTracker.Services.ModelServices.EquipmentService;
 using FitnessTracker.Services.ModelServices.ExerciseService;
 using FitnessTracker.Services.ModelServices.MuscleGroupService;
 using FitnessTracker.Services.ModelServices.MuscleService;
+using FitnessTracker.Services.ModelServices.SplitService;
 using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
@@ -395,10 +396,12 @@ namespace FitnessTracker
             #endregion
 
             #region Split
+            _ = builder.Services.AddScoped<ISplitService, SplitService>();
             _ = builder.Services.AddScoped<ICreateService<Split>, CreateService<Split>>();
             _ = builder.Services.AddScoped<IReadSingleService<Split>, ReadService<Split>>();
             _ = builder.Services.AddScoped<IReadSingleSelectedService<Split>, ReadService<Split>>();
             _ = builder.Services.AddScoped<IReadRangeService<Split>, ReadService<Split>>();
+            _ = builder.Services.AddScoped<IReadRangeSelectedService<Split>, ReadService<Split>>();
             _ = builder.Services.AddScoped<IUpdateService<Split>, UpdateService<Split>>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateSplitRequestDTO, Split>, CreateSplitRequestMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<Split, SimpleSplitResponseDTO>, SimpleSplitResponseMapper>();
@@ -421,7 +424,7 @@ namespace FitnessTracker
             #region Split comment
             _ = builder.Services.AddScoped<ICreateService<SplitComment>, CreateService<SplitComment>>();
             _ = builder.Services.AddScoped<IReadSingleService<SplitComment>, ReadService<SplitComment>>();
-            _ = builder.Services.AddScoped<IReadRangeService<SplitComment>, ReadService<SplitComment>>();
+            _ = builder.Services.AddScoped<IReadRangeSelectedService<SplitComment>, ReadService<SplitComment>>();
             _ = builder.Services.AddScoped<IDeleteService<SplitComment>, DeleteService<SplitComment>>();
             _ = builder.Services.AddScoped<IDeleteService<SplitComment>, DeleteService<SplitComment>>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateSplitCommentRequestDTO, SplitComment>, CreateSplitCommentRequestMapper>();

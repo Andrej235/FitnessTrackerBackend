@@ -21,20 +21,8 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            try
-            {
-                Models.SplitComment mapped = createCommentRequestMapper.Map(request);
-                mapped.CreatorId = userId;
-                mapped.SplitId = splitId;
-
-                _ = await commentCreateService.Add(mapped);
-                return Created();
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest("Failed to create comment");
-            }
+            await splitService.CreateComment(splitId, userId, request);
+            return Created();
         }
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
@@ -50,21 +38,8 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            try
-            {
-                Models.SplitComment mapped = createCommentRequestMapper.Map(request);
-                mapped.CreatorId = userId;
-                mapped.SplitId = splitId;
-                mapped.ParentId = commentId;
-
-                _ = await commentCreateService.Add(mapped);
-                return Created();
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest("Failed to create comment");
-            }
+            await splitService.CreateReply(splitId, commentId, userId, request);
+            return Created();
         }
     }
 }

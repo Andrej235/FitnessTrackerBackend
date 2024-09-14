@@ -19,7 +19,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                                       IReadSingleService<Split> readSingleService,
                                       IReadSingleSelectedService<Split> readSingleSelectedService,
                                       IReadRangeService<Split> readRangeService,
-                                      IReadRangeService<SplitComment> commentReadRangeService,
+                                      IReadRangeSelectedService<SplitComment> commentReadSelectedRangeService,
                                       IReadRangeService<Workout> workoutReadRangeService,
                                       IUpdateService<Split> updateService,
                                       IUpdateService<SplitWorkout> splitWorkoutUpdateService,
@@ -43,7 +43,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
         private readonly IReadSingleService<Split> readSingleService = readSingleService;
         private readonly IReadSingleSelectedService<Split> readSingleSelectedService = readSingleSelectedService;
         private readonly IReadRangeService<Split> readRangeService = readRangeService;
-        private readonly IReadRangeService<SplitComment> commentReadRangeService = commentReadRangeService;
+        private readonly IReadRangeSelectedService<SplitComment> commentReadSelectedRangeService = commentReadSelectedRangeService;
         private readonly IReadRangeService<Workout> workoutReadRangeService = workoutReadRangeService;
         private readonly IUpdateService<Split> updateService = updateService;
         private readonly IUpdateService<SplitWorkout> splitWorkoutUpdateService = splitWorkoutUpdateService;

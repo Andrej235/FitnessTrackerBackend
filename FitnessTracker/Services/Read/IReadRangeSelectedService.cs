@@ -2,8 +2,8 @@
 
 namespace FitnessTracker.Services.Read
 {
-    public interface IReadRangeSelectedService<T> where T : class
+    public interface IReadRangeSelectedService<TEntity> where TEntity : class
     {
-        Task<IEnumerable<object>> Get(Expression<Func<T, object>> select, Expression<Func<T, bool>>? criteria, int? offset = 0, int? limit = -1, Func<IWrappedQueryable<T>, IWrappedResult<T>>? queryBuilder = null);
+        Task<IEnumerable<T>> Get<T>(Expression<Func<TEntity, T>> select, Expression<Func<TEntity, bool>>? criteria, int? offset = 0, int? limit = -1, Func<IWrappedQueryable<TEntity>, IWrappedResult<TEntity>>? queryBuilder = null);
     }
 }

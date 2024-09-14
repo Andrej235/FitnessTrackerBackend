@@ -20,17 +20,8 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            try
-            {
-                await commentDeleteService.Delete(x => x.SplitId == splitId && x.ParentId == commentId);
-                await commentDeleteService.Delete(x => x.SplitId == splitId && x.CreatorId == userId && x.Id == commentId);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest("Failed to delete comment");
-            }
+            await splitService.DeleteComment(splitId, commentId, userId);
+            return NoContent();
         }
     }
 }

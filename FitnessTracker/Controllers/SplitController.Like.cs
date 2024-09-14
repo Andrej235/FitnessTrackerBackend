@@ -20,21 +20,8 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            try
-            {
-                _ = await likeCreateService.Add(new()
-                {
-                    UserId = userId,
-                    SplitId = id
-                });
-                return Created();
-
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest("Failed to like");
-            }
+            await splitService.CreateLike(id, userId);
+            return Created();
         }
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
@@ -50,16 +37,8 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            try
-            {
-                await likeDeleteService.Delete(x => x.UserId == userId && x.SplitId == id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest("Failed to remove like");
-            }
+            await splitService.DeleteLike(id, userId);
+            return NoContent();
         }
     }
 }
