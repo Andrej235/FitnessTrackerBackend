@@ -120,7 +120,7 @@ namespace FitnessTracker.Controllers
 
         [HttpGet("{username}/detailed")]
         [ProducesResponseType(typeof(DetailedPublicUserResponseDTO), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(DetailedPublicUserResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetDetailed(string username)
         {
             Models.User? user = await readSingleService.Get(x => x.Username == username);
