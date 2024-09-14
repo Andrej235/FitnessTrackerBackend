@@ -8,38 +8,34 @@ using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
 using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
-using Microsoft.AspNetCore.Mvc;
 
-namespace FitnessTracker.Controllers
+namespace FitnessTracker.Services.ModelServices.WorkoutService
 {
-    [ApiController]
-    [Route("api/workout")]
-    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
-    public partial class WorkoutController(ICreateService<Workout> createService,
-                                           ICreateService<WorkoutComment> commentCreateService,
-                                           ICreateService<WorkoutCommentLike> commentLikeCreateService,
-                                           ICreateService<WorkoutLike> likeCreateService,
-                                           ICreateService<FavoriteWorkout> favoriteCreateService,
-                                           IReadSingleService<Workout> readSingleService,
-                                           IReadSingleSelectedService<Workout> readSingleSelectedService,
-                                           IReadSingleSelectedService<User> userReadSingleSelectedService,
-                                           IReadRangeService<Workout> readRangeService,
-                                           IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
-                                           IReadRangeSelectedService<WorkoutComment> commentSelectService,
-                                           IReadRangeService<WorkoutLike> likeReadRangeService,
-                                           IReadRangeService<FavoriteWorkout> favoriteReadRangeService,
-                                           IUpdateService<Workout> updateService,
-                                           IDeleteService<Workout> deleteService,
-                                           IDeleteService<WorkoutComment> commentDeleteService,
-                                           IDeleteService<WorkoutCommentLike> commentLikeDeleteService,
-                                           IDeleteService<WorkoutLike> likeDeleteService,
-                                           IDeleteService<FavoriteWorkout> favoriteDeleteService,
-                                           IRequestMapper<CreateWorkoutRequestDTO, Workout> createRequestMapper,
-                                           IRequestMapper<CreateSetRequestDTO, Set> setCreateRequestMapper,
-                                           IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment> commentCreateRequestMapper,
-                                           IResponseMapper<Workout, NewWorkoutResponseDTO> newWorkoutResponseMapper,
-                                           IResponseMapper<Workout, SimpleWorkoutResponseDTO> simpleResponseMapper,
-                                           IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedResponseMapper) : ControllerBase
+    public partial class WorkoutService(ICreateService<Workout> createService,
+                                        ICreateService<WorkoutComment> commentCreateService,
+                                        ICreateService<WorkoutCommentLike> commentLikeCreateService,
+                                        ICreateService<WorkoutLike> likeCreateService,
+                                        ICreateService<FavoriteWorkout> favoriteCreateService,
+                                        IReadSingleService<Workout> readSingleService,
+                                        IReadSingleSelectedService<Workout> readSingleSelectedService,
+                                        IReadSingleSelectedService<User> userReadSingleSelectedService,
+                                        IReadRangeService<Workout> readRangeService,
+                                        IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
+                                        IReadRangeSelectedService<WorkoutComment> commentSelectService,
+                                        IReadRangeService<WorkoutLike> likeReadRangeService,
+                                        IReadRangeService<FavoriteWorkout> favoriteReadRangeService,
+                                        IUpdateService<Workout> updateService,
+                                        IDeleteService<Workout> deleteService,
+                                        IDeleteService<WorkoutComment> commentDeleteService,
+                                        IDeleteService<WorkoutCommentLike> commentLikeDeleteService,
+                                        IDeleteService<WorkoutLike> likeDeleteService,
+                                        IDeleteService<FavoriteWorkout> favoriteDeleteService,
+                                        IRequestMapper<CreateWorkoutRequestDTO, Workout> createRequestMapper,
+                                        IRequestMapper<CreateSetRequestDTO, Set> setCreateRequestMapper,
+                                        IRequestMapper<CreateWorkoutCommentRequestDTO, WorkoutComment> commentCreateRequestMapper,
+                                        IResponseMapper<Workout, NewWorkoutResponseDTO> newWorkoutResponseMapper,
+                                        IResponseMapper<Workout, SimpleWorkoutResponseDTO> simpleResponseMapper,
+                                        IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedResponseMapper) : IWorkoutService
     {
         private readonly ICreateService<Workout> createService = createService;
         private readonly ICreateService<WorkoutComment> commentCreateService = commentCreateService;

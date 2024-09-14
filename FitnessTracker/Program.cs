@@ -55,6 +55,7 @@ using FitnessTracker.Services.ModelServices.MuscleGroupService;
 using FitnessTracker.Services.ModelServices.MuscleService;
 using FitnessTracker.Services.ModelServices.SplitService;
 using FitnessTracker.Services.ModelServices.UserService;
+using FitnessTracker.Services.ModelServices.WorkoutService;
 using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
 using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
@@ -263,6 +264,7 @@ namespace FitnessTracker
             #endregion
 
             #region Workouts
+            _ = builder.Services.AddScoped<IWorkoutService, WorkoutService>();
             _ = builder.Services.AddScoped<IReadSingleService<Workout>, ReadService<Workout>>();
             _ = builder.Services.AddScoped<IReadSingleSelectedService<Workout>, ReadService<Workout>>();
             _ = builder.Services.AddScoped<IReadRangeService<Workout>, ReadService<Workout>>();
