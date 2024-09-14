@@ -7,7 +7,6 @@ namespace FitnessTracker.Controllers
 {
     public partial class SplitController
     {
-
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPost("comment/{id:guid}/like")]
         [ProducesResponseType(StatusCodes.Status201Created)]
