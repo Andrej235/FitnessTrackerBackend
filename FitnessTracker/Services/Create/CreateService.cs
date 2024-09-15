@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.Data;
+using FitnessTracker.Exceptions;
 using FitnessTracker.Utilities;
 
 namespace FitnessTracker.Services.Create
@@ -17,7 +18,7 @@ namespace FitnessTracker.Services.Create
             catch (Exception ex)
             {
                 ex.LogError();
-                throw;
+                throw new FailedToCreateEntityException("Failed to create entity", ex);
             }
         }
 
@@ -32,7 +33,7 @@ namespace FitnessTracker.Services.Create
             catch (Exception ex)
             {
                 ex.LogError();
-                throw;
+                throw new FailedToCreateEntityException("Failed to create entity", ex);
             }
         }
     }

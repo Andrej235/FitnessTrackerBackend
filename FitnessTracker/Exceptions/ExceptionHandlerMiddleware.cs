@@ -9,6 +9,7 @@ namespace FitnessTracker.Exceptions
             switch (exception)
             {
                 case BadRequestException: // 400
+                case FailedToCreateEntityException:
                     httpContext.Response.StatusCode = 400;
                     break;
 
