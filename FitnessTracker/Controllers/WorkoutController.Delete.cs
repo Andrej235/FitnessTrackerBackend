@@ -20,20 +20,8 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            try
-            {
-                await likeDeleteService.Delete(x => x.WorkoutId == id);
-                await favoriteDeleteService.Delete(x => x.WorkoutId == id);
-                await commentLikeDeleteService.Delete(x => x.WorkoutId == id);
-                await commentDeleteService.Delete(x => x.WorkoutId == id);
-                await deleteService.Delete(x => x.CreatorId == userId && x.Id == id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return NotFound();
-            }
+            await workoutService.Delete(userId, id);
+            return NoContent();
         }
     }
 }

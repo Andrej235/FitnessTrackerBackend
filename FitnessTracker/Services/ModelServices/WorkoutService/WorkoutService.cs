@@ -19,6 +19,7 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                                         IReadSingleService<Workout> readSingleService,
                                         IReadSingleSelectedService<Workout> readSingleSelectedService,
                                         IReadSingleSelectedService<User> userReadSingleSelectedService,
+                                        IReadSingleSelectedService<WorkoutComment> commentReadSingleSelectedService,
                                         IReadRangeService<Workout> readRangeService,
                                         IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
                                         IReadRangeSelectedService<WorkoutComment> commentSelectService,
@@ -45,6 +46,7 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
         private readonly IReadSingleService<Workout> readSingleService = readSingleService;
         private readonly IReadSingleSelectedService<Workout> readSingleSelectedService = readSingleSelectedService;
         private readonly IReadSingleSelectedService<User> userReadSingleSelectedService = userReadSingleSelectedService;
+        private readonly IReadSingleSelectedService<WorkoutComment> commentReadSingleSelectedService = commentReadSingleSelectedService;
         private readonly IReadRangeService<Workout> readRangeService = readRangeService;
         private readonly IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService = completedWorkoutReadRangeService;
         private readonly IReadRangeSelectedService<WorkoutComment> commentSelectService = commentSelectService;

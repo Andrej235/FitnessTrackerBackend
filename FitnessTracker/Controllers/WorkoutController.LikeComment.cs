@@ -1,5 +1,4 @@
-﻿using FitnessTracker.Models;
-using FitnessTracker.Utilities;
+﻿using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -21,21 +20,8 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            try
-            {
-                _ = await commentLikeCreateService.Add(new WorkoutCommentLike
-                {
-                    UserId = userId,
-                    WorkoutCommentId = id,
-                    WorkoutId = workoutId
-                });
-                return Created();
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest("Failed to like");
-            }
+            await workoutService.CreateCommentLike(userId, id, workoutId);
+            return Created();
         }
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
@@ -51,16 +37,8 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            try
-            {
-                await commentLikeDeleteService.Delete(x => x.UserId == userId && x.WorkoutCommentId == id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest("Failed to remove like");
-            }
+            await workoutService.DeleteCommentLike(userId, id);
+            return NoContent();
         }
     }
 }

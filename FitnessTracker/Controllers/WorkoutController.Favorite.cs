@@ -1,5 +1,4 @@
-﻿using FitnessTracker.Models;
-using FitnessTracker.Utilities;
+﻿using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -21,21 +20,8 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            try
-            {
-                _ = await favoriteCreateService.Add(new FavoriteWorkout
-                {
-                    UserId = userId,
-                    WorkoutId = id,
-                    FavoritedAt = DateTime.Now
-                });
-                return Created();
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest("Failed to favorite");
-            }
+            await workoutService.CreateFavorite(userId, id);
+            return Created();
         }
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
@@ -51,16 +37,8 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            try
-            {
-                await favoriteDeleteService.Delete(x => x.UserId == userId && x.WorkoutId == id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest("Failed to remove favorite");
-            }
+            await workoutService.DeleteFavorite(userId, id);
+            return NoContent();
         }
     }
 }

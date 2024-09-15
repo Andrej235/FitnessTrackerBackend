@@ -21,19 +21,8 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            try
-            {
-                Models.WorkoutComment mapped = commentCreateRequestMapper.Map(request);
-                mapped.CreatorId = userId;
-                mapped.WorkoutId = workoutId;
-
-                Models.WorkoutComment newComment = await commentCreateService.Add(mapped);
-                return Created($"workouts/{workoutId}/comment/{newComment.Id}", newComment.Id);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.GetErrorMessage());
-            }
+            string newCommentId = await workoutService.CreateComment(userId, workoutId, request);
+            return Created((string?)null, newCommentId);
         }
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
@@ -49,20 +38,8 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            try
-            {
-                Models.WorkoutComment mapped = commentCreateRequestMapper.Map(request);
-                mapped.CreatorId = userId;
-                mapped.WorkoutId = workoutId;
-                mapped.ParentId = commentId;
-
-                Models.WorkoutComment newComment = await commentCreateService.Add(mapped);
-                return Created($"workouts/{workoutId}/comment/{newComment.Id}", newComment.Id);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.GetErrorMessage());
-            }
+            string newCommentId = await workoutService.CreateReply(userId, workoutId, commentId, request);
+            return Created((string?)null, newCommentId);
         }
     }
 }

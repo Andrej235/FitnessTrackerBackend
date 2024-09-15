@@ -291,6 +291,7 @@ namespace FitnessTracker
             #region Workout comment
             _ = builder.Services.AddScoped<ICreateService<WorkoutComment>, CreateService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IReadSingleService<WorkoutComment>, ReadService<WorkoutComment>>();
+            _ = builder.Services.AddScoped<IReadSingleSelectedService<WorkoutComment>, ReadService<WorkoutComment>>();
             _ = builder.Services.AddScoped<ICountService<WorkoutComment>, CountService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IReadRangeService<WorkoutComment>, ReadService<WorkoutComment>>();
             _ = builder.Services.AddScoped<IReadRangeSelectedService<WorkoutComment>, ReadService<WorkoutComment>>();

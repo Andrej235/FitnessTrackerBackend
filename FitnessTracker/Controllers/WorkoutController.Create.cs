@@ -22,17 +22,7 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            try
-            {
-                Models.Workout workout = createRequestMapper.Map(request);
-                workout.CreatorId = userId;
-                Models.Workout newWorkout = await createService.Add(workout);
-                return Created($"/workouts/{newWorkout.Id}", newWorkoutResponseMapper.Map(newWorkout));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.GetErrorMessage());
-            }
+            return Created((string?)null, await workoutService.Create(userId, request));
         }
     }
 }

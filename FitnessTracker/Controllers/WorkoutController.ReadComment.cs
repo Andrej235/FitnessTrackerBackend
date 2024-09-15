@@ -1,5 +1,4 @@
 ﻿using FitnessTracker.DTOs.Responses.Workout;
-using FitnessTracker.Services.Read;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,32 +18,9 @@ namespace FitnessTracker.Controllers
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                 || !Guid.TryParse(userIdString, out Guid userId))
-                return Unauthorized();
-
-            IEnumerable<SimpleWorkoutCommentResponseDTO> comments = await commentSelectService.Get(
-                x => new SimpleWorkoutCommentResponseDTO
-                {
-                    Id = x.Id,
-                    Text = x.Text,
-                    Creator = new DTOs.Responses.User.SimpleUserResponseDTO
-                    {
-                        Username = x.Creator.Username,
-                        Name = x.Creator.Name,
-                        Image = x.Creator.ProfilePic,
-                    },
-                    CreatedAt = x.CreatedAt,
-                    LikeCount = x.Likes.Count,
-                    IsLiked = x.Likes.Any(x => x.Id == userId),
-                    IsCreator = x.CreatorId == userId,
-                    ReplyCount = x.Children.Count,
-                    WorkoutId = x.WorkoutId,
-                },
-                x => x.WorkoutId == workoutId && x.ParentId == null,
-                offset ?? 0,
-                limit ?? 10,
-                x => x.Include(x => x.Creator));
-
-            return Ok(comments);
+                return Ok(await workoutService.GetComments(workoutId, null, offset, limit));
+            else
+                return Ok(await workoutService.GetComments(workoutId, userId, offset, limit));
         }
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
@@ -57,32 +33,9 @@ namespace FitnessTracker.Controllers
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                 || !Guid.TryParse(userIdString, out Guid userId))
-                return Unauthorized();
-
-            IEnumerable<SimpleWorkoutCommentResponseDTO> comments = await commentSelectService.Get(
-                x => new SimpleWorkoutCommentResponseDTO
-                {
-                    Id = x.Id,
-                    Text = x.Text,
-                    Creator = new DTOs.Responses.User.SimpleUserResponseDTO
-                    {
-                        Username = x.Creator.Username,
-                        Name = x.Creator.Name,
-                        Image = x.Creator.ProfilePic,
-                    },
-                    CreatedAt = x.CreatedAt,
-                    LikeCount = x.Likes.Count,
-                    IsLiked = x.Likes.Any(x => x.Id == userId),
-                    IsCreator = x.CreatorId == userId,
-                    ReplyCount = x.Children.Count,
-                    WorkoutId = x.WorkoutId,
-                },
-                x => x.WorkoutId == workoutId && x.ParentId == commentId,
-                offset ?? 0,
-                limit ?? 10,
-                x => x.Include(x => x.Creator));
-
-            return Ok(comments);
+                return Ok(await workoutService.GetReplies(workoutId, commentId, null, offset, limit));
+            else
+                return Ok(await workoutService.GetReplies(workoutId, commentId, userId, offset, limit));
         }
     }
 }

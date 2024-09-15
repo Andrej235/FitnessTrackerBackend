@@ -1,6 +1,4 @@
 ﻿using FitnessTracker.DTOs.Requests.Workout;
-using FitnessTracker.Models;
-using FitnessTracker.Services.Read;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,30 +16,13 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> UpdateWorkout(Guid id, [FromBody] UpdateFullWorkoutRequestDTO request)
         {
-            try
-            {
-                if (User.Identity is not ClaimsIdentity claimsIdentity
-                    || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out Guid userId))
-                    return Unauthorized();
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out Guid userId))
+                return Unauthorized();
 
-                Workout? workout = await readSingleService.Get(x => x.CreatorId == userId && x.Id == id, x => x.Include(x => x.Sets));
-                if (workout is null)
-                    return NotFound();
-
-                workout.Name = request.Name;
-                workout.Description = request.Description;
-                workout.IsPublic = request.IsPublic;
-                workout.Sets = request.Sets.Select(setCreateRequestMapper.Map).ToList();
-                await updateService.Update(workout);
-
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest();
-            }
+            await workoutService.UpdateWorkout(userId, id, request);
+            return NoContent();
         }
     }
 }
