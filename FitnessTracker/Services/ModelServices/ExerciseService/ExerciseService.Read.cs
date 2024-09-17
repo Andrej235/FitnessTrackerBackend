@@ -44,7 +44,12 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
 
         public async Task<DetailedExerciseResponseDTO> GetDetailed(int exerciseId, Guid? userId)
         {
-            Exercise? exercise = await readSingleService.Get(
+            var exercise = await readSingleSelectedService.Get(
+                x => new
+                {
+                    Exercise = x,
+                    Favorites = x.Favorites.Count,
+                },
                 x => x.Id == exerciseId,
                 x => x.Include(x => x.PrimaryMuscleGroups)
                       .Include(x => x.SecondaryMuscleGroups)
@@ -53,8 +58,8 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
                       .Include(x => x.Equipment)
                 ) ?? throw new NotFoundException($"Exercise with id {exerciseId} was not found");
 
-            DetailedExerciseResponseDTO mapped = detailedResponseMapper.Map(exercise);
-            mapped.Favorites = await favoriteCountService.Count(x => x.ExerciseId == exerciseId);
+            DetailedExerciseResponseDTO mapped = detailedResponseMapper.Map(exercise.Exercise);
+            mapped.Favorites = exercise.Favorites;
 
             if (userId is not null)
                 mapped.IsFavorite = await favoriteReadSingleService.Get(x => x.UserId == userId && x.ExerciseId == exerciseId) is not null;

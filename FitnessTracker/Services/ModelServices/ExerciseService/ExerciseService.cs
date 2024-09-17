@@ -1,7 +1,6 @@
 ﻿using FitnessTracker.DTOs.Requests.Exercise;
 using FitnessTracker.DTOs.Responses.Exercises;
 using FitnessTracker.Models;
-using FitnessTracker.Services.Count;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
@@ -13,9 +12,9 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
 {
     public partial class ExerciseService(ICreateService<Exercise> createService,
                                          IReadSingleService<Exercise> readSingleService,
+                                         IReadSingleSelectedService<Exercise> readSingleSelectedService,
                                          IReadRangeService<Exercise> readRangeService,
                                          IReadSingleService<FavoriteExercise> favoriteReadSingleService,
-                                         ICountService<FavoriteExercise> favoriteCountService,
                                          IUpdateService<Exercise> updateService,
                                          ICreateService<FavoriteExercise> favoriteExerciseCreateService,
                                          ICreateRangeService<EquipmentUsage> equipmetUsageCreateRangeService,
@@ -37,9 +36,9 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
     {
         private readonly ICreateService<Exercise> createService = createService;
         private readonly IReadSingleService<Exercise> readSingleService = readSingleService;
+        private readonly IReadSingleSelectedService<Exercise> readSingleSelectedService = readSingleSelectedService;
         private readonly IReadRangeService<Exercise> readRangeService = readRangeService;
         private readonly IReadSingleService<FavoriteExercise> favoriteReadSingleService = favoriteReadSingleService;
-        private readonly ICountService<FavoriteExercise> favoriteCountService = favoriteCountService;
         private readonly IUpdateService<Exercise> updateService = updateService;
         private readonly ICreateService<FavoriteExercise> favoriteExerciseCreateService = favoriteExerciseCreateService;
         private readonly ICreateRangeService<EquipmentUsage> equipmetUsageCreateRangeService = equipmetUsageCreateRangeService;
