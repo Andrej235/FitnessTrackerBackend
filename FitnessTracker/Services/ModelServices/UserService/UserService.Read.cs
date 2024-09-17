@@ -13,7 +13,14 @@ namespace FitnessTracker.Services.ModelServices.UserService
             if (userId == default)
                 throw new UnauthorizedException();
 
-            User? user = await readSingleService.Get(
+            var user = await readSingleSelectedService.Get(
+                x => new
+                {
+                    User = x,
+                    Followers = x.Followers.Count,
+                    Following = x.Following.Count,
+                    TotalCompletedWorkouts = x.CompletedWorkouts.Count,
+                },
                 x => x.Id == userId,
                 x => x.Include(x => x.CurrentSplit!)
                       .ThenInclude(x => x.Creator)
@@ -22,10 +29,10 @@ namespace FitnessTracker.Services.ModelServices.UserService
                       .ThenInclude(x => x.Workout))
                 ?? throw new UnauthorizedException();
 
-            DetailedUserResponseDTO mapped = detailedResponseMapper.Map(user);
-            mapped.Followers = await followerCountService.Count(x => x.FolloweeId == userId);
-            mapped.Following = await followerCountService.Count(x => x.FollowerId == userId);
-            mapped.TotalCompletedWorkouts = await completedWorkoutCountService.Count(x => x.UserId == userId);
+            DetailedUserResponseDTO mapped = detailedResponseMapper.Map(user.User);
+            mapped.Followers = user.Followers;
+            mapped.Following = user.Following;
+            mapped.TotalCompletedWorkouts = user.TotalCompletedWorkouts;
 
             return mapped;
         }
@@ -51,17 +58,26 @@ namespace FitnessTracker.Services.ModelServices.UserService
             if (string.IsNullOrWhiteSpace(username))
                 throw new InvalidArgumentException("Username cannot be empty");
 
-            User? user = await readSingleService.Get(x => x.Username == username) ?? throw new NotFoundException($"User '{username}' not found");
+            var user = await readSingleSelectedService.Get(
+                x => new
+                {
+                    User = x,
+                    Followers = x.Followers.Count,
+                    Following = x.Following.Count,
+                    TotalCompletedWorkouts = x.CompletedWorkouts.Count,
+                },
+                x => x.Id == userId)
+                ?? throw new UnauthorizedException();
 
-            DetailedPublicUserResponseDTO mapped = publicUserDetailedResponseMapper.Map(user);
-            mapped.Followers = await followerCountService.Count(x => x.FolloweeId == user.Id);
-            mapped.Following = await followerCountService.Count(x => x.FollowerId == user.Id);
-            mapped.TotalCompletedWorkouts = await completedWorkoutCountService.Count(x => x.UserId == user.Id);
+            DetailedPublicUserResponseDTO mapped = publicUserDetailedResponseMapper.Map(user.User);
+            mapped.Followers = user.Followers;
+            mapped.Following = user.Following;
+            mapped.TotalCompletedWorkouts = user.TotalCompletedWorkouts;
 
-            if (userId == user.Id)
+            if (userId == user.User.Id)
                 mapped.IsMe = true;
             else
-                mapped.IsFollowing = (await followerReadSingleService.Get(x => x.FollowerId == userId && x.FolloweeId == user.Id)) is not null;
+                mapped.IsFollowing = (await followerReadSingleService.Get(x => x.FollowerId == userId && x.FolloweeId == user.User.Id)) is not null;
 
             return mapped;
         }

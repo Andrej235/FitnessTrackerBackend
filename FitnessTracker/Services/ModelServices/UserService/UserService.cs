@@ -7,7 +7,6 @@ using FitnessTracker.DTOs.Responses.Pins;
 using FitnessTracker.DTOs.Responses.User;
 using FitnessTracker.DTOs.Responses.Workout;
 using FitnessTracker.Models;
-using FitnessTracker.Services.Count;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
@@ -34,8 +33,6 @@ namespace FitnessTracker.Services.ModelServices.UserService
                                      IReadSingleService<UserSettings> settingsReadSingleService,
                                      IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
                                      IReadRangeService<UserFollows> followerReadRangeService,
-                                     ICountService<UserFollows> followerCountService,
-                                     ICountService<CompletedWorkout> completedWorkoutCountService,
                                      IUpdateService<User> updateService,
                                      IExecuteUpdateService<User> executeUpdateService,
                                      IUpdateService<UserSettings> settingsUpdateService,
@@ -74,8 +71,6 @@ namespace FitnessTracker.Services.ModelServices.UserService
         private readonly IReadSingleService<UserSettings> settingsReadSingleService = settingsReadSingleService;
         private readonly IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService = completedWorkoutReadRangeService;
         private readonly IReadRangeService<UserFollows> followerReadRangeService = followerReadRangeService;
-        private readonly ICountService<UserFollows> followerCountService = followerCountService;
-        private readonly ICountService<CompletedWorkout> completedWorkoutCountService = completedWorkoutCountService;
         private readonly IUpdateService<User> updateService = updateService;
         private readonly IExecuteUpdateService<User> executeUpdateService = executeUpdateService;
         private readonly IUpdateService<UserSettings> settingsUpdateService = settingsUpdateService;
