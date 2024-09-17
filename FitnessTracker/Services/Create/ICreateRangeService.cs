@@ -6,9 +6,7 @@
         /// Adds entities to database
         /// </summary>
         /// <param name="toAdd">Entities to save in the database</param>
-        /// <exception cref="OperationCanceledException"/>
-        /// <exception cref="Microsoft.EntityFrameworkCore.DbUpdateException"/>
-        /// <exception cref="Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException"/>
+        /// <exception cref="Exceptions.FailedToCreateEntityException"/>
         Task Add(IEnumerable<TEntity> toAdd);
     }
 }

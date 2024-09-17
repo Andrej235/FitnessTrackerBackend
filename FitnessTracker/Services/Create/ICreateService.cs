@@ -7,9 +7,7 @@
         /// </summary>
         /// <returns>Added entity with its new primary key</returns>
         /// <param name="toAdd">Entity to save in the database</param>
-        /// <exception cref="OperationCanceledException"/>
-        /// <exception cref="Microsoft.EntityFrameworkCore.DbUpdateException"/>
-        /// <exception cref="Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException"/>
+        /// <exception cref="Exceptions.FailedToCreateEntityException"/>
         Task<TEntity> Add(TEntity toAdd);
     }
 }
