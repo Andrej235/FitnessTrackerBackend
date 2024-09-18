@@ -5,7 +5,7 @@ namespace FitnessTracker.Services.Read
     public interface IReadRangeService<T> where T : class
     {
         /// <summary>
-        /// Finds all entities in the database which fit the provided criteria
+        /// Finds all entities in the database which fit the provided <paramref name="criteria"/>
         /// </summary>
         /// <param name="criteria">Criteria which is used to search for specific entities in the database</param>
         /// <param name="offset">
