@@ -14,7 +14,7 @@ namespace FitnessTracker.Services.Read
         /// Used to further modify the query
         /// Allows 5 methods: Include, ThenInclude, OrderBy, OrderByDescending and AsNoTracking
         /// </param>
-        /// <returns>First entity that fits the <paramref name="criteria"/> mapped  according to <paramref name="select"/>, or if such entity doesn't exist null</returns>
+        /// <returns>First entity that fits the <paramref name="criteria"/> mapped according to <paramref name="select"/>, or if such entity doesn't exist null</returns>
         Task<T?> Get<T>(Expression<Func<TEntity, T>> select, Expression<Func<TEntity, bool>> criteria, Func<IWrappedQueryable<TEntity>, IWrappedResult<TEntity>>? queryBuilder = null);
     }
 }

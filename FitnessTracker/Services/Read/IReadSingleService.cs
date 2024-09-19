@@ -2,7 +2,7 @@
 
 namespace FitnessTracker.Services.Read
 {
-    public interface IReadSingleService<T> where T : class
+    public interface IReadSingleService<TEntity> where TEntity : class
     {
         /// <summary>
         /// Finds the first entity in database which fits the <paramref name="criteria"/>
@@ -13,6 +13,6 @@ namespace FitnessTracker.Services.Read
         /// Allows 5 methods: Include, ThenInclude, OrderBy, OrderByDescending and AsNoTracking
         /// </param>
         /// <returns>First entity that fits the <paramref name="criteria"/> or if such entity doesn't exist, null</returns>
-        Task<T?> Get(Expression<Func<T, bool>> criteria, Func<IWrappedQueryable<T>, IWrappedResult<T>>? queryBuilder = null);
+        Task<TEntity?> Get(Expression<Func<TEntity, bool>> criteria, Func<IWrappedQueryable<TEntity>, IWrappedResult<TEntity>>? queryBuilder = null);
     }
 }
