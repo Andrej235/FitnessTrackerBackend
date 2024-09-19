@@ -21,8 +21,8 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                                       IReadRangeService<Split> readRangeService,
                                       IReadRangeSelectedService<SplitComment> commentReadSelectedRangeService,
                                       IReadRangeService<Workout> workoutReadRangeService,
-                                      IUpdateService<Split> updateService,
-                                      IUpdateService<SplitWorkout> splitWorkoutUpdateService,
+                                      IUpdateSingleService<Split> updateService,
+                                      IUpdateSingleService<SplitWorkout> splitWorkoutUpdateService,
                                       IDeleteService<SplitComment> commentDeleteService,
                                       IDeleteService<SplitCommentLike> commentLikeDeleteService,
                                       IDeleteService<SplitLike> likeDeleteService,
@@ -45,8 +45,8 @@ namespace FitnessTracker.Services.ModelServices.SplitService
         private readonly IReadRangeService<Split> readRangeService = readRangeService;
         private readonly IReadRangeSelectedService<SplitComment> commentReadSelectedRangeService = commentReadSelectedRangeService;
         private readonly IReadRangeService<Workout> workoutReadRangeService = workoutReadRangeService;
-        private readonly IUpdateService<Split> updateService = updateService;
-        private readonly IUpdateService<SplitWorkout> splitWorkoutUpdateService = splitWorkoutUpdateService;
+        private readonly IUpdateSingleService<Split> updateService = updateService;
+        private readonly IUpdateSingleService<SplitWorkout> splitWorkoutUpdateService = splitWorkoutUpdateService;
         private readonly IDeleteService<SplitComment> commentDeleteService = commentDeleteService;
         private readonly IDeleteService<SplitCommentLike> commentLikeDeleteService = commentLikeDeleteService;
         private readonly IDeleteService<SplitLike> likeDeleteService = likeDeleteService;

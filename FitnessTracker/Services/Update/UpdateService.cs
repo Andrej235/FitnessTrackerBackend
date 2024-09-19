@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace FitnessTracker.Services.Update
 {
-    public class UpdateService<T>(DataContext context) : IUpdateService<T>, IUpdateRangeService<T>, IExecuteUpdateService<T> where T : class
+    public class UpdateService<T>(DataContext context) : IUpdateSingleService<T>, IUpdateRangeService<T>, IExecuteUpdateService<T> where T : class
     {
         public async Task Update(T updatedEntity)
         {

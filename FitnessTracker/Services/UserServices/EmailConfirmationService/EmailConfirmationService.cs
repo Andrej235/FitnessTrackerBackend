@@ -8,13 +8,13 @@ using FitnessTracker.Utilities;
 namespace FitnessTracker.Services.UserServices.EmailConfirmationService
 {
     public class EmailConfirmationService(IReadSingleService<User> userReadService,
-                                          IUpdateService<User> userUpdateService,
+                                          IUpdateSingleService<User> userUpdateService,
                                           IReadSingleService<EmailConfirmation> tokenReadService,
                                           IDeleteService<EmailConfirmation> deleteService) : IEmailConfirmationService
     {
         private readonly IReadSingleService<User> userReadService = userReadService;
         private readonly IReadSingleService<EmailConfirmation> tokenReadService = tokenReadService;
-        private readonly IUpdateService<User> userUpdateService = userUpdateService;
+        private readonly IUpdateSingleService<User> userUpdateService = userUpdateService;
         private readonly IDeleteService<EmailConfirmation> deleteService = deleteService;
 
         public async Task ConfirmEmail(Guid userId, Guid confirmationCode)

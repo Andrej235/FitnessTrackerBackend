@@ -13,13 +13,13 @@ namespace FitnessTracker.Auth
     public class TokenManager(ConfigurationManager configuration,
                               IReadSingleService<RefreshToken> readSingleService,
                               ICreateService<RefreshToken> createService,
-                              IUpdateService<RefreshToken> updateService,
+                              IUpdateSingleService<RefreshToken> updateService,
                               IDeleteService<RefreshToken> deleteService) : ITokenManager
     {
         private readonly ConfigurationManager configuration = configuration;
         private readonly IReadSingleService<RefreshToken> readSingleService = readSingleService;
         private readonly ICreateService<RefreshToken> createService = createService;
-        private readonly IUpdateService<RefreshToken> updateService = updateService;
+        private readonly IUpdateSingleService<RefreshToken> updateService = updateService;
         private readonly IDeleteService<RefreshToken> deleteService = deleteService;
 
         private (string jwt, Guid jwtId) CreateJWTAndId(User user)

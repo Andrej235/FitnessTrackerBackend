@@ -15,7 +15,7 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
                                          IReadSingleSelectedService<Exercise> readSingleSelectedService,
                                          IReadRangeService<Exercise> readRangeService,
                                          IReadSingleService<FavoriteExercise> favoriteReadSingleService,
-                                         IUpdateService<Exercise> updateService,
+                                         IUpdateSingleService<Exercise> updateService,
                                          ICreateService<FavoriteExercise> favoriteExerciseCreateService,
                                          ICreateRangeService<EquipmentUsage> equipmetUsageCreateRangeService,
                                          ICreateRangeService<PrimaryMuscleGroupInExercise> primaryMuscleGroupCreateRangeService,
@@ -39,7 +39,7 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
         private readonly IReadSingleSelectedService<Exercise> readSingleSelectedService = readSingleSelectedService;
         private readonly IReadRangeService<Exercise> readRangeService = readRangeService;
         private readonly IReadSingleService<FavoriteExercise> favoriteReadSingleService = favoriteReadSingleService;
-        private readonly IUpdateService<Exercise> updateService = updateService;
+        private readonly IUpdateSingleService<Exercise> updateService = updateService;
         private readonly ICreateService<FavoriteExercise> favoriteExerciseCreateService = favoriteExerciseCreateService;
         private readonly ICreateRangeService<EquipmentUsage> equipmetUsageCreateRangeService = equipmetUsageCreateRangeService;
         private readonly ICreateRangeService<PrimaryMuscleGroupInExercise> primaryMuscleGroupCreateRangeService = primaryMuscleGroupCreateRangeService;

@@ -1,6 +1,6 @@
 ﻿namespace FitnessTracker.Services.Update
 {
-    public interface IUpdateService<TEntity> where TEntity : class
+    public interface IUpdateSingleService<TEntity> where TEntity : class
     {
         /// <summary>
         /// Updates the provided entity in the database

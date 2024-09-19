@@ -25,7 +25,7 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                                         IReadRangeSelectedService<WorkoutComment> commentSelectService,
                                         IReadRangeService<WorkoutLike> likeReadRangeService,
                                         IReadRangeService<FavoriteWorkout> favoriteReadRangeService,
-                                        IUpdateService<Workout> updateService,
+                                        IUpdateSingleService<Workout> updateService,
                                         IDeleteService<Workout> deleteService,
                                         IDeleteService<WorkoutComment> commentDeleteService,
                                         IDeleteService<WorkoutCommentLike> commentLikeDeleteService,
@@ -52,7 +52,7 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
         private readonly IReadRangeSelectedService<WorkoutComment> commentSelectService = commentSelectService;
         private readonly IReadRangeService<WorkoutLike> likeReadRangeService = likeReadRangeService;
         private readonly IReadRangeService<FavoriteWorkout> favoriteReadRangeService = favoriteReadRangeService;
-        private readonly IUpdateService<Workout> updateService = updateService;
+        private readonly IUpdateSingleService<Workout> updateService = updateService;
         private readonly IDeleteService<Workout> deleteService = deleteService;
         private readonly IDeleteService<WorkoutComment> commentDeleteService = commentDeleteService;
         private readonly IDeleteService<WorkoutCommentLike> commentLikeDeleteService = commentLikeDeleteService;

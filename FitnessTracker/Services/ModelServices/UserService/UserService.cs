@@ -33,9 +33,9 @@ namespace FitnessTracker.Services.ModelServices.UserService
                                      IReadSingleService<UserSettings> settingsReadSingleService,
                                      IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
                                      IReadRangeService<UserFollows> followerReadRangeService,
-                                     IUpdateService<User> updateService,
+                                     IUpdateSingleService<User> updateService,
                                      IExecuteUpdateService<User> executeUpdateService,
-                                     IUpdateService<UserSettings> settingsUpdateService,
+                                     IUpdateSingleService<UserSettings> settingsUpdateService,
                                      IUpdateRangeService<WorkoutPin> workoutPinUpdateRangeService,
                                      IUpdateRangeService<SplitPin> splitPinUpdateRangeService,
                                      IDeleteService<UserFollows> followDeleteService,
@@ -71,9 +71,9 @@ namespace FitnessTracker.Services.ModelServices.UserService
         private readonly IReadSingleService<UserSettings> settingsReadSingleService = settingsReadSingleService;
         private readonly IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService = completedWorkoutReadRangeService;
         private readonly IReadRangeService<UserFollows> followerReadRangeService = followerReadRangeService;
-        private readonly IUpdateService<User> updateService = updateService;
+        private readonly IUpdateSingleService<User> updateService = updateService;
         private readonly IExecuteUpdateService<User> executeUpdateService = executeUpdateService;
-        private readonly IUpdateService<UserSettings> settingsUpdateService = settingsUpdateService;
+        private readonly IUpdateSingleService<UserSettings> settingsUpdateService = settingsUpdateService;
         private readonly IUpdateRangeService<WorkoutPin> workoutPinUpdateRangeService = workoutPinUpdateRangeService;
         private readonly IUpdateRangeService<SplitPin> splitPinUpdateRangeService = splitPinUpdateRangeService;
         private readonly IDeleteService<UserFollows> followDeleteService = followDeleteService;

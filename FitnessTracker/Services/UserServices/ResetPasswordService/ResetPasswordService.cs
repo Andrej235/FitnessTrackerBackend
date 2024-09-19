@@ -9,12 +9,12 @@ using FitnessTracker.Utilities;
 namespace FitnessTracker.Services.UserServices.ResetPasswordService
 {
     public class ResetPasswordService(IReadSingleService<User> userReadService,
-                                      IUpdateService<User> userUpdateService,
+                                      IUpdateSingleService<User> userUpdateService,
                                       IReadSingleService<EmailConfirmation> tokenReadService,
                                       IDeleteService<EmailConfirmation> deleteService) : IResetPasswordService
     {
         private readonly IReadSingleService<User> userReadService = userReadService;
-        private readonly IUpdateService<User> userUpdateService = userUpdateService;
+        private readonly IUpdateSingleService<User> userUpdateService = userUpdateService;
         private readonly IReadSingleService<EmailConfirmation> tokenReadService = tokenReadService;
         private readonly IDeleteService<EmailConfirmation> deleteService = deleteService;
 
