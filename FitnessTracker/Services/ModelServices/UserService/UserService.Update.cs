@@ -54,10 +54,10 @@ namespace FitnessTracker.Services.ModelServices.UserService
             await updateService.Update(user);
         }
 
-        public Task Update(Guid userId, UpdateUserNameRequestDTO request) => executeUpdateService.Execute(x => x.Id == userId, x => x.SetProperty(x => x.Name, request.NewName));
+        public Task Update(Guid userId, UpdateUserNameRequestDTO request) => executeUpdateService.Update(x => x.Id == userId, x => x.SetProperty(x => x.Name, request.NewName));
 
-        public Task Update(Guid userId, UpdateUserBioRequestDTO request) => executeUpdateService.Execute(x => x.Id == userId, x => x.SetProperty(x => x.Bio, request.NewBio));
+        public Task Update(Guid userId, UpdateUserBioRequestDTO request) => executeUpdateService.Update(x => x.Id == userId, x => x.SetProperty(x => x.Bio, request.NewBio));
 
-        public Task Update(Guid userId, UpdateUserImageRequestDTO request) => executeUpdateService.Execute(x => x.Id == userId, x => x.SetProperty(x => x.ProfilePic, request.NewImage));
+        public Task Update(Guid userId, UpdateUserImageRequestDTO request) => executeUpdateService.Update(x => x.Id == userId, x => x.SetProperty(x => x.ProfilePic, request.NewImage));
     }
 }

@@ -34,7 +34,7 @@ namespace FitnessTracker.Services.Update
             }
         }
 
-        public async Task Execute(Expression<Func<T, bool>> updateCriteria, Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> setPropertyCalls) =>
+        public async Task Update(Expression<Func<T, bool>> updateCriteria, Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> setPropertyCalls) =>
             await context.Set<T>().Where(updateCriteria).ExecuteUpdateAsync(setPropertyCalls);
     }
 }

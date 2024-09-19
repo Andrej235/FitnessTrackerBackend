@@ -14,6 +14,6 @@ namespace FitnessTracker.Services.Update
         /// </summary>
         /// <param name="updateCriteria">The criteria to update</param>
         /// <param name="setPropertyCalls">The property calls to set in the database</param>
-        Task Execute(Expression<Func<TEntity, bool>> updateCriteria, Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls);
+        Task Update(Expression<Func<TEntity, bool>> updateCriteria, Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls);
     }
 }
