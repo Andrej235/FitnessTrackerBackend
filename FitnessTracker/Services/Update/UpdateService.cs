@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.Data;
+using FitnessTracker.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
@@ -11,15 +12,12 @@ namespace FitnessTracker.Services.Update
         {
             try
             {
-                if (!await context.Set<T>().ContainsAsync(updatedEntity))
-                    throw new NullReferenceException("Entity not found");
-
                 _ = context.Set<T>().Update(updatedEntity);
                 _ = await context.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new BadRequestException("Failed to update", ex);
             }
         }
 
@@ -30,9 +28,9 @@ namespace FitnessTracker.Services.Update
                 context.Set<T>().UpdateRange(updatedEntities);
                 _ = await context.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new BadRequestException("Failed to update", ex);
             }
         }
 

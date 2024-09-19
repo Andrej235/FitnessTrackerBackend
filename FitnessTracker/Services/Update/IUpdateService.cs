@@ -1,12 +1,15 @@
 ﻿namespace FitnessTracker.Services.Update
 {
-    public interface IUpdateService<T> where T : class
+    public interface IUpdateService<TEntity> where TEntity : class
     {
         /// <summary>
         /// Updates the provided entity in the database
-        /// <br/>The provided entity MUST have the same primary key
+        /// <br />The provided entity MUST be of type <typeparamref name="TEntity"/> and have the same primary key as the entity in the database
+        /// <br /> <br />
+        /// If you want to update an entity without having a reference to it, use <see cref="IExecuteUpdateService{T}.Execute"/>
         /// </summary>
-        /// <exception cref="NullReferenceException"></exception>
-        Task Update(T updatedEntity);
+        /// <param name="updatedEntity">Entity to update</param>
+        /// <exception cref="BadRequestException"/>
+        Task Update(TEntity updatedEntity);
     }
 }
