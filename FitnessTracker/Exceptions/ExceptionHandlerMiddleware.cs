@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using FitnessTracker.Utilities;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace FitnessTracker.Exceptions
 {
@@ -6,6 +7,8 @@ namespace FitnessTracker.Exceptions
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
+            exception.LogError();
+
             switch (exception)
             {
                 case BadRequestException: // 400

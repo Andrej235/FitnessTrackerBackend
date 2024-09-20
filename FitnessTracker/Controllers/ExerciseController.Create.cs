@@ -15,15 +15,8 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Create([FromBody] CreateExerciseRequestDTO request)
         {
-            try
-            {
-                await exerciseService.Create(request);
-                return Created();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.GetErrorMessage());
-            }
+            await exerciseService.Create(request);
+            return Created();
         }
     }
 }

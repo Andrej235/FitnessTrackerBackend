@@ -1,4 +1,4 @@
-﻿namespace FitnessTracker.Services.UserServices.ResetPasswordService
+﻿namespace FitnessTracker.Services.ModelServices.UserService.ResetPasswordService
 {
     public interface IResetPasswordService
     {

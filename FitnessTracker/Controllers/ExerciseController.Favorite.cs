@@ -1,5 +1,4 @@
-﻿using FitnessTracker.Utilities;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -14,21 +13,13 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Favorite(int id)
         {
-            try
-            {
-                if (User.Identity is not ClaimsIdentity claimsIdentity
-                    || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out Guid userId))
-                    return Unauthorized();
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out Guid userId))
+                return Unauthorized();
 
-                await exerciseService.CreateFavorite(id, userId);
-                return Created();
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest("Failed to add favorite");
-            }
+            await exerciseService.CreateFavorite(id, userId);
+            return Created();
         }
 
         [Authorize]
@@ -38,21 +29,13 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Unfavorite(int id)
         {
-            try
-            {
-                if (User.Identity is not ClaimsIdentity claimsIdentity
-                    || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || !Guid.TryParse(userIdString, out Guid userId))
-                    return Unauthorized();
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out Guid userId))
+                return Unauthorized();
 
-                await exerciseService.DeleteFavorite(id, userId);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest("Failed to remove favorite");
-            }
+            await exerciseService.DeleteFavorite(id, userId);
+            return NoContent();
         }
     }
 }

@@ -14,16 +14,8 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await exerciseService.Delete(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return NotFound();
-            }
+            await exerciseService.Delete(id);
+            return Ok();
         }
     }
 }

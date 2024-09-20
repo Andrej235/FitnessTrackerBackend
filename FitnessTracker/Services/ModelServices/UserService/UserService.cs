@@ -11,12 +11,12 @@ using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Mapping.Request;
 using FitnessTracker.Services.Mapping.Response;
+using FitnessTracker.Services.ModelServices.UserService.EmailConfirmationSenderService;
+using FitnessTracker.Services.ModelServices.UserService.EmailConfirmationService;
+using FitnessTracker.Services.ModelServices.UserService.ResetPasswordSenderService;
+using FitnessTracker.Services.ModelServices.UserService.ResetPasswordService;
 using FitnessTracker.Services.Read;
 using FitnessTracker.Services.Update;
-using FitnessTracker.Services.UserServices.EmailConfirmationSenderService;
-using FitnessTracker.Services.UserServices.EmailConfirmationService;
-using FitnessTracker.Services.UserServices.ResetPasswordSenderService;
-using FitnessTracker.Services.UserServices.ResetPasswordService;
 using System.Text.RegularExpressions;
 
 namespace FitnessTracker.Services.ModelServices.UserService

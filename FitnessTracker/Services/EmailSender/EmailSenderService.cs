@@ -1,5 +1,5 @@
 ﻿using FitnessTracker.Emails;
-using FitnessTracker.Utilities;
+using FitnessTracker.Exceptions;
 using MailKit.Net.Smtp;
 using MimeKit;
 
@@ -12,9 +12,16 @@ namespace FitnessTracker.Services.EmailSender
 
         public void SendEmail(Message message)
         {
-            MimeMessage emailMessage = CreateEmailMessage(message);
+            try
+            {
+                MimeMessage emailMessage = CreateEmailMessage(message);
 
-            Send(emailMessage);
+                Send(emailMessage);
+            }
+            catch (Exception ex)
+            {
+                throw new BadRequestException("Failed to send email", ex);
+            }
         }
 
         private MimeMessage CreateEmailMessage(Message message)
@@ -29,19 +36,13 @@ namespace FitnessTracker.Services.EmailSender
             };
             return emailMessage;
         }
+
         private void Send(MimeMessage mailMessage)
         {
-            try
-            {
-                client.Connect(emailConfig.SmtpServer, emailConfig.Port, true);
-                _ = client.AuthenticationMechanisms.Remove("XOAUTH2");
-                client.Authenticate(emailConfig.UserName, emailConfig.Password);
-                _ = client.Send(mailMessage);
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-            }
+            client.Connect(emailConfig.SmtpServer, emailConfig.Port, true);
+            _ = client.AuthenticationMechanisms.Remove("XOAUTH2");
+            client.Authenticate(emailConfig.UserName, emailConfig.Password);
+            _ = client.Send(mailMessage);
         }
     }
 }

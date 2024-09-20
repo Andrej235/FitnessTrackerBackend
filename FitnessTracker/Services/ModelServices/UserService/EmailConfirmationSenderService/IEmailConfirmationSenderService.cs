@@ -1,4 +1,4 @@
-﻿namespace FitnessTracker.Services.UserServices.EmailConfirmationSenderService
+﻿namespace FitnessTracker.Services.ModelServices.UserService.EmailConfirmationSenderService
 {
     public interface IEmailConfirmationSenderService
     {

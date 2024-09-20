@@ -1,6 +1,5 @@
 ﻿using FitnessTracker.DTOs.Requests.User;
 using FitnessTracker.DTOs.Responses.AuthTokens;
-using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -27,24 +26,16 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Refresh()
         {
-            try
-            {
-                if (User.Identity is not ClaimsIdentity claimsIdentity
-                    || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                    || claimsIdentity.FindFirst(JwtRegisteredClaimNames.Jti)?.Value is not string jwtIdString
-                    || !Request.Cookies.TryGetValue("refreshToken", out string? refreshTokenString)
-                    || !Guid.TryParse(jwtIdString, out Guid jwtId)
-                    || !Guid.TryParse(userIdString, out Guid userId)
-                    || !Guid.TryParse(refreshTokenString, out Guid refreshToken))
-                    return Unauthorized("Invalid token");
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || claimsIdentity.FindFirst(JwtRegisteredClaimNames.Jti)?.Value is not string jwtIdString
+                || !Request.Cookies.TryGetValue("refreshToken", out string? refreshTokenString)
+                || !Guid.TryParse(jwtIdString, out Guid jwtId)
+                || !Guid.TryParse(userIdString, out Guid userId)
+                || !Guid.TryParse(refreshTokenString, out Guid refreshToken))
+                return Unauthorized("Invalid token");
 
-                return Created((string?)null, await userService.Refresh(jwtId, userId, refreshToken));
-            }
-            catch (Exception ex)
-            {
-                ex.LogError();
-                return BadRequest("Invalid token");
-            }
+            return Created((string?)null, await userService.Refresh(jwtId, userId, refreshToken));
         }
 
         [Authorize]

@@ -15,15 +15,8 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Update([FromBody] UpdateExerciseRequestDTO request)
         {
-            try
-            {
-                await exerciseService.Update(request);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.GetErrorMessage());
-            }
+            await exerciseService.Update(request);
+            return NoContent();
         }
     }
 }

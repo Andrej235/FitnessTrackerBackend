@@ -3,7 +3,7 @@ using FitnessTracker.Models;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.EmailSender;
 
-namespace FitnessTracker.Services.UserServices.ResetPasswordSenderService
+namespace FitnessTracker.Services.ModelServices.UserService.ResetPasswordSenderService
 {
     public class ResetPasswordEmailSender(ICreateService<EmailConfirmation> createService,
                                           IEmailSenderService emailSender) : IResetPasswordEmailSenderService

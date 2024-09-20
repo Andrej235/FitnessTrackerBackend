@@ -2,7 +2,7 @@
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.EmailSender;
 
-namespace FitnessTracker.Services.UserServices.EmailConfirmationSenderService
+namespace FitnessTracker.Services.ModelServices.UserService.EmailConfirmationSenderService
 {
     public class EmailConfirmationSenderService(ICreateService<EmailConfirmation> createService,
                                           IEmailSenderService emailSender) : IEmailConfirmationSenderService
