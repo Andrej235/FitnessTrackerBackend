@@ -1,5 +1,6 @@
 ﻿using FitnessTracker.DTOs.Requests.Split;
 using FitnessTracker.DTOs.Responses.Split;
+using FitnessTracker.DTOs.Responses.Workout;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessTracker.Services.ModelServices.SplitService
@@ -15,6 +16,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
         Task<IEnumerable<SimpleSplitResponseDTO>> GetAllSimplePersonal(Guid userId, string? name);
         Task<DetailedSplitResponseDTO> GetSingleDetailed(Guid splitId, Guid? userId);
         Task<DetailedUserSplitResponseDTO> GetDetailedUsedBy(string username);
+        Task<IEnumerable<SimpleWorkoutOptionResponseDTO>> GetSplitWorkoutOptions(Guid userId, int? offset, int? limit, string? nameFilter, bool? publicOnly, bool? favoritesOnly, bool? personalOnly);
         Task CreateCommentLike(Guid commentId, Guid userId);
         Task DeleteCommentLike(Guid commentId, Guid userId);
         Task CreateLike(Guid splitId, Guid userId);
@@ -25,6 +27,5 @@ namespace FitnessTracker.Services.ModelServices.SplitService
         Task CreateComment(Guid splitId, Guid userId, CreateSplitCommentRequestDTO request);
         Task CreateReply(Guid splitId, Guid commentId, Guid userId, CreateSplitCommentRequestDTO request);
         Task Create(Guid userId, CreateSplitRequestDTO request);
-
     }
 }

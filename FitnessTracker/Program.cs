@@ -266,12 +266,14 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<IReadSingleService<Workout>, ReadService<Workout>>();
             _ = builder.Services.AddScoped<IReadSingleSelectedService<Workout>, ReadService<Workout>>();
             _ = builder.Services.AddScoped<IReadRangeService<Workout>, ReadService<Workout>>();
+            _ = builder.Services.AddScoped<IReadRangeSelectedService<Workout>, ReadService<Workout>>();
             _ = builder.Services.AddScoped<ICreateService<Workout>, CreateService<Workout>>();
             _ = builder.Services.AddScoped<IUpdateSingleService<Workout>, UpdateService<Workout>>();
             _ = builder.Services.AddScoped<IDeleteService<Workout>, DeleteService<Workout>>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateWorkoutRequestDTO, Workout>, CreateWorkoutRequestMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<Workout, NewWorkoutResponseDTO>, NewWorkoutResponseMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<Workout, SimpleWorkoutResponseDTO>, SimpleWorkoutResponseMapper>();
+            _ = builder.Services.AddScoped<IResponseMapper<Workout, SimpleWorkoutOptionResponseDTO>, SimpleWorkoutOptionResponseMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<Workout, DetailedWorkoutResponseDTO>, DetailedWorkoutResponseMapper>();
             #endregion
 
