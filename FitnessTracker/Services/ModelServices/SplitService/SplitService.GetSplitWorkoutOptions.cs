@@ -31,7 +31,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                     Workout = x,
                     LikeCount = x.Likes.Count,
                 },
-                filters.Combine() ?? (null),
+                filters.Combine(ExpressionExtensions.CombineOperator.AND),
                 offset,
                 limit ?? 10,
                 x => x.Include(x => x.Creator));

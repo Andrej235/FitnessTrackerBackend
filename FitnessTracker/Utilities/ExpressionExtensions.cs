@@ -4,7 +4,13 @@ namespace FitnessTracker.Utilities
 {
     public static class ExpressionExtensions
     {
-        public static Expression<Func<T, bool>>? Combine<T>(this IEnumerable<Expression<Func<T, bool>>> expressions)
+        public enum CombineOperator
+        {
+            AND,
+            OR,
+        }
+
+        public static Expression<Func<T, bool>>? Combine<T>(this IEnumerable<Expression<Func<T, bool>>> expressions, CombineOperator combineOperator = CombineOperator.OR)
         {
             ParameterExpression parameter = Expression.Parameter(typeof(T), "x");
             Expression? body = null;
@@ -15,7 +21,9 @@ namespace FitnessTracker.Utilities
 
                 body = body == null
                     ? replacedBody
-                    : Expression.OrElse(body, replacedBody);
+                    : combineOperator == CombineOperator.OR
+                        ? Expression.OrElse(body, replacedBody)
+                        : Expression.AndAlso(body, replacedBody);
             }
 
             return body is null ? null : Expression.Lambda<Func<T, bool>>(body, parameter);
