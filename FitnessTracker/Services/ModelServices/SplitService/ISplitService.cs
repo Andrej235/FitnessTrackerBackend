@@ -26,6 +26,6 @@ namespace FitnessTracker.Services.ModelServices.SplitService
         Task DeleteComment(Guid splitId, Guid commentId, Guid userId);
         Task CreateComment(Guid splitId, Guid userId, CreateSplitCommentRequestDTO request);
         Task CreateReply(Guid splitId, Guid commentId, Guid userId, CreateSplitCommentRequestDTO request);
-        Task Create(Guid userId, CreateSplitRequestDTO request);
+        Task<NewSplitResponseDTO> Create(Guid userId, CreateSplitRequestDTO request);
     }
 }

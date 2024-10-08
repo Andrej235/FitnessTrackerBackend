@@ -21,7 +21,7 @@ namespace FitnessTracker.Controllers
             if (searchTerm is null && publicOnly is null && favoriteOnly is null)
                 personalOnly = true;
 
-            return Ok(await splitService.GetSplitWorkoutOptions(userId, limit, offset, searchTerm, publicOnly, favoriteOnly, personalOnly));
+            return Ok(await splitService.GetSplitWorkoutOptions(userId, offset, limit, searchTerm, publicOnly, favoriteOnly, personalOnly));
         }
     }
 }
