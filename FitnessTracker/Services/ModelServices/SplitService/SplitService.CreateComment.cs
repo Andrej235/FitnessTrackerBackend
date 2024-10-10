@@ -6,7 +6,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
 {
     public partial class SplitService
     {
-        public Task CreateComment(Guid splitId, Guid userId, CreateSplitCommentRequestDTO request)
+        public async Task<Guid> CreateComment(Guid splitId, Guid userId, CreateSplitCommentRequestDTO request)
         {
             if (string.IsNullOrWhiteSpace(request.Comment))
                 throw new InvalidArgumentException("Comment cannot be empty");
@@ -15,10 +15,11 @@ namespace FitnessTracker.Services.ModelServices.SplitService
             mapped.CreatorId = userId;
             mapped.SplitId = splitId;
 
-            return commentCreateService.Add(mapped);
+            SplitComment newComment = await commentCreateService.Add(mapped);
+            return newComment.Id;
         }
 
-        public Task CreateReply(Guid splitId, Guid commentId, Guid userId, CreateSplitCommentRequestDTO request)
+        public async Task<Guid> CreateReply(Guid splitId, Guid commentId, Guid userId, CreateSplitCommentRequestDTO request)
         {
             if (string.IsNullOrWhiteSpace(request.Comment))
                 throw new InvalidArgumentException("Comment cannot be empty");
@@ -28,7 +29,8 @@ namespace FitnessTracker.Services.ModelServices.SplitService
             mapped.SplitId = splitId;
             mapped.ParentId = commentId;
 
-            return commentCreateService.Add(mapped);
+            SplitComment newComment = await commentCreateService.Add(mapped);
+            return newComment.Id;
         }
     }
 }

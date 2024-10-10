@@ -6,8 +6,8 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
     public interface IWorkoutService
     {
         Task<NewWorkoutResponseDTO> Create(Guid userId, CreateWorkoutRequestDTO request);
-        Task<string> CreateComment(Guid userId, Guid workoutId, CreateWorkoutCommentRequestDTO request);
-        Task<string> CreateReply(Guid userId, Guid workoutId, Guid commentId, CreateWorkoutCommentRequestDTO request);
+        Task<Guid> CreateComment(Guid userId, Guid workoutId, CreateWorkoutCommentRequestDTO request);
+        Task<Guid> CreateReply(Guid userId, Guid workoutId, Guid commentId, CreateWorkoutCommentRequestDTO request);
         Task Delete(Guid userId, Guid id);
         Task DeleteComment(Guid userId, Guid workoutId, Guid commentId);
         Task CreateFavorite(Guid userId, Guid workoutId);

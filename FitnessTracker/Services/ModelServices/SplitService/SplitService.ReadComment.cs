@@ -14,7 +14,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 x => new
                 {
                     Comment = x,
-                    IsLiked = x.Likes.Any(x => x.Id == userId),
+                    IsLiked = userId != null && x.Likes.Any(x => x.Id == userId),
                     LikeCount = x.Likes.Count,
                     RepliesCount = x.Likes.Count,
                 },
@@ -29,7 +29,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 mapped.IsLiked = x.IsLiked;
                 mapped.LikeCount = x.LikeCount;
                 mapped.ReplyCount = x.RepliesCount;
-                mapped.IsCreator = x.Comment.Creator.Id == userId;
+                mapped.IsCreator = userId != null && x.Comment.CreatorId == userId;
                 return mapped;
             });
 
@@ -38,11 +38,14 @@ namespace FitnessTracker.Services.ModelServices.SplitService
 
         public async Task<IEnumerable<SimpleSplitCommentResponseDTO>> GetReplies(Guid splitId, Guid commentId, Guid? userId, int? offset, int? limit)
         {
+            if (userId == default)
+                userId = null;
+
             var comments = await commentReadSelectedRangeService.Get(
                 x => new
                 {
                     Comment = x,
-                    IsLiked = x.Likes.Any(x => x.Id == userId),
+                    IsLiked = userId != null && x.Likes.Any(x => x.Id == userId),
                     LikeCount = x.Likes.Count,
                     RepliesCount = x.Likes.Count,
                 },
@@ -57,7 +60,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 mapped.IsLiked = x.IsLiked;
                 mapped.LikeCount = x.LikeCount;
                 mapped.ReplyCount = x.RepliesCount;
-                mapped.IsCreator = x.Comment.Creator.Id == userId;
+                mapped.IsCreator = userId != null && x.Comment.CreatorId == userId;
                 return mapped;
             });
 

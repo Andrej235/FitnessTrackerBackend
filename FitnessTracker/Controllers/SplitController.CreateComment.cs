@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.DTOs.Requests.Split;
+using FitnessTracker.DTOs.Responses.Split;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPost("{splitId:guid}/comment")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(NewSplitCommentResponseDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -21,13 +22,16 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            await splitService.CreateComment(splitId, userId, request);
-            return Created();
+            Guid newCommentId = await splitService.CreateComment(splitId, userId, request);
+            return Created((string?)null, new NewSplitCommentResponseDTO()
+            {
+                NewCommentId = newCommentId
+            });
         }
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPost("{splitId:guid}/comment/{commentId:guid}/reply")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(NewSplitCommentResponseDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -38,8 +42,11 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            await splitService.CreateReply(splitId, commentId, userId, request);
-            return Created();
+            Guid newCommentId = await splitService.CreateReply(splitId, commentId, userId, request);
+            return Created((string?)null, new NewSplitCommentResponseDTO()
+            {
+                NewCommentId = newCommentId
+            });
         }
     }
 }

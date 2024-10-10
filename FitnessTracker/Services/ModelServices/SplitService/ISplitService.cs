@@ -24,8 +24,8 @@ namespace FitnessTracker.Services.ModelServices.SplitService
         Task CreateFavorite(Guid splitId, Guid userId);
         Task DeleteFavorite(Guid splitId, Guid userId);
         Task DeleteComment(Guid splitId, Guid commentId, Guid userId);
-        Task CreateComment(Guid splitId, Guid userId, CreateSplitCommentRequestDTO request);
-        Task CreateReply(Guid splitId, Guid commentId, Guid userId, CreateSplitCommentRequestDTO request);
+        Task<Guid> CreateComment(Guid splitId, Guid userId, CreateSplitCommentRequestDTO request);
+        Task<Guid> CreateReply(Guid splitId, Guid commentId, Guid userId, CreateSplitCommentRequestDTO request);
         Task<NewSplitResponseDTO> Create(Guid userId, CreateSplitRequestDTO request);
     }
 }

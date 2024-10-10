@@ -1,4 +1,5 @@
 ﻿using FitnessTracker.DTOs.Requests.Workout;
+using FitnessTracker.DTOs.Responses.Workout;
 using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ namespace FitnessTracker.Controllers
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPost("{workoutId:guid}/comment")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(NewWorkoutCommentResponseDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -21,13 +22,16 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            string newCommentId = await workoutService.CreateComment(userId, workoutId, request);
-            return Created((string?)null, newCommentId);
+            Guid newCommentId = await workoutService.CreateComment(userId, workoutId, request);
+            return Created((string?)null, new NewWorkoutCommentResponseDTO()
+            {
+                NewCommentId = newCommentId
+            });
         }
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
         [HttpPost("{workoutId:guid}/comment/{commentId:guid}/reply")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(NewWorkoutCommentResponseDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -38,8 +42,11 @@ namespace FitnessTracker.Controllers
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            string newCommentId = await workoutService.CreateReply(userId, workoutId, commentId, request);
-            return Created((string?)null, newCommentId);
+            Guid newCommentId = await workoutService.CreateReply(userId, workoutId, commentId, request);
+            return Created((string?)null, new NewWorkoutCommentResponseDTO()
+            {
+                NewCommentId = newCommentId
+            });
         }
     }
 }
