@@ -69,5 +69,28 @@ namespace FitnessTracker.Services.ModelServices.UserService
             DetailedWeekOfCompletedWorkoutsResponseDTO mapped = detailedWeekOfCompletedWorkoutsResponseMapper.Map(completedWorkout);
             return mapped;
         }
+
+        public async Task<DetailedWeekOfCompletedWorkoutsResponseDTO> GetUserStreakOnWeek(string username, DateTime date)
+        {
+            var user = await readSingleSelectedService.Get(x => new
+            {
+                x.Id
+            },
+            x => x.Username == username) ?? throw new NotFoundException($"User '{username}' not found");
+
+            DateTime startOfWeek = date.GetStartOfWeek();
+            DateTime endOfWeek = startOfWeek.Date.AddDays(7);
+            IEnumerable<CompletedWorkout> completedWorkout = await completedWorkoutReadRangeService.Get(
+                criteria: x => x.UserId == user.Id && x.CompletedAt >= startOfWeek && x.CompletedAt <= endOfWeek,
+                queryBuilder: x => x.Include(x => x.Split)
+                    .ThenInclude(x => x.Workouts)
+                    .ThenInclude(x => x.Workout)
+                    .ThenInclude(x => x.Creator)
+                    .Include(x => x.Split)
+                    .ThenInclude(x => x.Creator));
+
+            DetailedWeekOfCompletedWorkoutsResponseDTO mapped = detailedWeekOfCompletedWorkoutsResponseMapper.Map(completedWorkout);
+            return mapped;
+        }
     }
 }

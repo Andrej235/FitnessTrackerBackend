@@ -9,7 +9,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
     {
         public async Task<NewSplitResponseDTO> Create(Guid userId, CreateSplitRequestDTO request)
         {
-            IEnumerable<Guid> selectedWorkoutIds = request.Workouts.Select(x => x.WorkoutId);
+            IEnumerable<Guid> selectedWorkoutIds = request.Workouts.Select(x => x.WorkoutId).Distinct();
             IEnumerable<Models.Workout> selectedWorkouts = await workoutReadRangeService.Get(x => selectedWorkoutIds.Contains(x.Id));
             if (selectedWorkoutIds.Count() != selectedWorkouts.Count())
                 throw new NotFoundException("One or more selected workouts could not found");

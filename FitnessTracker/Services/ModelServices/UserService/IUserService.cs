@@ -40,6 +40,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
         Task<IEnumerable<SimpleWeekOfCompletedWorkoutsResponseDTO>> GetStreak(Guid userId, int? year);
         Task<IEnumerable<SimpleWeekOfCompletedWorkoutsResponseDTO>> GetStreak(string username, int? year);
         Task<DetailedWeekOfCompletedWorkoutsResponseDTO> GetUserStreakOnWeek(Guid userId, DateTime date);
+        Task<DetailedWeekOfCompletedWorkoutsResponseDTO> GetUserStreakOnWeek(string username, DateTime date);
         Task<DetailedWorkoutResponseDTO> GetTodaysWorkout(Guid userId);
         Task ReorderPins(Guid userId, ReorderPinsRequestDTO request);
         Task Update(Guid userId, UpdatePasswordUserRequestDTO request);
