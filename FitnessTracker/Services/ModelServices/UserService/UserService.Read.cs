@@ -66,7 +66,12 @@ namespace FitnessTracker.Services.ModelServices.UserService
                     Following = x.Following.Count,
                     TotalCompletedWorkouts = x.CompletedWorkouts.Count,
                 },
-                x => x.Id == userId)
+                x => x.Username == username,
+                x => x.Include(x => x.CurrentSplit!)
+                      .ThenInclude(x => x.Creator)
+                      .Include(x => x.CurrentSplit!)
+                      .ThenInclude(x => x.Workouts)
+                      .ThenInclude(x => x.Workout))
                 ?? throw new UnauthorizedException();
 
             DetailedPublicUserResponseDTO mapped = publicUserDetailedResponseMapper.Map(user.User);
