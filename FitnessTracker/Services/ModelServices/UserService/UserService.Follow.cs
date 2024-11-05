@@ -4,36 +4,46 @@ namespace FitnessTracker.Services.ModelServices.UserService
 {
     public partial class UserService
     {
-        public Task Follow(Guid userId, Guid userToFollowId)
+        public async Task Follow(Guid userId, string usernameToFollow)
         {
             if (userId == default)
                 throw new UnauthorizedException();
 
-            if (userToFollowId == default)
+            if (string.IsNullOrWhiteSpace(usernameToFollow))
                 throw new InvalidArgumentException();
 
-            if (userId == userToFollowId)
+            var userToFollowId = await readSingleSelectedService.Get(
+                    x => new { x.Id },
+                    x => x.Username == usernameToFollow
+                ) ?? throw new NotFoundException($"User '{usernameToFollow}' not found");
+
+            if (userId == userToFollowId.Id)
                 throw new BadRequestException("You cannot follow yourself");
 
-            return followCreateService.Add(new()
+            _ = await followCreateService.Add(new()
             {
                 FollowerId = userId,
-                FolloweeId = userToFollowId
+                FolloweeId = userToFollowId.Id
             });
         }
 
-        public Task Unfollow(Guid userId, Guid userToFollowId)
+        public async Task Unfollow(Guid userId, string usernameToFollow)
         {
             if (userId == default)
                 throw new UnauthorizedException();
 
-            if (userToFollowId == default)
+            if (string.IsNullOrWhiteSpace(usernameToFollow))
                 throw new InvalidArgumentException();
 
-            if (userId == userToFollowId)
-                throw new BadRequestException("You cannot unfollow yourself");
+            var userToFollowId = await readSingleSelectedService.Get(
+                    x => new { x.Id },
+                    x => x.Username == usernameToFollow
+                ) ?? throw new NotFoundException($"User '{usernameToFollow}' not found");
 
-            return followDeleteService.Delete(x => x.FollowerId == userId && x.FolloweeId == userToFollowId);
+            if (userId == userToFollowId.Id)
+                throw new BadRequestException("You cannot follow yourself");
+
+            await followDeleteService.Delete(x => x.FollowerId == userId && x.FolloweeId == userToFollowId.Id);
         }
     }
 }
