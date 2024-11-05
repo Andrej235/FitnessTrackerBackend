@@ -1,4 +1,5 @@
-﻿using FitnessTracker.Models;
+﻿using FitnessTracker.Exceptions;
+using FitnessTracker.Models;
 using FitnessTracker.Services.Create;
 using FitnessTracker.Services.Delete;
 using FitnessTracker.Services.Read;
@@ -79,7 +80,7 @@ namespace FitnessTracker.Auth
         {
             RefreshToken? token = await readSingleService.Get(x => x.Token == refreshToken, x => x.Include(x => x.User));
             if (token is null || token.JwtId != jwtId || token.UserId != userId)
-                throw new Exception("Invalid token");
+                throw new InvalidRequestDTOException("Invalid token");
 
             (string newJwt, Guid newJwtId) = CreateJWTAndId(token.User);
             token.JwtId = newJwtId;

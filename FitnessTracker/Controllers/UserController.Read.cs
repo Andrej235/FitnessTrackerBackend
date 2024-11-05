@@ -53,14 +53,14 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(IEnumerable<SimpleUserResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetFollowers([FromQuery] string? name, [FromQuery] int? limit, [FromQuery] int? offset)
+        public async Task<IActionResult> GetFollowers([FromQuery] string? searchTerm, [FromQuery] int? limit, [FromQuery] int? offset)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                 || !Guid.TryParse(userIdString, out Guid id))
                 return Unauthorized();
 
-            return Ok(await userService.GetFollowers(id, name, offset, limit));
+            return Ok(await userService.GetFollowers(id, searchTerm, offset, limit));
         }
 
         [HttpGet("{username}/followers")]
@@ -74,14 +74,14 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(IEnumerable<SimpleUserResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetFollowing([FromQuery] string? name, [FromQuery] int? limit, [FromQuery] int? offset)
+        public async Task<IActionResult> GetFollowing([FromQuery] string? searchTerm, [FromQuery] int? limit, [FromQuery] int? offset)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                 || !Guid.TryParse(userIdString, out Guid id))
                 return Unauthorized();
 
-            return Ok(await userService.GetFollowing(id, name, offset, limit));
+            return Ok(await userService.GetFollowing(id, searchTerm, offset, limit));
         }
 
         [HttpGet("{username}/following")]
