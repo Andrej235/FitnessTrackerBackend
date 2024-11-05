@@ -37,15 +37,17 @@ namespace FitnessTracker.Services.ModelServices.UserService
             return mapped;
         }
 
-        public async Task<UserProfilePictureResponseDTO> GetProfilePic(Guid userId)
+        public async Task<SimpleUserResponseDTO> GetBasicInfo(Guid userId)
         {
             if (userId == default)
                 throw new UnauthorizedException();
 
-            UserProfilePictureResponseDTO? user = await readSingleSelectedService.Get(
-                x => new UserProfilePictureResponseDTO
+            SimpleUserResponseDTO user = await readSingleSelectedService.Get(
+                x => new SimpleUserResponseDTO
                 {
-                    Image = x.ProfilePic
+                    Username = x.Username,
+                    Name = x.Name,
+                    Image = x.ProfilePic,
                 },
                 x => x.Id == userId)
                 ?? throw new UnauthorizedException();

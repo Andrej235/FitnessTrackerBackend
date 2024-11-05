@@ -27,7 +27,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
         Task<IEnumerable<PinResponseDTO>> GetPinOptions(Guid userId);
         Task MarkCompletedWorkout(Guid userId, CreateCompletedWorkoutRequestDTO request);
         Task<DetailedUserResponseDTO> GetDetailed(Guid userId);
-        Task<UserProfilePictureResponseDTO> GetProfilePic(Guid userId);
+        Task<SimpleUserResponseDTO> GetBasicInfo(Guid userId);
         Task<IEnumerable<SimpleUserResponseDTO>> GetFollowing(Guid userId, string? nameFilter, int? offset, int? limit);
         Task<IEnumerable<SimpleUserResponseDTO>> GetFollowers(Guid userId, string? nameFilter, int? offset, int? limit);
         Task<DetailedPublicUserResponseDTO> GetDetailed(string username, Guid? userId);

@@ -22,17 +22,17 @@ namespace FitnessTracker.Controllers
         }
 
         [Authorize]
-        [HttpGet("me/profilepicture")]
-        [ProducesResponseType(typeof(UserProfilePictureResponseDTO), StatusCodes.Status200OK)]
+        [HttpGet("me/basic")]
+        [ProducesResponseType(typeof(SimpleUserResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> GetProfilePic()
+        public async Task<IActionResult> GetBasicInfo()
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            return Ok(await userService.GetProfilePic(userId));
+            return Ok(await userService.GetBasicInfo(userId));
         }
 
         [HttpGet("{username}/detailed")]
