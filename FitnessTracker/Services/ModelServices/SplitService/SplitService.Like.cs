@@ -13,6 +13,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
             {
                 UserId = userId,
                 SplitId = splitId,
+                LikedAt = DateTime.Now
             });
         }
 

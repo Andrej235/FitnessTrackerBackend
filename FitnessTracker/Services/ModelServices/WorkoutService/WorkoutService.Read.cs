@@ -8,15 +8,6 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
 {
     public partial class WorkoutService
     {
-        public async Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAll(string? name, int? limit, int? offset)
-        {
-            IEnumerable<Workout> workouts = name is null
-                ? await readRangeService.Get(x => x.IsPublic, offset, limit ?? 10, x => x.Include(x => x.Creator))
-                : await readRangeService.Get(x => x.IsPublic && EF.Functions.Like(x.Name, $"%{name}%"), offset, limit ?? 10, x => x.Include(x => x.Creator));
-
-            return workouts.Select(simpleResponseMapper.Map);
-        }
-
         public async Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllBy(string username, string? nameFilter, int? limit, int? offset)
         {
             Guid userId = await userReadSingleSelectedService.Get(

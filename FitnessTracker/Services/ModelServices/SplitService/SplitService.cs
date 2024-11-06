@@ -20,6 +20,8 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                                       IReadSingleService<Split> readSingleService,
                                       IReadSingleSelectedService<Split> readSingleSelectedService,
                                       IReadRangeService<Split> readRangeService,
+                                      IReadRangeService<FavoriteSplit> favoriteReadRangeService,
+                                      IReadRangeService<SplitLike> likeReadRangeService,
                                       IReadRangeSelectedService<SplitComment> commentReadSelectedRangeService,
                                       IReadRangeService<Workout> workoutReadRangeService,
                                       IUpdateSingleService<Split> updateService,

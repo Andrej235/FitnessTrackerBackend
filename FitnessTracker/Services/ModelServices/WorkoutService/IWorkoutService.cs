@@ -16,7 +16,6 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
         Task DeleteLike(Guid userId, Guid workoutId);
         Task CreateCommentLike(Guid userId, Guid commentId, Guid workoutId);
         Task DeleteCommentLike(Guid userId, Guid commentId);
-        Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAll(string? name, int? limit, int? offset);
         Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllBy(string username, string? nameFilter, int? limit, int? offset);
         Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllPersonal(Guid userId, string? nameFilter, int? limit, int? offset);
         Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllFavorites(Guid userId, string? nameFilter, int? limit, int? offset);

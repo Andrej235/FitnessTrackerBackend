@@ -223,8 +223,8 @@ namespace FitnessTracker.Data
                     .WithMany()
                     .UsingEntity<SplitLike>(j =>
                     {
-                        _ = j.HasOne<Split>().WithMany().HasForeignKey(x => x.SplitId).OnDelete(DeleteBehavior.Cascade);
-                        _ = j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+                        _ = j.HasOne(x => x.Split).WithMany().HasForeignKey(x => x.SplitId).OnDelete(DeleteBehavior.Cascade);
+                        _ = j.HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
                         _ = j.HasKey(x => new { x.SplitId, x.UserId });
                         _ = j.HasIndex(x => x.SplitId);
                         _ = j.HasIndex(x => new { x.SplitId, x.UserId }).IsUnique();
@@ -244,8 +244,8 @@ namespace FitnessTracker.Data
                     .WithMany()
                     .UsingEntity<FavoriteSplit>(j =>
                     {
-                        _ = j.HasOne<Split>().WithMany().HasForeignKey(x => x.SplitId).OnDelete(DeleteBehavior.Cascade);
-                        _ = j.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+                        _ = j.HasOne(x => x.Split).WithMany().HasForeignKey(x => x.SplitId).OnDelete(DeleteBehavior.Cascade);
+                        _ = j.HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
                         _ = j.HasKey(x => new { x.SplitId, x.UserId });
                         _ = j.HasIndex(x => x.SplitId);
                         _ = j.HasIndex(x => new { x.SplitId, x.UserId }).IsUnique();

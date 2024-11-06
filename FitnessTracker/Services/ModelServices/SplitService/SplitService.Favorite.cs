@@ -12,7 +12,8 @@ namespace FitnessTracker.Services.ModelServices.SplitService
             return favoriteCreateService.Add(new()
             {
                 UserId = userId,
-                SplitId = splitId
+                SplitId = splitId,
+                FavoritedAt = DateTime.Now,
             });
         }
 

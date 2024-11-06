@@ -8,16 +8,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
 {
     public partial class SplitService
     {
-        public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllPublic(string? name)
-        {
-            IEnumerable<Split> splits = string.IsNullOrWhiteSpace(name)
-                ? await readRangeService.Get(x => x.IsPublic, 0, 10, x => x.Include(x => x.Creator))
-                : await readRangeService.Get(x => x.IsPublic && EF.Functions.Like(x.Name, $"%{name}%"), 0, 10, x => x.Include(x => x.Creator));
-
-            return splits.Select(simpleResponseMapper.Map);
-        }
-
-        public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllPublicBy(string username, string? splitNameFilter)
+        public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllPublicBy(string username, string? splitNameFilter, int? offset, int? limit)
         {
             if (string.IsNullOrWhiteSpace(username))
                 throw new InvalidArgumentException($"{nameof(username)} cannot be empty");
@@ -31,19 +22,37 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 ?? throw new NotFoundException();
 
             IEnumerable<Split> splits = string.IsNullOrWhiteSpace(splitNameFilter)
-                ? await readRangeService.Get(x => x.CreatorId == user.Id && x.IsPublic, 0, 10, x => x.Include(x => x.Creator))
-                : await readRangeService.Get(x => x.CreatorId == user.Id && x.IsPublic && EF.Functions.Like(x.Name, $"%{splitNameFilter}%"), 0, 10, x => x.Include(x => x.Creator));
+                ? await readRangeService.Get(x => x.CreatorId == user.Id && x.IsPublic, offset, limit, x => x.Include(x => x.Creator))
+                : await readRangeService.Get(x => x.CreatorId == user.Id && x.IsPublic && EF.Functions.Like(x.Name, $"%{splitNameFilter}%"), offset, limit, x => x.Include(x => x.Creator));
 
             return splits.Select(simpleResponseMapper.Map);
         }
 
-        public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllSimplePersonal(Guid userId, string? name)
+        public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllPersonal(Guid userId, string? splitNameFilter, int? offset, int? limit)
         {
-            IEnumerable<Split> splits = name is null
-                ? await readRangeService.Get(x => x.CreatorId == userId, 0, 10, x => x.Include(x => x.Creator))
-                : await readRangeService.Get(x => x.CreatorId == userId && EF.Functions.Like(x.Name, $"%{name}%"), 0, 10, x => x.Include(x => x.Creator));
+            IEnumerable<Split> splits = splitNameFilter is null
+                ? await readRangeService.Get(x => x.CreatorId == userId, offset, limit, x => x.Include(x => x.Creator))
+                : await readRangeService.Get(x => x.CreatorId == userId && EF.Functions.Like(x.Name, $"%{splitNameFilter}%"), offset, limit, x => x.Include(x => x.Creator));
 
             return splits.Select(simpleResponseMapper.Map);
+        }
+
+        public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllFavorites(Guid userId, string? nameFilter, int? limit, int? offset)
+        {
+            IEnumerable<FavoriteSplit> workouts = nameFilter is null
+                ? await favoriteReadRangeService.Get(x => x.UserId == userId && (x.Split.IsPublic || x.Split.CreatorId == userId), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator))
+                : await favoriteReadRangeService.Get(x => x.UserId == userId && (x.Split.IsPublic || x.Split.CreatorId == userId) && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator));
+
+            return workouts.Select(x => simpleResponseMapper.Map(x.Split));
+        }
+
+        public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllLiked(Guid userId, string? nameFilter, int? limit, int? offset)
+        {
+            IEnumerable<SplitLike> workouts = nameFilter is null
+                ? await likeReadRangeService.Get(x => x.UserId == userId && (x.Split.IsPublic || x.Split.CreatorId == userId), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator))
+                : await likeReadRangeService.Get(x => x.UserId == userId && (x.Split.IsPublic || x.Split.CreatorId == userId) && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator));
+
+            return workouts.Select(x => simpleResponseMapper.Map(x.Split));
         }
 
         public async Task<DetailedSplitResponseDTO> GetSingleDetailed(Guid splitId, Guid? userId)
