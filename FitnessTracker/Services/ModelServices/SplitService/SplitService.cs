@@ -44,7 +44,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
         private readonly ICreateService<SplitCommentLike> commentLikeCreateService = commentLikeCreateService;
         private readonly ICreateService<SplitLike> likeCreateService = likeCreateService;
         private readonly ICreateService<FavoriteSplit> favoriteCreateService = favoriteCreateService;
-        private readonly IReadSingleSelectedService<User> userReadSingleService = userReadSingleService;
+        private readonly IReadSingleSelectedService<User> userReadSingleSelectedService = userReadSingleService;
         private readonly IReadSingleService<Split> readSingleService = readSingleService;
         private readonly IReadSingleSelectedService<Split> readSingleSelectedService = readSingleSelectedService;
         private readonly IReadRangeService<Split> readRangeService = readRangeService;
