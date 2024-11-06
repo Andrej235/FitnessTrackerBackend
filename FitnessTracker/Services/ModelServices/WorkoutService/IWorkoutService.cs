@@ -20,6 +20,8 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
         Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllPersonal(Guid userId, string? nameFilter, int? limit, int? offset);
         Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllFavorites(Guid userId, string? nameFilter, int? limit, int? offset);
         Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllLiked(Guid userId, string? nameFilter, int? limit, int? offset);
+        Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllFavoritesBy(string username, Guid? userId, string? nameFilter, int? limit, int? offset);
+        Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllLikedBy(string username, Guid? userId, string? nameFilter, int? limit, int? offset);
         Task<DetailedWorkoutResponseDTO> GetDetailed(Guid workoutId, Guid? userId);
         Task<IEnumerable<SimpleWorkoutCommentResponseDTO>> GetComments(Guid workoutId, Guid? userId, int? offset, int? limit);
         Task<IEnumerable<SimpleWorkoutCommentResponseDTO>> GetReplies(Guid workoutId, Guid commentId, Guid? userId, int? offset, int? limit);

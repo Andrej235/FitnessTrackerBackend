@@ -39,6 +39,32 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
             return workouts.Select(x => simpleResponseMapper.Map(x.Workout));
         }
 
+        public async Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllFavoritesBy(string username, Guid? userId, string? nameFilter, int? limit, int? offset)
+        {
+            Guid creatorId = await userReadSingleSelectedService.Get(
+                x => x.Id,
+                x => x.Username == username);
+
+            IEnumerable<FavoriteWorkout> workouts = nameFilter is null
+                ? await favoriteReadRangeService.Get(x => x.UserId == creatorId && (x.Workout.IsPublic || x.Workout.CreatorId == userId), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator))
+                : await favoriteReadRangeService.Get(x => x.UserId == creatorId && (x.Workout.IsPublic || x.Workout.CreatorId == userId) && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
+
+            return workouts.Select(x => simpleResponseMapper.Map(x.Workout));
+        }
+
+        public async Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllLikedBy(string username, Guid? userId, string? nameFilter, int? limit, int? offset)
+        {
+            Guid creatorId = await userReadSingleSelectedService.Get(
+                x => x.Id,
+                x => x.Username == username);
+
+            IEnumerable<WorkoutLike> workouts = nameFilter is null
+                ? await likeReadRangeService.Get(x => x.UserId == creatorId && (x.Workout.IsPublic || x.Workout.CreatorId == userId), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator))
+                : await likeReadRangeService.Get(x => x.UserId == creatorId && (x.Workout.IsPublic || x.Workout.CreatorId == userId) && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
+
+            return workouts.Select(x => simpleResponseMapper.Map(x.Workout));
+        }
+
         public async Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllPersonal(Guid userId, string? nameFilter, int? limit, int? offset)
         {
             IEnumerable<Workout> workouts = nameFilter is null

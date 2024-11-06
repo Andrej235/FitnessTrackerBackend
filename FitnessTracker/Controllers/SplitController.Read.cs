@@ -1,5 +1,4 @@
 ﻿using FitnessTracker.DTOs.Responses.Split;
-using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -12,7 +11,7 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllPublicBy(string username, [FromQuery] string? nameFilter, [FromQuery] int? offset, [FromQuery] int? limit) => Ok(await splitService.GetAllPublicBy(username, nameFilter, offset, limit));
 
-        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
+        [Authorize]
         [HttpGet("personal/simple")]
         [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

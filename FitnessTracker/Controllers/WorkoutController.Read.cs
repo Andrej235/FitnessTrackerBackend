@@ -53,6 +53,34 @@ namespace FitnessTracker.Controllers
             return Ok(await workoutService.GetAllLiked(userId, nameFilter, limit, offset));
         }
 
+        [Authorize]
+        [HttpGet("favorite/simple/by/{username}")]
+        [ProducesResponseType(typeof(IEnumerable<SimpleWorkoutResponseDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GetAllFavoritesBy(string username, [FromQuery] string? nameFilter, [FromQuery] int? limit, [FromQuery] int? offset)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out Guid userId))
+                return Ok(await workoutService.GetAllFavoritesBy(username, null, nameFilter, limit, offset));
+            else
+                return Ok(await workoutService.GetAllFavoritesBy(username, userId, nameFilter, limit, offset));
+        }
+
+        [Authorize]
+        [HttpGet("liked/simple/by/{username}")]
+        [ProducesResponseType(typeof(IEnumerable<SimpleWorkoutResponseDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GetAllLikedBy(string username, [FromQuery] string? nameFilter, [FromQuery] int? limit, [FromQuery] int? offset)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out Guid userId))
+                return Ok(await workoutService.GetAllLikedBy(username, null, nameFilter, limit, offset));
+            else
+                return Ok(await workoutService.GetAllLikedBy(username, userId, nameFilter, limit, offset));
+        }
+
         [HttpGet("{id:guid}/detailed")]
         [ProducesResponseType(typeof(DetailedWorkoutResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
