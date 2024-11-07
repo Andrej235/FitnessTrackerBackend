@@ -9,7 +9,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
 {
     public partial class SplitService
     {
-        public async Task<IEnumerable<SimpleWorkoutOptionResponseDTO>> GetSplitWorkoutOptions(Guid userId, int? offset, int? limit, string? nameFilter, bool? publicOnly, bool? favoritesOnly, bool? personalOnly)
+        public async Task<IEnumerable<SimpleWorkoutOptionResponseDTO>> GetSplitWorkoutOptions(Guid userId, int? offset, int? limit, string? nameFilter, bool? favoritesOnly, bool? personalOnly)
         {
             List<Expression<Func<Workout, bool>>> filters = [];
 

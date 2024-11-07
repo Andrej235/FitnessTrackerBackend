@@ -7,9 +7,9 @@ namespace FitnessTracker.Controllers
 {
     public partial class SplitController
     {
-        [HttpGet("public/simple/by/{username}")]
+        [HttpGet("simple/by/{username}")]
         [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllPublicBy(string username, [FromQuery] string? nameFilter, [FromQuery] int? offset, [FromQuery] int? limit) => Ok(await splitService.GetAllPublicBy(username, nameFilter, offset, limit));
+        public async Task<IActionResult> GetAllBy(string username, [FromQuery] string? nameFilter, [FromQuery] int? offset, [FromQuery] int? limit) => Ok(await splitService.GetAllPublicBy(username, nameFilter, offset, limit));
 
         [Authorize]
         [HttpGet("personal/simple")]

@@ -7,7 +7,7 @@ namespace FitnessTracker.Controllers
 {
     public partial class WorkoutController
     {
-        [HttpGet("public/simple/by/{username}")]
+        [HttpGet("simple/by/{username}")]
         [ProducesResponseType(typeof(IEnumerable<SimpleWorkoutResponseDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllBy(string username, [FromQuery] string? nameFilter, [FromQuery] int? limit, [FromQuery] int? offset) => Ok(await workoutService.GetAllBy(username, nameFilter, limit, offset));
 
