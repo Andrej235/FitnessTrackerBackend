@@ -16,9 +16,6 @@ namespace FitnessTracker.Services.ModelServices.SplitService
             if (nameFilter is not null)
                 filters.Add(x => EF.Functions.Like(x.Name, $"%{nameFilter}%"));
 
-            if (publicOnly is true)
-                filters.Add(x => x.IsPublic);
-
             if (favoritesOnly is true)
                 filters.Add(x => x.Favorites.Any(x => x.Id == userId));
 

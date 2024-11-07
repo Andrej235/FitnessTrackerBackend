@@ -16,7 +16,6 @@ namespace FitnessTracker.Services.ModelServices.SplitService
 
             split.Name = request.Name;
             split.Description = request.Description;
-            split.IsPublic = request.IsPublic && split.Workouts.All(x => x.Workout.IsPublic);
 
             await updateService.Update(split);
         }

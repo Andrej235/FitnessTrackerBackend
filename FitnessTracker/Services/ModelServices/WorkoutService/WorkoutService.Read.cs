@@ -15,8 +15,8 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                 x => x.Username == username);
 
             IEnumerable<Workout> workouts = nameFilter is null
-                ? await readRangeService.Get(x => x.CreatorId == userId && x.IsPublic, offset, limit ?? 10, x => x.Include(x => x.Creator))
-                : await readRangeService.Get(x => x.CreatorId == userId && x.IsPublic && EF.Functions.Like(x.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Creator));
+                ? await readRangeService.Get(x => x.CreatorId == userId, offset, limit ?? 10, x => x.Include(x => x.Creator))
+                : await readRangeService.Get(x => x.CreatorId == userId && EF.Functions.Like(x.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Creator));
 
             return workouts.Select(simpleResponseMapper.Map);
         }
@@ -24,8 +24,8 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
         public async Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllFavorites(Guid userId, string? nameFilter, int? limit, int? offset)
         {
             IEnumerable<FavoriteWorkout> workouts = nameFilter is null
-                ? await favoriteReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator))
-                : await favoriteReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId) && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
+                ? await favoriteReadRangeService.Get(x => x.UserId == userId, offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator))
+                : await favoriteReadRangeService.Get(x => x.UserId == userId && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
 
             return workouts.Select(x => simpleResponseMapper.Map(x.Workout));
         }
@@ -33,8 +33,8 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
         public async Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllLiked(Guid userId, string? nameFilter, int? limit, int? offset)
         {
             IEnumerable<WorkoutLike> workouts = nameFilter is null
-                ? await likeReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator))
-                : await likeReadRangeService.Get(x => x.UserId == userId && (x.Workout.IsPublic || x.Workout.CreatorId == userId) && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
+                ? await likeReadRangeService.Get(x => x.UserId == userId, offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator))
+                : await likeReadRangeService.Get(x => x.UserId == userId && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
 
             return workouts.Select(x => simpleResponseMapper.Map(x.Workout));
         }
@@ -46,8 +46,8 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                 x => x.Username == username);
 
             IEnumerable<FavoriteWorkout> workouts = nameFilter is null
-                ? await favoriteReadRangeService.Get(x => x.UserId == creatorId && (x.Workout.IsPublic || x.Workout.CreatorId == userId), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator))
-                : await favoriteReadRangeService.Get(x => x.UserId == creatorId && (x.Workout.IsPublic || x.Workout.CreatorId == userId) && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
+                ? await favoriteReadRangeService.Get(x => x.UserId == creatorId, offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator))
+                : await favoriteReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
 
             return workouts.Select(x => simpleResponseMapper.Map(x.Workout));
         }
@@ -59,8 +59,8 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                 x => x.Username == username);
 
             IEnumerable<WorkoutLike> workouts = nameFilter is null
-                ? await likeReadRangeService.Get(x => x.UserId == creatorId && (x.Workout.IsPublic || x.Workout.CreatorId == userId), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator))
-                : await likeReadRangeService.Get(x => x.UserId == creatorId && (x.Workout.IsPublic || x.Workout.CreatorId == userId) && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
+                ? await likeReadRangeService.Get(x => x.UserId == creatorId, offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator))
+                : await likeReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
 
             return workouts.Select(x => simpleResponseMapper.Map(x.Workout));
         }
@@ -93,9 +93,6 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                        .Include(x => x.Sets)
                        .ThenInclude(x => x.Exercise))
                 ?? throw new NotFoundException();
-
-            if (!data.workout.IsPublic && (!validUserId || data.workout.CreatorId != userId))
-                throw new UnauthorizedAccessException();
 
             DetailedWorkoutResponseDTO mapped = detailedResponseMapper.Map(data.workout);
             mapped.FavoriteCount = data.favoriteCount;

@@ -11,7 +11,6 @@ namespace FitnessTracker.Services.Mapping.Request.SplitMappers
         {
             Name = from.Name,
             Description = from.Description,
-            IsPublic = from.IsPublic,
             Workouts = from.Workouts.Select(splitWorkoutRequestMapper.Map).ToList()
         };
     }

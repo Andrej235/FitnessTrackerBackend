@@ -16,7 +16,6 @@ namespace FitnessTracker.Services.Mapping.Response.SplitMappers
             Description = from.Description,
             Creator = userResponseMapper.Map(from.Creator),
             Workouts = from.Workouts.Select(workoutResponseMapper.Map),
-            IsPublic = from.IsPublic,
         };
     }
 }

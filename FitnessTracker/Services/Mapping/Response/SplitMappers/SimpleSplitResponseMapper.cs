@@ -13,7 +13,6 @@ namespace FitnessTracker.Services.Mapping.Response.SplitMappers
             Id = from.Id,
             Name = from.Name,
             Creator = userResponseMapper.Map(from.Creator),
-            IsPublic = from.IsPublic
         };
     }
 }

@@ -421,7 +421,6 @@ namespace FitnessTracker.Data
                         });
 
                     _ = workout.HasIndex(x => x.CreatorId);
-                    _ = workout.HasIndex(x => x.IsPublic);
                 });
 
             _ = modelBuilder.Entity<WorkoutComment>(workoutComment =>

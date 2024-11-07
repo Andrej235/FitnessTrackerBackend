@@ -22,8 +22,8 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 ?? throw new NotFoundException();
 
             IEnumerable<Split> splits = string.IsNullOrWhiteSpace(splitNameFilter)
-                ? await readRangeService.Get(x => x.CreatorId == user.Id && x.IsPublic, offset, limit, x => x.Include(x => x.Creator))
-                : await readRangeService.Get(x => x.CreatorId == user.Id && x.IsPublic && EF.Functions.Like(x.Name, $"%{splitNameFilter}%"), offset, limit, x => x.Include(x => x.Creator));
+                ? await readRangeService.Get(x => x.CreatorId == user.Id, offset, limit, x => x.Include(x => x.Creator))
+                : await readRangeService.Get(x => x.CreatorId == user.Id && EF.Functions.Like(x.Name, $"%{splitNameFilter}%"), offset, limit, x => x.Include(x => x.Creator));
 
             return splits.Select(simpleResponseMapper.Map);
         }
@@ -40,8 +40,8 @@ namespace FitnessTracker.Services.ModelServices.SplitService
         public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllFavorites(Guid userId, string? nameFilter, int? limit, int? offset)
         {
             IEnumerable<FavoriteSplit> splits = nameFilter is null
-                ? await favoriteReadRangeService.Get(x => x.UserId == userId && (x.Split.IsPublic || x.Split.CreatorId == userId), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator))
-                : await favoriteReadRangeService.Get(x => x.UserId == userId && (x.Split.IsPublic || x.Split.CreatorId == userId) && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator));
+                ? await favoriteReadRangeService.Get(x => x.UserId == userId, offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator))
+                : await favoriteReadRangeService.Get(x => x.UserId == userId && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator));
 
             return splits.Select(x => simpleResponseMapper.Map(x.Split));
         }
@@ -49,8 +49,8 @@ namespace FitnessTracker.Services.ModelServices.SplitService
         public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllLiked(Guid userId, string? nameFilter, int? limit, int? offset)
         {
             IEnumerable<SplitLike> splits = nameFilter is null
-                ? await likeReadRangeService.Get(x => x.UserId == userId && (x.Split.IsPublic || x.Split.CreatorId == userId), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator))
-                : await likeReadRangeService.Get(x => x.UserId == userId && (x.Split.IsPublic || x.Split.CreatorId == userId) && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator));
+                ? await likeReadRangeService.Get(x => x.UserId == userId, offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator))
+                : await likeReadRangeService.Get(x => x.UserId == userId && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator));
 
             return splits.Select(x => simpleResponseMapper.Map(x.Split));
         }
@@ -62,8 +62,8 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 x => x.Username == username);
 
             IEnumerable<FavoriteSplit> splits = nameFilter is null
-                ? await favoriteReadRangeService.Get(x => x.UserId == creatorId && (x.Split.IsPublic || x.Split.CreatorId == userId), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator))
-                : await favoriteReadRangeService.Get(x => x.UserId == creatorId && (x.Split.IsPublic || x.Split.CreatorId == userId) && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator));
+                ? await favoriteReadRangeService.Get(x => x.UserId == creatorId, offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator))
+                : await favoriteReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator));
 
             return splits.Select(x => simpleResponseMapper.Map(x.Split));
         }
@@ -75,8 +75,8 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 x => x.Username == username);
 
             IEnumerable<SplitLike> splits = nameFilter is null
-                ? await likeReadRangeService.Get(x => x.UserId == creatorId && (x.Split.IsPublic || x.Split.CreatorId == userId), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator))
-                : await likeReadRangeService.Get(x => x.UserId == creatorId && (x.Split.IsPublic || x.Split.CreatorId == userId) && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator));
+                ? await likeReadRangeService.Get(x => x.UserId == creatorId, offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator))
+                : await likeReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator));
 
             return splits.Select(x => simpleResponseMapper.Map(x.Split));
         }
@@ -99,9 +99,6 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                       .ThenInclude(x => x.Workout)
                       .ThenInclude(x => x.Creator))
                 ?? throw new NotFoundException();
-
-            if (!data.split.IsPublic && data.split.CreatorId != userId)
-                throw new AccessDeniedException();
 
             DetailedSplitResponseDTO mapped = detailedResponseMapper.Map(data.split);
             mapped.LikeCount = data.likeCount;
@@ -137,9 +134,6 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                       .Include(x => x.Workouts)
                       .ThenInclude(x => x.Workout))
                 ?? throw new NotFoundException();
-
-            if (!split.IsPublic)
-                throw new AccessDeniedException();
 
             DetailedUserSplitResponseDTO mapped = detailedUserSplitResponseMapper.Map(split);
             return mapped;

@@ -7,6 +7,5 @@ namespace FitnessTracker.DTOs.Responses.Split
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
         public SimpleUserResponseDTO Creator { get; set; } = null!;
-        public bool IsPublic { get; set; }
     }
 }

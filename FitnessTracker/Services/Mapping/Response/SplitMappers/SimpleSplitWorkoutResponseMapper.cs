@@ -14,7 +14,6 @@ namespace FitnessTracker.Services.Mapping.Response.SplitMappers
             Id = from.WorkoutId,
             Name = from.Workout.Name,
             Description = from.Workout.Description,
-            IsPublic = from.Workout.IsPublic,
             Day = from.Day,
         };
     }

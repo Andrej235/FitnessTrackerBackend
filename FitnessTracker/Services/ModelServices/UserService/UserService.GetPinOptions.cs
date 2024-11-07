@@ -12,7 +12,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
                 throw new UnauthorizedException();
 
             List<PinResponseDTO>? pins = await readSingleSelectedService.Get(
-                select: x => x.CreatedWorkouts.Where(x => x.IsPublic).Select(x => new PinResponseDTO
+                select: x => x.CreatedWorkouts.Select(x => new PinResponseDTO
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -21,7 +21,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
                     Description = x.Description ?? "",
                     Order = -1,
                 })
-                .Union(x.CreatedSplits.Where(x => x.IsPublic).Select(x => new PinResponseDTO
+                .Union(x.CreatedSplits.Select(x => new PinResponseDTO
                 {
                     Id = x.Id,
                     Name = x.Name,

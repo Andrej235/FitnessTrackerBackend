@@ -14,12 +14,6 @@ namespace FitnessTracker.Services.ModelServices.SplitService
             if (selectedWorkoutIds.Count() != selectedWorkouts.Count())
                 throw new NotFoundException("One or more selected workouts could not found");
 
-            if (selectedWorkouts.Any(x => !x.IsPublic && x.CreatorId != userId))
-                throw new AccessDeniedException("One or more selected workouts are not public and you are not the creator");
-
-            if (request.IsPublic && selectedWorkouts.Any(x => !x.IsPublic))
-                throw new BadRequestException("Attempted to create a public split with one or more private workouts");
-
             Split mapped = createRequestMapper.Map(request);
             mapped.CreatorId = userId;
 
@@ -27,7 +21,6 @@ namespace FitnessTracker.Services.ModelServices.SplitService
             return new()
             {
                 Id = newSplit.Id,
-                IsPublic = newSplit.IsPublic,
                 Name = newSplit.Name,
             };
         }

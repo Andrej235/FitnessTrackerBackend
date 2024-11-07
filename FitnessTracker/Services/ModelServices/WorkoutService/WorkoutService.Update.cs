@@ -15,7 +15,6 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
 
             workout.Name = request.Name;
             workout.Description = request.Description;
-            workout.IsPublic = request.IsPublic;
             workout.Sets = request.Sets.Select(setCreateRequestMapper.Map).ToList();
             await updateService.Update(workout);
         }
