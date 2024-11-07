@@ -420,6 +420,7 @@ namespace FitnessTracker
             #region Split like
             _ = builder.Services.AddScoped<ICreateService<SplitLike>, CreateService<SplitLike>>();
             _ = builder.Services.AddScoped<IReadSingleService<SplitLike>, ReadService<SplitLike>>();
+            _ = builder.Services.AddScoped<IReadRangeService<SplitLike>, ReadService<SplitLike>>();
             _ = builder.Services.AddScoped<IDeleteService<SplitLike>, DeleteService<SplitLike>>();
             #endregion
 
@@ -442,6 +443,7 @@ namespace FitnessTracker
             #region Split favorite
             _ = builder.Services.AddScoped<ICreateService<FavoriteSplit>, CreateService<FavoriteSplit>>();
             _ = builder.Services.AddScoped<IReadSingleService<FavoriteSplit>, ReadService<FavoriteSplit>>();
+            _ = builder.Services.AddScoped<IReadRangeService<FavoriteSplit>, ReadService<FavoriteSplit>>();
             _ = builder.Services.AddScoped<IDeleteService<FavoriteSplit>, DeleteService<FavoriteSplit>>();
             #endregion
 
