@@ -8,9 +8,28 @@ namespace FitnessTracker.Services.ModelServices.UserService
 {
     public partial class UserService
     {
+        private readonly HashSet<string> restrictedUsernames =
+        [
+            "admin",
+            "exercises",
+            "exercise",
+            "workout",
+            "workouts",
+            "split",
+            "splits",
+            "authentication",
+            "auth",
+            "register",
+            "login",
+            "resetpassword",
+            "user"
+        ];
+
         public async Task<SimpleJWTResponseDTO> Register(RegisterUserRequestDTO request, IResponseCookies cookies)
         {
-            if (request.Username.Length < 3 || !ValidEmailRegex().IsMatch(request.Email.Trim()) || request.Password.Length < 8)
+            ValidateUsername(request.Username);
+
+            if (!ValidEmailRegex().IsMatch(request.Email.Trim()) || request.Password.Length < 8)
                 throw new InvalidRequestDTOException("Invalid registration details");
 
             User mapped = registrationMapper.Map(request);
@@ -32,6 +51,15 @@ namespace FitnessTracker.Services.ModelServices.UserService
             string jwt = await tokenManager.GenerateJWTAndRefreshToken(newUser, cookies);
             await emailConfirmationSender.SendEmailConfirmation(newUser.Email, newUser.Id);
             return jwtResponseMapper.Map(jwt);
+        }
+
+        private void ValidateUsername(string username)
+        {
+            if (!ValidUsernameRegex().IsMatch(username))
+                throw new InvalidRequestDTOException("Username is invalid");
+
+            if (restrictedUsernames.Contains(username.ToLower()))
+                throw new InvalidRequestDTOException("Username is reserved");
         }
 
         public async Task<SimpleJWTResponseDTO> Login(LoginUserRequestDTO request, IResponseCookies cookies)

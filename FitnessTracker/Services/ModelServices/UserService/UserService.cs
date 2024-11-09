@@ -97,6 +97,9 @@ namespace FitnessTracker.Services.ModelServices.UserService
         private readonly IResponseMapper<IEnumerable<CompletedWorkout>, DetailedWeekOfCompletedWorkoutsResponseDTO> detailedWeekOfCompletedWorkoutsResponseMapper = detailedWeekOfCompletedWorkoutsResponseMapper;
         private readonly IResponseMapper<string, SimpleJWTResponseDTO> jwtResponseMapper = jwtResponseMapper;
 
+        [GeneratedRegex(@"^[a-zA-Z0-9_.]{3,15}$")]
+        private static partial Regex ValidUsernameRegex();
+
         [GeneratedRegex(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")]
         private static partial Regex ValidEmailRegex();
     }
