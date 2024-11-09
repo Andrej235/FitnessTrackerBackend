@@ -4,10 +4,10 @@ using FitnessTracker.Models;
 
 namespace FitnessTracker.Services.Mapping.Response.UserMappers
 {
-    public class DetailedPublicUserResponseMapper(IResponseMapper<Split, DetailedUserSplitResponseDTO> splitResponseMapper) : IResponseMapper<User, DetailedPublicUserResponseDTO>
+    public class DetailedPublicUserResponseMapper(IResponseMapper<Split, DetailedUserSplitResponseDTO> splitResponseMapper) : IResponseMapper<User, DetailedUserResponseDTO>
     {
         private readonly IResponseMapper<Split, DetailedUserSplitResponseDTO> splitResponseMapper = splitResponseMapper;
-        public DetailedPublicUserResponseDTO Map(User from) => new()
+        public DetailedUserResponseDTO Map(User from) => new()
         {
             Name = from.Name,
             Username = from.Username,

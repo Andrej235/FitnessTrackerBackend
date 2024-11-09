@@ -51,9 +51,8 @@ namespace FitnessTracker.Services.ModelServices.UserService
                                      IResponseMapper<User, SimpleUserResponseDTO> simpleResponseMapper,
                                      IResponseMapper<WorkoutPin, PinResponseDTO> workoutPinResponseMapper,
                                      IResponseMapper<SplitPin, PinResponseDTO> splitPinResponseMapper,
-                                     IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper,
                                      IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedWorkoutResponseMapper,
-                                     IResponseMapper<User, DetailedPublicUserResponseDTO> publicUserDetailedResponseMapper,
+                                     IResponseMapper<User, DetailedUserResponseDTO> publicUserDetailedResponseMapper,
                                      IResponseMapper<UserSettings, UserSettingsResponseDTO> settingsResponseMapper,
                                      IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO> simpleWeekOfCompletedWorkoutsResponseMapper,
                                      IResponseMapper<IEnumerable<CompletedWorkout>, DetailedWeekOfCompletedWorkoutsResponseDTO> detailedWeekOfCompletedWorkoutsResponseMapper,
@@ -89,9 +88,8 @@ namespace FitnessTracker.Services.ModelServices.UserService
         private readonly IResponseMapper<User, SimpleUserResponseDTO> simpleResponseMapper = simpleResponseMapper;
         private readonly IResponseMapper<WorkoutPin, PinResponseDTO> workoutPinResponseMapper = workoutPinResponseMapper;
         private readonly IResponseMapper<SplitPin, PinResponseDTO> splitPinResponseMapper = splitPinResponseMapper;
-        private readonly IResponseMapper<User, DetailedUserResponseDTO> detailedResponseMapper = detailedResponseMapper;
         private readonly IResponseMapper<Workout, DetailedWorkoutResponseDTO> detailedWorkoutResponseMapper = detailedWorkoutResponseMapper;
-        private readonly IResponseMapper<User, DetailedPublicUserResponseDTO> publicUserDetailedResponseMapper = publicUserDetailedResponseMapper;
+        private readonly IResponseMapper<User, DetailedUserResponseDTO> publicUserDetailedResponseMapper = publicUserDetailedResponseMapper;
         private readonly IResponseMapper<UserSettings, UserSettingsResponseDTO> settingsResponseMapper = settingsResponseMapper;
         private readonly IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO> simpleWeekOfCompletedWorkoutsResponseMapper = simpleWeekOfCompletedWorkoutsResponseMapper;
         private readonly IResponseMapper<IEnumerable<CompletedWorkout>, DetailedWeekOfCompletedWorkoutsResponseDTO> detailedWeekOfCompletedWorkoutsResponseMapper = detailedWeekOfCompletedWorkoutsResponseMapper;

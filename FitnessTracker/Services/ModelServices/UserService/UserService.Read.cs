@@ -26,7 +26,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
             return user;
         }
 
-        public async Task<DetailedPublicUserResponseDTO> GetDetailed(string username, Guid? userId)
+        public async Task<DetailedUserResponseDTO> GetDetailed(string username, Guid? userId)
         {
             if (string.IsNullOrWhiteSpace(username))
                 throw new InvalidArgumentException("Username cannot be empty");
@@ -47,7 +47,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
                       .ThenInclude(x => x.Workout))
                 ?? throw new UnauthorizedException();
 
-            DetailedPublicUserResponseDTO mapped = publicUserDetailedResponseMapper.Map(user.User);
+            DetailedUserResponseDTO mapped = publicUserDetailedResponseMapper.Map(user.User);
             mapped.Followers = user.Followers;
             mapped.Following = user.Following;
             mapped.TotalCompletedWorkouts = user.TotalCompletedWorkouts;

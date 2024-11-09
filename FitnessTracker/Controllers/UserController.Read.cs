@@ -22,7 +22,7 @@ namespace FitnessTracker.Controllers
         }
 
         [HttpGet("{username}/detailed")]
-        [ProducesResponseType(typeof(DetailedPublicUserResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DetailedUserResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetDetailed(string username)
         {
