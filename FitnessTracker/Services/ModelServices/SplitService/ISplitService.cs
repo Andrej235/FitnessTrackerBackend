@@ -12,9 +12,6 @@ namespace FitnessTracker.Services.ModelServices.SplitService
         Task<IEnumerable<SimpleSplitCommentResponseDTO>> GetComments(Guid splitId, Guid? userId, int? offset, int? limit);
         Task<IEnumerable<SimpleSplitCommentResponseDTO>> GetReplies(Guid splitId, Guid commentId, Guid? userId, int? offset, int? limit);
         Task<IEnumerable<SimpleSplitResponseDTO>> GetAllPublicBy(string username, string? splitNameFilter, int? offset, int? limit);
-        Task<IEnumerable<SimpleSplitResponseDTO>> GetAllPersonal(Guid userId, string? splitNameFilter, int? offset, int? limit);
-        Task<IEnumerable<SimpleSplitResponseDTO>> GetAllFavorites(Guid userId, string? nameFilter, int? limit, int? offset);
-        Task<IEnumerable<SimpleSplitResponseDTO>> GetAllLiked(Guid userId, string? nameFilter, int? limit, int? offset);
         Task<IEnumerable<SimpleSplitResponseDTO>> GetAllFavoritesBy(string username, Guid? userId, string? nameFilter, int? limit, int? offset);
         Task<IEnumerable<SimpleSplitResponseDTO>> GetAllLikedBy(string username, Guid? userId, string? nameFilter, int? limit, int? offset);
         Task<DetailedSplitResponseDTO> GetSingleDetailed(Guid splitId, Guid? userId);

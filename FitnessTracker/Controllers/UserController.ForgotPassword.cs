@@ -5,7 +5,7 @@ namespace FitnessTracker.Controllers
 {
     public partial class UserController
     {
-        [HttpPost("me/forgotpassword")]
+        [HttpPost("forgot-password")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -15,7 +15,7 @@ namespace FitnessTracker.Controllers
             return Created();
         }
 
-        [HttpPatch("me/forgotpassword/{code:guid}")]
+        [HttpPatch("forgot-password/{code:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ConfirmForgotPasswordEmail(Guid code, [FromBody] ResetPasswordUserRequestDTO request)

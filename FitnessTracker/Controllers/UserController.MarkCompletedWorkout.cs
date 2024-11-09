@@ -9,7 +9,7 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
-        [HttpPost("me/split/today/completeworkout")]
+        [HttpPost("split/today/complete-workout")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

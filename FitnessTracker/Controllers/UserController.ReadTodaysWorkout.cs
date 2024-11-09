@@ -8,7 +8,7 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [Authorize]
-        [HttpGet("me/split/today")]
+        [HttpGet("split/today")]
         [ProducesResponseType(typeof(DetailedWorkoutResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

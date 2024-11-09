@@ -1,7 +1,6 @@
 ﻿using FitnessTracker.DTOs.Requests.Completed;
 using FitnessTracker.DTOs.Requests.Pins;
 using FitnessTracker.DTOs.Requests.User;
-using FitnessTracker.DTOs.Responses.Activity;
 using FitnessTracker.DTOs.Responses.AuthTokens;
 using FitnessTracker.DTOs.Responses.CompletedWorkouts;
 using FitnessTracker.DTOs.Responses.Pins;
@@ -26,20 +25,13 @@ namespace FitnessTracker.Services.ModelServices.UserService
         Task ConfirmForgotPasswordEmail(Guid code, ResetPasswordUserRequestDTO request);
         Task<IEnumerable<PinResponseDTO>> GetPinOptions(Guid userId);
         Task MarkCompletedWorkout(Guid userId, CreateCompletedWorkoutRequestDTO request);
-        Task<DetailedUserResponseDTO> GetDetailed(Guid userId);
         Task<SimpleUserResponseDTO> GetBasicInfo(Guid userId);
-        Task<IEnumerable<SimpleUserResponseDTO>> GetFollowing(Guid userId, string? nameFilter, int? offset, int? limit);
-        Task<IEnumerable<SimpleUserResponseDTO>> GetFollowers(Guid userId, string? nameFilter, int? offset, int? limit);
         Task<DetailedPublicUserResponseDTO> GetDetailed(string username, Guid? userId);
         Task<IEnumerable<SimpleUserResponseDTO>> GetFollowingFor(string username, string? nameFilter, int? offset, int? limit);
         Task<IEnumerable<SimpleUserResponseDTO>> GetFollowersFor(string username, string? nameFilter, int? offset, int? limit);
-        Task<UserActivityResponseDTO> ReadLatestActivity(Guid userId);
-        Task<IEnumerable<PinResponseDTO>> GetPins(Guid userId);
         Task<IEnumerable<PinResponseDTO>> GetPinsFor(string username);
         Task<UserSettingsResponseDTO> GetSettings(Guid userId);
-        Task<IEnumerable<SimpleWeekOfCompletedWorkoutsResponseDTO>> GetStreak(Guid userId, int? year);
         Task<IEnumerable<SimpleWeekOfCompletedWorkoutsResponseDTO>> GetStreak(string username, int? year);
-        Task<DetailedWeekOfCompletedWorkoutsResponseDTO> GetUserStreakOnWeek(Guid userId, DateTime date);
         Task<DetailedWeekOfCompletedWorkoutsResponseDTO> GetUserStreakOnWeek(string username, DateTime date);
         Task<DetailedWorkoutResponseDTO> GetTodaysWorkout(Guid userId);
         Task ReorderPins(Guid userId, ReorderPinsRequestDTO request);

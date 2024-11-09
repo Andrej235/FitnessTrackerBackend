@@ -8,7 +8,7 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [Authorize(Roles = Role.Unverified)]
-        [HttpPost("me/resendconfirmationemail")]
+        [HttpPost("resend-confirmation-email")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -25,7 +25,7 @@ namespace FitnessTracker.Controllers
         }
 
         [Authorize(Roles = Role.Unverified)]
-        [HttpPatch("me/confirmemail/{code:guid}")]
+        [HttpPatch("confirm-email/{code:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

@@ -8,7 +8,7 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [Authorize]
-        [HttpPut("me/settings")]
+        [HttpPut("settings")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> UpdateSettings([FromBody] UpdateUserSettingsRequestDTO request)

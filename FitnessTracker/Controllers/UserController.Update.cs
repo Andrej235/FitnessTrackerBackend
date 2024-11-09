@@ -9,7 +9,7 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [Authorize]
-        [HttpPatch("me/password")]
+        [HttpPatch("password")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -25,7 +25,7 @@ namespace FitnessTracker.Controllers
         }
 
         [Authorize]
-        [HttpPatch("me/email")]
+        [HttpPatch("email")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -41,7 +41,7 @@ namespace FitnessTracker.Controllers
         }
 
         [Authorize(Roles = $"{Role.Admin},{Role.User}")]
-        [HttpPatch("me/split")]
+        [HttpPatch("split")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -58,7 +58,7 @@ namespace FitnessTracker.Controllers
         }
 
         [Authorize]
-        [HttpPatch("me/name")]
+        [HttpPatch("name")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -74,7 +74,7 @@ namespace FitnessTracker.Controllers
         }
 
         [Authorize]
-        [HttpPatch("me/bio")]
+        [HttpPatch("bio")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -90,7 +90,7 @@ namespace FitnessTracker.Controllers
         }
 
         [Authorize]
-        [HttpPatch("me/image")]
+        [HttpPatch("image")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

@@ -8,7 +8,7 @@ namespace FitnessTracker.Controllers
     public partial class SplitController
     {
         [Authorize]
-        [HttpGet("me/workoutoptions")]
+        [HttpGet("workout-options")]
         [ProducesResponseType(typeof(IEnumerable<SimpleWorkoutOptionResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetSplitWorkoutOptions([FromQuery] int? limit, [FromQuery] int? offset, [FromQuery] string? searchTerm, [FromQuery] bool? favoriteOnly, [FromQuery] bool? personalOnly)

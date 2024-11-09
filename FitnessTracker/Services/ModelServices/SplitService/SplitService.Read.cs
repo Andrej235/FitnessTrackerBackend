@@ -28,33 +28,6 @@ namespace FitnessTracker.Services.ModelServices.SplitService
             return splits.Select(simpleResponseMapper.Map);
         }
 
-        public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllPersonal(Guid userId, string? splitNameFilter, int? offset, int? limit)
-        {
-            IEnumerable<Split> splits = splitNameFilter is null
-                ? await readRangeService.Get(x => x.CreatorId == userId, offset, limit, x => x.Include(x => x.Creator))
-                : await readRangeService.Get(x => x.CreatorId == userId && EF.Functions.Like(x.Name, $"%{splitNameFilter}%"), offset, limit, x => x.Include(x => x.Creator));
-
-            return splits.Select(simpleResponseMapper.Map);
-        }
-
-        public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllFavorites(Guid userId, string? nameFilter, int? limit, int? offset)
-        {
-            IEnumerable<FavoriteSplit> splits = nameFilter is null
-                ? await favoriteReadRangeService.Get(x => x.UserId == userId, offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator))
-                : await favoriteReadRangeService.Get(x => x.UserId == userId && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator));
-
-            return splits.Select(x => simpleResponseMapper.Map(x.Split));
-        }
-
-        public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllLiked(Guid userId, string? nameFilter, int? limit, int? offset)
-        {
-            IEnumerable<SplitLike> splits = nameFilter is null
-                ? await likeReadRangeService.Get(x => x.UserId == userId, offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator))
-                : await likeReadRangeService.Get(x => x.UserId == userId && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator));
-
-            return splits.Select(x => simpleResponseMapper.Map(x.Split));
-        }
-
         public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllFavoritesBy(string username, Guid? userId, string? nameFilter, int? limit, int? offset)
         {
             Guid creatorId = await userReadSingleSelectedService.Get(

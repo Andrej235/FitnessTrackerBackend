@@ -8,7 +8,7 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [Authorize]
-        [HttpGet("me/settings")]
+        [HttpGet("settings")]
         [ProducesResponseType(typeof(UserSettingsResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetSettings()

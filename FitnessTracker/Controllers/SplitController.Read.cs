@@ -12,49 +12,6 @@ namespace FitnessTracker.Controllers
         public async Task<IActionResult> GetAllBy(string username, [FromQuery] string? nameFilter, [FromQuery] int? offset, [FromQuery] int? limit) => Ok(await splitService.GetAllPublicBy(username, nameFilter, offset, limit));
 
         [Authorize]
-        [HttpGet("personal/simple")]
-        [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> GetAllPersonal([FromQuery] string? nameFilter, [FromQuery] int? offset, [FromQuery] int? limit)
-        {
-            if (User.Identity is not ClaimsIdentity claimsIdentity
-                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out Guid userId))
-                return Unauthorized();
-
-            return Ok(await splitService.GetAllPersonal(userId, nameFilter, offset, limit));
-        }
-
-        [Authorize]
-        [HttpGet("favorite/simple")]
-        [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> GetAllFavorites([FromQuery] string? nameFilter, [FromQuery] int? limit, [FromQuery] int? offset)
-        {
-            if (User.Identity is not ClaimsIdentity claimsIdentity
-                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out Guid userId))
-                return Unauthorized();
-
-            return Ok(await splitService.GetAllFavorites(userId, nameFilter, limit, offset));
-        }
-
-        [Authorize]
-        [HttpGet("liked/simple")]
-        [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> GetAllLiked([FromQuery] string? nameFilter, [FromQuery] int? limit, [FromQuery] int? offset)
-        {
-            if (User.Identity is not ClaimsIdentity claimsIdentity
-                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
-                || !Guid.TryParse(userIdString, out Guid userId))
-                return Unauthorized();
-
-            return Ok(await splitService.GetAllLiked(userId, nameFilter, limit, offset));
-        }
-
-        [Authorize]
         [HttpGet("favorite/simple/by/{username}")]
         [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

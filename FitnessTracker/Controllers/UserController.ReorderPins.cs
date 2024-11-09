@@ -8,7 +8,7 @@ namespace FitnessTracker.Controllers
     public partial class UserController
     {
         [Authorize]
-        [HttpPatch("me/pins/reorder")]
+        [HttpPatch("pins/reorder")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

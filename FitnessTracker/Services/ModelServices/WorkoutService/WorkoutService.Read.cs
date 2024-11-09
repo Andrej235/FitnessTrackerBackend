@@ -21,24 +21,6 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
             return workouts.Select(simpleResponseMapper.Map);
         }
 
-        public async Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllFavorites(Guid userId, string? nameFilter, int? limit, int? offset)
-        {
-            IEnumerable<FavoriteWorkout> workouts = nameFilter is null
-                ? await favoriteReadRangeService.Get(x => x.UserId == userId, offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator))
-                : await favoriteReadRangeService.Get(x => x.UserId == userId && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
-
-            return workouts.Select(x => simpleResponseMapper.Map(x.Workout));
-        }
-
-        public async Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllLiked(Guid userId, string? nameFilter, int? limit, int? offset)
-        {
-            IEnumerable<WorkoutLike> workouts = nameFilter is null
-                ? await likeReadRangeService.Get(x => x.UserId == userId, offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator))
-                : await likeReadRangeService.Get(x => x.UserId == userId && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
-
-            return workouts.Select(x => simpleResponseMapper.Map(x.Workout));
-        }
-
         public async Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllFavoritesBy(string username, Guid? userId, string? nameFilter, int? limit, int? offset)
         {
             Guid creatorId = await userReadSingleSelectedService.Get(
@@ -63,15 +45,6 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                 : await likeReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
 
             return workouts.Select(x => simpleResponseMapper.Map(x.Workout));
-        }
-
-        public async Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllPersonal(Guid userId, string? nameFilter, int? limit, int? offset)
-        {
-            IEnumerable<Workout> workouts = nameFilter is null
-                ? await readRangeService.Get(x => x.CreatorId == userId, offset, limit ?? 10, x => x.Include(x => x.Creator).OrderByDescending(x => x.CreatedAt))
-                : await readRangeService.Get(x => x.CreatorId == userId && EF.Functions.Like(x.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Creator).OrderByDescending(x => x.CreatedAt));
-
-            return workouts.Select(simpleResponseMapper.Map);
         }
 
         public async Task<DetailedWorkoutResponseDTO> GetDetailed(Guid workoutId, Guid? userId)
