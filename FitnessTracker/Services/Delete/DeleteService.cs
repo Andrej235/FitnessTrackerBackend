@@ -9,10 +9,10 @@ namespace FitnessTracker.Services.Delete
     {
         private readonly DataContext context = context;
 
-        public async Task Delete(Expression<Func<T, bool>> deleteCriteria)
+        public async Task Delete(Expression<Func<T, bool>> deleteCriteria, bool validate)
         {
             int deletedCount = await context.Set<T>().Where(deleteCriteria).ExecuteDeleteAsync();
-            if (deletedCount == 0)
+            if (validate && deletedCount == 0)
                 throw new NotFoundException("Entity not found");
         }
     }

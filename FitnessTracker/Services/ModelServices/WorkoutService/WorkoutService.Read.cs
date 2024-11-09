@@ -47,8 +47,11 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
             return workouts.Select(x => simpleResponseMapper.Map(x.Workout));
         }
 
-        public async Task<DetailedWorkoutResponseDTO> GetDetailed(Guid workoutId, Guid? userId)
+        public async Task<DetailedWorkoutResponseDTO> GetDetailed(string creatorUsername, string workoutName, Guid? userId)
         {
+            Guid creatorId = (await userReadSingleSelectedService.Get(x => new { x.Id }, x => x.Username == creatorUsername)
+                ?? throw new NotFoundException($"User {creatorUsername} not found")).Id;
+
             bool validUserId = userId is not null && userId != default;
 
             var data = await readSingleSelectedService.Get(
@@ -61,7 +64,7 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                      isFavorited = validUserId && x.Favorites.Any(x => x.Id == userId),
                      workout = x,
                  },
-                 x => x.Id == workoutId,
+                 x => x.CreatorId == creatorId && x.Name == workoutName,
                  x => x.Include(x => x.Creator)
                        .Include(x => x.Sets)
                        .ThenInclude(x => x.Exercise))
@@ -78,7 +81,7 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                 return mapped;
 
             IEnumerable<CompletedWorkout> completed = await completedWorkoutReadRangeService.Get(
-                criteria: x => x.UserId == userId && x.WorkoutId == workoutId,
+                criteria: x => x.UserId == userId && x.WorkoutId == mapped.Id,
                 limit: 1,
                 queryBuilder: x => x.Include(x => x.CompletedSets).OrderByDescending(x => x.CompletedAt));
 

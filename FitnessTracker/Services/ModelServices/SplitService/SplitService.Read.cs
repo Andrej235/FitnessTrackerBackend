@@ -54,8 +54,11 @@ namespace FitnessTracker.Services.ModelServices.SplitService
             return splits.Select(x => simpleResponseMapper.Map(x.Split));
         }
 
-        public async Task<DetailedSplitResponseDTO> GetSingleDetailed(Guid splitId, Guid? userId)
+        public async Task<DetailedSplitResponseDTO> GetSingleDetailed(string creatorUsername, string splitName, Guid? userId)
         {
+            Guid creatorId = (await userReadSingleSelectedService.Get(x => new { x.Id }, x => x.Username == creatorUsername)
+                ?? throw new NotFoundException($"User {creatorUsername} not found")).Id;
+
             var data = await readSingleSelectedService.Get(
                 x => new
                 {
@@ -66,7 +69,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                     isFavorite = x.Favorites.Any(x => x.Id == userId),
                     split = x,
                 },
-                x => x.Id == splitId,
+                x => x.CreatorId == creatorId && x.Name == splitName,
                 x => x.Include(x => x.Creator)
                       .Include(x => x.Workouts)
                       .ThenInclude(x => x.Workout)

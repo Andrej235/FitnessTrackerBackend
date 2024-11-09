@@ -4,24 +4,27 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
 {
     public partial class WorkoutService
     {
-        public async Task Delete(Guid userId, Guid id)
+        public async Task Delete(Guid userId, string creatorUsername, string workoutName)
         {
+            Guid creatorId = (await userReadSingleSelectedService.Get(x => new { x.Id }, x => x.Username == creatorUsername)
+                ?? throw new NotFoundException($"User {creatorUsername} not found")).Id;
+
+            if (creatorId != userId)
+                throw new AccessDeniedException();
+
             var workout = await readSingleSelectedService.Get(
                 x => new
                 {
-                    x.CreatorId,
+                    x.Id,
                 },
-                x => x.Id == id)
+                x => x.CreatorId == creatorId && x.Name == workoutName)
                 ?? throw new NotFoundException();
 
-            if (workout.CreatorId == userId)
-                throw new AccessDeniedException();
-
-            await likeDeleteService.Delete(x => x.WorkoutId == id);
-            await favoriteDeleteService.Delete(x => x.WorkoutId == id);
-            await commentLikeDeleteService.Delete(x => x.WorkoutId == id);
-            await commentDeleteService.Delete(x => x.WorkoutId == id);
-            await deleteService.Delete(x => x.CreatorId == userId && x.Id == id);
+            await likeDeleteService.Delete(x => x.WorkoutId == workout.Id, false);
+            await favoriteDeleteService.Delete(x => x.WorkoutId == workout.Id, false);
+            await commentLikeDeleteService.Delete(x => x.WorkoutId == workout.Id, false);
+            await commentDeleteService.Delete(x => x.WorkoutId == workout.Id, false);
+            await deleteService.Delete(x => x.CreatorId == userId && x.Id == workout.Id, false);
         }
     }
 }

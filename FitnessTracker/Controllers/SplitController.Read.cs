@@ -9,12 +9,13 @@ namespace FitnessTracker.Controllers
     {
         [HttpGet("simple/by/{username}")]
         [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllBy(string username, [FromQuery] string? nameFilter, [FromQuery] int? offset, [FromQuery] int? limit) => Ok(await splitService.GetAllPublicBy(username, nameFilter, offset, limit));
 
         [Authorize]
         [HttpGet("favorite/simple/by/{username}")]
         [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllFavoritesBy(string username, [FromQuery] string? nameFilter, [FromQuery] int? limit, [FromQuery] int? offset)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -28,7 +29,7 @@ namespace FitnessTracker.Controllers
         [Authorize]
         [HttpGet("liked/simple/by/{username}")]
         [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllLikedBy(string username, [FromQuery] string? nameFilter, [FromQuery] int? limit, [FromQuery] int? offset)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
@@ -40,18 +41,17 @@ namespace FitnessTracker.Controllers
         }
 
         [Authorize]
-        [HttpGet("{id:guid}/detailed")]
+        [HttpGet("{creator}/{name}")]
         [ProducesResponseType(typeof(DetailedSplitResponseDTO), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetDetailed(Guid id)
+        public async Task<IActionResult> GetDetailed(string creator, string name)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            return Ok(await splitService.GetSingleDetailed(id, userId));
+            return Ok(await splitService.GetSingleDetailed(creator, name, userId));
         }
 
         [HttpGet("usedby/{username}/detailed")]

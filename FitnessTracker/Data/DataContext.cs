@@ -250,6 +250,9 @@ namespace FitnessTracker.Data
                         _ = j.HasIndex(x => x.SplitId);
                         _ = j.HasIndex(x => new { x.SplitId, x.UserId }).IsUnique();
                     });
+
+                _ = split.HasIndex(x => x.CreatorId);
+                _ = split.HasIndex(x => new { x.CreatorId, x.Name }).IsUnique();
             });
 
             _ = modelBuilder.Entity<SplitComment>(splitComment =>
@@ -421,6 +424,7 @@ namespace FitnessTracker.Data
                         });
 
                     _ = workout.HasIndex(x => x.CreatorId);
+                    _ = workout.HasIndex(x => new { x.CreatorId, x.Name }).IsUnique();
                 });
 
             _ = modelBuilder.Entity<WorkoutComment>(workoutComment =>
