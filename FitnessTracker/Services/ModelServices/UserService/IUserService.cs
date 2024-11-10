@@ -23,7 +23,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
         Task Unfollow(Guid userId, string usernameToFollow);
         Task SendForgotPasswordEmail(SendForgotPasswordEmailRequestDTO request);
         Task ConfirmForgotPasswordEmail(Guid code, ResetPasswordUserRequestDTO request);
-        Task<IEnumerable<PinResponseDTO>> GetPinOptions(Guid userId);
+        Task<IEnumerable<PinResponseDTO>> GetPinOptions(Guid userId, int? offset, int? limit);
         Task MarkCompletedWorkout(Guid userId, CreateCompletedWorkoutRequestDTO request);
         Task<SimpleUserResponseDTO> GetBasicInfo(Guid userId);
         Task<DetailedUserResponseDTO> GetDetailed(string username, Guid? userId);

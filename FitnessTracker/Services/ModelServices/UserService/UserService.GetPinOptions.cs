@@ -6,7 +6,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
 {
     public partial class UserService
     {
-        public async Task<IEnumerable<PinResponseDTO>> GetPinOptions(Guid userId)
+        public async Task<IEnumerable<PinResponseDTO>> GetPinOptions(Guid userId, int? offset, int? limit)
         {
             if (userId == default)
                 throw new UnauthorizedException();
@@ -31,6 +31,8 @@ namespace FitnessTracker.Services.ModelServices.UserService
                     Order = -1,
                 }))
                 .OrderByDescending(x => x.LikeCount)
+                .Skip(offset ?? 0)
+                .Take(limit ?? 10)
                 .ToList(),
                 criteria: x => x.Id == userId)
                 ?? throw new UnauthorizedException();
