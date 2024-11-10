@@ -23,7 +23,7 @@ namespace FitnessTracker.Auth
         private readonly IUpdateSingleService<RefreshToken> updateService = updateService;
         private readonly IDeleteService<RefreshToken> deleteService = deleteService;
 
-        private (string jwt, Guid jwtId) CreateJWTAndId(User user)
+        private (string jwt, Guid jwtId) CreateJWTAndId(Guid userId, string role)
         {
             JwtSecurityTokenHandler tokenHandler = new();
             byte[] key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]!);
@@ -33,9 +33,9 @@ namespace FitnessTracker.Auth
             {
                 Subject = new ClaimsIdentity(
                     [
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                        new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                         new Claim(JwtRegisteredClaimNames.Jti, jwtId.ToString()),
-                        new Claim(ClaimTypes.Role, user.Role)
+                        new Claim(ClaimTypes.Role, role)
                     ]
                 ),
 
@@ -51,14 +51,14 @@ namespace FitnessTracker.Auth
             return (tokenString, jwtId);
         }
 
-        public async Task<string> GenerateJWTAndRefreshToken(User user, IResponseCookies cookies)
+        public async Task<string> GenerateJWTAndRefreshToken(Guid userId, string role, IResponseCookies cookies)
         {
-            (string jwt, Guid jwtId) = CreateJWTAndId(user);
+            (string jwt, Guid jwtId) = CreateJWTAndId(userId, role);
 
             RefreshToken refresh = new()
             {
                 JwtId = jwtId,
-                UserId = user.Id,
+                UserId = userId,
                 ExpiryDate = DateTime.UtcNow.AddDays(7),
             };
 
@@ -82,7 +82,7 @@ namespace FitnessTracker.Auth
             if (token is null || token.JwtId != jwtId || token.UserId != userId)
                 throw new InvalidRequestDTOException("Invalid token");
 
-            (string newJwt, Guid newJwtId) = CreateJWTAndId(token.User);
+            (string newJwt, Guid newJwtId) = CreateJWTAndId(token.User.Id, token.User.Role);
             token.JwtId = newJwtId;
             await updateService.Update(token);
 

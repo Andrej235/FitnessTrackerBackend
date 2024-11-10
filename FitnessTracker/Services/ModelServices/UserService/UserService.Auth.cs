@@ -48,7 +48,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
                 PublicFavoriteSplits = true,
             });
 
-            string jwt = await tokenManager.GenerateJWTAndRefreshToken(newUser, cookies);
+            string jwt = await tokenManager.GenerateJWTAndRefreshToken(newUser.Id, newUser.Role, cookies);
             await emailConfirmationSender.SendEmailConfirmation(newUser.Email, newUser.Id);
             return jwtResponseMapper.Map(jwt);
         }
@@ -64,16 +64,37 @@ namespace FitnessTracker.Services.ModelServices.UserService
 
         public async Task<SimpleJWTResponseDTO> Login(LoginUserRequestDTO request, IResponseCookies cookies)
         {
-            if (!ValidEmailRegex().IsMatch(request.Email) || request.Password.Length < 8)
+            if (request.Password.Length < 8)
                 throw new InvalidRequestDTOException("Incorrect email or password");
 
-            User user = await readSingleService.Get(x => x.Email == request.Email) ?? throw new InvalidLoginCredentialsException("Incorrect email or password");
+            var user = (ValidEmailRegex().IsMatch(request.Email)
+                ? await readSingleSelectedService.Get(
+                    x => new
+                    {
+                        x.Id,
+                        x.Role,
+                        x.PasswordHash,
+                        x.Salt
+                    },
+                    x => x.Email == request.Email)
+                : ValidUsernameRegex().IsMatch(request.Email)
+                ? await readSingleSelectedService.Get(
+                    x => new
+                    {
+                        x.Id,
+                        x.Role,
+                        x.PasswordHash,
+                        x.Salt
+                    },
+                    x => x.Username == request.Email)
+                : null)
+                ?? throw new InvalidLoginCredentialsException("Incorrect email or password");
 
             byte[] hash = request.Password.ToHash(user.Salt);
             if (!user.PasswordHash.SequenceEqual(hash))
                 throw new InvalidLoginCredentialsException("Incorrect email or password");
 
-            string jwt = await tokenManager.GenerateJWTAndRefreshToken(user, cookies);
+            string jwt = await tokenManager.GenerateJWTAndRefreshToken(user.Id, user.Role, cookies);
             return jwtResponseMapper.Map(jwt);
         }
 
