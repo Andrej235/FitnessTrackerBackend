@@ -14,16 +14,13 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 throw new InvalidArgumentException($"{nameof(username)} cannot be empty");
 
             var user = await userReadSingleSelectedService.Get(
-                x => new
-                {
-                    x.Id,
-                },
+                x => new { x.Id, },
                 x => x.Username == username)
                 ?? throw new NotFoundException();
 
             IEnumerable<Split> splits = string.IsNullOrWhiteSpace(splitNameFilter)
-                ? await readRangeService.Get(x => x.CreatorId == user.Id, offset, limit, x => x.Include(x => x.Creator))
-                : await readRangeService.Get(x => x.CreatorId == user.Id && EF.Functions.Like(x.Name, $"%{splitNameFilter}%"), offset, limit, x => x.Include(x => x.Creator));
+                ? await readRangeService.Get(x => x.CreatorId == user.Id, offset, limit, x => x.Include(x => x.Creator).OrderByDescending(x => x.CreatedAt))
+                : await readRangeService.Get(x => x.CreatorId == user.Id && EF.Functions.Like(x.Name, $"%{splitNameFilter}%"), offset, limit, x => x.Include(x => x.Creator).OrderByDescending(x => x.CreatedAt));
 
             return splits.Select(simpleResponseMapper.Map);
         }
@@ -35,8 +32,8 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 x => x.Username == username);
 
             IEnumerable<FavoriteSplit> splits = nameFilter is null
-                ? await favoriteReadRangeService.Get(x => x.UserId == creatorId, offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator))
-                : await favoriteReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator));
+                ? await favoriteReadRangeService.Get(x => x.UserId == creatorId, offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator).OrderByDescending(x => x.FavoritedAt))
+                : await favoriteReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator).OrderByDescending(x => x.FavoritedAt));
 
             return splits.Select(x => simpleResponseMapper.Map(x.Split));
         }
@@ -48,8 +45,8 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 x => x.Username == username);
 
             IEnumerable<SplitLike> splits = nameFilter is null
-                ? await likeReadRangeService.Get(x => x.UserId == creatorId, offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator))
-                : await likeReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator));
+                ? await likeReadRangeService.Get(x => x.UserId == creatorId, offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator).OrderByDescending(x => x.LikedAt))
+                : await likeReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator).OrderByDescending(x => x.LikedAt));
 
             return splits.Select(x => simpleResponseMapper.Map(x.Split));
         }

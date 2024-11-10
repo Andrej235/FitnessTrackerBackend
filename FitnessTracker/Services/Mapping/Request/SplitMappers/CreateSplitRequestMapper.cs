@@ -11,7 +11,8 @@ namespace FitnessTracker.Services.Mapping.Request.SplitMappers
         {
             Name = from.Name,
             Description = from.Description,
-            Workouts = from.Workouts.Select(splitWorkoutRequestMapper.Map).ToList()
+            Workouts = from.Workouts.Select(splitWorkoutRequestMapper.Map).ToList(),
+            CreatedAt = DateTime.Now,
         };
     }
 }

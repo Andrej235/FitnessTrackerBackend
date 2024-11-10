@@ -15,8 +15,8 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                 x => x.Username == username);
 
             IEnumerable<Workout> workouts = nameFilter is null
-                ? await readRangeService.Get(x => x.CreatorId == userId, offset, limit ?? 10, x => x.Include(x => x.Creator))
-                : await readRangeService.Get(x => x.CreatorId == userId && EF.Functions.Like(x.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Creator));
+                ? await readRangeService.Get(x => x.CreatorId == userId, offset, limit ?? 10, x => x.Include(x => x.Creator).OrderByDescending(x => x.CreatedAt))
+                : await readRangeService.Get(x => x.CreatorId == userId && EF.Functions.Like(x.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Creator).OrderByDescending(x => x.CreatedAt));
 
             return workouts.Select(simpleResponseMapper.Map);
         }
@@ -28,8 +28,8 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                 x => x.Username == username);
 
             IEnumerable<FavoriteWorkout> workouts = nameFilter is null
-                ? await favoriteReadRangeService.Get(x => x.UserId == creatorId, offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator))
-                : await favoriteReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
+                ? await favoriteReadRangeService.Get(x => x.UserId == creatorId, offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator).OrderByDescending(x => x.FavoritedAt))
+                : await favoriteReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator).OrderByDescending(x => x.FavoritedAt));
 
             return workouts.Select(x => simpleResponseMapper.Map(x.Workout));
         }
@@ -41,8 +41,8 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                 x => x.Username == username);
 
             IEnumerable<WorkoutLike> workouts = nameFilter is null
-                ? await likeReadRangeService.Get(x => x.UserId == creatorId, offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator))
-                : await likeReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator));
+                ? await likeReadRangeService.Get(x => x.UserId == creatorId, offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator).OrderByDescending(x => x.LikedAt))
+                : await likeReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator).OrderByDescending(x => x.LikedAt));
 
             return workouts.Select(x => simpleResponseMapper.Map(x.Workout));
         }
