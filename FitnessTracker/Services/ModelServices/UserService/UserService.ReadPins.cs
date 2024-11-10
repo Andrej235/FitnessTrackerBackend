@@ -18,11 +18,13 @@ namespace FitnessTracker.Services.ModelServices.UserService
                     {
                         Pin = x,
                         LikeCount = x.Workout.Likes.Count,
+                        FavoriteCount = x.Workout.Favorites.Count,
                     }),
                     SplitPins = x.SplitPins.Select(x => new
                     {
                         Pin = x,
                         LikeCount = x.Split.Likes.Count,
+                        FavoriteCount = x.Split.Favorites.Count,
                     }),
                 },
                 x => x.Id == userId,
@@ -36,6 +38,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
             {
                 PinResponseDTO mapped = workoutPinResponseMapper.Map(x.Pin);
                 mapped.LikeCount = x.LikeCount;
+                mapped.FavoriteCount = x.FavoriteCount;
                 return mapped;
             });
 
@@ -43,6 +46,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
             {
                 PinResponseDTO mapped = splitPinResponseMapper.Map(x.Pin);
                 mapped.LikeCount = x.LikeCount;
+                mapped.FavoriteCount = x.FavoriteCount;
                 return mapped;
             });
 
@@ -57,11 +61,13 @@ namespace FitnessTracker.Services.ModelServices.UserService
                     {
                         Pin = x,
                         LikeCount = x.Workout.Likes.Count,
+                        FavoriteCount = x.Workout.Favorites.Count,
                     }),
                     SplitPins = x.SplitPins.Select(x => new
                     {
                         Pin = x,
                         LikeCount = x.Split.Likes.Count,
+                        FavoriteCount = x.Split.Favorites.Count,
                     }),
                 },
                 x => x.Username == username,
@@ -75,6 +81,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
             {
                 PinResponseDTO mapped = workoutPinResponseMapper.Map(x.Pin);
                 mapped.LikeCount = x.LikeCount;
+                mapped.FavoriteCount = x.FavoriteCount;
                 return mapped;
             });
 
@@ -82,6 +89,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
             {
                 PinResponseDTO mapped = splitPinResponseMapper.Map(x.Pin);
                 mapped.LikeCount = x.LikeCount;
+                mapped.FavoriteCount = x.FavoriteCount;
                 return mapped;
             });
 

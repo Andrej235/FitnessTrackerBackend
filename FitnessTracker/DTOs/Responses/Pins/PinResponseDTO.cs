@@ -10,5 +10,6 @@ namespace FitnessTracker.DTOs.Responses.Pins
         public PinType Type { get; set; }
         public int Order { get; set; }
         public int LikeCount { get; set; }
+        public int FavoriteCount { get; set; }
     }
 }
