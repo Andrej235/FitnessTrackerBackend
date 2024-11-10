@@ -1,5 +1,4 @@
 ﻿using FitnessTracker.DTOs.Responses.Split;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -12,7 +11,6 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllBy(string username, [FromQuery] string? nameFilter, [FromQuery] int? offset, [FromQuery] int? limit) => Ok(await splitService.GetAllPublicBy(username, nameFilter, offset, limit));
 
-        [Authorize]
         [HttpGet("favorite/simple/by/{username}")]
         [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -26,7 +24,6 @@ namespace FitnessTracker.Controllers
                 return Ok(await splitService.GetAllFavoritesBy(username, userId, nameFilter, limit, offset));
         }
 
-        [Authorize]
         [HttpGet("liked/simple/by/{username}")]
         [ProducesResponseType(typeof(IEnumerable<SimpleSplitResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -40,7 +37,6 @@ namespace FitnessTracker.Controllers
                 return Ok(await splitService.GetAllLikedBy(username, userId, nameFilter, limit, offset));
         }
 
-        [Authorize]
         [HttpGet("{creator}/{name}")]
         [ProducesResponseType(typeof(DetailedSplitResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -49,9 +45,9 @@ namespace FitnessTracker.Controllers
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                 || !Guid.TryParse(userIdString, out Guid userId))
-                return Unauthorized();
-
-            return Ok(await splitService.GetSingleDetailed(creator, name, userId));
+                return Ok(await splitService.GetSingleDetailed(creator, name, null));
+            else
+                return Ok(await splitService.GetSingleDetailed(creator, name, userId));
         }
 
         [HttpGet("usedby/{username}/detailed")]
