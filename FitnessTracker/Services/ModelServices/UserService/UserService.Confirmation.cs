@@ -22,7 +22,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
             await emailConfirmationSender.SendEmailConfirmation(user.Email, userId);
         }
 
-        public Task ConfirmEmail(Guid code, Guid userId)
+        public Task ConfirmEmail(Guid userId, Guid code)
         {
             if (userId == default)
                 throw new UnauthorizedException();

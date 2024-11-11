@@ -16,7 +16,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
         Task<SimpleJWTResponseDTO> Refresh(Guid jwtId, Guid userId, Guid refreshToken);
         Task Logout(Guid refreshToken);
         Task ResendConfirmationEmail(Guid userId);
-        Task ConfirmEmail(Guid code, Guid userId);
+        Task ConfirmEmail(Guid userId, Guid code);
         Task CreatePins(Guid userId, CreatePinsRequestDTO request);
         Task DeletePins(Guid userId, DeletePinsRequestDTO request);
         Task Follow(Guid userId, string usernameToFollow);
@@ -25,7 +25,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
         Task ConfirmForgotPasswordEmail(Guid code, ResetPasswordUserRequestDTO request);
         Task<IEnumerable<PinResponseDTO>> GetPinOptions(Guid userId, int? offset, int? limit);
         Task MarkCompletedWorkout(Guid userId, CreateCompletedWorkoutRequestDTO request);
-        Task<SimpleUserResponseDTO> GetBasicInfo(Guid userId);
+        Task<BasicUserPersonalInfoResponseDTO> GetBasicInfo(Guid userId);
         Task<DetailedUserResponseDTO> GetDetailed(string username, Guid? userId);
         Task<IEnumerable<SimpleUserResponseDTO>> GetFollowingFor(string username, string? nameFilter, int? offset, int? limit);
         Task<IEnumerable<SimpleUserResponseDTO>> GetFollowersFor(string username, string? nameFilter, int? offset, int? limit);

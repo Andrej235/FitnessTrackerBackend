@@ -9,7 +9,7 @@ namespace FitnessTracker.Controllers
     {
         [Authorize]
         [HttpGet("basic")]
-        [ProducesResponseType(typeof(SimpleUserResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(BasicUserPersonalInfoResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetBasicInfo()
         {

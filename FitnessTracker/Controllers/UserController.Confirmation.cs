@@ -21,7 +21,7 @@ namespace FitnessTracker.Controllers
                 return Unauthorized();
 
             await userService.ResendConfirmationEmail(userId);
-            return Created();
+            return Created((string?)null, null);
         }
 
         [Authorize(Roles = Role.Unverified)]

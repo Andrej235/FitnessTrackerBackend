@@ -8,17 +8,18 @@ namespace FitnessTracker.Services.ModelServices.UserService
 {
     public partial class UserService
     {
-        public async Task<SimpleUserResponseDTO> GetBasicInfo(Guid userId)
+        public async Task<BasicUserPersonalInfoResponseDTO> GetBasicInfo(Guid userId)
         {
             if (userId == default)
                 throw new UnauthorizedException();
 
-            SimpleUserResponseDTO user = await readSingleSelectedService.Get(
-                x => new SimpleUserResponseDTO
+            BasicUserPersonalInfoResponseDTO user = await readSingleSelectedService.Get(
+                x => new BasicUserPersonalInfoResponseDTO
                 {
                     Username = x.Username,
                     Name = x.Name,
                     Image = x.ProfilePic,
+                    IsVerified = x.EmailConfirmed
                 },
                 x => x.Id == userId)
                 ?? throw new UnauthorizedException();
