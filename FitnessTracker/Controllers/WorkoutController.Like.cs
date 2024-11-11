@@ -1,5 +1,4 @@
-﻿using FitnessTracker.Utilities;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -7,7 +6,7 @@ namespace FitnessTracker.Controllers
 {
     public partial class WorkoutController
     {
-        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
+        [Authorize]
         [HttpPost("{id:guid}/like")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -24,7 +23,7 @@ namespace FitnessTracker.Controllers
             return Created();
         }
 
-        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
+        [Authorize]
         [HttpDelete("{id:guid}/like")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

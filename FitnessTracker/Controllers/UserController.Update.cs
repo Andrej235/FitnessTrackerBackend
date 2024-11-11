@@ -1,5 +1,4 @@
 ﻿using FitnessTracker.DTOs.Requests.User;
-using FitnessTracker.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -40,7 +39,7 @@ namespace FitnessTracker.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = $"{Role.Admin},{Role.User}")]
+        [Authorize]
         [HttpPatch("split")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
