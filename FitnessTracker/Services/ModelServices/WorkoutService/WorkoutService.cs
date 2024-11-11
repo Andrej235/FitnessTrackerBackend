@@ -19,10 +19,12 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                                         IReadSingleService<Workout> readSingleService,
                                         IReadSingleSelectedService<Workout> readSingleSelectedService,
                                         IReadSingleSelectedService<User> userReadSingleSelectedService,
+                                        IReadSingleSelectedService<Set> setReadSingleSelectedService,
                                         IReadSingleSelectedService<WorkoutComment> commentReadSingleSelectedService,
                                         IReadRangeService<Workout> readRangeService,
                                         IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService,
                                         IReadRangeSelectedService<WorkoutComment> commentSelectService,
+                                        IReadRangeSelectedService<CompletedWorkout> completedWorkoutReadRangeSelectedService,
                                         IReadRangeService<WorkoutLike> likeReadRangeService,
                                         IReadRangeService<FavoriteWorkout> favoriteReadRangeService,
                                         IUpdateSingleService<Workout> updateService,
@@ -46,10 +48,12 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
         private readonly IReadSingleService<Workout> readSingleService = readSingleService;
         private readonly IReadSingleSelectedService<Workout> readSingleSelectedService = readSingleSelectedService;
         private readonly IReadSingleSelectedService<User> userReadSingleSelectedService = userReadSingleSelectedService;
+        private readonly IReadSingleSelectedService<Set> setReadSingleSelectedService = setReadSingleSelectedService;
         private readonly IReadSingleSelectedService<WorkoutComment> commentReadSingleSelectedService = commentReadSingleSelectedService;
         private readonly IReadRangeService<Workout> readRangeService = readRangeService;
         private readonly IReadRangeService<CompletedWorkout> completedWorkoutReadRangeService = completedWorkoutReadRangeService;
         private readonly IReadRangeSelectedService<WorkoutComment> commentSelectService = commentSelectService;
+        private readonly IReadRangeSelectedService<CompletedWorkout> completedWorkoutReadRangeSelectedService = completedWorkoutReadRangeSelectedService;
         private readonly IReadRangeService<WorkoutLike> likeReadRangeService = likeReadRangeService;
         private readonly IReadRangeService<FavoriteWorkout> favoriteReadRangeService = favoriteReadRangeService;
         private readonly IUpdateSingleService<Workout> updateService = updateService;

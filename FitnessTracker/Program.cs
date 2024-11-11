@@ -252,6 +252,7 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<ICreateService<Set>, CreateService<Set>>();
             _ = builder.Services.AddScoped<ICreateRangeService<Set>, CreateService<Set>>();
             _ = builder.Services.AddScoped<IReadSingleService<Set>, ReadService<Set>>();
+            _ = builder.Services.AddScoped<IReadSingleSelectedService<Set>, ReadService<Set>>();
             _ = builder.Services.AddScoped<IReadRangeService<Set>, ReadService<Set>>();
             _ = builder.Services.AddScoped<IUpdateSingleService<Set>, UpdateService<Set>>();
             _ = builder.Services.AddScoped<IDeleteService<Set>, DeleteService<Set>>();
@@ -449,6 +450,7 @@ namespace FitnessTracker
             #region Completed workouts / sets
             _ = builder.Services.AddScoped<ICreateService<CompletedWorkout>, CreateService<CompletedWorkout>>();
             _ = builder.Services.AddScoped<IReadRangeService<CompletedWorkout>, ReadService<CompletedWorkout>>();
+            _ = builder.Services.AddScoped<IReadRangeSelectedService<CompletedWorkout>, ReadService<CompletedWorkout>>();
             _ = builder.Services.AddScoped<IResponseMapper<IGrouping<DateTime, CompletedWorkout>, SimpleWeekOfCompletedWorkoutsResponseDTO>, SimpleWeekOfCompletedWorkoutsResponseMapper>();
             _ = builder.Services.AddScoped<IResponseMapper<IEnumerable<CompletedWorkout>, DetailedWeekOfCompletedWorkoutsResponseDTO>, DetailedWeekOfCompletedWorkoutsResponseMapper>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateCompletedSetRequestDTO, CompletedSet>, CreateCompletedSetRequestMapper>();
