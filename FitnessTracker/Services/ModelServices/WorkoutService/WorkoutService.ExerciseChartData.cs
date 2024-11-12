@@ -13,29 +13,37 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                 x => x.Creator.Username == username && x.Name == workoutName)
                 ?? throw new NotFoundException($"Workout {workoutName} not found")).Id;
 
-            var data = await completedWorkoutReadRangeSelectedService.Get(
+            var completedWorkouts = await completedWorkoutReadRangeSelectedService.Get(
                 x => new
                 {
-                    Sets = x.CompletedSets.Select(x => new
+                    Sets = x.CompletedSets.Select(y => new
                     {
-                        x.WeightUsed,
-                        x.RepsCompleted
+                        y.WeightUsed,
+                        y.RepsCompleted,
+                        y.Set.Type
                     }),
                     x.CompletedAt
                 },
-                x => x.WorkoutId == workoutId && x.CompletedSets.Any(x => x.Set.ExerciseId == exerciseId) && x.UserId == userId,
+                x => x.WorkoutId == workoutId && x.UserId == userId && x.CompletedSets.Any(x => x.Set.ExerciseId == exerciseId),
                 offset: offset ?? 0,
                 limit: limit ?? 10,
                 queryBuilder: x => x.OrderByDescending(x => x.CompletedAt));
 
+            var sets = completedWorkouts
+                .Select(x => new
+                {
+                    x.CompletedAt,
+                    Set = x.Sets.Where(x => x.Type is Models.Set.SetType.Normal or Models.Set.SetType.Failure).MinBy(x => x.WeightUsed)
+                });
+
             return new WorkoutExerciseChartDataResponseDTO()
             {
-                Data = data.SelectMany(x => x.Sets.Select(y => new WorkoutExerciseChartSingleSetDataResponseDTO()
+                Data = sets.Where(x => x.Set is not null).Select(x => new WorkoutExerciseChartSingleSetDataResponseDTO()
                 {
                     TimeCompleted = x.CompletedAt,
-                    RepsCompleted = y.RepsCompleted,
-                    WeightUsed = y.WeightUsed
-                }))
+                    RepsCompleted = x.Set!.RepsCompleted,
+                    WeightUsed = x.Set!.WeightUsed,
+                })
             };
         }
     }
