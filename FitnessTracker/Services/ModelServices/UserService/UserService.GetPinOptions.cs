@@ -11,6 +11,9 @@ namespace FitnessTracker.Services.ModelServices.UserService
             if (userId == default)
                 throw new UnauthorizedException();
 
+            int nonNullOffset = offset ?? 0;
+            int nonNullLimit = limit ?? 10;
+
             List<PinResponseDTO>? pins = await readSingleSelectedService.Get(
                 select: x => x.CreatedWorkouts.Select(x => new PinResponseDTO
                 {
@@ -33,8 +36,8 @@ namespace FitnessTracker.Services.ModelServices.UserService
                     Order = -1,
                 }))
                 .OrderByDescending(x => x.LikeCount)
-                .Skip(offset ?? 0)
-                .Take(limit ?? 10)
+                .Skip(nonNullOffset)
+                .Take(nonNullLimit)
                 .ToList(),
                 criteria: x => x.Id == userId)
                 ?? throw new UnauthorizedException();
