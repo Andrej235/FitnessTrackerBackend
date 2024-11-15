@@ -5,37 +5,37 @@ namespace FitnessTracker.Data
 {
     public class DataContext(DbContextOptions options) : DbContext(options)
     {
-        public DbSet<CompletedWorkout> CompletedWorkouts { get; set; } //
-        public DbSet<CompletedSet> CompletedSets { get; set; }
-        public DbSet<EmailConfirmation> EmailConfirmations { get; set; } //
-        public DbSet<Equipment> Equipment { get; set; } //
-        public DbSet<EquipmentUsage> EquipmentUsage { get; set; } //
-        public DbSet<Exercise> Exercises { get; set; } //
-        public DbSet<FavoriteExercise> FavoriteExercises { get; set; } //
-        public DbSet<FavoriteSplit> FavoriteSplits { get; set; } //
-        public DbSet<FavoriteWorkout> FavoriteWorkouts { get; set; } //
-        public DbSet<Muscle> Muscles { get; set; } //
-        public DbSet<MuscleGroup> MusclesGroups { get; set; } //
-        public DbSet<PrimaryMuscleGroupInExercise> PrimaryMuscleGroups { get; set; } //
-        public DbSet<PrimaryMuscleInExercise> PrimaryMuscles { get; set; } //
-        public DbSet<RefreshToken> RefreshTokens { get; set; } //
-        public DbSet<SecondaryMuscleGroupInExercise> SecondaryMuscleGroups { get; set; } //
-        public DbSet<SecondaryMuscleInExercise> SecondaryMuscles { get; set; } //
-        public DbSet<Set> Sets { get; set; } //
-        public DbSet<Split> Splits { get; set; } //
-        public DbSet<SplitComment> SplitComments { get; set; } //
-        public DbSet<SplitCommentLike> SplitCommentLikes { get; set; } //
-        public DbSet<SplitLike> SplitLikes { get; set; } //
-        public DbSet<SplitPin> SplitPins { get; set; } //
-        public DbSet<SplitWorkout> SplitWorkouts { get; set; } //
-        public DbSet<User> Users { get; set; } //
-        public DbSet<UserSettings> UserSettings { get; set; } //
-        public DbSet<UserFollows> UserFollows { get; set; } //
-        public DbSet<Workout> Workouts { get; set; } //
-        public DbSet<WorkoutComment> WorkoutComments { get; set; } //
-        public DbSet<WorkoutCommentLike> WorkoutCommentLikes { get; set; } //
-        public DbSet<WorkoutLike> WorkoutLikes { get; set; } //
-        public DbSet<WorkoutPin> WorkoutPins { get; set; } //
+        public DbSet<CompletedWorkout> CompletedWorkouts { get; set; } = null!; //
+        public DbSet<CompletedSet> CompletedSets { get; set; } = null!; //
+        public DbSet<EmailConfirmation> EmailConfirmations { get; set; } = null!; //
+        public DbSet<Equipment> Equipment { get; set; } = null!; //
+        public DbSet<EquipmentUsage> EquipmentUsage { get; set; } = null!; //
+        public DbSet<Exercise> Exercises { get; set; } = null!; //
+        public DbSet<FavoriteExercise> FavoriteExercises { get; set; } = null!; //
+        public DbSet<FavoriteSplit> FavoriteSplits { get; set; } = null!; //
+        public DbSet<FavoriteWorkout> FavoriteWorkouts { get; set; } = null!; //
+        public DbSet<Muscle> Muscles { get; set; } = null!; //
+        public DbSet<MuscleGroup> MusclesGroups { get; set; } = null!; //
+        public DbSet<PrimaryMuscleGroupInExercise> PrimaryMuscleGroups { get; set; } = null!; //
+        public DbSet<PrimaryMuscleInExercise> PrimaryMuscles { get; set; } = null!; //
+        public DbSet<RefreshToken> RefreshTokens { get; set; } = null!; //
+        public DbSet<SecondaryMuscleGroupInExercise> SecondaryMuscleGroups { get; set; } = null!; //
+        public DbSet<SecondaryMuscleInExercise> SecondaryMuscles { get; set; } = null!; //
+        public DbSet<Set> Sets { get; set; } = null!; //
+        public DbSet<Split> Splits { get; set; } = null!; //
+        public DbSet<SplitComment> SplitComments { get; set; } = null!; //
+        public DbSet<SplitCommentLike> SplitCommentLikes { get; set; } = null!; //
+        public DbSet<SplitLike> SplitLikes { get; set; } = null!; //
+        public DbSet<SplitPin> SplitPins { get; set; } = null!; //
+        public DbSet<SplitWorkout> SplitWorkouts { get; set; } = null!; //
+        public DbSet<User> Users { get; set; } = null!; //
+        public DbSet<UserSettings> UserSettings { get; set; } = null!; //
+        public DbSet<UserFollows> UserFollows { get; set; } = null!; //
+        public DbSet<Workout> Workouts { get; set; } = null!; //
+        public DbSet<WorkoutComment> WorkoutComments { get; set; } = null!; //
+        public DbSet<WorkoutCommentLike> WorkoutCommentLikes { get; set; } = null!; //
+        public DbSet<WorkoutLike> WorkoutLikes { get; set; } = null!; //
+        public DbSet<WorkoutPin> WorkoutPins { get; set; } = null!; //
 
 
 
