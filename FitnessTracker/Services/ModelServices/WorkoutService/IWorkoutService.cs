@@ -23,7 +23,7 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
         Task<IEnumerable<SimpleWorkoutCommentResponseDTO>> GetComments(Guid workoutId, Guid? userId, int? offset, int? limit);
         Task<IEnumerable<SimpleWorkoutCommentResponseDTO>> GetReplies(Guid workoutId, Guid commentId, Guid? userId, int? offset, int? limit);
         Task UpdateWorkout(Guid userId, string creatorUsername, string workoutName, UpdateFullWorkoutRequestDTO request);
-        Task<WorkoutExerciseChartDataResponseDTO> GetChartDataForExercise(Guid userId, string username, string workoutName, int exerciseId, int? limit, int? offset);
-        Task<WorkoutExerciseChartDataResponseDTO> MockChartDataForExercise(Guid userId, string username, string workoutName, int exerciseId);
+        Task<WorkoutExerciseChartDataResponseDTO> GetChartDataForExercise(Guid userId, string username, string workoutName, int exerciseId, DateTime? startDate);
+        Task<WorkoutExerciseChartDataResponseDTO> MockChartDataForExercise(Guid userId, string username, string workoutName, int exerciseId, DateTime? startDate);
     }
 }

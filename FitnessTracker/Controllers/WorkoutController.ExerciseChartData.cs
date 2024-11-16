@@ -12,14 +12,14 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(WorkoutExerciseChartDataResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetChartData(string creator, string name, int exerciseId, [FromQuery] int? offset, [FromQuery] int? limit)
+        public async Task<IActionResult> GetChartData(string creator, string name, int exerciseId, [FromQuery] DateTime? startDate)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            return Ok(await workoutService.GetChartDataForExercise(userId, creator, name, exerciseId, offset, limit));
+            return Ok(await workoutService.GetChartDataForExercise(userId, creator, name, exerciseId, startDate));
         }
 
         [Authorize]
@@ -27,14 +27,14 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(WorkoutExerciseChartDataResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Mock(string creator, string name, int exerciseId)
+        public async Task<IActionResult> Mock(string creator, string name, int exerciseId, [FromQuery] DateTime? startDate)
         {
             if (User.Identity is not ClaimsIdentity claimsIdentity
                 || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
                 || !Guid.TryParse(userIdString, out Guid userId))
                 return Unauthorized();
 
-            return Ok(await workoutService.MockChartDataForExercise(userId, creator, name, exerciseId));
+            return Ok(await workoutService.MockChartDataForExercise(userId, creator, name, exerciseId, startDate));
         }
     }
 }

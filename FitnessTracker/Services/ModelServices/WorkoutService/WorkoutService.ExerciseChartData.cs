@@ -6,13 +6,14 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
 {
     public partial class WorkoutService
     {
-        public async Task<WorkoutExerciseChartDataResponseDTO> GetChartDataForExercise(Guid userId, string username, string workoutName, int exerciseId, int? limit, int? offset)
+        public async Task<WorkoutExerciseChartDataResponseDTO> GetChartDataForExercise(Guid userId, string username, string workoutName, int exerciseId, DateTime? startDate)
         {
             Guid workoutId = (await readSingleSelectedService.Get(
                 x => new { x.Id },
                 x => x.Creator.Username == username && x.Name == workoutName)
                 ?? throw new NotFoundException($"Workout {workoutName} not found")).Id;
 
+            startDate ??= DateTime.Now.AddMonths(-3);
             var completedWorkouts = await completedWorkoutReadRangeSelectedService.Get(
                 x => new
                 {
@@ -24,9 +25,7 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                     }),
                     x.CompletedAt
                 },
-                x => x.WorkoutId == workoutId && x.UserId == userId && x.CompletedSets.Any(x => x.Set.ExerciseId == exerciseId),
-                offset: offset ?? 0,
-                limit: limit ?? 10,
+                x => x.CompletedAt >= startDate && x.WorkoutId == workoutId && x.UserId == userId && x.CompletedSets.Any(x => x.Set.ExerciseId == exerciseId),
                 queryBuilder: x => x.OrderByDescending(x => x.CompletedAt));
 
             var sets = completedWorkouts
@@ -47,7 +46,7 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
             };
         }
 
-        public async Task<WorkoutExerciseChartDataResponseDTO> MockChartDataForExercise(Guid userId, string username, string workoutName, int exerciseId)
+        public async Task<WorkoutExerciseChartDataResponseDTO> MockChartDataForExercise(Guid userId, string username, string workoutName, int exerciseId, DateTime? startDate)
         {
             var workout = await readSingleSelectedService.Get(
                 x => new
@@ -62,10 +61,9 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                 throw new NotFoundException($"Workout {workoutName} does not have an exercise {exerciseId}");
 
             List<WorkoutExerciseChartSingleSetDataResponseDTO> data = [];
-            DateTime startDate = DateTime.Now.AddYears(-1);
             float weight = 50;
 
-            for (DateTime current = startDate; current <= DateTime.Now; current = current.AddDays(4))
+            for (DateTime current = startDate ?? DateTime.Now.AddMonths(-3); current <= DateTime.Now; current = current.AddDays(4))
             {
                 data.Add(new WorkoutExerciseChartSingleSetDataResponseDTO()
                 {
