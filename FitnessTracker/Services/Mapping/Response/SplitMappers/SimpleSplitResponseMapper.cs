@@ -12,6 +12,7 @@ namespace FitnessTracker.Services.Mapping.Response.SplitMappers
         {
             Id = from.Id,
             Name = from.Name,
+            Description = from.Description,
             Creator = userResponseMapper.Map(from.Creator),
         };
     }
