@@ -1,4 +1,6 @@
-﻿namespace FitnessTracker.DTOs.Responses.Exercises
+﻿using FitnessTracker.DTOs.Responses.CompletedWorkouts;
+
+namespace FitnessTracker.DTOs.Responses.Exercises
 {
     public class ExerciseHistorySegmentResponseDTO
     {

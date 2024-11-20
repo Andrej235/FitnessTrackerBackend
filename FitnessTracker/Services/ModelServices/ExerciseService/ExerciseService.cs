@@ -15,6 +15,7 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
                                          IReadSingleService<FavoriteExercise> favoriteReadSingleService,
                                          IReadSingleSelectedService<Exercise> readSingleSelectedService,
                                          IReadRangeService<Exercise> readRangeService,
+                                         IReadRangeSelectedService<CompletedWorkout> completedWorkoutReadRangeSelectedService,
                                          IReadRangeSelectedService<CompletedSet> completedSetReadRangeSelectedService,
                                          IUpdateSingleService<Exercise> updateService,
                                          ICreateService<FavoriteExercise> favoriteExerciseCreateService,
@@ -39,6 +40,7 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
         private readonly IReadSingleService<FavoriteExercise> favoriteReadSingleService = favoriteReadSingleService;
         private readonly IReadSingleSelectedService<Exercise> readSingleSelectedService = readSingleSelectedService;
         private readonly IReadRangeService<Exercise> readRangeService = readRangeService;
+        private readonly IReadRangeSelectedService<CompletedWorkout> completedWorkoutReadRangeSelectedService = completedWorkoutReadRangeSelectedService;
         private readonly IReadRangeSelectedService<CompletedSet> completedSetReadRangeSelectedService = completedSetReadRangeSelectedService;
         private readonly IUpdateSingleService<Exercise> updateService = updateService;
         private readonly ICreateService<FavoriteExercise> favoriteExerciseCreateService = favoriteExerciseCreateService;

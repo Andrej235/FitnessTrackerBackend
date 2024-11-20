@@ -72,7 +72,7 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
                         x.RepsCompleted,
                         x.CompletedWorkout.CompletedAt
                     },
-                    x => x.UserId == userId,
+                    x => x.UserId == userId && x.Set.ExerciseId == exerciseId,
                     0,
                     1,
                     x => x.OrderByDescending(x => x.WeightUsed))).FirstOrDefault();
@@ -91,7 +91,7 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
                         x.RepsCompleted,
                         x.CompletedWorkout.CompletedAt
                     },
-                    x => x.UserId == userId,
+                    x => x.UserId == userId && x.Set.ExerciseId == exerciseId,
                     0,
                     1,
                     x => x.OrderByDescending(x => x.WeightUsed * x.RepsCompleted))).First();

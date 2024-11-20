@@ -12,15 +12,15 @@ using System.Text;
 namespace FitnessTracker.Auth
 {
     public class TokenManager(ConfigurationManager configuration,
-                              IReadSingleService<RefreshToken> readSingleService,
+                              IReadSingleSelectedService<RefreshToken> readSingleSelectedService,
                               ICreateService<RefreshToken> createService,
-                              IUpdateSingleService<RefreshToken> updateService,
+                              IExecuteUpdateService<RefreshToken> executeUpdateService,
                               IDeleteService<RefreshToken> deleteService) : ITokenManager
     {
         private readonly ConfigurationManager configuration = configuration;
-        private readonly IReadSingleService<RefreshToken> readSingleService = readSingleService;
+        private readonly IReadSingleSelectedService<RefreshToken> readSingleSelectedService = readSingleSelectedService;
         private readonly ICreateService<RefreshToken> createService = createService;
-        private readonly IUpdateSingleService<RefreshToken> updateService = updateService;
+        private readonly IExecuteUpdateService<RefreshToken> executeUpdateService = executeUpdateService;
         private readonly IDeleteService<RefreshToken> deleteService = deleteService;
 
         private (string jwt, Guid jwtId) CreateJWTAndId(Guid userId, string role)
@@ -78,13 +78,20 @@ namespace FitnessTracker.Auth
 
         public async Task<string> RefreshJWT(Guid jwtId, Guid refreshToken, Guid userId)
         {
-            RefreshToken? token = await readSingleService.Get(x => x.Token == refreshToken, x => x.Include(x => x.User));
+            var token = await readSingleSelectedService.Get(
+                x => new
+                {
+                    x.JwtId,
+                    x.UserId,
+                    x.User.Role
+                },
+                x => x.Token == refreshToken);
+
             if (token is null || token.JwtId != jwtId || token.UserId != userId)
                 throw new InvalidRequestDTOException("Invalid token");
 
-            (string newJwt, Guid newJwtId) = CreateJWTAndId(token.User.Id, token.User.Role);
-            token.JwtId = newJwtId;
-            await updateService.Update(token);
+            (string newJwt, Guid newJwtId) = CreateJWTAndId(token.UserId, token.Role);
+            await executeUpdateService.Update(x => x.Token == refreshToken, x => x.SetProperty(x => x.JwtId, newJwtId));
 
             return newJwt;
         }

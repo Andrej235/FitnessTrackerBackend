@@ -13,5 +13,7 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
 
         Task CreateFavorite(int exerciseId, Guid userId);
         Task DeleteFavorite(int exerciseId, Guid userId);
+
+        Task<IEnumerable<ExerciseHistorySegmentResponseDTO>> GetHistory(int exerciseId, Guid userId, int? offset, int? limit);
     }
 }
