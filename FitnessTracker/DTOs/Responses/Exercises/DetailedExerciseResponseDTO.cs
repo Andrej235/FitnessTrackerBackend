@@ -14,5 +14,8 @@ namespace FitnessTracker.DTOs.Responses.Exercises
         public IEnumerable<SimpleMuscleGroupResponseDTO> SecondaryMuscleGroups { get; set; } = [];
         public IEnumerable<SimpleMuscleResponseDTO> SecondaryMuscles { get; set; } = [];
         public IEnumerable<SimpleEquipmentResponseDTO> Equipment { get; set; } = [];
+
+        public ExerciseRecordReponseDTO? MostWeightLifted { get; set; } = null!;
+        public ExerciseRecordReponseDTO? MostVolumeLifted { get; set; } = null!;
     }
 }

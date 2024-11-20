@@ -455,6 +455,7 @@ namespace FitnessTracker
             _ = builder.Services.AddScoped<IResponseMapper<IEnumerable<CompletedWorkout>, DetailedWeekOfCompletedWorkoutsResponseDTO>, DetailedWeekOfCompletedWorkoutsResponseMapper>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateCompletedSetRequestDTO, CompletedSet>, CreateCompletedSetRequestMapper>();
             _ = builder.Services.AddScoped<IRequestMapper<CreateCompletedWorkoutRequestDTO, CompletedWorkout>, CreateCompletedWorkoutRequestMapper>();
+            _ = builder.Services.AddScoped<IReadRangeSelectedService<CompletedSet>, ReadService<CompletedSet>>();
             #endregion
 
             #region Pins

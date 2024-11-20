@@ -12,9 +12,10 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
 {
     public partial class ExerciseService(ICreateService<Exercise> createService,
                                          IReadSingleService<Exercise> readSingleService,
+                                         IReadSingleService<FavoriteExercise> favoriteReadSingleService,
                                          IReadSingleSelectedService<Exercise> readSingleSelectedService,
                                          IReadRangeService<Exercise> readRangeService,
-                                         IReadSingleService<FavoriteExercise> favoriteReadSingleService,
+                                         IReadRangeSelectedService<CompletedSet> completedSetReadRangeSelectedService,
                                          IUpdateSingleService<Exercise> updateService,
                                          ICreateService<FavoriteExercise> favoriteExerciseCreateService,
                                          ICreateRangeService<EquipmentUsage> equipmetUsageCreateRangeService,
@@ -31,14 +32,14 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
                                          IDeleteService<SecondaryMuscleInExercise> secondaryMuscleDeleteService,
                                          IRequestMapper<CreateExerciseRequestDTO, Exercise> createRequestMapper,
                                          IResponseMapper<Exercise, SimpleExerciseResponseDTO> simpleResponseMapper,
-                                         IResponseMapper<Exercise, DetailedExerciseResponseDTO> detailedResponseMapper
-        ) : IExerciseService
+                                         IResponseMapper<Exercise, DetailedExerciseResponseDTO> detailedResponseMapper) : IExerciseService
     {
         private readonly ICreateService<Exercise> createService = createService;
         private readonly IReadSingleService<Exercise> readSingleService = readSingleService;
+        private readonly IReadSingleService<FavoriteExercise> favoriteReadSingleService = favoriteReadSingleService;
         private readonly IReadSingleSelectedService<Exercise> readSingleSelectedService = readSingleSelectedService;
         private readonly IReadRangeService<Exercise> readRangeService = readRangeService;
-        private readonly IReadSingleService<FavoriteExercise> favoriteReadSingleService = favoriteReadSingleService;
+        private readonly IReadRangeSelectedService<CompletedSet> completedSetReadRangeSelectedService = completedSetReadRangeSelectedService;
         private readonly IUpdateSingleService<Exercise> updateService = updateService;
         private readonly ICreateService<FavoriteExercise> favoriteExerciseCreateService = favoriteExerciseCreateService;
         private readonly ICreateRangeService<EquipmentUsage> equipmetUsageCreateRangeService = equipmetUsageCreateRangeService;

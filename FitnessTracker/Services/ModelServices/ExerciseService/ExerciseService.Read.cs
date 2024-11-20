@@ -62,7 +62,54 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
             mapped.Favorites = exercise.Favorites;
 
             if (userId is not null)
+            {
                 mapped.IsFavorite = await favoriteReadSingleService.Get(x => x.UserId == userId && x.ExerciseId == exerciseId) is not null;
+
+                var mostWeightLifted = (await completedSetReadRangeSelectedService.Get(
+                    x => new
+                    {
+                        x.WeightUsed,
+                        x.RepsCompleted,
+                        x.CompletedWorkout.CompletedAt
+                    },
+                    x => x.UserId == userId,
+                    0,
+                    1,
+                    x => x.OrderByDescending(x => x.WeightUsed))).FirstOrDefault();
+
+                if (mostWeightLifted is null)
+                {
+                    mapped.MostWeightLifted = null;
+                    mapped.MostVolumeLifted = null;
+                    return mapped;
+                }
+
+                var mostVolumeLifted = (await completedSetReadRangeSelectedService.Get(
+                    x => new
+                    {
+                        x.WeightUsed,
+                        x.RepsCompleted,
+                        x.CompletedWorkout.CompletedAt
+                    },
+                    x => x.UserId == userId,
+                    0,
+                    1,
+                    x => x.OrderByDescending(x => x.WeightUsed * x.RepsCompleted))).First();
+
+                mapped.MostWeightLifted = new()
+                {
+                    AchievedAt = mostWeightLifted.CompletedAt,
+                    Reps = mostWeightLifted.RepsCompleted,
+                    Weight = mostWeightLifted.WeightUsed
+                };
+
+                mapped.MostVolumeLifted = new()
+                {
+                    AchievedAt = mostVolumeLifted.CompletedAt,
+                    Reps = mostVolumeLifted.RepsCompleted,
+                    Weight = mostVolumeLifted.WeightUsed
+                };
+            }
 
             return mapped;
         }
