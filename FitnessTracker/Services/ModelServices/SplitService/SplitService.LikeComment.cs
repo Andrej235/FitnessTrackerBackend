@@ -1,27 +1,13 @@
-﻿using FitnessTracker.Exceptions;
-
-namespace FitnessTracker.Services.ModelServices.SplitService
+﻿namespace FitnessTracker.Services.ModelServices.SplitService
 {
     public partial class SplitService
     {
-        public Task CreateCommentLike(Guid commentId, Guid userId)
+        public Task CreateCommentLike(Guid commentId, Guid userId) => commentLikeCreateService.Add(new()
         {
-            if (commentId == default)
-                throw new InvalidArgumentException($"{nameof(commentId)} cannot be empty");
+            UserId = userId,
+            SplitCommentId = commentId
+        });
 
-            return commentLikeCreateService.Add(new()
-            {
-                UserId = userId,
-                SplitCommentId = commentId
-            });
-        }
-
-        public async Task DeleteCommentLike(Guid commentId, Guid userId)
-        {
-            if (commentId == default)
-                throw new InvalidArgumentException($"{nameof(commentId)} cannot be empty");
-
-            await commentLikeDeleteService.Delete(x => x.UserId == userId && x.SplitCommentId == commentId);
-        }
+        public Task DeleteCommentLike(Guid commentId, Guid userId) => commentLikeDeleteService.Delete(x => x.UserId == userId && x.SplitCommentId == commentId);
     }
 }

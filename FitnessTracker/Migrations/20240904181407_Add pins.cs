@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -11,7 +10,7 @@ namespace FitnessTracker.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "SplitPins",
                 columns: table => new
                 {
@@ -20,20 +19,20 @@ namespace FitnessTracker.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SplitPins", x => new { x.UserId, x.SplitId });
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_SplitPins", x => new { x.UserId, x.SplitId });
+                    _ = table.ForeignKey(
                         name: "FK_SplitPins_Splits_SplitId",
                         column: x => x.SplitId,
                         principalTable: "Splits",
                         principalColumn: "Id");
-                    table.ForeignKey(
+                    _ = table.ForeignKey(
                         name: "FK_SplitPins_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateTable(
+            _ = migrationBuilder.CreateTable(
                 name: "WorkoutPins",
                 columns: table => new
                 {
@@ -42,37 +41,37 @@ namespace FitnessTracker.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WorkoutPins", x => new { x.UserId, x.WorkoutId });
-                    table.ForeignKey(
+                    _ = table.PrimaryKey("PK_WorkoutPins", x => new { x.UserId, x.WorkoutId });
+                    _ = table.ForeignKey(
                         name: "FK_WorkoutPins_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id");
-                    table.ForeignKey(
+                    _ = table.ForeignKey(
                         name: "FK_WorkoutPins_Workouts_WorkoutId",
                         column: x => x.WorkoutId,
                         principalTable: "Workouts",
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_SplitPins_SplitId",
                 table: "SplitPins",
                 column: "SplitId");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_SplitPins_UserId_SplitId",
                 table: "SplitPins",
                 columns: new[] { "UserId", "SplitId" },
                 unique: true);
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_WorkoutPins_UserId_WorkoutId",
                 table: "WorkoutPins",
                 columns: new[] { "UserId", "WorkoutId" },
                 unique: true);
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_WorkoutPins_WorkoutId",
                 table: "WorkoutPins",
                 column: "WorkoutId");
@@ -81,10 +80,10 @@ namespace FitnessTracker.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "SplitPins");
 
-            migrationBuilder.DropTable(
+            _ = migrationBuilder.DropTable(
                 name: "WorkoutPins");
         }
     }

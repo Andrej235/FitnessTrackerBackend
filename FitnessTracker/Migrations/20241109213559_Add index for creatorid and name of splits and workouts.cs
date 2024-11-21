@@ -10,7 +10,7 @@ namespace FitnessTracker.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
+            _ = migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "Workouts",
                 type: "nvarchar(450)",
@@ -18,7 +18,7 @@ namespace FitnessTracker.Migrations
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)");
 
-            migrationBuilder.AlterColumn<string>(
+            _ = migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "Splits",
                 type: "nvarchar(450)",
@@ -26,13 +26,13 @@ namespace FitnessTracker.Migrations
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)");
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_Workouts_CreatorId_Name",
                 table: "Workouts",
                 columns: new[] { "CreatorId", "Name" },
                 unique: true);
 
-            migrationBuilder.CreateIndex(
+            _ = migrationBuilder.CreateIndex(
                 name: "IX_Splits_CreatorId_Name",
                 table: "Splits",
                 columns: new[] { "CreatorId", "Name" },
@@ -42,15 +42,15 @@ namespace FitnessTracker.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
+            _ = migrationBuilder.DropIndex(
                 name: "IX_Workouts_CreatorId_Name",
                 table: "Workouts");
 
-            migrationBuilder.DropIndex(
+            _ = migrationBuilder.DropIndex(
                 name: "IX_Splits_CreatorId_Name",
                 table: "Splits");
 
-            migrationBuilder.AlterColumn<string>(
+            _ = migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "Workouts",
                 type: "nvarchar(max)",
@@ -58,7 +58,7 @@ namespace FitnessTracker.Migrations
                 oldClrType: typeof(string),
                 oldType: "nvarchar(450)");
 
-            migrationBuilder.AlterColumn<string>(
+            _ = migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "Splits",
                 type: "nvarchar(max)",
