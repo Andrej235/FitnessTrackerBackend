@@ -96,6 +96,18 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
                     1,
                     x => x.OrderByDescending(x => x.WeightUsed * x.RepsCompleted))).First();
 
+                var mostSessionVolumeLifter = (await completedWorkoutReadRangeSelectedService.Get(
+                    x => new
+                    {
+                        TotalVolume = x.CompletedSets.Where(x => x.Set.ExerciseId == exerciseId).Sum(cs => cs.WeightUsed * cs.RepsCompleted),
+                        x.CompletedAt,
+                    },
+                    x => x.UserId == userId && x.CompletedSets.Any(cs => cs.Set.ExerciseId == exerciseId),
+                    0,
+                    1,
+                    x => x.OrderByDescending(x => x.CompletedSets.Where(x => x.Set.ExerciseId == exerciseId).Sum(cs => cs.WeightUsed * cs.RepsCompleted))
+                    )).First();
+
                 mapped.MostWeightLifted = new()
                 {
                     AchievedAt = mostWeightLifted.CompletedAt,
@@ -108,6 +120,12 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
                     AchievedAt = mostVolumeLifted.CompletedAt,
                     Reps = mostVolumeLifted.RepsCompleted,
                     Weight = mostVolumeLifted.WeightUsed
+                };
+
+                mapped.MostSessionVolumeLifted = new()
+                {
+                    AchievedAt = mostVolumeLifted.CompletedAt,
+                    TotalVolumeLifted = mostSessionVolumeLifter.TotalVolume
                 };
             }
 

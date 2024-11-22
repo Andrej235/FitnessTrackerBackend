@@ -17,5 +17,6 @@ namespace FitnessTracker.DTOs.Responses.Exercises
 
         public ExerciseRecordReponseDTO? MostWeightLifted { get; set; } = null!;
         public ExerciseRecordReponseDTO? MostVolumeLifted { get; set; } = null!;
+        public ExerciseSessionRecordReponseDTO? MostSessionVolumeLifted { get; set; } = null!;
     }
 }
