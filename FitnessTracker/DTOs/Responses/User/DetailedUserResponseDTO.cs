@@ -12,6 +12,5 @@ namespace FitnessTracker.DTOs.Responses.User
         public bool IsFollowing { get; set; }
         public DateTime JoinedAt { get; set; }
         public DetailedUserSplitResponseDTO? CurrentSplit { get; set; }
-        public Models.Gender Gender { get; set; }
     }
 }

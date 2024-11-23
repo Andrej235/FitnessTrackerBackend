@@ -1,11 +1,5 @@
 ﻿namespace FitnessTracker.Models
 {
-    public enum Gender
-    {
-        Male = 0,
-        Female = 1
-    }
-
     public class User
     {
         public Guid Id { get; set; }
@@ -16,7 +10,6 @@
         public byte[] PasswordHash { get; set; } = null!;
         public byte[] Salt { get; set; } = null!;
         public string? ProfilePic { get; set; }
-        public Gender Gender { get; set; }
         public DateTime JoinedAt { get; set; }
 
         public ICollection<Workout> CreatedWorkouts { get; set; } = [];
