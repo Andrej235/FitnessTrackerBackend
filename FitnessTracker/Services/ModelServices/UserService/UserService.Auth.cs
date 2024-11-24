@@ -39,7 +39,6 @@ namespace FitnessTracker.Services.ModelServices.UserService
             {
                 UserId = newUser.Id,
                 PublicStreak = true,
-                PublicCompletedWorkouts = true,
                 PublicCurrentSplit = true,
                 PublicFollowing = true,
                 PublicLikedWorkouts = true,

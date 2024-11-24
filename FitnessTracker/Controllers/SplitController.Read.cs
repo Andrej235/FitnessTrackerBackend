@@ -54,6 +54,14 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(DetailedUserSplitResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetDetailedUsedBy(string username) => Ok(await splitService.GetDetailedUsedBy(username));
+        public async Task<IActionResult> GetDetailedUsedBy(string username)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out Guid userId))
+                return Ok(await splitService.GetDetailedUsedBy(username, null));
+            else
+                return Ok(await splitService.GetDetailedUsedBy(username, userId));
+        }
     }
 }

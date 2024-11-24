@@ -61,17 +61,21 @@ namespace FitnessTracker.Services.ModelServices.UserService
             return mapped;
         }
 
-        public async Task<IEnumerable<SimpleUserResponseDTO>> GetFollowersFor(string username, string? nameFilter, int? offset, int? limit)
+        public async Task<IEnumerable<SimpleUserResponseDTO>> GetFollowersFor(string username, Guid? userId, string? nameFilter, int? offset, int? limit)
         {
             if (string.IsNullOrWhiteSpace(username))
                 throw new InvalidArgumentException("Username cannot be empty");
 
-            User user = await readSingleService.Get(
-                x => x.Username == username,
-                x => x.Include(x => x.Settings))
+            var user = await readSingleSelectedService.Get(
+                x => new
+                {
+                    x.Id,
+                    x.Settings.PublicFollowing
+                },
+                x => x.Username == username)
                 ?? throw new NotFoundException($"User '{username}' not found");
 
-            if (!user.Settings.PublicFollowing)
+            if (!user.PublicFollowing && userId != user.Id)
                 throw new AccessDeniedException("User's following is not public");
 
             IEnumerable<UserFollows> follows = nameFilter is null
@@ -81,17 +85,21 @@ namespace FitnessTracker.Services.ModelServices.UserService
             return follows.Select(x => simpleResponseMapper.Map(x.Follower));
         }
 
-        public async Task<IEnumerable<SimpleUserResponseDTO>> GetFollowingFor(string username, string? nameFilter, int? offset, int? limit)
+        public async Task<IEnumerable<SimpleUserResponseDTO>> GetFollowingFor(string username, Guid? userId, string? nameFilter, int? offset, int? limit)
         {
             if (string.IsNullOrWhiteSpace(username))
                 throw new InvalidArgumentException("Username cannot be empty");
 
-            User? user = await readSingleService.Get(
-                x => x.Username == username,
-                x => x.Include(x => x.Settings))
+            var user = await readSingleSelectedService.Get(
+                x => new
+                {
+                    x.Id,
+                    x.Settings.PublicFollowing
+                },
+                x => x.Username == username)
                 ?? throw new NotFoundException($"User '{username}' not found");
 
-            if (!user.Settings.PublicFollowing)
+            if (!user.PublicFollowing && userId != user.Id)
                 throw new AccessDeniedException("User's following is not public");
 
             IEnumerable<Models.UserFollows> follows = nameFilter is null

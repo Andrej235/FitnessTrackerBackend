@@ -12,7 +12,6 @@ namespace FitnessTracker.Services.ModelServices.UserService
             UserSettings? settings = await settingsReadSingleService.Get(x => x.UserId == userId, x => x.AsNoTracking()) ?? throw new UnauthorizedException();
 
             settings.PublicFollowing = request.PublicFollowing;
-            settings.PublicCompletedWorkouts = request.PublicCompletedWorkouts;
             settings.PublicStreak = request.PublicStreak;
             settings.PublicCurrentSplit = request.PublicCurrentSplit;
             settings.PublicLikedWorkouts = request.PublicLikedWorkouts;

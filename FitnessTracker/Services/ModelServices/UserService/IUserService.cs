@@ -27,12 +27,12 @@ namespace FitnessTracker.Services.ModelServices.UserService
         Task MarkCompletedWorkout(Guid userId, CreateCompletedWorkoutRequestDTO request);
         Task<BasicUserPersonalInfoResponseDTO> GetBasicInfo(Guid userId);
         Task<DetailedUserResponseDTO> GetDetailed(string username, Guid? userId);
-        Task<IEnumerable<SimpleUserResponseDTO>> GetFollowingFor(string username, string? nameFilter, int? offset, int? limit);
-        Task<IEnumerable<SimpleUserResponseDTO>> GetFollowersFor(string username, string? nameFilter, int? offset, int? limit);
+        Task<IEnumerable<SimpleUserResponseDTO>> GetFollowingFor(string username, Guid? userId, string? nameFilter, int? offset, int? limit);
+        Task<IEnumerable<SimpleUserResponseDTO>> GetFollowersFor(string username, Guid? userId, string? nameFilter, int? offset, int? limit);
         Task<IEnumerable<PinResponseDTO>> GetPinsFor(string username);
         Task<UserSettingsResponseDTO> GetSettings(Guid userId);
-        Task<IEnumerable<SimpleWeekOfCompletedWorkoutsResponseDTO>> GetStreak(string username, int? year);
-        Task<DetailedWeekOfCompletedWorkoutsResponseDTO> GetUserStreakOnWeek(string username, DateTime date);
+        Task<IEnumerable<SimpleWeekOfCompletedWorkoutsResponseDTO>> GetStreak(string username, Guid? userId, int? year);
+        Task<DetailedWeekOfCompletedWorkoutsResponseDTO> GetUserStreakOnWeek(string username, Guid? userId, DateTime date);
         Task<DetailedWorkoutResponseDTO> GetTodaysWorkout(Guid userId);
         Task ReorderPins(Guid userId, ReorderPinsRequestDTO request);
         Task Update(Guid userId, UpdatePasswordUserRequestDTO request);

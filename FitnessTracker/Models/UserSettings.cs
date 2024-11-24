@@ -6,7 +6,6 @@
         public User User { get; set; } = null!;
 
         public bool PublicFollowing { get; set; }
-        public bool PublicCompletedWorkouts { get; set; }
         public bool PublicStreak { get; set; }
         public bool PublicCurrentSplit { get; set; }
 

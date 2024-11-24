@@ -8,7 +8,6 @@ namespace FitnessTracker.Services.Mapping.Response.UserMappers
         public UserSettingsResponseDTO Map(UserSettings from) => new()
         {
             PublicFollowing = from.PublicFollowing,
-            PublicCompletedWorkouts = from.PublicCompletedWorkouts,
             PublicStreak = from.PublicStreak,
             PublicCurrentSplit = from.PublicCurrentSplit,
             PublicLikedWorkouts = from.PublicLikedWorkouts,

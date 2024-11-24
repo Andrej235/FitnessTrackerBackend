@@ -82,7 +82,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
             return mapped;
         }
 
-        public async Task<DetailedUserSplitResponseDTO> GetDetailedUsedBy(string username)
+        public async Task<DetailedUserSplitResponseDTO> GetDetailedUsedBy(string username, Guid? userId)
         {
             if (string.IsNullOrWhiteSpace(username))
                 throw new InvalidArgumentException($"{nameof(username)} cannot be empty");
@@ -92,13 +92,12 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 {
                     x.Id,
                     x.SplitId,
-                    x.Settings.PublicStreak
+                    x.Settings.PublicCurrentSplit
                 },
-                x => x.Username == username,
-                x => x.Include(x => x.Settings))
+                x => x.Username == username)
                 ?? throw new NotFoundException();
 
-            if (!user.PublicStreak)
+            if (!user.PublicCurrentSplit && userId != user.Id)
                 throw new AccessDeniedException();
 
             Split? split = await readSingleService.Get(

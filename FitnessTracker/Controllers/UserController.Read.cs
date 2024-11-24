@@ -38,12 +38,28 @@ namespace FitnessTracker.Controllers
         [ProducesResponseType(typeof(IEnumerable<SimpleUserResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetFollowersFor(string username, [FromQuery] string? searchTerm, [FromQuery] int? limit, [FromQuery] int? offset) => Ok(await userService.GetFollowersFor(username, searchTerm, offset, limit));
+        public async Task<IActionResult> GetFollowersFor(string username, [FromQuery] string? searchTerm, [FromQuery] int? limit, [FromQuery] int? offset)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out Guid userId))
+                return Ok(await userService.GetFollowersFor(username, null, searchTerm, offset, limit));
+            else
+                return Ok(await userService.GetFollowersFor(username, userId, searchTerm, offset, limit));
+        }
 
         [HttpGet("{username}/following")]
         [ProducesResponseType(typeof(IEnumerable<SimpleUserResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetFollowingFor(string username, [FromQuery] string? searchTerm, [FromQuery] int? limit, [FromQuery] int? offset) => Ok(await userService.GetFollowingFor(username, searchTerm, offset, limit));
+        public async Task<IActionResult> GetFollowingFor(string username, [FromQuery] string? searchTerm, [FromQuery] int? limit, [FromQuery] int? offset)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out Guid userId))
+                return Ok(await userService.GetFollowingFor(username, null, searchTerm, offset, limit));
+            else
+                return Ok(await userService.GetFollowingFor(username, userId, searchTerm, offset, limit));
+        }
     }
 }
