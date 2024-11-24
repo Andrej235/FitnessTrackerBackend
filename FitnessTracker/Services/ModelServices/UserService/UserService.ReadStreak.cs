@@ -44,11 +44,11 @@ namespace FitnessTracker.Services.ModelServices.UserService
             var user = await readSingleSelectedService.Get(x => new
             {
                 x.Id,
-                x.Settings.PublicStreak
+                x.Settings.PublicCurrentSplit
             },
             x => x.Username == username) ?? throw new NotFoundException($"User '{username}' not found");
 
-            if (!user.PublicStreak && userId != user.Id)
+            if (!user.PublicCurrentSplit && userId != user.Id)
                 throw new AccessDeniedException("User's streak is not public");
 
             DateTime startOfWeek = date.GetStartOfWeek();
