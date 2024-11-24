@@ -39,6 +39,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
                     Followers = x.Followers.Count,
                     Following = x.Following.Count,
                     TotalCompletedWorkouts = x.CompletedWorkouts.Count,
+                    x.Settings.PublicCurrentSplit
                 },
                 x => x.Username == username,
                 x => x.Include(x => x.CurrentSplit!)
@@ -52,6 +53,9 @@ namespace FitnessTracker.Services.ModelServices.UserService
             mapped.Followers = user.Followers;
             mapped.Following = user.Following;
             mapped.TotalCompletedWorkouts = user.TotalCompletedWorkouts;
+
+            if (!user.PublicCurrentSplit && userId != user.User.Id)
+                mapped.CurrentSplit = null;
 
             if (userId == user.User.Id)
                 mapped.IsMe = true;

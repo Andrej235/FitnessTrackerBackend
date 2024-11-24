@@ -22,6 +22,7 @@ namespace FitnessTracker.Controllers
 
         [HttpGet("{username}/streak/week/{date:datetime}")]
         [ProducesResponseType(typeof(DetailedWeekOfCompletedWorkoutsResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUserStreakOnWeek(string username, DateTime date)
         {
