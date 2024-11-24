@@ -8,15 +8,22 @@ namespace FitnessTracker.Services.ModelServices.SplitService
 {
     public partial class SplitService
     {
-        public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllPublicBy(string username, string? splitNameFilter, int? offset, int? limit)
+        public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllPublicBy(string username, Guid? userId, string? splitNameFilter, int? offset, int? limit)
         {
             if (string.IsNullOrWhiteSpace(username))
                 throw new InvalidArgumentException($"{nameof(username)} cannot be empty");
 
             var user = await userReadSingleSelectedService.Get(
-                x => new { x.Id, },
+                x => new
+                {
+                    x.Id,
+                    x.Settings.PublicCreatedSplits,
+                },
                 x => x.Username == username)
-                ?? throw new NotFoundException();
+                ?? throw new NotFoundException($"User {username} not found.");
+
+            if (!user.PublicCreatedSplits && userId != user.Id)
+                throw new AccessDeniedException("User's created splits are private.");
 
             IEnumerable<Split> splits = string.IsNullOrWhiteSpace(splitNameFilter)
                 ? await readRangeService.Get(x => x.CreatorId == user.Id, offset, limit, x => x.Include(x => x.Creator).OrderByDescending(x => x.CreatedAt))
@@ -27,26 +34,42 @@ namespace FitnessTracker.Services.ModelServices.SplitService
 
         public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllFavoritesBy(string username, Guid? userId, string? nameFilter, int? limit, int? offset)
         {
-            Guid creatorId = await userReadSingleSelectedService.Get(
-                x => x.Id,
-                x => x.Username == username);
+            var user = await userReadSingleSelectedService.Get(
+                x => new
+                {
+                    x.Id,
+                    x.Settings.PublicFavoriteSplits,
+                },
+                x => x.Username == username)
+                ?? throw new NotFoundException($"User {username} not found.");
+
+            if (!user.PublicFavoriteSplits && userId != user.Id)
+                throw new AccessDeniedException("User's favorite splits are private.");
 
             IEnumerable<FavoriteSplit> splits = nameFilter is null
-                ? await favoriteReadRangeService.Get(x => x.UserId == creatorId, offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator).OrderByDescending(x => x.FavoritedAt))
-                : await favoriteReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator).OrderByDescending(x => x.FavoritedAt));
+                ? await favoriteReadRangeService.Get(x => x.UserId == user.Id, offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator).OrderByDescending(x => x.FavoritedAt))
+                : await favoriteReadRangeService.Get(x => x.UserId == user.Id && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator).OrderByDescending(x => x.FavoritedAt));
 
             return splits.Select(x => simpleResponseMapper.Map(x.Split));
         }
 
         public async Task<IEnumerable<SimpleSplitResponseDTO>> GetAllLikedBy(string username, Guid? userId, string? nameFilter, int? limit, int? offset)
         {
-            Guid creatorId = await userReadSingleSelectedService.Get(
-                x => x.Id,
-                x => x.Username == username);
+            var user = await userReadSingleSelectedService.Get(
+                x => new
+                {
+                    x.Id,
+                    x.Settings.PublicLikedSplits,
+                },
+                x => x.Username == username)
+                ?? throw new NotFoundException($"User {username} not found.");
+
+            if (!user.PublicLikedSplits && userId != user.Id)
+                throw new AccessDeniedException("User's liked splits are private.");
 
             IEnumerable<SplitLike> splits = nameFilter is null
-                ? await likeReadRangeService.Get(x => x.UserId == creatorId, offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator).OrderByDescending(x => x.LikedAt))
-                : await likeReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator).OrderByDescending(x => x.LikedAt));
+                ? await likeReadRangeService.Get(x => x.UserId == user.Id, offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator).OrderByDescending(x => x.LikedAt))
+                : await likeReadRangeService.Get(x => x.UserId == user.Id && EF.Functions.Like(x.Split.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Split).ThenInclude(x => x.Creator).OrderByDescending(x => x.LikedAt));
 
             return splits.Select(x => simpleResponseMapper.Map(x.Split));
         }

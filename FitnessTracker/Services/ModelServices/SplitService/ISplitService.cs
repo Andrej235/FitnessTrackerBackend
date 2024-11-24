@@ -11,7 +11,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
         Task UpdateSplitWorkout(Guid splitId, Guid userId, DayOfWeek day, [FromBody] UpdateSplitWorkoutRequestDTO request);
         Task<IEnumerable<SimpleSplitCommentResponseDTO>> GetComments(Guid splitId, Guid? userId, int? offset, int? limit);
         Task<IEnumerable<SimpleSplitCommentResponseDTO>> GetReplies(Guid splitId, Guid commentId, Guid? userId, int? offset, int? limit);
-        Task<IEnumerable<SimpleSplitResponseDTO>> GetAllPublicBy(string username, string? splitNameFilter, int? offset, int? limit);
+        Task<IEnumerable<SimpleSplitResponseDTO>> GetAllPublicBy(string username, Guid? userId, string? splitNameFilter, int? offset, int? limit);
         Task<IEnumerable<SimpleSplitResponseDTO>> GetAllFavoritesBy(string username, Guid? userId, string? nameFilter, int? limit, int? offset);
         Task<IEnumerable<SimpleSplitResponseDTO>> GetAllLikedBy(string username, Guid? userId, string? nameFilter, int? limit, int? offset);
         Task<DetailedSplitResponseDTO> GetSingleDetailed(string creatorUsername, string splitName, Guid? userId);
