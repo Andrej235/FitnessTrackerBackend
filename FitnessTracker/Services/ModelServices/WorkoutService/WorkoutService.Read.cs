@@ -8,41 +8,62 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
 {
     public partial class WorkoutService
     {
-        public async Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllBy(string username, string? nameFilter, int? limit, int? offset)
+        public async Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllBy(string username, Guid? userId, string? nameFilter, int? limit, int? offset)
         {
-            Guid userId = await userReadSingleSelectedService.Get(
-                x => x.Id,
-                x => x.Username == username);
+            var creator = await userReadSingleSelectedService.Get(
+                x => new
+                {
+                    x.Id,
+                    x.Settings.PublicCreatedWorkouts
+                },
+                x => x.Username == username) ?? throw new NotFoundException($"User {username} not found");
+
+            if (!creator.PublicCreatedWorkouts && userId != creator.Id)
+                throw new AccessDeniedException("User's created workouts are private.");
 
             IEnumerable<Workout> workouts = nameFilter is null
-                ? await readRangeService.Get(x => x.CreatorId == userId, offset, limit ?? 10, x => x.Include(x => x.Creator).OrderByDescending(x => x.CreatedAt))
-                : await readRangeService.Get(x => x.CreatorId == userId && EF.Functions.Like(x.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Creator).OrderByDescending(x => x.CreatedAt));
+                ? await readRangeService.Get(x => x.CreatorId == creator.Id, offset, limit ?? 10, x => x.Include(x => x.Creator).OrderByDescending(x => x.CreatedAt))
+                : await readRangeService.Get(x => x.CreatorId == creator.Id && EF.Functions.Like(x.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Creator).OrderByDescending(x => x.CreatedAt));
 
             return workouts.Select(simpleResponseMapper.Map);
         }
 
         public async Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllFavoritesBy(string username, Guid? userId, string? nameFilter, int? limit, int? offset)
         {
-            Guid creatorId = await userReadSingleSelectedService.Get(
-                x => x.Id,
-                x => x.Username == username);
+            var creator = await userReadSingleSelectedService.Get(
+                x => new
+                {
+                    x.Id,
+                    x.Settings.PublicFavoriteWorkouts
+                },
+                x => x.Username == username) ?? throw new NotFoundException($"User {username} not found");
+
+            if (!creator.PublicFavoriteWorkouts && userId != creator.Id)
+                throw new AccessDeniedException("User's favorite workouts are private.");
 
             IEnumerable<FavoriteWorkout> workouts = nameFilter is null
-                ? await favoriteReadRangeService.Get(x => x.UserId == creatorId, offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator).OrderByDescending(x => x.FavoritedAt))
-                : await favoriteReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator).OrderByDescending(x => x.FavoritedAt));
+                ? await favoriteReadRangeService.Get(x => x.UserId == creator.Id, offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator).OrderByDescending(x => x.FavoritedAt))
+                : await favoriteReadRangeService.Get(x => x.UserId == creator.Id && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator).OrderByDescending(x => x.FavoritedAt));
 
             return workouts.Select(x => simpleResponseMapper.Map(x.Workout));
         }
 
         public async Task<IEnumerable<SimpleWorkoutResponseDTO>> GetAllLikedBy(string username, Guid? userId, string? nameFilter, int? limit, int? offset)
         {
-            Guid creatorId = await userReadSingleSelectedService.Get(
-                x => x.Id,
-                x => x.Username == username);
+            var creator = await userReadSingleSelectedService.Get(
+                x => new
+                {
+                    x.Id,
+                    x.Settings.PublicLikedWorkouts
+                },
+                x => x.Username == username) ?? throw new NotFoundException($"User {username} not found");
+
+            if (!creator.PublicLikedWorkouts && userId != creator.Id)
+                throw new AccessDeniedException("User's liked workouts are private.");
 
             IEnumerable<WorkoutLike> workouts = nameFilter is null
-                ? await likeReadRangeService.Get(x => x.UserId == creatorId, offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator).OrderByDescending(x => x.LikedAt))
-                : await likeReadRangeService.Get(x => x.UserId == creatorId && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator).OrderByDescending(x => x.LikedAt));
+                ? await likeReadRangeService.Get(x => x.UserId == creator.Id, offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator).OrderByDescending(x => x.LikedAt))
+                : await likeReadRangeService.Get(x => x.UserId == creator.Id && EF.Functions.Like(x.Workout.Name, $"%{nameFilter}%"), offset, limit ?? 10, x => x.Include(x => x.Workout).ThenInclude(x => x.Creator).OrderByDescending(x => x.LikedAt));
 
             return workouts.Select(x => simpleResponseMapper.Map(x.Workout));
         }

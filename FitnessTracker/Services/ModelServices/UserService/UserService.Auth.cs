@@ -45,6 +45,8 @@ namespace FitnessTracker.Services.ModelServices.UserService
                 PublicLikedSplits = true,
                 PublicFavoriteWorkouts = true,
                 PublicFavoriteSplits = true,
+                PublicCreatedWorkouts = true,
+                PublicCreatedSplits = true,
             });
 
             string jwt = await tokenManager.GenerateJWTAndRefreshToken(newUser.Id, newUser.Role, cookies);

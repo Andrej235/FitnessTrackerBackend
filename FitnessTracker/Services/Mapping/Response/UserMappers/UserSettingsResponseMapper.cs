@@ -10,8 +10,10 @@ namespace FitnessTracker.Services.Mapping.Response.UserMappers
             PublicFollowing = from.PublicFollowing,
             PublicStreak = from.PublicStreak,
             PublicCurrentSplit = from.PublicCurrentSplit,
+            PublicCreatedWorkouts = from.PublicCreatedWorkouts,
             PublicLikedWorkouts = from.PublicLikedWorkouts,
             PublicFavoriteWorkouts = from.PublicFavoriteWorkouts,
+            PublicCreatedSplits = from.PublicCreatedSplits,
             PublicLikedSplits = from.PublicLikedSplits,
             PublicFavoriteSplits = from.PublicFavoriteSplits,
         };

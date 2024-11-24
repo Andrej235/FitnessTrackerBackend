@@ -9,7 +9,15 @@ namespace FitnessTracker.Controllers
         [HttpGet("simple/by/{username}")]
         [ProducesResponseType(typeof(IEnumerable<SimpleWorkoutResponseDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAllBy(string username, [FromQuery] string? nameFilter, [FromQuery] int? limit, [FromQuery] int? offset) => Ok(await workoutService.GetAllBy(username, nameFilter, limit, offset));
+        public async Task<IActionResult> GetAllBy(string username, [FromQuery] string? nameFilter, [FromQuery] int? limit, [FromQuery] int? offset)
+        {
+            if (User.Identity is not ClaimsIdentity claimsIdentity
+                || claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value is not string userIdString
+                || !Guid.TryParse(userIdString, out Guid userId))
+                return Ok(await workoutService.GetAllBy(username, null, nameFilter, limit, offset));
+            else
+                return Ok(await workoutService.GetAllBy(username, userId, nameFilter, limit, offset));
+        }
 
         [HttpGet("favorite/simple/by/{username}")]
         [ProducesResponseType(typeof(IEnumerable<SimpleWorkoutResponseDTO>), StatusCodes.Status200OK)]

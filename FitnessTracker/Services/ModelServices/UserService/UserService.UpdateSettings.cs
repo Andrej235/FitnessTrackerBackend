@@ -14,8 +14,10 @@ namespace FitnessTracker.Services.ModelServices.UserService
             settings.PublicFollowing = request.PublicFollowing;
             settings.PublicStreak = request.PublicStreak;
             settings.PublicCurrentSplit = request.PublicCurrentSplit;
+            settings.PublicCreatedWorkouts = request.PublicCreatedWorkouts;
             settings.PublicLikedWorkouts = request.PublicLikedWorkouts;
             settings.PublicFavoriteWorkouts = request.PublicFavoriteWorkouts;
+            settings.PublicCreatedSplits = request.PublicCreatedSplits;
             settings.PublicLikedSplits = request.PublicLikedSplits;
             settings.PublicFavoriteSplits = request.PublicFavoriteSplits;
             await settingsUpdateService.Update(settings);
