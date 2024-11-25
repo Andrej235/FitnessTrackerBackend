@@ -4,7 +4,7 @@
     {
         public static DateTime GetStartOfWeek(this DateTime date)
         {
-            int diff = (7 + (date.DayOfWeek - DayOfWeek.Monday)) % 7;
+            int diff = (date.DayOfWeek - DayOfWeek.Sunday) % 7;
             return date.AddDays(-diff).Date;
         }
     }
