@@ -29,7 +29,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
             if (year is null)
             {
                 DateTime startOfWeek = DateTime.Now.GetStartOfWeek();
-                DateTime startOfLastYearsWeek = startOfWeek.AddYears(-1).GetStartOfWeek().AddDays(7);
+                DateTime startOfLastYearsWeek = startOfWeek.AddDays(-364);
                 groupedCompletedWorkouts = groupedCompletedWorkouts.Where(x => x.Key > startOfLastYearsWeek && x.Key <= startOfWeek);
             }
             else

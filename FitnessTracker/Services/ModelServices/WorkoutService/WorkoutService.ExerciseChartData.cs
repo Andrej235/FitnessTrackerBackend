@@ -45,42 +45,5 @@ namespace FitnessTracker.Services.ModelServices.WorkoutService
                 })
             };
         }
-
-        public async Task<WorkoutExerciseChartDataResponseDTO> MockChartDataForExercise(Guid userId, string username, string workoutName, int exerciseId, DateTime? startDate)
-        {
-            var workout = await readSingleSelectedService.Get(
-                x => new
-                {
-                    x.Id,
-                    Set = x.Sets.Where(x => x.Type == Models.Set.SetType.Normal || x.Type == Models.Set.SetType.Failure).FirstOrDefault(x => x.ExerciseId == exerciseId)
-                },
-                x => x.Creator.Username == username && x.Name == workoutName)
-                ?? throw new NotFoundException($"Workout {workoutName} not found");
-
-            if (workout.Set is null)
-                throw new NotFoundException($"Workout {workoutName} does not have an exercise {exerciseId}");
-
-            List<WorkoutExerciseChartSingleSetDataResponseDTO> data = [];
-            float weight = 50;
-
-            for (DateTime current = startDate ?? DateTime.Now.AddMonths(-3); current <= DateTime.Now; current = current.AddDays(4))
-            {
-                data.Add(new WorkoutExerciseChartSingleSetDataResponseDTO()
-                {
-                    TimeCompleted = current,
-                    WeightUsed = Random.Shared.NextDouble() < 0.1f ? Random.Shared.NextDouble() < 0.5f ? weight - 2.5f : weight - 5 : weight,
-                    RepsCompleted = workout.Set.TopRepRange,
-                });
-
-                double rand = Random.Shared.NextDouble();
-                if (rand < .4)
-                    weight += 2.5f;
-            }
-
-            return new WorkoutExerciseChartDataResponseDTO()
-            {
-                Data = data,
-            };
-        }
     }
 }
