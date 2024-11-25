@@ -30,7 +30,7 @@ namespace FitnessTracker.Services.ModelServices.UserService
         Task<IEnumerable<SimpleUserResponseDTO>> GetFollowingFor(string username, Guid? userId, string? nameFilter, int? offset, int? limit);
         Task<IEnumerable<SimpleUserResponseDTO>> GetFollowersFor(string username, Guid? userId, string? nameFilter, int? offset, int? limit);
         Task<IEnumerable<PinResponseDTO>> GetPinsFor(string username);
-        Task<UserSettingsResponseDTO> GetSettings(Guid userId);
+        Task<UserSettingsResponseDTO> GetSettings(string username);
         Task<IEnumerable<SimpleWeekOfCompletedWorkoutsResponseDTO>> GetStreak(string username, Guid? userId, int? year);
         Task<DetailedWeekOfCompletedWorkoutsResponseDTO> GetUserStreakOnWeek(string username, Guid? userId, DateTime date);
         Task<DetailedWorkoutResponseDTO> GetTodaysWorkout(Guid userId);
