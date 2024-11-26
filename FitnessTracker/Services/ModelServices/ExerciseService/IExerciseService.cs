@@ -6,7 +6,7 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
     public interface IExerciseService
     {
         Task Create(CreateExerciseRequestDTO newExercise);
-        Task<IEnumerable<SimpleExerciseResponseDTO>> GetAll(int? muscleGroupId, int? equipmentId, string? name, int? offset, int? limit);
+        Task<IEnumerable<SimpleExerciseResponseDTO>> GetAll(Guid? userId, int? muscleGroupId, int? equipmentId, bool? favoritesOnly, string? name, int? offset, int? limit);
         Task<DetailedExerciseResponseDTO> GetDetailed(int exerciseId, Guid? userId);
         Task Update(UpdateExerciseRequestDTO updatedExercise);
         Task Delete(int id);

@@ -33,7 +33,6 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 limit ?? 10,
                 x => x.Include(x => x.Creator));
 
-            //TODO: Sort the results based on how many criteria they match
             return workoutOptions.Select(x =>
             {
                 SimpleWorkoutOptionResponseDTO mapped = simpleWorkoutOptionResponseMapper.Map(x.Workout);

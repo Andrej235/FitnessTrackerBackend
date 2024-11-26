@@ -10,7 +10,7 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
 {
     public partial class ExerciseService
     {
-        public async Task<IEnumerable<SimpleExerciseResponseDTO>> GetAll(int? muscleGroupId, int? equipmentId, string? name, int? offset, int? limit)
+        public async Task<IEnumerable<SimpleExerciseResponseDTO>> GetAll(Guid? userId, int? muscleGroupId, int? equipmentId, bool? favoritesOnly, string? name, int? offset, int? limit)
         {
             List<Expression<Func<Exercise, bool>>> filters = [];
 
@@ -23,8 +23,17 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
             if (equipmentId is not null)
                 filters.Add(e => e.Equipment.Any(eq => eq.Id == equipmentId));
 
+            Expression<Func<Exercise, bool>>? criteria = filters.Combine() ?? (null);
+
+            if (favoritesOnly is true && userId is not null)
+            {
+                criteria = criteria is null
+                    ? (x => x.Favorites.Any(f => f.Id == userId))
+                    : new Expression<Func<Exercise, bool>>[] { criteria, x => x.Favorites.Any(f => f.Id == userId) }.Combine(ExpressionExtensions.CombineOperator.AND);
+            }
+
             IEnumerable<Exercise> exercises = await readRangeService.Get(
-                filters.Combine() ?? (null),
+                criteria,
                 offset,
                 limit ?? 10,
                 x =>
@@ -38,7 +47,6 @@ namespace FitnessTracker.Services.ModelServices.ExerciseService
                     return x;
                 });
 
-            //TODO: Sort the results based on how many criteria they match
             return exercises.Select(simpleResponseMapper.Map);
         }
 

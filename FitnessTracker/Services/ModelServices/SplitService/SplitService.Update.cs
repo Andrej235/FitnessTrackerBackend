@@ -27,7 +27,7 @@ namespace FitnessTracker.Services.ModelServices.SplitService
                 throw new AccessDeniedException("You can only update splits that you created.");
 
             SplitWorkout splitWorkout = split.Workouts.FirstOrDefault(x => x.Day == day) ?? throw new NotFoundException($"Split workout for day {day} not found.");
-            splitWorkout.WorkoutId = request.NewWorkoutId; //TODO: Check if workout is public
+            splitWorkout.WorkoutId = request.NewWorkoutId;
 
             await splitWorkoutUpdateService.Update(splitWorkout);
         }
